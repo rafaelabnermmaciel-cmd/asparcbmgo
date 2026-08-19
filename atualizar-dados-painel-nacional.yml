@@ -9,9 +9,9 @@ name: Atualizar dados — Painel Parlamentar Nacional
 #     botão "Run workflow". Não precisa instalar nada nem usar terminal.
 #   - Automático: roda sozinho toda segunda-feira às 06h (horário de Brasília).
 #
-# Ao final, se algum dado novo foi baixado, o workflow cria um commit automático com os
-# arquivos atualizados em painel-nacional/public/data/. Se o site estiver conectado ao
-# Netlify, esse commit dispara um novo deploy sozinho.
+# Ao final, se algum dado novo foi baixado, o workflow recompila o site e cria um commit
+# automático com os arquivos atualizados em painel-nacional/public/data/ e em
+# painel-nacional-app/ (a versão publicada pelo GitHub Pages, no mesmo domínio do SGPAR).
 
 on:
   workflow_dispatch:
@@ -80,12 +80,20 @@ jobs:
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commitar dados atualizados
+      - name: Recompilar site publicado (painel-nacional-app/)
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          npm run build
+          rm -rf ../painel-nacional-app
+          mkdir -p ../painel-nacional-app
+          cp -r dist/. ../painel-nacional-app/
+
+      - name: Commitar dados e site atualizados
         if: steps.diff.outputs.mudou == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/*.json
+          git add public/data/*.json ../painel-nacional-app
           git commit -m "chore(dados): atualiza deputados/senadores/votações/eleições [automático]"
           git push
 
