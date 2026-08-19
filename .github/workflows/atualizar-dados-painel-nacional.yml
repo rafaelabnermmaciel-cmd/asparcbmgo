@@ -7,19 +7,21 @@ name: Atualizar dados — Painel Parlamentar Nacional
 # Como usar:
 #   - Manual: aba "Actions" do repositório → "Atualizar dados — Painel Parlamentar Nacional" →
 #     botão "Run workflow". Não precisa instalar nada nem usar terminal.
-#   - Automático: roda sozinho toda segunda-feira às 06h (horário de Brasília).
+#   - Automático: roda sozinho toda segunda-feira às 06h (horário de Brasília) — só a parte
+#     confiável (deputados/senadores com foto). Votações e TSE são pesados/instáveis demais
+#     pra rodar sozinhos toda semana; só rodam quando alguém marca a caixinha manualmente.
 #
-# Ao final, se algum dado novo foi baixado, o workflow recompila o site e cria um commit
-# automático com os arquivos atualizados em painel-nacional/public/data/ e em
-# painel-nacional-app/ (a versão publicada pelo GitHub Pages, no mesmo domínio do SGPAR).
+# Deputados/senadores (nome, foto, partido, UF, gabinete) são commitados logo depois de
+# buscados, num passo isolado — assim, mesmo se a etapa de votações travar ou falhar, os
+# dados essenciais dos parlamentares já ficam salvos e publicados.
 
 on:
   workflow_dispatch:
     inputs:
       buscar_votacoes:
-        description: 'Também buscar histórico de votações (mais demorado)'
+        description: 'Também buscar histórico de votações (mais demorado, endpoint não 100% confirmado)'
         type: boolean
-        default: true
+        default: false
       buscar_eleicoes:
         description: 'Também buscar votos da eleição via TSE'
         type: boolean
@@ -33,7 +35,7 @@ on:
         type: string
         default: '2022'
   schedule:
-    - cron: '0 9 * * 1' # toda segunda-feira, 09:00 UTC = 06:00 em Brasília
+    - cron: '0 9 * * 1' # toda segunda-feira, 09:00 UTC = 06:00 em Brasília — só deputados/senadores
 
 permissions:
   contents: write
@@ -41,6 +43,7 @@ permissions:
 jobs:
   atualizar-dados:
     runs-on: ubuntu-latest
+    timeout-minutes: 90 # rede pública das APIs pode ser lenta, mas isto evita um job travado por horas
     defaults:
       run:
         working-directory: painel-nacional
@@ -59,46 +62,68 @@ jobs:
         run: npm install
 
       - name: Buscar deputados e senadores (Câmara + Senado)
+        timeout-minutes: 20
         run: npm run fetch:parlamentares
 
-      - name: Buscar histórico de votações
-        if: ${{ github.event_name == 'schedule' || inputs.buscar_votacoes == true }}
-        run: npm run fetch:votacoes
-        continue-on-error: true # endpoint não verificado — não travar o workflow inteiro se falhar
-
-      - name: Buscar votos recebidos na eleição (TSE)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.buscar_eleicoes == true }}
-        run: npm run fetch:eleicoes -- --ano "${{ inputs.eleicoes_ano }}" ${{ inputs.eleicoes_limite == '0' && '--all' || format('--limit {0}', inputs.eleicoes_limite) }}
-        continue-on-error: true # parte menos confiável do pipeline — ver README
-
-      - name: Conferir se algo mudou
-        id: diff
+      - name: Conferir se deputados/senadores mudaram
+        id: diff_parlamentares
         run: |
-          if git diff --quiet -- public/data/*.json; then
+          if git diff --quiet -- public/data/deputados.json public/data/senadores.json; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Recompilar site publicado (painel-nacional-app/)
-        if: steps.diff.outputs.mudou == 'true'
+      - name: Recompilar e commitar deputados/senadores (passo isolado, garante que não se perde)
+        if: steps.diff_parlamentares.outputs.mudou == 'true'
         run: |
           npm run build
           rm -rf ../painel-nacional-app
           mkdir -p ../painel-nacional-app
           cp -r dist/. ../painel-nacional-app/
-
-      - name: Commitar dados e site atualizados
-        if: steps.diff.outputs.mudou == 'true'
-        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/*.json ../painel-nacional-app
-          git commit -m "chore(dados): atualiza deputados/senadores/votações/eleições [automático]"
+          git add public/data/deputados.json public/data/senadores.json ../painel-nacional-app
+          git commit -m "chore(dados): atualiza deputados e senadores (foto, partido, UF, gabinete) [automático]"
+          git push
+
+      - name: Buscar histórico de votações
+        if: ${{ inputs.buscar_votacoes == true }}
+        timeout-minutes: 45
+        continue-on-error: true # endpoint não verificado — não travar o workflow inteiro se falhar
+        run: npm run fetch:votacoes
+
+      - name: Buscar votos recebidos na eleição (TSE)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.buscar_eleicoes == true }}
+        timeout-minutes: 45
+        continue-on-error: true # parte menos confiável do pipeline — ver README
+        run: npm run fetch:eleicoes -- --ano "${{ inputs.eleicoes_ano }}" ${{ inputs.eleicoes_limite == '0' && '--all' || format('--limit {0}', inputs.eleicoes_limite) }}
+
+      - name: Conferir se votações/eleições mudaram
+        id: diff_extra
+        run: |
+          if git diff --quiet -- public/data/votacoes.json public/data/resultados-eleitorais.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Recompilar e commitar votações/eleições
+        if: steps.diff_extra.outputs.mudou == 'true'
+        run: |
+          npm run build
+          rm -rf ../painel-nacional-app
+          mkdir -p ../painel-nacional-app
+          cp -r dist/. ../painel-nacional-app/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/votacoes.json public/data/resultados-eleitorais.json ../painel-nacional-app
+          git commit -m "chore(dados): atualiza votações/eleições [automático]"
           git push
 
       - name: Resumo
         run: |
           echo "### Resultado da coleta" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Dados alterados: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Deputados/senadores alterados: ${{ steps.diff_parlamentares.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Votações/eleições alterados: ${{ steps.diff_extra.outputs.mudou || 'não executado' }}" >> "$GITHUB_STEP_SUMMARY"
           echo "- Confira os logs de cada etapa acima para ver avisos/erros de cada API." >> "$GITHUB_STEP_SUMMARY"
