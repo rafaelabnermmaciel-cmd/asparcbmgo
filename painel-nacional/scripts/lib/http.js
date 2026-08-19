@@ -18,14 +18,15 @@ function sleep(ms) {
  * @param {object} opts
  * @param {number} [opts.retries=4]
  * @param {number} [opts.baseDelayMs=800]
+ * @param {number} [opts.timeoutMs=20000] corta a requisição se travar sem resposta
  * @param {Record<string,string>} [opts.headers]
  */
 async function getJson(url, opts = {}) {
-  const { retries = 4, baseDelayMs = 800, headers = {} } = opts;
+  const { retries = 4, baseDelayMs = 800, timeoutMs = 20000, headers = {} } = opts;
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers } });
+      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs) });
       if (res.status === 429) {
         const retryAfter = Number(res.headers.get('retry-after')) || baseDelayMs * 2 ** attempt / 1000;
         console.warn(`[http] 429 rate limited em ${url} — aguardando ${retryAfter}s`);
@@ -52,11 +53,11 @@ async function getJson(url, opts = {}) {
  * Baixa um arquivo (texto/CSV) com retry, sem parsear.
  */
 async function getText(url, opts = {}) {
-  const { retries = 4, baseDelayMs = 800, headers = {} } = opts;
+  const { retries = 4, baseDelayMs = 800, timeoutMs = 20000, headers = {} } = opts;
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers } });
+      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs) });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText} em ${url}`);
       return await res.text();
     } catch (err) {
