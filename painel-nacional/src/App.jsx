@@ -7,6 +7,11 @@ const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Parlamentares = lazy(() => import('./pages/Parlamentares.jsx'));
 const ParlamentarPerfil = lazy(() => import('./pages/ParlamentarPerfil.jsx'));
 const Legislativo = lazy(() => import('./pages/Legislativo.jsx'));
+const Captacao = lazy(() => import('./pages/Captacao.jsx'));
+const Aniversarios = lazy(() => import('./pages/Aniversarios.jsx'));
+const Agenda = lazy(() => import('./pages/Agenda.jsx'));
+const Relatorios = lazy(() => import('./pages/Relatorios.jsx'));
+const Gerenciamento = lazy(() => import('./pages/Gerenciamento.jsx'));
 
 export default function App() {
   return (
@@ -19,6 +24,11 @@ export default function App() {
             <Route path="/parlamentares" element={<Parlamentares />} />
             <Route path="/parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
             <Route path="/legislativo" element={<Legislativo />} />
+            <Route path="/captacao" element={<Captacao />} />
+            <Route path="/aniversarios" element={<Aniversarios />} />
+            <Route path="/agenda" element={<Agenda />} />
+            <Route path="/relatorios" element={<Relatorios />} />
+            <Route path="/gerenciamento" element={<Gerenciamento />} />
           </Routes>
         </Suspense>
       </main>
