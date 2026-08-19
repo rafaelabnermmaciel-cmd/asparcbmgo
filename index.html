@@ -210,6 +210,7 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
 .cal-dot.leg{background:var(--il);}
 .cal-dot.rec{background:var(--ok);}
 .cal-dot.div{background:var(--pl);}
+.cal-dot.aniv{background:var(--wl);}
 .cal-dot.more{background:var(--t3);width:5px;height:5px;}
 .cal-list-item{display:flex;align-items:flex-start;gap:10px;padding:8px 11px;background:var(--elev);border-radius:var(--r);border:1px solid var(--bd);cursor:pointer;transition:.12s;}
 .cal-list-item:hover{border-color:var(--rline);}
@@ -254,37 +255,83 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
 </header>
 
 <nav class="mtabs">
-  <div class="mtab active" onclick="switchMain('cal')" id="mt-cal">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    Calendário
-  </div>
-  <div class="mtab" onclick="switchMain('leg')" id="mt-leg">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-    Acompanhamento Legislativo
-  </div>
-  <div class="mtab" onclick="switchMain('rec')" id="mt-rec">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    Captação de Recursos
+  <div class="mtab active" onclick="switchMain('home')" id="mt-home">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Dashboard
   </div>
   <div class="mtab" onclick="switchMain('parl')" id="mt-parl">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     Parlamentares
   </div>
+  <div class="mtab" onclick="switchMain('anv')" id="mt-anv">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 11V9a4 4 0 0 1 8 0 4 4 0 0 1 8 0v2"/><line x1="12" y1="5" x2="12" y2="3"/><line x1="2" y1="21" x2="22" y2="21"/></svg>
+    Aniversários
+  </div>
+  <div class="mtab" onclick="switchMain('cal')" id="mt-cal">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Agenda
+  </div>
+  <div class="mtab" onclick="switchMain('leg')" id="mt-leg">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Legislativo
+  </div>
+  <div class="mtab" onclick="switchMain('rec')" id="mt-rec">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Captação de Recursos
+  </div>
+  <div class="mtab" onclick="switchMain('ger')" id="mt-ger" style="margin-left:auto">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Gerenciamento
+  </div>
 </nav>
 
-<!-- CALENDÁRIO -->
-<div id="tab-cal" class="page fade">
+<!-- DASHBOARD / INÍCIO -->
+<div id="tab-home" class="page fade">
   <div class="topbar">
-    <div><div class="page-title">Calendário Institucional</div><div class="page-sub">Agenda de reuniões e eventos · CBM-GO · até 2030</div></div>
+    <div><div class="page-title">Visão Geral</div><div class="page-sub">SGPAR · Bancada Federal de Goiás — CBM-GO</div></div>
+  </div>
+  <div class="kgrid" id="home-kpis"></div>
+  <div class="cgrid gw" style="align-items:start">
+    <div class="cc">
+      <div class="ctit"><div class="cb"></div>Parlamentares</div>
+      <div class="csub">Bancada Federal de Goiás em exercício</div>
+      <div id="home-parl-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-top:6px"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="cc">
+        <div class="ctit"><div class="cb"></div>Aniversariantes do Mês</div>
+        <div class="csub" id="home-anv-lbl">—</div>
+        <div class="rl" id="home-anv-list" style="margin-top:6px"></div>
+      </div>
+      <div class="cc">
+        <div class="ctit"><div class="cb"></div>Próximas Reuniões</div>
+        <div class="csub">Agenda institucional</div>
+        <div class="rl" id="home-reu-list" style="margin-top:6px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="cc" style="margin-top:10px">
+    <div class="ctit"><div class="cb"></div>Acompanhamento Legislativo Recente</div>
+    <div class="csub">Últimas movimentações por parlamentar</div>
+    <div class="rl" id="home-leg-list" style="margin-top:6px"></div>
+  </div>
+</div>
+
+<!-- CALENDÁRIO -->
+<div id="tab-cal" class="page hidden fade">
+  <div class="topbar">
+    <div><div class="page-title">Agenda</div><div class="page-sub">Reuniões e compromissos parlamentares · CBM-GO</div></div>
     <div class="top-actions">
       <button class="btn btn-ghost" onclick="calToday()">Hoje</button>
       <div class="stabs" style="margin:0">
+        <div class="stab" id="cv-dia" onclick="calView('dia')">Dia</div>
+        <div class="stab" id="cv-semana" onclick="calView('semana')">Semana</div>
         <div class="stab active" id="cv-mes" onclick="calView('mes')">Mês</div>
         <div class="stab" id="cv-lista" onclick="calView('lista')">Lista</div>
       </div>
-      <button class="btn btn-red" onclick="openCalForm(null)">
+      <button class="btn btn-red admin-only hidden" onclick="openCalForm(null)">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Novo Evento
+        Nova Reunião
       </button>
     </div>
   </div>
@@ -300,26 +347,29 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
         <span class="pill p-i" style="cursor:pointer" onclick="calFilterFn('leg')">● Legislativo</span>
         <span class="pill p-ok" style="cursor:pointer" onclick="calFilterFn('rec')">● Captação</span>
         <span class="pill p-p" style="cursor:pointer" onclick="calFilterFn('div')">● Diverso</span>
+        <span class="pill p-w" style="cursor:pointer" onclick="calFilterFn('aniv')">🎂 Aniversário</span>
         <span class="pill p-n" style="cursor:pointer" onclick="calFilterFn(null)">Todos</span>
       </div>
     </div>
     <div id="cal-content"></div>
   </div>
-  <div class="thbar" style="border-radius:var(--rl) var(--rl) 0 0;border:1px solid var(--bd)"><span class="thtit">Próximos Eventos</span></div>
+  <div class="thbar" style="border-radius:var(--rl) var(--rl) 0 0;border:1px solid var(--bd)"><span class="thtit">Próximas Reuniões</span></div>
   <div style="background:var(--card);border:1px solid var(--bd);border-top:none;border-radius:0 0 var(--rl) var(--rl);padding:10px;display:flex;flex-direction:column;gap:6px" id="cal-upcoming"></div>
 </div>
 
 <!-- LEGISLATIVO -->
 <div id="tab-leg" class="page hidden fade">
   <div class="topbar">
-    <div><div class="page-title">Acompanhamento Legislativo</div><div class="page-sub">Projetos, interações e posicionamentos parlamentares</div></div>
+    <div><div class="page-title">Acompanhamento Legislativo</div><div class="page-sub">Projetos, interações e posicionamentos parlamentares · Bancada Federal de Goiás</div></div>
     <div class="top-actions">
-      <button class="btn btn-ghost" onclick="openInterForm(null)">+ Interação</button>
-      <button class="btn btn-red" onclick="openProjForm(null)">+ Projeto</button>
+      <button class="btn btn-ghost admin-only hidden" onclick="openInterForm(null)">+ Interação</button>
+      <button class="btn btn-red admin-only hidden" onclick="openProjForm(null)">+ Projeto</button>
     </div>
   </div>
   <div class="stabs">
     <div class="stab active" onclick="switchSub('leg','dash')" data-tab="leg" data-view="dash">Dashboard</div>
+    <div class="stab" onclick="switchSub('leg','porparl')" data-tab="leg" data-view="porparl">Por Parlamentar</div>
+    <div class="stab" onclick="switchSub('leg','nac')" data-tab="leg" data-view="nac">Proposições de Interesse (Nacional)</div>
     <div class="stab" onclick="switchSub('leg','kanban')" data-tab="leg" data-view="kanban">Kanban</div>
     <div class="stab" onclick="switchSub('leg','timeline')" data-tab="leg" data-view="timeline">Linha do Tempo</div>
   </div>
@@ -349,17 +399,35 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
       <div class="tscroll"><table><thead><tr><th>Data</th><th>Participantes</th><th>Tipo</th><th>Projeto</th><th>Posic.</th><th>Resp.</th><th></th></tr></thead><tbody id="inter-tb"></tbody></table></div>
     </div>
   </div>
+  <div id="leg-porparl" class="hidden fade">
+    <div class="filters">
+      <div class="fsearch"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="fi" id="lp-q" placeholder="Buscar parlamentar..." oninput="renderLegPorParl()"></div>
+    </div>
+    <div id="lp-list" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+  <div id="leg-nac" class="hidden fade">
+    <div class="topbar" style="margin-bottom:8px">
+      <div><div class="page-sub" id="nac-fonte" style="padding-left:0"></div></div>
+      <div class="top-actions">
+        <select class="fsel" id="nac-tipo" onchange="renderLegNac()"><option value="">Todos os tipos</option><option>PL</option><option>PLP</option><option>PEC</option></select>
+        <select class="fsel" id="nac-casa" onchange="renderLegNac()"><option value="">Todas as casas</option><option>Câmara dos Deputados</option><option>Senado Federal</option></select>
+        <button class="btn btn-red admin-only hidden" onclick="openPropnacForm(null)">+ Proposição</button>
+      </div>
+    </div>
+    <div id="nac-atualiz"></div>
+    <div id="nac-list" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
   <div id="leg-kanban" class="hidden fade">
     <div class="topbar" style="margin-bottom:8px">
       <input class="finp" style="max-width:220px;padding-left:9px" id="kb-q" placeholder="Filtrar projetos..." oninput="renderKanban()">
-      <button class="btn btn-red" onclick="openProjForm(null)">+ Projeto</button>
+      <button class="btn btn-red admin-only hidden" onclick="openProjForm(null)">+ Projeto</button>
     </div>
     <div class="kanban" id="kb-board"></div>
   </div>
   <div id="leg-timeline" class="hidden fade">
     <div class="topbar" style="margin-bottom:8px">
       <select class="fsel" id="tl-tipo" onchange="renderTimeline()"><option value="">Todos tipos</option><option>Reunião</option><option>Audiência</option><option>Contato informal</option><option>Evento institucional</option><option>Visita a gabinete</option><option>Reunião de captação</option></select>
-      <button class="btn btn-ghost" onclick="openInterForm(null)">+ Interação</button>
+      <button class="btn btn-ghost admin-only hidden" onclick="openInterForm(null)">+ Interação</button>
     </div>
     <div id="tl-list" style="position:relative;padding-left:16px;border-left:1px solid var(--bd);margin-left:4px;"></div>
   </div>
@@ -370,8 +438,8 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
   <div class="topbar">
     <div><div class="page-title">Captação de Recursos</div><div class="page-sub">Emendas parlamentares e transferências · CBM-GO</div></div>
     <div class="top-actions">
-      <button class="btn btn-ghost" onclick="openAddAno()">+ Ano</button>
-      <button class="btn btn-red" onclick="openDestForm(null)">+ Destinação</button>
+      <button class="btn btn-ghost admin-only hidden" onclick="openAddAno()">+ Ano</button>
+      <button class="btn btn-red admin-only hidden" onclick="openDestForm(null)">+ Destinação</button>
     </div>
   </div>
   <div class="ybar" id="rec-ybar"></div>
@@ -422,8 +490,8 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
     <div class="topbar" style="margin-bottom:12px">
       <div><div class="page-title">Mapeamento de Stakeholders</div><div class="page-sub">Articulação política e responsáveis internos CBM-GO</div></div>
       <div class="top-actions">
-        <button class="btn btn-ghost" onclick="openStkForm('resp',null)">+ Responsável Interno</button>
-        <button class="btn btn-red" onclick="openStkForm('stk',null)">+ Stakeholder</button>
+        <button class="btn btn-ghost admin-only hidden" onclick="openStkForm('resp',null)">+ Responsável Interno</button>
+        <button class="btn btn-red admin-only hidden" onclick="openStkForm('stk',null)">+ Stakeholder</button>
       </div>
     </div>
 
@@ -461,7 +529,7 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
     <div class="topbar" style="margin-bottom:12px">
       <div><div class="page-title">Necessidades dos Quartéis</div><div class="page-sub">Demandas operacionais por unidade · CBM-GO</div></div>
       <div class="top-actions">
-        <button class="btn btn-red" onclick="openStkForm('quartel',null)">+ Quartel / Necessidade</button>
+        <button class="btn btn-red admin-only hidden" onclick="openStkForm('quartel',null)">+ Quartel / Necessidade</button>
       </div>
     </div>
 
@@ -482,19 +550,55 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
   </div>
 </div>
 
-<!-- PARLAMENTARES -->
+<!-- PARLAMENTARES (VISÃO PÚBLICA) -->
 <div id="tab-parl" class="page hidden fade">
   <div class="topbar">
-    <div><div class="page-title">Parlamentares</div><div class="page-sub">Bancada Federal de Goiás · 22 parlamentares com relacionamento ativo</div></div>
-    <div class="top-actions"><button class="btn btn-ghost" onclick="openParlForm(null)">+ Adicionar</button></div>
+    <div><div class="page-title">Parlamentares</div><div class="page-sub" id="parlv-sub">Bancada Federal de Goiás em exercício</div></div>
+  </div>
+  <div class="filters">
+    <div class="fsearch"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="fi" id="pv-q" placeholder="Buscar parlamentar..." oninput="renderParlView()"></div>
+    <select class="fsel" id="pv-casa" onchange="renderParlView()"><option value="">Todas as casas</option><option>Câmara dos Deputados</option><option>Senado Federal</option></select>
+    <select class="fsel" id="pv-partido" onchange="renderParlView()"><option value="">Todos os partidos</option></select>
+  </div>
+  <div id="parlv-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px"></div>
+</div>
+
+<!-- ANIVERSÁRIOS -->
+<div id="tab-anv" class="page hidden fade">
+  <div class="topbar">
+    <div><div class="page-title">Aniversários</div><div class="page-sub">Parlamentares em exercício, em ordem cronológica · veja o calendário completo na aba Agenda</div></div>
+  </div>
+  <div id="anv-today"></div>
+  <div class="rl" id="anv-upcoming-list"></div>
+</div>
+
+<!-- GERENCIAMENTO (ADMINISTRAÇÃO) -->
+<div id="tab-ger" class="page hidden fade">
+  <div class="topbar">
+    <div><div class="page-title">Gerenciamento</div><div class="page-sub">Área restrita de administração — adicionar, editar e excluir registros</div></div>
+  </div>
+  <div class="stabs">
+    <div class="stab ger-subtab active" data-sub="parladmin" onclick="switchGer('parladmin')">Parlamentares</div>
+    <div class="stab ger-subtab" data-sub="cal" onclick="switchGer('cal')">Agenda / Reuniões</div>
+    <div class="stab ger-subtab" data-sub="leg" onclick="switchGer('leg')">Legislativo</div>
+    <div class="stab ger-subtab" data-sub="rec" onclick="switchGer('rec')">Captação de Recursos</div>
+  </div>
+</div>
+
+<!-- PARLAMENTARES (TABELA DE ADMINISTRAÇÃO — dentro de Gerenciamento) -->
+<div id="tab-parladmin" class="page hidden fade">
+  <div class="topbar">
+    <div><div class="page-title">Gerenciar Parlamentares</div><div class="page-sub">Cadastro completo · adicionar, editar, excluir ou substituir parlamentares</div></div>
+    <div class="top-actions"><button class="btn btn-red" onclick="openParlForm(null)">+ Adicionar Parlamentar</button></div>
   </div>
   <div class="filters">
     <div class="fsearch"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input class="fi" id="pt-q" placeholder="Buscar parlamentar..." oninput="renderParlTable()"></div>
     <select class="fsel" id="pt-casa" onchange="renderParlTable()"><option value="">Todas as casas</option><option>Câmara dos Deputados</option><option>Senado Federal</option></select>
+    <select class="fsel" id="pt-status" onchange="renderParlTable()"><option value="">Ativos e inativos</option><option value="ativo">Somente em exercício</option><option value="inativo">Somente mandato encerrado</option></select>
   </div>
   <div class="tw">
     <div class="thbar"><span class="thtit" id="parl-cnt">Parlamentares</span></div>
-    <div class="tscroll"><table><thead><tr><th>Parlamentar</th><th>Casa</th><th>Partido</th><th>Comissões</th><th>Reuniões</th><th>Valor Captado</th><th>Última Reunião</th><th></th></tr></thead><tbody id="parl-tb"></tbody></table></div>
+    <div class="tscroll"><table><thead><tr><th>Parlamentar</th><th>Casa</th><th>Partido</th><th>Nascimento</th><th>Status</th><th>Reuniões</th><th>Valor Captado</th><th></th></tr></thead><tbody id="parl-tb"></tbody></table></div>
   </div>
 </div>
 
@@ -567,11 +671,16 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
         </div>
         <div id="cf-parts-tags" style="display:flex;flex-wrap:wrap;gap:3px;min-height:24px"></div>
       </div>
-      <div class="fg"><label>Local</label><input class="finp" id="cf-local" placeholder="Ex: Gabinete 419, Câmara dos Deputados"></div>
+      <div class="fr2">
+        <div class="fg"><label>Local</label><input class="finp" id="cf-local" placeholder="Ex: Gabinete 419, Câmara dos Deputados"></div>
+        <div class="fg"><label>Tipo de Reunião</label><select class="fsel2" id="cf-tiporeuniao"><option>Reunião institucional</option><option>Audiência</option><option>Contato informal</option><option>Visita a gabinete</option><option>Evento institucional</option><option>Reunião de captação</option><option>Outro</option></select></div>
+      </div>
+      <div class="fg"><label>Status</label><select class="fsel2" id="cf-status"><option>Prevista</option><option>Realizada</option><option>Cancelada</option><option>Remarcada</option></select></div>
       <div class="fdiv"></div>
       <div class="fsec">Conteúdo da Reunião</div>
-      <div class="fg"><label>Pauta / Assunto Tratado</label><textarea class="ftea" id="cf-pauta" placeholder="Pontos discutidos na reunião..."></textarea></div>
+      <div class="fg"><label>Pauta / Assunto Tratado (Descrição)</label><textarea class="ftea" id="cf-pauta" placeholder="Pontos discutidos na reunião..."></textarea></div>
       <div class="fg"><label>Resultado / Encaminhamentos</label><textarea class="ftea" id="cf-resultado" placeholder="O que foi decidido ou encaminhado..."></textarea></div>
+      <div class="fg"><label>Observações</label><textarea class="ftea" id="cf-obs" placeholder="Ex: Tratamento de demandas do CBM-GO..."></textarea></div>
       <div class="fr3">
         <div class="fg"><label>Posicionamento</label>
           <select class="fsel2" id="cf-posic"><option value="">N/A</option><option value="favorável">Favorável</option><option value="neutro">Neutro</option><option value="contrário">Contrário</option><option value="em análise">Em análise</option></select>
@@ -679,13 +788,55 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
   </div>
 </div>
 
+<!-- MODAL PROPOSIÇÃO NACIONAL -->
+<div class="overlay" id="modal-propnac">
+  <div class="modal modal-lg">
+    <div class="mhdr"><span class="mtit" id="pn-tit">Nova Proposição</span><div class="mclose" onclick="closeModal('modal-propnac')">×</div></div>
+    <div class="mbody">
+      <div class="fr3">
+        <div class="fg"><label>Tipo</label><select class="fsel2" id="pn-tipo"><option>PL</option><option>PLP</option><option>PEC</option></select></div>
+        <div class="fg"><label>Número</label><input class="finp" id="pn-num" placeholder="Ex: 317/2022"></div>
+        <div class="fg"><label>Casa Atual</label><select class="fsel2" id="pn-casa"><option>Câmara dos Deputados</option><option>Senado Federal</option><option>Encerrada — virou lei</option></select></div>
+      </div>
+      <div class="fg"><label>Assunto (Resumo)</label><textarea class="ftea" id="pn-resumo"></textarea></div>
+      <div class="fg"><label>Situação Atual</label><textarea class="ftea" id="pn-situacao"></textarea></div>
+      <div class="fr2">
+        <div class="fg"><label>Última Movimentação (o que aconteceu)</label><input class="finp" id="pn-ultimamov"></div>
+        <div class="fg"><label>Data da Última Movimentação</label><input class="finp" id="pn-ultimamovdata" type="date"></div>
+      </div>
+      <div class="fg"><label>Próximos Passos</label><textarea class="ftea" id="pn-proximos"></textarea></div>
+      <div class="fg"><label>Ponto de Atenção / Observações</label><textarea class="ftea" id="pn-ponto"></textarea></div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);cursor:pointer"><input type="checkbox" id="pn-encerrada" style="accent-color:var(--red);width:13px;height:13px">Tramitação encerrada</label>
+    </div>
+    <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal('modal-propnac')">Cancelar</button><button class="btn btn-red" onclick="savePropnac()">Salvar</button></div>
+  </div>
+</div>
+
 <!-- MODAL PARL -->
 <div class="overlay" id="modal-parl">
-  <div class="modal">
+  <div class="modal modal-lg">
     <div class="mhdr"><span class="mtit" id="parl-tit">Parlamentar</span><div class="mclose" onclick="closeModal('modal-parl')">×</div></div>
     <div class="mbody">
-      <div class="fr2"><div class="fg"><label>Nome</label><input class="finp" id="parlf-name"></div><div class="fg"><label>Casa</label><select class="fsel2" id="parlf-casa"><option value="Câmara dos Deputados">Câmara</option><option value="Senado Federal">Senado</option></select></div></div>
-      <div class="fr3"><div class="fg"><label>Partido</label><input class="finp" id="parlf-partido"></div><div class="fg"><label>Comissões</label><input class="finp" id="parlf-comissao"></div><div class="fg"><label>E-mail</label><input class="finp" id="parlf-email" type="email"></div></div>
+      <div class="fsec">Foto</div>
+      <div class="ph-area" onclick="document.getElementById('parlf-foto-file').click()">
+        <input type="file" id="parlf-foto-file" accept="image/*" onchange="handleParlFoto(event)">
+        <div id="parlf-foto-prev" style="display:flex;align-items:center;justify-content:center;gap:8px">📷 Clique para adicionar/substituir a foto</div>
+      </div>
+      <div style="text-align:center;margin-top:4px" id="parlf-foto-search"></div>
+      <input type="hidden" id="parlf-foto">
+      <div class="fdiv"></div>
+      <div class="fr2"><div class="fg"><label>Nome</label><input class="finp" id="parlf-name" placeholder="Ex: Wilder Morais" oninput="updateParlfFotoSearch()"></div>
+        <div class="fg"><label>Casa</label><select class="fsel2" id="parlf-casa" onchange="syncParlCargo();updateParlfFotoSearch()"><option value="Câmara dos Deputados">Câmara dos Deputados</option><option value="Senado Federal">Senado Federal</option></select></div></div>
+      <div class="fr3">
+        <div class="fg"><label>Cargo</label><select class="fsel2" id="parlf-cargo"><option>Deputado Federal</option><option>Deputada Federal</option><option>Senador</option><option>Senadora</option><option>Ex-Deputado Federal</option><option>Ex-Senador(a)</option></select></div>
+        <div class="fg"><label>Partido</label><input class="finp" id="parlf-partido" placeholder="Ex: PL"></div>
+        <div class="fg"><label>Status</label><select class="fsel2" id="parlf-ativo"><option value="1">Em exercício</option><option value="0">Mandato encerrado / substituído</option></select></div>
+      </div>
+      <div class="fr2"><div class="fg"><label>Comissões</label><input class="finp" id="parlf-comissao" placeholder="Ex: CSPCCO / CCJC"></div>
+        <div class="fg"><label>Data de Nascimento</label><input class="finp" id="parlf-nascimento" type="date"></div></div>
+      <div class="fr2"><div class="fg"><label>Telefone / Gabinete</label><input class="finp" id="parlf-telefone" placeholder="(61) 3303-0000"></div>
+        <div class="fg"><label>E-mail</label><input class="finp" id="parlf-email" type="email" placeholder="gabinete@camara.leg.br"></div></div>
+      <div class="fg"><label>Observações</label><textarea class="ftea" id="parlf-obs" placeholder="Anotações internas, histórico de mandato, substituições, etc."></textarea></div>
     </div>
     <div class="mfoot"><button class="btn btn-ghost" onclick="closeModal('modal-parl')">Cancelar</button><button class="btn btn-red" onclick="saveParl()">Salvar</button></div>
   </div>
@@ -713,6 +864,8 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
   </div>
 </div>
 
+<!-- MODAL CONFIRMAR EXCLUSÃO -->
+<div class="overlay" id="modal-confirm">
   <div class="cmod">
     <h3 style="font-size:14px;font-weight:700;color:#F87171;margin-bottom:8px">Confirmar Exclusão</h3>
     <p style="font-size:11px;color:var(--t2);margin-bottom:15px;line-height:1.6">Deseja excluir este registro? Ação irreversível.</p>
@@ -721,29 +874,40 @@ tbody td{padding:7px 10px;font-size:11px;vertical-align:middle;}
 </div>
 
 <script>
+// Base de parlamentares — bancada federal de Goiás (Senado Federal + Câmara dos Deputados).
+// Dia/mês de aniversário conferidos e confirmados pelo CBM-GO (lista oficial recebida em
+// 18/ago/2026) para os 20 parlamentares em exercício. O ano de nascimento de cada um foi
+// pesquisado em fontes públicas — como o ano não constava na lista de conferência, recomenda-se
+// validar cada ano junto à Câmara/Senado quando possível (editável em Gerenciamento). Nenhum
+// dado foi inventado: campos não confirmados foram deixados em branco.
+// ativo:false = não integra a bancada em exercício (mandato encerrado/não segue no cargo) —
+// registro mantido apenas para preservar o histórico de reuniões/legislativo/captação já lançado.
 const INIT_PARL = [
-  {id:1,name:'Wilder Morais',casa:'Senado Federal',partido:'PL',comissao:'CAS / CAE'},
-  {id:2,name:'Vanderlan Cardoso',casa:'Senado Federal',partido:'PSD',comissao:'CAE / CLP'},
-  {id:3,name:'Major Vitor Hugo',casa:'Câmara dos Deputados',partido:'PL',comissao:'CSPCCO / CCJC'},
-  {id:4,name:'Adriana Accorsi',casa:'Câmara dos Deputados',partido:'PT',comissao:'CSSF / CSPCCO'},
-  {id:5,name:'Heuler Cruvinel',casa:'Câmara dos Deputados',partido:'PSD',comissao:'CCJC / CFT'},
-  {id:6,name:'Zacharias Calil',casa:'Câmara dos Deputados',partido:'União Brasil',comissao:'CFT / CDEIC'},
-  {id:7,name:'Márcio Corrêa',casa:'Câmara dos Deputados',partido:'PL',comissao:'CSPCCO / CCTCI'},
-  {id:8,name:'Flávia Morais',casa:'Câmara dos Deputados',partido:'PDT',comissao:'CSSF / CCULT'},
-  {id:9,name:'Ernesto Rolim',casa:'Câmara dos Deputados',partido:'PP',comissao:'CODEFAT / CSPCCO'},
-  {id:10,name:'Ismael Alexandrino',casa:'Câmara dos Deputados',partido:'PDT',comissao:'CSSF'},
-  {id:11,name:'Leda Borges',casa:'Câmara dos Deputados',partido:'PSD',comissao:'CFT'},
-  {id:12,name:'José Nelto',casa:'Câmara dos Deputados',partido:'Podemos',comissao:'CDEIC'},
-  {id:13,name:'Silvye Alves',casa:'Câmara dos Deputados',partido:'União Brasil',comissao:'CSPCCO'},
-  {id:14,name:'Marussa Boldrin',casa:'Câmara dos Deputados',partido:'União Brasil',comissao:'CFT'},
-  {id:15,name:'Gustavo Gayer',casa:'Câmara dos Deputados',partido:'PL',comissao:'CSPCCO'},
-  {id:16,name:'Magda Mofatto',casa:'Câmara dos Deputados',partido:'PL',comissao:'CSSF'},
-  {id:17,name:'Adriano do Baldy',casa:'Câmara dos Deputados',partido:'PP',comissao:'CFT'},
-  {id:18,name:'Daniel Agrobom',casa:'Câmara dos Deputados',partido:'PL',comissao:'CSPCCO'},
-  {id:19,name:'Rubens Otoni',casa:'Câmara dos Deputados',partido:'PT',comissao:'CFT'},
-  {id:20,name:'Professor Alcides',casa:'Câmara dos Deputados',partido:'Solidariedade',comissao:'CDEIC'},
-  {id:21,name:'Jorge Kajuru',casa:'Senado Federal',partido:'PSB',comissao:'CAS'},
-  {id:22,name:'Glaustin da Fokus',casa:'Câmara dos Deputados',partido:'PSD',comissao:'CSPCCO'},
+  {id:1,name:'Wilder Morais',casa:'Senado Federal',cargo:'Senador',partido:'PL',comissao:'CAS / CAE',nascimento:'1968-06-29',telefone:'(61) 3303-6440',email:'sen.wildermorais@senado.leg.br',foto:'',ativo:true,obs:''},
+  {id:2,name:'Vanderlan Cardoso',casa:'Senado Federal',cargo:'Senador',partido:'PSD',comissao:'CAE / CCJ (vice-presidente)',nascimento:'1962-11-15',telefone:'(61) 3303-2092',email:'sen.vanderlancardoso@senado.leg.br',foto:'',ativo:true,obs:''},
+  {id:21,name:'Jorge Kajuru',casa:'Senado Federal',cargo:'Senador',partido:'PSB',comissao:'CAS / CCJ',nascimento:'1961-01-20',telefone:'(61) 3303-2844',email:'sen.jorgekajuru@senado.leg.br',foto:'',ativo:true,obs:''},
+  {id:4,name:'Delegada Adriana Accorsi',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'PT',comissao:'CSSF / CSPCCO',nascimento:'1973-03-17',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:6,name:'Dr. Zacharias Calil',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'União Brasil',comissao:'CFT / CDEIC',nascimento:'1953-11-05',telefone:'',email:'',foto:'',ativo:true,obs:'Não disputa a reeleição para a Câmara em 2026 — é pré-candidato ao Senado por GO (a confirmar).'},
+  {id:8,name:'Flávia Morais',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'PDT',comissao:'CSSF / CCULT',nascimento:'1969-04-26',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:10,name:'Dr. Ismael Alexandrino',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PDT',comissao:'CSSF',nascimento:'1983-07-26',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:11,name:'Leda Borges',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'PSD',comissao:'CFT',nascimento:'1961-11-02',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:12,name:'José Nelto',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'Podemos',comissao:'CDEIC',nascimento:'1960-09-19',telefone:'',email:'dep.josenelto@camara.leg.br',foto:'',ativo:true,obs:''},
+  {id:13,name:'Silvye Alves',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'União Brasil',comissao:'CSPCCO',nascimento:'1980-11-08',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:14,name:'Marussa Boldrin',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'União Brasil',comissao:'CFT',nascimento:'1990-06-25',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:15,name:'Gustavo Gayer',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PL',comissao:'CREDN (suplente)',nascimento:'1981-04-13',telefone:'',email:'dep.gustavogayer@camara.leg.br',foto:'',ativo:true,obs:'Responde a processo de cassação em tramitação no Conselho de Ética (a confirmar situação atual).'},
+  {id:16,name:'Magda Mofatto',casa:'Câmara dos Deputados',cargo:'Deputada Federal',partido:'PL',comissao:'CSSF',nascimento:'1948-10-26',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:17,name:'Adriano do Baldy',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PP',comissao:'CFT',nascimento:'1969-09-06',telefone:'',email:'dep.adrianodobaldy@camara.leg.br',foto:'',ativo:true,obs:''},
+  {id:18,name:'Daniel Agrobom',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PL',comissao:'Agricultura, Pecuária, Abastecimento e Desenv. Rural',nascimento:'1968-07-02',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:19,name:'Rubens Otoni',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PT',comissao:'CFT / Educação',nascimento:'1956-02-06',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:20,name:'Professor Alcides',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'Solidariedade',comissao:'CDEIC',nascimento:'1953-10-25',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  {id:22,name:'Glaustin da Fokus',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PSD',comissao:'CSPCCO',nascimento:'1973-12-22',telefone:'',email:'',foto:'',ativo:true,obs:'Licenciado por 120 dias em ago/2025 (suplente Samuel Santos em exercício); reassumiu o mandato em 03/12/2025.'},
+  {id:23,name:'Célio Silveira',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'MDB',comissao:'',nascimento:'1959-09-19',telefone:'',email:'dep.celiosilveira@camara.leg.br',foto:'',ativo:true,obs:''},
+  {id:24,name:'Jeferson Rodrigues',casa:'Câmara dos Deputados',cargo:'Deputado Federal',partido:'PSDB',comissao:'',nascimento:'1975-05-01',telefone:'',email:'',foto:'',ativo:true,obs:''},
+  // ── Não integram mais a bancada federal em exercício — mantidos apenas por vínculo histórico ──
+  {id:3,name:'Major Vitor Hugo',casa:'Câmara dos Deputados',cargo:'Ex-Deputado Federal',partido:'PL',comissao:'CSPCCO / CCJC',nascimento:'',telefone:'',email:'',foto:'',ativo:false,obs:'Não concorreu à reeleição em 2022 (candidatou-se a governador de GO). Mandato de deputado federal encerrado em 31/01/2023. Atualmente vereador em Goiânia (eleito em 2024).'},
+  {id:5,name:'Heuler Cruvinel',casa:'Câmara dos Deputados',cargo:'Ex-Deputado Federal',partido:'PSD',comissao:'CCJC / CFT',nascimento:'',telefone:'',email:'',foto:'',ativo:false,obs:'Mandato de deputado federal encerrado em 31/01/2019. Concorreu a vice-governador de GO em 2022 (não eleito). Não integra a bancada federal atual.'},
+  {id:7,name:'Márcio Corrêa',casa:'Câmara dos Deputados',cargo:'Ex-Deputado Federal',partido:'PL',comissao:'CSPCCO / CCTCI',nascimento:'',telefone:'',email:'',foto:'',ativo:false,obs:'Exerceu o mandato como suplente (licença de Célio Silveira) em 2023. Eleito prefeito de Anápolis, assumiu em jan/2025 — não integra a bancada federal atual.'},
+  {id:9,name:'Ernesto Rolim',casa:'Câmara dos Deputados',cargo:'—',partido:'PP',comissao:'CODEFAT / CSPCCO',nascimento:'',telefone:'',email:'',foto:'',ativo:false,obs:'ATENÇÃO: registro impreciso herdado da base original — este nome não foi localizado no cadastro oficial de deputados federais por Goiás. Mantido apenas para preservar o histórico de interação já lançado (não excluir sem revisar/corrigir manualmente em Gerenciamento).'},
 ];
 const INIT_DEST = [
   // 2024
@@ -812,6 +976,44 @@ const INIT_ANOS = [
   {ano:2026,fase:'Previsto LOA',obs:'Nenhuma destinação de 2026 foi paga. Todas previstas na LOA 2025/2026 — dependem de articulação parlamentar.'},
 ];
 
+// ═══ PROPOSIÇÕES DE INTERESSE NACIONAL (CBM) ═══
+// Importado do "Relatório Consolidado de Proposições Legislativas do CBM" (fonte: ASPAR,
+// 18/08/2026). São matérias em tramitação no Congresso Nacional de interesse institucional dos
+// Corpos de Bombeiros Militares — não vinculadas a um parlamentar específico da bancada de GO
+// (o relatório não identifica autor/relator goiano em nenhuma destas proposições; nenhum vínculo
+// foi inventado). Campos ausentes no PDF (ex.: link de consulta) foram deixados em branco.
+const INIT_PROPNAC = [
+  {id:1,tipo:'PLP',num:'18/2021',casa:'Encerrada — virou lei',resumo:'Altera a Lei Complementar nº 141/2012 para permitir que o atendimento pré-hospitalar dos Corpos de Bombeiros Militares receba emendas parlamentares destinadas à saúde, de forma facultativa, vedado o uso para pagamento de pessoal ativo ou inativo.',situacao:'Tramitação encerrada. Aprovado no Plenário do Senado em 15/07/2026 (65 a 2, regime de urgência, relator Sen. Nelsinho Trad). Emendas de ampliação a bombeiros voluntários rejeitadas. Sancionado e publicado como Lei Complementar nº 234/2026 em 07/08/2026.',ultimaMovData:'2026-08-07',ultimaMov:'Sancionada como Lei Complementar nº 234/2026.',proximosPassos:'Não há mais tramitação legislativa. Requisitos de acesso aos recursos ainda serão definidos pelo Poder Executivo/Ministério da Saúde.',pontoAtencao:'Acompanhar a regulamentação pelo Executivo e pelo Ministério da Saúde, da qual dependerá o acesso do CBM-GO a esses recursos.',encerrada:true},
+  {id:2,tipo:'PL',num:'317/2022',casa:'Câmara dos Deputados',resumo:'Autoriza Estados e DF a reduzirem o tempo mínimo de atividade militar exigido para aposentadoria integral de policiais e bombeiros militares (regra geral de 30 para até 25 anos; transição de 25 para até 20 anos), com pedágio de 4 meses por ano faltante, limitado a 5 anos adicionais.',situacao:'Redação Final aprovada na CCJC em 12/08/2026 (relator Dep. Sargento Portugal). Tramitação na Câmara encerrada; segue ao Senado. Recebimento formal pelo Senado ainda não confirmado.',ultimaMovData:'2026-08-12',ultimaMov:'CCJC aprovou a Redação Final em reunião deliberativa.',proximosPassos:'Aguardar autuação formal no Senado Federal.',pontoAtencao:'Redirecionar articulação para o Senado. Sen. Styvenson Valentim já se manifestou favorável; mapear relator assim que distribuída.',encerrada:false},
+  {id:3,tipo:'PL',num:'241/2023',casa:'Câmara dos Deputados',resumo:'Permite a averbação de até 10 anos (hoje limitado a 5) de tempo de serviço público ou privado anterior ao ingresso na corporação, para aposentadoria integral de policiais e bombeiros militares estaduais. Não se aplica às Forças Armadas.',situacao:'Regime de urgência aprovado em 15/04/2026. Relator em Plenário: Dep. Cabo Gilberto Silva (3 pareceres preliminares). Pautada em 12 e 13/08/2026 mas não votada por encerramento das sessões. "Aguardando Deliberação no Plenário". Apensados: PL 1512/2023, PL 1269/2024 e PL 2449/2026.',ultimaMovData:'2026-08-13',ultimaMov:'Pautada em Plenário nos dias 12 e 13/08; não apreciada por encerramento das sessões.',proximosPassos:'Em regime de urgência, pode ser pautada e votada em qualquer sessão sem passar pelas comissões. Se aprovada, segue ao Senado.',pontoAtencao:'Monitorar a Ordem do Dia diariamente — pode ser votada a qualquer momento. Articulação mantida com o Dep. Sargento Portugal.',encerrada:false},
+  {id:4,tipo:'PL',num:'4.804/2025',casa:'Câmara dos Deputados',resumo:'Estabelece diretrizes de atuação integrada entre saúde e segurança pública no atendimento a pessoas com transtornos mentais em situações de urgência.',situacao:'Aprovado na CSPCCO em 25/02/2026 (relator Dep. Allan Garcês). Atualmente na Comissão de Saúde (CSaúde), aguardando redistribuição, sem movimento recente.',ultimaMovData:'2026-02-25',ultimaMov:'Aprovado na Comissão de Segurança Pública (CSPCCO).',proximosPassos:'Tramitação conclusiva: após CSaúde, segue à CFT e depois à CCJC. Se não houver recurso, vai direto ao Senado, sem Plenário.',pontoAtencao:'Interface direta com o atendimento pré-hospitalar dos CBMs.',encerrada:false},
+  {id:5,tipo:'PL',num:'1.274/2024',casa:'Câmara dos Deputados',resumo:'Institui protocolos de atendimento para pessoas com deficiência e mobilidade reduzida na Política Nacional de Proteção e Defesa Civil.',situacao:'Pronta para Pauta na CCJC desde 11/03/2026 (relator Dep. Alex Manente).',ultimaMovData:'2026-03-11',ultimaMov:'Matéria pronta para pauta na CCJC.',proximosPassos:'Tramitação conclusiva: se não houver recurso após aprovação na CCJC, segue ao Senado, sem Plenário.',pontoAtencao:'Impacto na padronização de protocolos operacionais em cenários de desastre com populações vulneráveis.',encerrada:false},
+  {id:6,tipo:'PL',num:'2.995/2025',casa:'Câmara dos Deputados',resumo:'Agiliza o atendimento telefônico imediato de emergências por engasgo nos serviços públicos de urgência.',situacao:'Aprovado na CSPCCO; atualmente na CSaúde, aguardando relator.',ultimaMovData:'',ultimaMov:'Aprovado na CSPCCO; em CSaúde aguardando relator.',proximosPassos:'Tramitação conclusiva: segue à CFT e depois à CCJC.',pontoAtencao:'Possível impacto na integração com protocolos de atendimento pré-hospitalar dos CBMs.',encerrada:false},
+  {id:7,tipo:'PL',num:'1.958/2023',casa:'Câmara dos Deputados',resumo:'Isenta do pagamento de tarifas aeroportuárias as aeronaves públicas de Estados, do Distrito Federal e Municípios em operações governamentais.',situacao:'Substitutivo aprovado na CVT em 11/12/2024, unificando o apensado PL 5.788/2023. Atualmente na CFT; relator Dep. Josenildo (PDT-AP) designado desde 04/09/2025, aguardando parecer.',ultimaMovData:'2024-12-11',ultimaMov:'Substitutivo aprovado na Comissão de Viação e Transportes (CVT).',proximosPassos:'Tramitação conclusiva: após a CFT, segue à CCJC; se não houver recurso, vai direto ao Senado.',pontoAtencao:'Mesmo tema do PL 3.268/2020 e do PL 3.846/2025 (Senado). Bom momento para reunião com o Dep. Josenildo antes da apresentação do parecer.',encerrada:false},
+  {id:8,tipo:'PL',num:'5.788/2023',casa:'Câmara dos Deputados',resumo:'Estendia a isenção de tarifas aeroportuárias às aeronaves públicas municipais — mesmo tema do PL 1.958/2023, ao qual está apensado.',situacao:'Apensado ao PL 1.958/2023; mérito incorporado ao substitutivo de 11/12/2024. Não tramita de forma independente.',ultimaMovData:'2024-12-11',ultimaMov:'Mérito incorporado ao substitutivo do PL 1.958/2023.',proximosPassos:'Segue exatamente a tramitação do PL 1.958/2023.',pontoAtencao:'Acompanhamento deve ser feito pelo PL 1.958/2023.',encerrada:false},
+  {id:9,tipo:'PL',num:'5.045/2005',casa:'Senado Federal',resumo:'Autoriza os Governadores a convocarem policiais e bombeiros militares da reserva remunerada em situações de grave perturbação da ordem pública.',situacao:'Redação Final aprovada na CCJC da Câmara em 24/02/2026 e remetida ao Senado em 03/03/2026 (Ofício nº 52/2026/PS-GSE). Situação oficial: "Aguardando Apreciação pelo Senado Federal".',ultimaMovData:'2026-03-03',ultimaMov:'Remetida ao Senado Federal (Ofício nº 52/2026/PS-GSE).',proximosPassos:'Acompanhar a recepção formal (autuação) e a distribuição às comissões do Senado.',pontoAtencao:'Trata do emprego da reserva remunerada em situações excepcionais, com impacto na gestão de efetivo.',encerrada:false},
+  {id:10,tipo:'PL',num:'1.146/2023',casa:'Senado Federal',resumo:'Proíbe instrumentos de adestramento que causem danos a animais, com risco às técnicas de treinamento de cães de busca e resgate dos CBMs.',situacao:'Aprovado anteriormente na CDH, com emendas. Na CCJ, o Sen. Jorge Seif havia sido designado relator (12/03/2026), mas a relatoria foi devolvida em 06/05/2026 por ele não pertencer mais aos quadros da comissão. Atualmente sem relator: "Aguardando Designação do Relator".',ultimaMovData:'2026-05-06',ultimaMov:'Relatoria devolvida por o relator não pertencer mais à CCJ.',proximosPassos:'Decisão terminativa na CCJ assim que houver novo relator; se não houver recurso, não vai a Plenário.',pontoAtencao:'Já houve reunião com o relator anterior, Nota Técnica via CONAI e visita técnica ao Batalhão de Busca e Salvamento do CBMDF. Acompanhar de perto a nova designação de relator.',encerrada:false},
+  {id:11,tipo:'PL',num:'5.967/2023',casa:'Senado Federal',resumo:'Limita a 144 horas mensais a jornada de policiais e bombeiros militares, com banco de horas e pagamento em dobro em feriados.',situacao:'Aprovado no Plenário da Câmara e recebido no Senado. Despachado em 03/06/2026 para a CCJ, onde está desde 08/06/2026 aguardando designação de relator.',ultimaMovData:'2026-06-08',ultimaMov:'Despachado à CCJ, aguardando designação de relator.',proximosPassos:'Após designação de relator na CCJ, segue à Comissão de Segurança Pública (CSP).',pontoAtencao:'Exclusão dos CBMs do escopo já obtida na Câmara. Verificar, quando houver relator, se foi preservada no texto remetido ao Senado.',encerrada:false},
+  {id:12,tipo:'PL',num:'1.451/2023',casa:'Senado Federal',resumo:'Restringe a contribuição previdenciária de militares inativos e pensionistas à parcela que exceder o teto do RGPS.',situacao:'Aprovado em caráter conclusivo na CCJC da Câmara em 17/03/2026; recebido no Senado e despachado à CAE e à CAS. Em 12/08/2026 foi designado relator na CAE: Senador Efraim Filho.',ultimaMovData:'2026-08-12',ultimaMov:'Relator designado na CAE do Senado: Senador Efraim Filho.',proximosPassos:'Aguarda apresentação do relatório pelo Sen. Efraim Filho na CAE; depois segue também à CAS.',pontoAtencao:'Tema conexo ao PL 2.557/2026. Bom momento para buscar reunião com o gabinete do Sen. Efraim Filho antes do relatório.',encerrada:false},
+  {id:13,tipo:'PL',num:'3.268/2020',casa:'Senado Federal',resumo:'Isenta do pagamento de tarifas aeroportuárias as aeronaves públicas federais, estaduais, municipais e distritais — corresponde, no Senado, ao PL 1.958/2023 da Câmara.',situacao:'Relator Sen. Weverton apresentou relatório reformulado favorável com 3 emendas próprias. Chegou a ser pautado na CAE em 01/04/2025, mas foi retirado de pauta. Sem registro de nova deliberação desde então.',ultimaMovData:'2025-04-01',ultimaMov:'Pautado na CAE e retirado de pauta.',proximosPassos:'Decisão terminativa: após a CAE, segue à Comissão de Constituição, Justiça e Cidadania (CI).',pontoAtencao:'Parado há mais de um ano — articular reinclusão em pauta junto ao gabinete do Sen. Weverton, em conjunto com o PL 3.846/2025.',encerrada:false},
+  {id:14,tipo:'PL',num:'3.846/2025',casa:'Senado Federal',resumo:'Isenta de taxas de pouso, decolagem e uso de infraestrutura aeroportuária as aeronaves civis de uso público em missões de segurança pública, saúde e defesa civil.',situacao:'Autuado no Senado, ainda sem distribuição a comissão nem relator designado.',ultimaMovData:'',ultimaMov:'Autuado no Senado.',proximosPassos:'Regime a definir no despacho da Mesa; prováveis CAE e CI, no mesmo padrão do PL 3.268/2020.',pontoAtencao:'Janela oportuna para atuação antecipada, em tramitação conjunta com o PL 3.268/2020.',encerrada:false},
+  {id:15,tipo:'PL',num:'458/2024',casa:'Senado Federal',resumo:'Concede prioridade aos profissionais de segurança pública (policiais, bombeiros militares, guardas municipais e agentes penitenciários) no recebimento da restituição do IRPF, logo após idosos e magistério. Autor: Sen. Jayme Campos (União-MT).',situacao:'Aprovado na CSP em 22/04/2025. Aprovado na CAE em 11/08/2026, com relatório favorável do Sen. Hamilton Mourão (acolhendo a Emenda nº 2-CSP como subemenda e rejeitando a Emenda nº 1-T). No prazo de recurso na CAE.',ultimaMovData:'2026-08-11',ultimaMov:'Aprovado na CAE do Senado (relator Sen. Hamilton Mourão).',proximosPassos:'Decisão terminativa nas comissões (CSP e CAE); se não houver recurso de 1/10 dos senadores, vai direto à Câmara, sem Plenário do Senado.',pontoAtencao:'Tende a ter tramitação tranquila (sem custo orçamentário direto). Monitorar prazo de recurso e, depois, articular na Câmara para manter o texto sem alterações restritivas.',encerrada:false},
+  {id:16,tipo:'PL',num:'2.557/2026',casa:'Senado Federal',resumo:'Isenta do Imposto de Renda os rendimentos de militares das Forças Armadas, policiais militares e bombeiros militares, sem distinção de patente.',situacao:'Originado da Sugestão Legislativa SUG 6/2026 (Parecer nº 66/2026 da CDH). Autor formal: Sen. Izalci Lucas. Prazo de emendas perante a Mesa encerrado em 28/05/2026 (1 emenda recebida, do próprio autor). Aguarda despacho de distribuição às comissões, sem movimento recente.',ultimaMovData:'2026-05-28',ultimaMov:'Encerrado o prazo de emendas perante a Mesa.',proximosPassos:'Expectativa de tramitação pela CCJ e pela CAE.',pontoAtencao:'Sem estimativa de impacto fiscal no texto — tende a enfrentar resistência na CAE. Tema conexo ao PL 1.451/2023.',encerrada:false},
+  {id:17,tipo:'PEC',num:'17/2025',casa:'Câmara dos Deputados',resumo:'Acrescenta os §§ 11, 12 e 13 ao art. 144 da CF para instituir piso salarial nacional para policiais civis, PMs, bombeiros militares, policiais penais e peritos oficiais dos Estados (mínimo de 5 salários mínimos, prazo de até 8 anos para adaptação). Autores: Deps. Coronel Meira (PL-PE), Delegado Fabio Costa (PP-AL) e Alfredo Gaspar (União-AL), com apoio de outros 175 parlamentares.',situacao:'Apresentada em 23/04/2025. "Aguardando Despacho do Presidente da Câmara dos Deputados", ainda sem despacho às comissões. Profissionais do DF ficam fora da regra geral (piso definido por lei à parte).',ultimaMovData:'2025-04-23',ultimaMov:'Apresentada à Câmara dos Deputados.',proximosPassos:'Aguarda despacho do Presidente da Câmara para formação de Comissão Especial; depois exige aprovação em 2 turnos no Plenário (quórum de 3/5) e segue ao Senado.',pontoAtencao:'Grande interesse para o CBM-GO, com apoio de 175 deputados. Mais ampla que a PEC 10/2026 (cobre também policiais civis e outras carreiras). Monitorar despacho inicial e buscar contato com os autores, em especial o Dep. Coronel Meira (presidente da CSPCCO da Câmara).',encerrada:false},
+  {id:18,tipo:'PEC',num:'18/2025',casa:'Senado Federal',resumo:'PEC da Segurança Pública (iniciativa do Poder Executivo). Altera os arts. 5º, 15, 22, 23, 24, 40, 49, 84, 103-B, 130-A e 144 da CF, cria os arts. 144-A e 144-B, e estabelece novas fontes de recursos para o FNSP e o Funpen (incluindo parte da arrecadação de apostas esportivas e do Fundo Social do pré-sal).',situacao:'Aprovada pela Câmara em dois turnos em março/2026 e recebida (autuada) no Senado. Em 14/08/2026 o Presidente Davi Alcolumbre encaminhou a PEC à CCJ como pauta prioritária; em 18/08/2026 o presidente da CCJ, Sen. Otto Alencar, afirma que a comissão ainda aguarda o recebimento formal do texto.',ultimaMovData:'2026-08-18',ultimaMov:'CCJ do Senado aguarda o recebimento formal do texto para iniciar a análise.',proximosPassos:'Aguarda chegada formal à CCJ para exame de constitucionalidade, juridicidade e técnica legislativa; depois exige 2 turnos no Plenário (quórum de 49 votos). Expectativa de conclusão na CCJ antes do fim do período eleitoral.',pontoAtencao:'Prioridade do Poder Executivo, com forte pressão política. Acompanhar de perto a designação de relator na CCJ assim que recebida formalmente.',encerrada:false},
+  {id:19,tipo:'PEC',num:'44/2023',casa:'Senado Federal',resumo:'Reserva 5% das emendas parlamentares para ações de prevenção e resposta a desastres.',situacao:'Recebida no Senado, na Secretaria de Expediente, aguardando despacho de distribuição e indicação de relatoria.',ultimaMovData:'',ultimaMov:'Recebida na Secretaria de Expediente do Senado.',proximosPassos:'Exige aprovação em 2 turnos no Plenário do Senado (quórum de 49 votos) após parecer da CCJ.',pontoAtencao:'Baixa priorização orçamentária no exercício atual, agravada pelo contexto eleitoral de 2026.',encerrada:false},
+  {id:20,tipo:'PEC',num:'10/2026',casa:'Senado Federal',resumo:'Institui piso salarial nacional para policiais militares e corpos de bombeiros militares. Origem: Sugestão Legislativa SUG 14/2020 (20.753 apoios populares), aprovada pela CDH em 15/04/2026 (relatoria do Sen. Styvenson Valentim) e convertida em PEC.',situacao:'"Aguardando Despacho" no Plenário do Senado desde a autuação em 14/05/2026; ainda não foi formalmente encaminhada à CCJ. Dado oficial mais recente: 07/07/2026.',ultimaMovData:'2026-07-07',ultimaMov:'Segue aguardando despacho no Plenário do Senado (sem movimento formal desde então).',proximosPassos:'Aguarda despacho para a CCJ (análise de admissibilidade); depois exige 2 turnos no Plenário (quórum de 49 votos) e tramitação completa na Câmara.',pontoAtencao:'Parada na fase de despacho há mais de três meses. Há 35 senadores subscritores que podem ser mobilizados para articular o destravamento, seguindo o precedente da PEC 18/2025.',encerrada:false},
+];
+const PROPNAC_ATUALIZ=[
+  {num:'PLP 18/2021',data:'2026-08-07',fato:'Sancionada como Lei Complementar nº 234/2026. Tramitação encerrada, virou lei.'},
+  {num:'PL 241/2023',data:'2026-08-13',fato:'Pautada em Plenário nos dias 12 e 13/08; não apreciada por encerramento das sessões. Aguarda nova data.'},
+  {num:'PL 458/2024',data:'2026-08-11',fato:'Aprovado na CAE do Senado (relator Sen. Hamilton Mourão). Aguardando prazo de recurso.'},
+  {num:'PL 1451/2023',data:'2026-08-12',fato:'Relator designado na CAE do Senado: Senador Efraim Filho.'},
+  {num:'PL 317/2022',data:'2026-08-12',fato:'Aprovada a Redação Final na CCJC da Câmara (relator Dep. Sargento Portugal). Tramitação na Câmara encerrada; segue ao Senado.'},
+  {num:'PEC 18/2025',data:'2026-08-18',fato:'Enviada à CCJ do Senado em 14/08; CCJ ainda aguarda o recebimento formal para começar a análise.'},
+];
+const PROPNAC_FONTE={nome:'Relatório Consolidado de Proposições Legislativas do CBM (ASPAR)',data:'2026-08-18'};
+
 // ═══ CONSTANTS ═══
 const EL=['ind','cad','apv','emp','lic','con','entr'];
 const ELN={ind:'Indicação',cad:'Cadastro',apv:'Aprovação',emp:'Empenho',lic:'Licitação',con:'Contratação',entr:'Entrega'};
@@ -824,8 +1026,8 @@ const POS_L={'favorável':'✓ Favorável','contrário':'✗ Contrário','neutro
 const PR_P={'alta':'p-r','média':'p-w','baixa':'p-ok'};
 const PROJ_SC={'Em articulação':'#60A5FA','Aguardando Relator':'#7878A0','Em Análise Técnica':'#D4A843','Em Comissão':'#A78BFA','Em Plenário':'#E05A1E','Aprovado em Comissão':'#2DD4BF','Aprovado':'#22C55E','Arquivado':'#C8102E'};
 const PAL=['#C8102E','#60A5FA','#D4A843','#A78BFA','#2DD4BF','#E05A1E','#22C55E','#F472B6'];
-const CAL_C={'inter':'p-r','leg':'p-i','rec':'p-ok','div':'p-p'};
-const CAL_L={'inter':'Interação','leg':'Legislativo','rec':'Captação','div':'Assunto Diverso'};
+const CAL_C={'inter':'p-r','leg':'p-i','rec':'p-ok','div':'p-p','aniv':'p-w'};
+const CAL_L={'inter':'Interação','leg':'Legislativo','rec':'Captação','div':'Assunto Diverso','aniv':'Aniversário'};
 const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const DAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
@@ -958,7 +1160,7 @@ function moveProjKanban(id, direction) {
 
 
 // ═══ STORAGE ═══
-const SK='sgpar_v7';
+const SK='sgpar_v8';
 function loadState(){try{const r=localStorage.getItem(SK);if(r)return JSON.parse(r);}catch(e){}return null;}
 function saveState(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
 
@@ -970,10 +1172,13 @@ let S=loadState()||{
   anos:INIT_ANOS.map(x=>({...x})),
   dest:INIT_DEST.map(x=>({...x,etapas:{...x.etapas}})),
   events:[],
-  nextId:{parl:30,proj:20,inter:20,dest:50,ev:10},
+  propnac:INIT_PROPNAC.map(x=>({...x})),
+  nextId:{parl:30,proj:20,inter:20,dest:50,ev:10,propnac:21},
 };
 if(!S.events)S.events=[];
 if(!S.nextId.ev)S.nextId.ev=10;
+if(!S.propnac)S.propnac=INIT_PROPNAC.map(x=>({...x}));
+if(!S.nextId.propnac)S.nextId.propnac=21;
 
 // ═══ STAKEHOLDERS & NECESSIDADES ═══
 // ═══ STAKEHOLDERS & NECESSIDADES — DADOS E LÓGICA ═══
@@ -1023,7 +1228,7 @@ function renderStkTable(){
     if(q&&!(x.nome+x.tipo+x.instituicao+x.contato+x.responsavel+x.obs).toLowerCase().includes(q))return false;
     return true;
   });
-  if(!list.length){tb.innerHTML=`<tr><td colspan="9" class="empty">Nenhum stakeholder registrado. Clique em "+ Stakeholder" para adicionar.</td></tr>`;return;}
+  if(!list.length){tb.innerHTML=`<tr><td colspan="9" class="empty">Nenhum stakeholder registrado.${ADMIN?' Clique em "+ Stakeholder" para adicionar.':''}</td></tr>`;return;}
   tb.innerHTML=list.map(s=>{
     return `<tr onclick="openStkDetail('stk',${s.id})">
       <td><div style="display:flex;align-items:center;gap:6px"><div class="av">${ini(s.nome)}</div><strong>${s.nome}</strong></div></td>
@@ -1034,9 +1239,9 @@ function renderStkTable(){
       <td><span class="pill ${REL_P[s.status]||'p-n'}">${s.status||'—'}</span></td>
       <td style="color:var(--t2)">${s.responsavel||'—'}</td>
       <td style="color:var(--t2);font-size:10px;max-width:120px;white-space:normal">${s.obs||'—'}</td>
-      <td><div style="display:flex;gap:4px">
+      <td><div style="display:flex;gap:4px">${ADMIN?`
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openStkForm('stk',${s.id})">✏</button>
-        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('stk',${s.id})">✕</button>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('stk',${s.id})">✕</button>`:''}
       </div></td>
     </tr>`;
   }).join('');
@@ -1051,16 +1256,16 @@ function renderRespTable(){
     if(q&&!(x.nome+x.funcao+x.quartel+x.contato+x.papel).toLowerCase().includes(q))return false;
     return true;
   });
-  if(!list.length){tb.innerHTML=`<tr><td colspan="6" class="empty">Nenhum responsável cadastrado. Clique em "+ Responsável" para adicionar.</td></tr>`;return;}
+  if(!list.length){tb.innerHTML=`<tr><td colspan="6" class="empty">Nenhum responsável cadastrado.${ADMIN?' Clique em "+ Responsável" para adicionar.':''}</td></tr>`;return;}
   tb.innerHTML=list.map(r=>`<tr onclick="openStkDetail('resp',${r.id})">
     <td><div style="display:flex;align-items:center;gap:6px"><div class="av">${ini(r.nome)}</div><strong>${r.nome}</strong></div></td>
     <td><span class="pill p-p">${r.funcao||'—'}</span></td>
     <td style="color:var(--t2)">${r.quartel||'—'}</td>
     <td style="color:var(--t2);font-size:10px">${r.contato||'—'}</td>
     <td style="color:var(--t2)">${r.papel||'—'}</td>
-    <td><div style="display:flex;gap:4px">
+    <td><div style="display:flex;gap:4px">${ADMIN?`
       <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openStkForm('resp',${r.id})">✏</button>
-      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('resp',${r.id})">✕</button>
+      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('resp',${r.id})">✕</button>`:''}
     </div></td>
   </tr>`).join('');
 }
@@ -1076,7 +1281,7 @@ function renderQuartelTable(){
     if(q&&!(x.nome+x.municipio+x.tipoNec+x.descricao).toLowerCase().includes(q))return false;
     return true;
   });
-  if(!list.length){tb.innerHTML=`<tr><td colspan="7" class="empty">Nenhum quartel registrado. Clique em "+ Quartel" para adicionar.</td></tr>`;return;}
+  if(!list.length){tb.innerHTML=`<tr><td colspan="7" class="empty">Nenhum quartel registrado.${ADMIN?' Clique em "+ Quartel" para adicionar.':''}</td></tr>`;return;}
   tb.innerHTML=list.map(qt=>{
     const stkVinc=(qt.stakeholders||[]).map(sid=>{const s=S.stakeholders.find(x=>x.id===sid);return s?`<span class="stk-link-chip">👤 ${s.nome}</span>`:''}).join('');
     const parlVinc=(qt.parlamentares||[]).map(pid=>{const p=getParl(pid);return p&&p.name!=='—'?`<span class="stk-link-chip">🏛 ${p.name}</span>`:''}).join('');
@@ -1087,9 +1292,9 @@ function renderQuartelTable(){
       <td style="color:var(--t2);font-size:10px;max-width:150px;white-space:normal">${qt.descricao||'—'}</td>
       <td style="max-width:140px">${stkVinc||'<span style="color:var(--t3);font-size:9px">—</span>'}</td>
       <td style="max-width:140px">${parlVinc||'<span style="color:var(--t3);font-size:9px">—</span>'}</td>
-      <td><div style="display:flex;gap:4px">
+      <td><div style="display:flex;gap:4px">${ADMIN?`
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openStkForm('quartel',${qt.id})">✏</button>
-        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('quartel',${qt.id})">✕</button>
+        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDelStk('quartel',${qt.id})">✕</button>`:''}
       </div></td>
     </tr>`;
   }).join('');
@@ -1243,7 +1448,7 @@ function openStkDetail(mode,id){
       <div class="df full"><div class="dlbl">Observações</div><div class="dval sec">${s.obs||'—'}</div></div>
       ${qtlVinc.length?`<div class="df full"><div class="dlbl">Quartéis Vinculados</div><div class="dval stk-detail-section"><div class="stk-detail-title">🏠 Quartéis com este stakeholder</div>${qtlVinc.map(q=>`<div style="margin-bottom:4px"><span class="stk-link-chip">🏠 ${q.nome}</span> <span style="color:var(--t2);font-size:10px">${q.municipio} · ${q.tipoNec}</span></div>`).join('')}</div></div>`:''}
     </div>`;
-    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('stk',${s.id})">✏ Editar</button>`;
+    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('stk',${s.id})">✏ Editar</button>`:''}`;
     openModal('modal-detail');
   } else if(mode==='quartel'){
     const qt=S.quarteis.find(x=>x.id===id);if(!qt)return;
@@ -1257,7 +1462,7 @@ function openStkDetail(mode,id){
       ${stkVinc.length?`<div class="df full"><div class="dlbl">Stakeholders Relacionados</div><div class="dval"><div class="stk-detail-section"><div class="stk-detail-title">👤 Stakeholders</div>${stkVinc.map(s=>`<div style="margin-bottom:4px"><span class="stk-link-chip">👤 ${s.nome}</span> <span style="color:var(--t2);font-size:10px">${s.tipo} · <span class="pill ${INF_P[s.influencia]||'p-n'}" style="font-size:8px">${s.influencia}</span></span></div>`).join('')}</div></div></div>`:''}
       ${parlVinc.length?`<div class="df full"><div class="dlbl">Parlamentares Vinculados</div><div class="dval"><div class="stk-detail-section"><div class="stk-detail-title">🏛 Parlamentares</div>${parlVinc.map(p=>`<div style="margin-bottom:4px"><span class="stk-link-chip">🏛 ${p.name}</span> <span style="color:var(--t2);font-size:10px">${p.partido} · ${p.casa}</span></div>`).join('')}</div></div></div>`:''}
     </div>`;
-    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('quartel',${qt.id})">✏ Editar</button>`;
+    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('quartel',${qt.id})">✏ Editar</button>`:''}`;
     openModal('modal-detail');
   } else if(mode==='resp'){
     const r=S.responsaveis.find(x=>x.id===id);if(!r)return;
@@ -1268,7 +1473,7 @@ function openStkDetail(mode,id){
       <div class="df"><div class="dlbl">Contato</div><div class="dval sec">${r.contato||'—'}</div></div>
       <div class="df full"><div class="dlbl">Papel na Captação</div><div class="dval sec">${r.papel||'—'}</div></div>
     </div>`;
-    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('resp',${r.id})">✏ Editar</button>`;
+    document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openStkForm('resp',${r.id})">✏ Editar</button>`:''}`;
     openModal('modal-detail');
   }
 }
@@ -1301,7 +1506,245 @@ const fmtR=v=>{if(!v&&v!==0)return'—';return'R$'+(v>=1e6?(v/1e6).toFixed(2).re
 const fmtFull=v=>v?.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})||'—';
 const fmtD=d=>{if(!d)return'—';const[y,m,di]=d.split('-');return`${di}/${m}/${y}`;};
 const ini=n=>n.split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+// Link de busca para localizar a foto oficial no site do Senado/Câmara (não baixa/assume nenhuma foto).
+const officialSearchUrl=p=>{
+  const site=p.casa&&p.casa.includes('Senado')?'senado.leg.br':'camara.leg.br';
+  return`https://www.google.com/search?q=${encodeURIComponent(p.name+' foto oficial site:'+site)}`;
+};
 const etDone=et=>EL.filter(k=>et[k]).length;
+
+// ═══ PARLAMENTARES ATIVOS / ANIVERSÁRIOS ═══
+const activeParl=()=>S.parl.filter(p=>p.ativo!==false);
+function parlAge(nasc){
+  if(!nasc)return null;
+  const[y,m,d]=nasc.split('-').map(Number);
+  const t=new Date();let age=t.getFullYear()-y;
+  if((t.getMonth()+1)<m||((t.getMonth()+1)===m&&t.getDate()<d))age--;
+  return age;
+}
+function nextBirthday(nasc){
+  if(!nasc)return null;
+  const[,m,d]=nasc.split('-').map(Number);
+  const today=new Date();today.setHours(0,0,0,0);
+  let bday=new Date(today.getFullYear(),m-1,d);
+  if(bday<today)bday=new Date(today.getFullYear()+1,m-1,d);
+  return bday;
+}
+function daysUntil(nasc){
+  const b=nextBirthday(nasc);if(!b)return Infinity;
+  const today=new Date();today.setHours(0,0,0,0);
+  return Math.round((b-today)/86400000);
+}
+const fmtDiaMes=nasc=>{if(!nasc)return'—';const[,m,d]=nasc.split('-');return`${d}/${m}`;};
+
+// ═══ DASHBOARD / INÍCIO ═══
+function renderHome(){
+  const ap=activeParl();
+  const dep=ap.filter(p=>!p.casa.includes('Senado')).length;
+  const sen=ap.filter(p=>p.casa.includes('Senado')).length;
+  const todayStr=new Date().toISOString().split('T')[0];
+  const mesAtual=new Date().getMonth()+1;
+  const anivMes=ap.filter(p=>p.nascimento&&parseInt(p.nascimento.split('-')[1])===mesAtual);
+  const futuras=getAllEvtsNoAniv().filter(e=>e.data&&e.data>=todayStr).sort((a,b)=>a.data.localeCompare(b.data));
+  const previstas=futuras.filter(e=>!e.status||e.status==='Prevista').length;
+  const realizadas=getAllEvts().filter(e=>e.status==='Realizado').length;
+  document.getElementById('home-kpis').innerHTML=`
+    <div class="kcard" style="border-top-color:var(--red)"><div class="klbl">Parlamentares</div><div class="kval" style="color:var(--red)">${ap.length}</div><div class="ksub">Bancada de GO em exercício</div></div>
+    <div class="kcard" style="border-top-color:var(--il)"><div class="klbl">Deputados Federais</div><div class="kval" style="color:var(--il)">${dep}</div><div class="ksub">Câmara dos Deputados</div></div>
+    <div class="kcard" style="border-top-color:var(--pl)"><div class="klbl">Senadores</div><div class="kval" style="color:var(--pl)">${sen}</div><div class="ksub">Senado Federal</div></div>
+    <div class="kcard" style="border-top-color:var(--wl)"><div class="klbl">Aniversariantes do Mês</div><div class="kval" style="color:var(--wl)">${anivMes.length}</div><div class="ksub">${MONTHS[mesAtual-1]}</div></div>
+    <div class="kcard" style="border-top-color:var(--ok)"><div class="klbl">Reuniões Previstas</div><div class="kval" style="color:var(--ok)">${previstas}</div><div class="ksub">${futuras.length} agendadas ao todo</div></div>
+    <div class="kcard" style="border-top-color:var(--tl)"><div class="klbl">Reuniões Realizadas</div><div class="kval" style="color:var(--tl)">${realizadas}</div><div class="ksub">Registro histórico</div></div>
+  `;
+  document.getElementById('home-parl-grid').innerHTML=ap.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`
+    <div class="ri" style="cursor:pointer" onclick="openParlDetail(${p.id})">
+      ${p.foto?`<img src="${p.foto}" style="width:28px;height:28px;object-fit:cover;border-radius:6px;flex-shrink:0">`:`<div class="av" style="width:28px;height:28px;flex-shrink:0">${ini(p.name)}</div>`}
+      <div class="rb"><div class="rname">${p.name}</div><div style="font-size:9px;color:var(--t3)">${p.partido} · ${p.casa.includes('Senado')?'Senado':'Câmara'}</div></div>
+    </div>`).join('')||'<div class="empty">Nenhum parlamentar cadastrado.</div>';
+  document.getElementById('home-anv-lbl').textContent=MONTHS[mesAtual-1];
+  document.getElementById('home-anv-list').innerHTML=anivMes.length?anivMes.slice().sort((a,b)=>parseInt(a.nascimento.split('-')[2])-parseInt(b.nascimento.split('-')[2])).map(p=>`
+    <div class="ri"><div class="av">${ini(p.name)}</div><div class="rb"><div class="rname">${p.name}</div><div style="font-size:9px;color:var(--t3)">${fmtDiaMes(p.nascimento)}</div></div></div>`).join(''):'<div class="empty">Nenhum aniversariante este mês.</div>';
+  document.getElementById('home-reu-list').innerHTML=futuras.length?futuras.slice(0,5).map(e=>{const l=getParl(e.parl_id);return`
+    <div class="ri"><div class="av">📅</div><div class="rb"><div class="rname">${e.titulo||CAL_L[e.tipo||'inter']}</div><div style="font-size:9px;color:var(--t3)">${fmtD(e.data)}${l.name!=='—'?' · '+l.name:''}</div></div></div>`;}).join(''):'<div class="empty">Nenhuma reunião agendada.</div>';
+  const recentProj=S.proj.slice().sort((a,b)=>b.id-a.id).slice(0,5);
+  document.getElementById('home-leg-list').innerHTML=recentProj.length?recentProj.map(p=>{const l=getParl(p.parl_id);return`
+    <div class="ri" style="cursor:pointer" onclick="closeModal('modal-detail');openProjDetail(${p.id})"><div class="av">${p.tipo}</div><div class="rb"><div class="rname">${p.tipo} ${p.num} — ${l.name}${l.ativo===false?' <span class="pill p-n" style="font-size:8px">mandato encerrado</span>':''}</div><div style="font-size:9px;color:var(--t3)">${p.status}</div></div></div>`;}).join(''):'<div class="empty">Nenhum projeto cadastrado.</div>';
+}
+
+// ═══ PARLAMENTARES — VISÃO PÚBLICA ═══
+function renderParlView(){
+  const q=(document.getElementById('pv-q')||{}).value?.toLowerCase()||'';
+  const casa=(document.getElementById('pv-casa')||{}).value||'';
+  const partido=(document.getElementById('pv-partido')||{}).value||'';
+  const ap=activeParl();
+  const partSel=document.getElementById('pv-partido');
+  if(partSel&&partSel.options.length<=1){
+    const parts=[...new Set(ap.map(p=>p.partido))].filter(Boolean).sort();
+    partSel.innerHTML='<option value="">Todos os partidos</option>'+parts.map(pt=>`<option>${pt}</option>`).join('');
+  }
+  const rows=ap.filter(p=>(!q||(p.name+p.partido).toLowerCase().includes(q))&&(!casa||p.casa===casa)&&(!partido||p.partido===partido));
+  document.getElementById('parlv-sub').textContent=`Bancada Federal de Goiás em exercício · ${ap.length} parlamentares (${ap.filter(p=>p.casa.includes('Senado')).length} senadores, ${ap.filter(p=>!p.casa.includes('Senado')).length} deputados federais)`;
+  document.getElementById('parlv-grid').innerHTML=rows.length?rows.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>`
+    <div class="cc" style="cursor:pointer;display:flex;gap:10px;align-items:center;margin-bottom:0" onclick="openParlDetail(${p.id})">
+      ${p.foto?`<img src="${p.foto}" style="width:46px;height:46px;object-fit:cover;border-radius:8px;flex-shrink:0">`:`<div class="av" style="width:46px;height:46px;font-size:14px;flex-shrink:0">${ini(p.name)}</div>`}
+      <div style="min-width:0">
+        <div style="font-weight:700;font-size:12px;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:10px;color:var(--t3)">${p.cargo||(p.casa.includes('Senado')?'Senador':'Deputado Federal')} · ${p.partido||'—'}</div>
+      </div>
+    </div>`).join(''):'<div class="empty" style="grid-column:1/-1">Nenhum parlamentar encontrado.</div>';
+}
+
+// ═══ FICHA DO PARLAMENTAR (leitura) ═══
+function openParlDetail(id){
+  const p=S.parl.find(x=>x.id===id);if(!p)return;
+  const todayStr=new Date().toISOString().split('T')[0];
+  const reuFuturas=getAllEvtsNoAniv().filter(e=>e.parl_id===id&&e.data>=todayStr).sort((a,b)=>a.data.localeCompare(b.data));
+  const reuPassadas=getAllEvtsNoAniv().filter(e=>e.parl_id===id&&e.data<todayStr).sort((a,b)=>b.data.localeCompare(a.data));
+  const projs=S.proj.filter(x=>x.parl_id===id);
+  const dests=S.dest.filter(x=>x.parl_id===id);
+  const capTotal=dests.reduce((s,d)=>s+d.vl_prev,0);
+  document.getElementById('det-tit').textContent=p.name;
+  document.getElementById('det-body').innerHTML=`
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+      ${p.foto?`<img src="${p.foto}" style="width:64px;height:64px;object-fit:cover;border-radius:10px">`:`<div class="av" style="width:64px;height:64px;font-size:20px">${ini(p.name)}</div>`}
+      <div>
+        <div style="font-size:15px;font-weight:700">${p.name}${p.ativo===false?' <span class="pill p-n">Mandato encerrado</span>':''}</div>
+        <div style="font-size:11px;color:var(--t2)">${p.cargo||(p.casa.includes('Senado')?'Senador':'Deputado Federal')} · ${p.partido||'—'} · ${p.casa}</div>
+        ${!p.foto?`<a href="${officialSearchUrl(p)}" target="_blank" rel="noopener" style="font-size:10px;color:var(--il)" onclick="event.stopPropagation()">🔎 Buscar foto oficial (${p.casa.includes('Senado')?'Senado':'Câmara'})</a>`:''}
+      </div>
+    </div>
+    <div class="dg">
+      <div class="df"><div class="dlbl">Comissões</div><div class="dval sec">${p.comissao||'—'}</div></div>
+      <div class="df"><div class="dlbl">Aniversário</div><div class="dval">${p.nascimento?fmtD(p.nascimento)+(parlAge(p.nascimento)!==null?` (${parlAge(p.nascimento)} anos)`:''):'—'}</div></div>
+      <div class="df"><div class="dlbl">Telefone</div><div class="dval sec">${p.telefone||'—'}</div></div>
+      <div class="df"><div class="dlbl">E-mail</div><div class="dval sec">${p.email||'—'}</div></div>
+      <div class="df full"><div class="dlbl">Valor Captado (destinações CBM-GO)</div><div class="dval" style="color:var(--red);font-weight:700">${capTotal?fmtFull(capTotal):'—'}</div></div>
+      <div class="df full"><div class="dlbl">Observações</div><div class="dval sec">${p.obs||'—'}</div></div>
+    </div>
+    <div class="stk-detail-section">
+      <div class="stk-detail-title">📅 Próximas Reuniões (${reuFuturas.length})</div>
+      ${reuFuturas.length?reuFuturas.slice(0,6).map(e=>`<div style="font-size:11px;color:var(--t2);margin-bottom:3px">${fmtD(e.data)} — ${e.titulo||CAL_L[e.tipo||'inter']}${e.status?` <span class="pill p-n" style="font-size:8px">${e.status}</span>`:''}</div>`).join(''):'<div style="font-size:11px;color:var(--t3)">Nenhuma reunião futura.</div>'}
+    </div>
+    <div class="stk-detail-section">
+      <div class="stk-detail-title">🗂 Reuniões Realizadas / Histórico (${reuPassadas.length})</div>
+      ${reuPassadas.length?reuPassadas.slice(0,6).map(e=>`<div style="font-size:11px;color:var(--t2);margin-bottom:3px">${fmtD(e.data)} — ${e.titulo||CAL_L[e.tipo||'inter']}</div>`).join(''):'<div style="font-size:11px;color:var(--t3)">Nenhum registro.</div>'}
+    </div>
+    <div class="stk-detail-section">
+      <div class="stk-detail-title">⚖ Acompanhamento Legislativo (${projs.length})</div>
+      ${projs.length?projs.map(pr=>`<div style="font-size:11px;color:var(--t2);margin-bottom:3px;cursor:pointer" onclick="closeModal('modal-detail');openProjDetail(${pr.id})"><span class="pill p-n" style="margin-right:4px">${pr.tipo} ${pr.num}</span>${pr.status} — ${(pr.ementa||'').slice(0,90)}</div>`).join(''):'<div style="font-size:11px;color:var(--t3)">Nenhum projeto vinculado.</div>'}
+    </div>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openParlForm(${id})">✏ Editar</button>`:''}`;
+  openModal('modal-detail');
+}
+
+// ═══ ANIVERSÁRIOS ═══
+const birthdaysInMonth=m=>activeParl().filter(p=>p.nascimento&&parseInt(p.nascimento.split('-')[1])===m);
+function renderAniversarios(){
+  const ap=activeParl();
+  const today=new Date();const todayMonth=today.getMonth()+1;const todayDay=today.getDate();
+  const hoje=ap.filter(p=>p.nascimento&&parseInt(p.nascimento.split('-')[1])===todayMonth&&parseInt(p.nascimento.split('-')[2])===todayDay);
+  document.getElementById('anv-today').innerHTML=hoje.length?`<div class="alert" style="background:var(--okd);border-color:rgba(34,197,94,.3);border-left-color:var(--ok)"><span style="font-size:16px">🎉</span><div><strong>Aniversário hoje:</strong> ${hoje.map(p=>`${p.name} (${p.partido})`).join(', ')}</div></div>`:'';
+  const withDays=ap.filter(p=>p.nascimento).map(p=>({p,days:daysUntil(p.nascimento)})).sort((a,b)=>a.days-b.days);
+  document.getElementById('anv-upcoming-list').innerHTML=withDays.length?withDays.map(({p,days})=>`
+    <div class="ri" style="cursor:pointer" onclick="openParlDetail(${p.id})">${p.foto?`<img src="${p.foto}" style="width:22px;height:22px;object-fit:cover;border-radius:5px">`:`<div class="av">${ini(p.name)}</div>`}<div class="rb"><div class="rname">${p.name}${days===0?' 🎂':''}</div><div style="font-size:9px;color:var(--t3)">${fmtDiaMes(p.nascimento)} · ${p.partido} · ${p.casa.includes('Senado')?'Senado':'Câmara'}</div></div><div class="rv" style="color:${days===0?'var(--red)':'var(--t3)'};font-weight:${days===0?700:400}">${days===0?'Hoje!':days===1?'Amanhã':`em ${days} dias`}</div></div>`).join(''):'<div class="empty">Nenhuma data de nascimento cadastrada.</div>';
+}
+
+// ═══ LEGISLATIVO — POR PARLAMENTAR ═══
+function renderLegPorParl(){
+  const q=(document.getElementById('lp-q')||{}).value?.toLowerCase()||'';
+  const ap=activeParl().filter(p=>!q||p.name.toLowerCase().includes(q));
+  const withData=ap.filter(p=>S.proj.some(x=>x.parl_id===p.id));
+  document.getElementById('lp-list').innerHTML=withData.length?withData.map(p=>{
+    const projs=S.proj.filter(x=>x.parl_id===p.id);
+    const inters=S.inter.filter(x=>x.parl_id===p.id).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    const lastMov=inters[0];
+    return`<div class="tw" style="margin-bottom:0">
+      <div class="thbar"><span class="thtit">${p.name} <span style="color:var(--t3);font-weight:400;text-transform:none">· ${p.partido} · ${p.casa.includes('Senado')?'Senado':'Câmara'}</span></span></div>
+      <div class="tscroll"><table><thead><tr><th>Proposição</th><th>Tipo</th><th>Assunto</th><th>Situação</th><th>Comissão</th><th>Última Movimentação</th></tr></thead><tbody>
+        ${projs.map(pr=>`<tr onclick="openProjDetail(${pr.id})" style="cursor:pointer">
+          <td style="font-weight:700">${pr.num}</td><td><span class="pill p-n">${pr.tipo}</span></td>
+          <td style="max-width:280px;font-size:10px;color:var(--t2)">${pr.ementa||'—'}</td>
+          <td><span class="pill" style="background:${PROJ_SC[pr.status]||'#888'}22;color:${PROJ_SC[pr.status]||'#888'};border:1px solid ${PROJ_SC[pr.status]||'#888'}44">${pr.status}</span></td>
+          <td style="font-size:10px;color:var(--t3)">${p.comissao||'—'}</td>
+          <td style="font-size:10px;color:var(--t3)">${lastMov?fmtD(lastMov.data):'—'}</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    </div>`;
+  }).join(''):'<div class="empty">Nenhum registro legislativo encontrado.</div>';
+}
+
+// ═══ PROPOSIÇÕES DE INTERESSE NACIONAL ═══
+const PROPNAC_TIPO_C={'PL':'p-n','PLP':'p-i','PEC':'p-p'};
+function renderLegNac(){
+  document.getElementById('nac-fonte').textContent=`Fonte: ${PROPNAC_FONTE.nome} — atualizado em ${fmtD(PROPNAC_FONTE.data)}`;
+  if(PROPNAC_ATUALIZ.length){
+    document.getElementById('nac-atualiz').innerHTML=`<div class="tw" style="margin-bottom:12px">
+      <div class="thbar"><span class="thtit">Atualizações Recentes</span></div>
+      <div class="tscroll"><table><thead><tr><th>Proposição</th><th>Data</th><th>O que aconteceu</th></tr></thead><tbody>
+        ${PROPNAC_ATUALIZ.map(a=>`<tr><td style="font-weight:700">${a.num}</td><td style="color:var(--t3);font-size:10px">${fmtD(a.data)}</td><td style="font-size:11px;color:var(--t2)">${a.fato}</td></tr>`).join('')}
+      </tbody></table></div>
+    </div>`;
+  } else document.getElementById('nac-atualiz').innerHTML='';
+  const tipo=(document.getElementById('nac-tipo')||{}).value||'';
+  const casa=(document.getElementById('nac-casa')||{}).value||'';
+  const rows=S.propnac.filter(p=>(!tipo||p.tipo===tipo)&&(!casa||p.casa===casa)).slice().sort((a,b)=>(b.ultimaMovData||'').localeCompare(a.ultimaMovData||''));
+  document.getElementById('nac-list').innerHTML=rows.length?rows.map(p=>`
+    <div class="cc" style="cursor:pointer;margin-bottom:0" onclick="openPropnacDetail(${p.id})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px">
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <span class="pill ${PROPNAC_TIPO_C[p.tipo]||'p-n'}">${p.tipo} ${p.num}</span>
+          <span class="pill p-t">${p.casa}</span>
+          ${p.encerrada?'<span class="pill p-ok">Tramitação encerrada</span>':''}
+        </div>
+        <div style="font-size:9px;color:var(--t3);white-space:nowrap">${p.ultimaMovData?fmtD(p.ultimaMovData):''}</div>
+      </div>
+      <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:6px">${p.resumo}</div>
+      <div style="font-size:10px;color:var(--t1)"><strong>Última movimentação:</strong> ${p.ultimaMov||'—'}</div>
+    </div>`).join(''):'<div class="empty">Nenhuma proposição encontrada.</div>';
+}
+function openPropnacDetail(id){
+  const p=S.propnac.find(x=>x.id===id);if(!p)return;
+  document.getElementById('det-tit').textContent=`${p.tipo} ${p.num}`;
+  document.getElementById('det-body').innerHTML=`<div class="dg">
+    <div class="df"><div class="dlbl">Casa Atual</div><div class="dval"><span class="pill p-t">${p.casa}</span>${p.encerrada?' <span class="pill p-ok">Tramitação encerrada</span>':''}</div></div>
+    <div class="df"><div class="dlbl">Última Movimentação</div><div class="dval">${p.ultimaMovData?fmtD(p.ultimaMovData):'—'}</div></div>
+    <div class="df full"><div class="dlbl">Assunto</div><div class="dval">${p.resumo||'—'}</div></div>
+    <div class="df full"><div class="dlbl">Situação Atual</div><div class="dval sec">${p.situacao||'—'}</div></div>
+    <div class="df full"><div class="dlbl">O que aconteceu</div><div class="dval sec">${p.ultimaMov||'—'}</div></div>
+    <div class="df full"><div class="dlbl">Próximos Passos</div><div class="dval" style="color:var(--wl)">${p.proximosPassos||'—'}</div></div>
+    <div class="df full"><div class="dlbl">Ponto de Atenção</div><div class="dval sec">${p.pontoAtencao||'—'}</div></div>
+    <div class="df full"><div class="dlbl">Fonte</div><div class="dval sec">${PROPNAC_FONTE.nome} — ${fmtD(PROPNAC_FONTE.data)}</div></div>
+  </div>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-danger" onclick="closeModal('modal-detail');confirmDel('propnac',${id})">Excluir</button><button class="btn btn-red" onclick="closeModal('modal-detail');openPropnacForm(${id})">✏ Editar</button>`:''}`;
+  openModal('modal-detail');
+}
+function openPropnacForm(id){
+  editId.propnac=id;
+  document.getElementById('pn-tit').textContent=id?'Editar Proposição':'Nova Proposição';
+  const p=id?S.propnac.find(x=>x.id===id):null;
+  document.getElementById('pn-tipo').value=p?.tipo||'PL';
+  document.getElementById('pn-num').value=p?.num||'';
+  document.getElementById('pn-casa').value=p?.casa||'Câmara dos Deputados';
+  document.getElementById('pn-resumo').value=p?.resumo||'';
+  document.getElementById('pn-situacao').value=p?.situacao||'';
+  document.getElementById('pn-ultimamov').value=p?.ultimaMov||'';
+  document.getElementById('pn-ultimamovdata').value=p?.ultimaMovData||'';
+  document.getElementById('pn-proximos').value=p?.proximosPassos||'';
+  document.getElementById('pn-ponto').value=p?.pontoAtencao||'';
+  document.getElementById('pn-encerrada').checked=!!p?.encerrada;
+  openModal('modal-propnac');
+}
+function savePropnac(){
+  const num=document.getElementById('pn-num').value.trim();if(!num){alert('Informe o número da proposição.');return;}
+  const rec={tipo:document.getElementById('pn-tipo').value,num,casa:document.getElementById('pn-casa').value,
+    resumo:document.getElementById('pn-resumo').value,situacao:document.getElementById('pn-situacao').value,
+    ultimaMov:document.getElementById('pn-ultimamov').value,ultimaMovData:document.getElementById('pn-ultimamovdata').value,
+    proximosPassos:document.getElementById('pn-proximos').value,pontoAtencao:document.getElementById('pn-ponto').value,
+    encerrada:document.getElementById('pn-encerrada').checked};
+  if(editId.propnac){const i=S.propnac.findIndex(x=>x.id===editId.propnac);if(i>=0)S.propnac[i]={...S.propnac[i],...rec};}
+  else S.propnac.push({id:S.nextId.propnac++,...rec});
+  saveState();closeModal('modal-propnac');renderAll();
+}
 
 // ═══ CHART DEFAULTS ═══
 Chart.defaults.color='#3A3A58';
@@ -1340,31 +1783,55 @@ function mkRank(elId,entries,maxV){
 }
 
 // ═══ NAVIGATION ═══
-let activeMain='cal';
+let activeMain='home';
+let ADMIN=false; // true only while the Gerenciamento tab is active — gates all add/edit/delete UI
 let pendPh={dest:[],inter:[],cal:[]};
 let calPartsArr=[];
 let calViewMode='mes';
 let calFilterType=null;
 let calDate=new Date();
-let editId={dest:null,inter:null,proj:null,parl:null,ev:null};
+let editId={dest:null,inter:null,proj:null,parl:null,ev:null,propnac:null};
 
+const MAIN_TABS=['home','parl','anv','cal','leg','rec','ger'];
+let gerSub='parladmin';
+function applyAdminVisibility(){
+  document.querySelectorAll('.admin-only').forEach(el=>el.classList.toggle('hidden',!ADMIN));
+}
 function switchMain(tab){
+  document.querySelectorAll('.overlay.open').forEach(el=>el.classList.remove('open'));
   activeMain=tab;
-  ['cal','leg','rec','parl'].forEach(t=>{
+  ADMIN=(tab==='ger');
+  MAIN_TABS.forEach(t=>{
     document.getElementById('mt-'+t)?.classList.toggle('active',t===tab);
-    document.getElementById('tab-'+t)?.classList.toggle('hidden',t!==tab);
+    if(t!=='ger')document.getElementById('tab-'+t)?.classList.toggle('hidden',t!==tab||tab==='ger');
   });
-  if(tab==='cal')renderCal();
+  document.getElementById('tab-ger')?.classList.toggle('hidden',tab!=='ger');
+  document.getElementById('tab-parladmin')?.classList.add('hidden');
+  applyAdminVisibility();
+  if(tab==='home')renderHome();
+  else if(tab==='parl')renderParlView();
+  else if(tab==='anv')renderAniversarios();
+  else if(tab==='cal')renderCal();
   else if(tab==='leg')renderLegDash();
   else if(tab==='rec'){renderYearBar();renderRecDash();}
-  else renderParlTable();
+  else if(tab==='ger')switchGer(gerSub||'parladmin');
+}
+function switchGer(sub){
+  gerSub=sub;ADMIN=true;
+  document.querySelectorAll('.ger-subtab').forEach(b=>b.classList.toggle('active',b.dataset.sub===sub));
+  ['parladmin','cal','leg','rec'].forEach(t=>document.getElementById('tab-'+t)?.classList.toggle('hidden',t!==sub));
+  applyAdminVisibility();
+  if(sub==='parladmin')renderParlTable();
+  else if(sub==='cal')renderCal();
+  else if(sub==='leg')renderLegDash();
+  else if(sub==='rec'){renderYearBar();renderRecDash();}
 }
 
 function switchSub(tab,view){
   document.querySelectorAll(`.stab[data-tab="${tab}"]`).forEach(b=>b.classList.toggle('active',b.dataset.view===view));
   if(tab==='leg'){
-    ['dash','kanban','timeline'].forEach(v=>document.getElementById('leg-'+v).classList.toggle('hidden',v!==view));
-    if(view==='dash')renderLegDash();else if(view==='kanban')renderKanban();else renderTimeline();
+    ['dash','porparl','nac','kanban','timeline'].forEach(v=>document.getElementById('leg-'+v).classList.toggle('hidden',v!==view));
+    if(view==='dash')renderLegDash();else if(view==='porparl')renderLegPorParl();else if(view==='nac')renderLegNac();else if(view==='kanban')renderKanban();else renderTimeline();
   } else {
     ['dash','kanban','funil','table'].forEach(v=>document.getElementById('rec-'+v).classList.toggle('hidden',v!==view));
     if(view==='dash')renderRecDash();else if(view==='kanban')renderRecKanban();else if(view==='funil')renderFunil();else renderDestTable();
@@ -1374,15 +1841,39 @@ function switchSub(tab,view){
 // ═══ CALENDAR ═══
 function calView(mode){
   calViewMode=mode;
-  document.getElementById('cv-mes').classList.toggle('active',mode==='mes');
-  document.getElementById('cv-lista').classList.toggle('active',mode==='lista');
+  ['dia','semana','mes','lista'].forEach(v=>document.getElementById('cv-'+v)?.classList.toggle('active',v===mode));
   renderCal();
 }
 function calToday(){calDate=new Date();renderCal();}
-function calPrev(){calDate=new Date(calDate.getFullYear(),calDate.getMonth()-1,1);renderCal();}
-function calNext(){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+1,1);renderCal();}
+function calPrev(){
+  if(calViewMode==='dia')calDate=new Date(calDate.getFullYear(),calDate.getMonth(),calDate.getDate()-1);
+  else if(calViewMode==='semana')calDate=new Date(calDate.getFullYear(),calDate.getMonth(),calDate.getDate()-7);
+  else calDate=new Date(calDate.getFullYear(),calDate.getMonth()-1,1);
+  renderCal();
+}
+function calNext(){
+  if(calViewMode==='dia')calDate=new Date(calDate.getFullYear(),calDate.getMonth(),calDate.getDate()+1);
+  else if(calViewMode==='semana')calDate=new Date(calDate.getFullYear(),calDate.getMonth(),calDate.getDate()+7);
+  else calDate=new Date(calDate.getFullYear(),calDate.getMonth()+1,1);
+  renderCal();
+}
 function calFilterFn(type){calFilterType=type;renderCal();}
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const weekStart=d=>{const r=new Date(d.getFullYear(),d.getMonth(),d.getDate());r.setDate(r.getDate()-r.getDay());return r;};
+const addDaysDate=(d,n)=>{const r=new Date(d);r.setDate(r.getDate()+n);return r;};
 
+function getBirthdayEvts(){
+  const evts=[];
+  const thisYear=new Date().getFullYear();
+  activeParl().forEach(p=>{
+    if(!p.nascimento)return;
+    const[,m,d]=p.nascimento.split('-');
+    for(let y=thisYear-1;y<=thisYear+5;y++){
+      evts.push({id:'b:'+p.id+':'+y,data:`${y}-${m}-${d}`,titulo:`🎂 Aniversário — ${p.name}`,tipo:'aniv',parl_id:p.id,_src:'aniv'});
+    }
+  });
+  return evts;
+}
 function getAllEvts(){
   const evts=[];
   // Calendar events
@@ -1394,14 +1885,57 @@ function getAllEvts(){
     const l=getParl(i.parl_id);
     evts.push({id:'i'+i.id,data:i.data,titulo:(l.name!=='—'?l.name:'')+(i.partic?' · '+i.partic:'') || i.tipo,tipo:'inter',parl_id:i.parl_id,_src:'inter'});
   });
+  evts.push(...getBirthdayEvts());
   return evts.filter(e=>!calFilterType||e.tipo===calFilterType);
 }
+// Igual a getAllEvts(), mas sem os aniversários — usado nas listas de "próximas reuniões"
+function getAllEvtsNoAniv(){return getAllEvts().filter(e=>e.tipo!=='aniv');}
 
 function renderCal(){
   const y=calDate.getFullYear(),m=calDate.getMonth();
-  document.getElementById('cal-month-lbl').textContent=`${MONTHS[m]} ${y}`;
-  calViewMode==='mes'?renderCalMes(y,m):renderCalLista();
+  if(calViewMode==='dia')document.getElementById('cal-month-lbl').textContent=calDate.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  else if(calViewMode==='semana'){const s=weekStart(calDate),e=addDaysDate(s,6);document.getElementById('cal-month-lbl').textContent=`${s.getDate()}/${s.getMonth()+1} – ${e.getDate()}/${e.getMonth()+1}/${e.getFullYear()}`;}
+  else document.getElementById('cal-month-lbl').textContent=`${MONTHS[m]} ${y}`;
+  if(calViewMode==='mes')renderCalMes(y,m);
+  else if(calViewMode==='lista')renderCalLista();
+  else if(calViewMode==='semana')renderCalSemana();
+  else renderCalDia();
   renderCalUpcoming();
+}
+function renderCalDia(){
+  const ds=ymd(calDate);
+  const evts=getAllEvts().filter(e=>e.data===ds).sort((a,b)=>(a.hora||'').localeCompare(b.hora||''));
+  let h='<div style="padding:12px;display:flex;flex-direction:column;gap:6px">';
+  if(!evts.length)h+='<div class="empty">Nenhuma reunião neste dia.</div>';
+  evts.forEach(e=>{
+    const l=getParl(e.parl_id);
+    h+=`<div class="cal-list-item" onclick="openEvDetail(${JSON.stringify(e.id).replace(/"/g,"'")})">
+      <div class="cal-date-b">${e.hora||'—'}</div>
+      <div class="cal-list-body"><div class="cal-list-title">${e.titulo||CAL_L[e.tipo||'inter']}</div>
+      <div class="cal-list-meta"><span class="pill ${CAL_C[e.tipo||'inter']}" style="margin-right:4px">${CAL_L[e.tipo||'inter']}</span>${l.name!=='—'?l.name:''}${e.local?' · '+e.local:''}</div></div>
+    </div>`;
+  });
+  h+='</div>';
+  document.getElementById('cal-content').innerHTML=h;
+}
+function renderCalSemana(){
+  const start=weekStart(calDate);
+  const evts=getAllEvts();
+  const today=ymd(new Date());
+  let h='<div class="cal-grid">';
+  for(let i=0;i<7;i++){const d=addDaysDate(start,i);h+=`<div class="cal-day-hdr">${DAYS[i]} ${d.getDate()}/${d.getMonth()+1}</div>`;}
+  for(let i=0;i<7;i++){
+    const d=addDaysDate(start,i);const ds=ymd(d);
+    const de=evts.filter(e=>e.data===ds);
+    h+=`<div class="cal-cell${ds===today?' today':''}" style="min-height:110px" onclick="openCalDay('${ds}')"><div class="cal-dn">${d.getDate()}</div>`;
+    if(de.length){
+      h+='<div style="display:flex;flex-direction:column;gap:2px">'+de.slice(0,4).map(e=>`<div class="pill ${CAL_C[e.tipo||'inter']}" style="font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block" onclick="event.stopPropagation();openEvDetail(${JSON.stringify(e.id).replace(/"/g,"'")})">${e.hora?e.hora+' ':''}${e.titulo||CAL_L[e.tipo||'inter']}</div>`).join('')+'</div>';
+      if(de.length>4)h+=`<div style="font-size:8px;color:var(--t3);margin-top:2px">+${de.length-4} mais</div>`;
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+  document.getElementById('cal-content').innerHTML=h;
 }
 
 function renderCalMes(y,m){
@@ -1455,7 +1989,7 @@ function renderCalLista(){
         <div class="cal-list-title">${e.titulo||CAL_L[e.tipo||'inter']}</div>
         <div class="cal-list-meta"><span class="pill ${CAL_C[e.tipo||'inter']}" style="margin-right:4px">${CAL_L[e.tipo||'inter']}</span>${parts?`<span>${parts}</span>`:''}${e.local?` · ${e.local}`:''}</div>
       </div>
-      ${e._src==='ev'?`<div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏</button></div>`:''}
+      ${ADMIN&&e._src==='ev'?`<div style="display:flex;gap:4px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏</button></div>`:''}
     </div>`;
   });
   h+='</div>';
@@ -1464,7 +1998,7 @@ function renderCalLista(){
 
 function renderCalUpcoming(){
   const today=new Date().toISOString().split('T')[0];
-  const up=getAllEvts().filter(e=>e.data&&e.data>=today).sort((a,b)=>a.data.localeCompare(b.data)).slice(0,5);
+  const up=getAllEvtsNoAniv().filter(e=>e.data&&e.data>=today).sort((a,b)=>a.data.localeCompare(b.data)).slice(0,5);
   if(!up.length){document.getElementById('cal-upcoming').innerHTML='<div class="empty">Nenhum evento futuro cadastrado.</div>';return;}
   document.getElementById('cal-upcoming').innerHTML=up.map(e=>{
     const l=getParl(e.parl_id);
@@ -1480,7 +2014,7 @@ function renderCalUpcoming(){
         <div class="cal-list-meta"><span class="pill ${CAL_C[e.tipo||'inter']}" style="margin-right:4px">${CAL_L[e.tipo||'inter']}</span>${parts?`<span>${parts}</span>`:''}</div>
       </div>
       <div style="display:flex;gap:4px">
-        ${e._src==='ev'?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('ev',${JSON.stringify(e.id).replace(/"/g,"'")})">✕</button>`:''}
+        ${ADMIN&&e._src==='ev'?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('ev',${JSON.stringify(e.id).replace(/"/g,"'")})">✕</button>`:''}
       </div>
     </div>`;
   }).join('');
@@ -1492,8 +2026,7 @@ function openCalDay(ds){
   const label=`${d}/${m}/${y}`;
 
   if(dayEvts.length===0){
-    // No events — open form directly
-    openCalForm(null,ds);
+    if(ADMIN)openCalForm(null,ds);
     return;
   }
 
@@ -1504,7 +2037,7 @@ function openCalDay(ds){
     const parts=[l.name!=='—'?l.name:null,...(e.participantes||[])].filter(Boolean).join(', ');
     const idJson=JSON.stringify(e.id).replace(/"/g,"'");
     return`<div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--elev);border-radius:var(--r);border:1px solid var(--bd);cursor:pointer;margin-bottom:6px" onclick="closeModal('modal-detail');openEvDetail(${idJson})">
-      <div style="width:8px;height:8px;border-radius:50%;background:${tipo==='inter'?'var(--red)':tipo==='leg'?'var(--il)':tipo==='rec'?'var(--ok)':'var(--pl)'};flex-shrink:0"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:${tipo==='inter'?'var(--red)':tipo==='leg'?'var(--il)':tipo==='rec'?'var(--ok)':tipo==='aniv'?'var(--wl)':'var(--pl)'};flex-shrink:0"></div>
       <div style="flex:1;min-width:0">
         <div style="font-size:11px;font-weight:700;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.titulo||CAL_L[tipo]}</div>
         ${parts?`<div style="font-size:10px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${parts}</div>`:''}
@@ -1513,7 +2046,7 @@ function openCalDay(ds){
         <span class="pill ${CAL_C[tipo]}">${CAL_L[tipo]}</span>
         ${e.recorr?`<span class="pill p-n" style="font-size:8px">${{diaria:'↻ Diário',semanal:'↻ Semanal',mensal:'↻ Mensal',anual:'↻ Anual'}[e.recorr]||''}</span>`:''}
       </div>
-      ${e._src==='ev'?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();closeModal('modal-detail');openCalForm(${idJson})">✏</button>`:''}
+      ${ADMIN&&e._src==='ev'?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();closeModal('modal-detail');openCalForm(${idJson})">✏</button>`:''}
     </div>`;
   }).join('');
 
@@ -1523,11 +2056,12 @@ function openCalDay(ds){
     ${listHTML}`;
   document.getElementById('det-foot').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>
-    <button class="btn btn-red" onclick="closeModal('modal-detail');openCalForm(null,'${ds}')">+ Adicionar Evento</button>`;
+    ${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openCalForm(null,'${ds}')">+ Adicionar Reunião</button>`:''}`;
   openModal('modal-detail');
 }
 
 function openEvDetail(id){
+  if(typeof id==='string'&&id.startsWith('b:')){openParlDetail(parseInt(id.split(':')[1]));return;}
   if(typeof id==='string'&&id.startsWith('i')){openInterDetail(parseInt(id.slice(1)));return;}
   const e=S.events.find(x=>x.id===id);if(!e)return;
   const l=getParl(e.parl_id);
@@ -1537,13 +2071,17 @@ function openEvDetail(id){
   const recorrLabel={'diaria':'Diário','semanal':'Semanal','mensal':'Mensal','anual':'Anual'};
   const recorrBadge=e.recorr?`<span class="pill p-n" style="margin-left:4px">${recorrLabel[e.recorr]||''}</span>`:'';
   const occInfo=e.total_occurrences>1?` (${(e.occurrence_idx||0)+1}/${e.total_occurrences})`:'';
+  const STATUS_P={'Prevista':'p-i','Realizada':'p-ok','Cancelada':'p-r','Remarcada':'p-w'};
   document.getElementById('det-body').innerHTML=`<div class="dg">
     <div class="df"><div class="dlbl">Data e Hora</div><div class="dval">${fmtD(e.data)}${occInfo}${e.hora?' às '+e.hora:''}</div></div>
     <div class="df"><div class="dlbl">Tipo</div><div class="dval"><span class="pill ${CAL_C[e.tipo||'inter']}">${CAL_L[e.tipo||'inter']}</span>${recorrBadge}</div></div>
+    ${e.tipoReuniao?`<div class="df"><div class="dlbl">Tipo de Reunião</div><div class="dval sec">${e.tipoReuniao}</div></div>`:''}
+    <div class="df"><div class="dlbl">Status</div><div class="dval"><span class="pill ${STATUS_P[e.status]||'p-n'}">${e.status||'Prevista'}</span></div></div>
     ${parts?`<div class="df full"><div class="dlbl">Participantes</div><div class="dval sec">${parts}</div></div>`:''}
     ${e.local?`<div class="df full"><div class="dlbl">Local</div><div class="dval sec">${e.local}</div></div>`:''}
     ${e.pauta?`<div class="df full"><div class="dlbl">Pauta Tratada</div><div class="dval">${e.pauta}</div></div>`:''}
     ${e.resultado?`<div class="df full"><div class="dlbl">Resultado</div><div class="dval" style="color:var(--ok)">${e.resultado}</div></div>`:''}
+    ${e.obs?`<div class="df full"><div class="dlbl">Observações</div><div class="dval sec">${e.obs}</div></div>`:''}
     ${e.posic?`<div class="df"><div class="dlbl">Posicionamento</div><div class="dval"><span class="pill ${POS_P[e.posic]||'p-n'}">${POS_L[e.posic]||e.posic}</span></div></div>`:''}
     ${e.prox?`<div class="df"><div class="dlbl">Próxima Ação</div><div class="dval" style="color:var(--wl)">${e.prox}</div></div>`:''}
     ${e.resp?`<div class="df"><div class="dlbl">Responsável</div><div class="dval sec">${e.resp}</div></div>`:''}
@@ -1551,7 +2089,7 @@ function openEvDetail(id){
     ${e.proj_id?`<div class="df full"><div class="dlbl">Projeto Vinculado</div><div class="dval">${getProj(e.proj_id)?`<span class="pill p-i">${getProj(e.proj_id).tipo} ${getProj(e.proj_id).num}</span>`:'—'}</div></div>`:''}
     ${e.fotos?.length?`<div class="df full"><div class="dlbl">Fotos</div><div class="ph-grid" style="margin-top:4px">${e.fotos.map(f=>`<img src="${f}" class="ph-th" onclick="window.open('${f}','_blank')">`).join('')}</div></div>`:''}
   </div>`;
-  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏ Editar</button>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openCalForm(${JSON.stringify(e.id).replace(/"/g,"'")})">✏ Editar</button>`:''}`;
   openModal('modal-detail');
 }
 
@@ -1573,8 +2111,11 @@ function openCalForm(id,prefDate=null){
   document.getElementById('cf-parl-q').value=e?.parl_id?getParl(e.parl_id).name:'';
   document.getElementById('cf-parl-id').value=e?.parl_id||'';
   document.getElementById('cf-local').value=e?.local||'';
+  document.getElementById('cf-tiporeuniao').value=e?.tipoReuniao||'Reunião institucional';
+  document.getElementById('cf-status').value=e?.status||'Prevista';
   document.getElementById('cf-pauta').value=e?.pauta||'';
   document.getElementById('cf-resultado').value=e?.resultado||'';
+  document.getElementById('cf-obs').value=e?.obs||'';
   document.getElementById('cf-posic').value=e?.posic||'';
   document.getElementById('cf-prox').value=e?.prox||'';
   document.getElementById('cf-resp').value=e?.resp||'';
@@ -1681,7 +2222,9 @@ function saveCal(){
 
   const baseRec={titulo,hora:document.getElementById('cf-hora').value,tipo,parl_id:pid,proj_id,dest_id,
     participantes:[...calPartsArr],local:document.getElementById('cf-local').value,
+    tipoReuniao:document.getElementById('cf-tiporeuniao').value,status:document.getElementById('cf-status').value,
     pauta:document.getElementById('cf-pauta').value,resultado:document.getElementById('cf-resultado').value,
+    obs:document.getElementById('cf-obs').value,
     posic:document.getElementById('cf-posic').value||null,prox:document.getElementById('cf-prox').value,
     resp:document.getElementById('cf-resp').value,div_det:document.getElementById('cf-div-det').value,
     fotos:[...existFotos,...pendPh.cal],recorr,recorr_ate,recorr_qtd,data_fim};
@@ -1803,7 +2346,7 @@ function renderInterTable(){
       <td>${p?`<span class="pill p-r">${p.tipo} ${p.num}</span>`:'<span style="color:var(--t3)">—</span>'}</td>
       <td><span class="pill ${POS_P[i.posic]||'p-n'}">${POS_L[i.posic]||i.posic}</span></td>
       <td style="color:var(--t2)">${i.resp||'—'}</td>
-      <td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openInterForm(${i.id})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('inter',${i.id})">✕</button></div></td>
+      <td><div style="display:flex;gap:3px">${ADMIN?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openInterForm(${i.id})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('inter',${i.id})">✕</button>`:''}</div></td>
     </tr>`;}).join(''):`<tr><td colspan="7" class="empty">Nenhuma interação.</td></tr>`;
 }
 
@@ -1823,8 +2366,8 @@ function renderKanban(){
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px">
           <span style="font-size:9px;color:var(--t2)">${l.name.split(' ').slice(-1)[0]}</span>
           <div style="display:flex;gap:2px">
-            ${canPrev?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveProjKanban(${p.id},-1)" title="Fase anterior">◀</button>`:''}
-            ${canNext?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveProjKanban(${p.id},1)" title="Próxima fase">▶</button>`:''}
+            ${ADMIN&&canPrev?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveProjKanban(${p.id},-1)" title="Fase anterior">◀</button>`:''}
+            ${ADMIN&&canNext?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveProjKanban(${p.id},1)" title="Próxima fase">▶</button>`:''}
           </div>
         </div>
       </div>`;
@@ -1845,7 +2388,7 @@ function renderTimeline(){
         </div>
         <div style="font-weight:600;font-size:11px;margin-bottom:2px">${display} <span style="color:var(--t3);font-weight:400">| ${l.partido!=='—'?l.partido:'—'}</span></div>
         <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:5px">${i.resumo||'—'}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between"><span class="pill ${POS_P[i.posic]||'p-n'}">${POS_L[i.posic]||i.posic}</span><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openInterForm(${i.id})">✏</button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between"><span class="pill ${POS_P[i.posic]||'p-n'}">${POS_L[i.posic]||i.posic}</span>${ADMIN?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openInterForm(${i.id})">✏</button>`:''}</div>
       </div>
     </div>`}).join('')||'<div class="empty">Nenhuma interação.</div>';
 }
@@ -1910,8 +2453,8 @@ function renderRecKanban(){
         <div style="display:flex;align-items:center;justify-content:space-between">
           <span style="font-size:11px;font-weight:700;color:var(--red)">${fmtR(d.vl_prev)}</span>
           <div style="display:flex;gap:2px">
-            ${canPrev?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveDestKanban(${d.id},-1)" title="Etapa anterior">◀</button>`:''}
-            ${canNext?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveDestKanban(${d.id},1)" title="Próxima etapa">▶</button>`:''}
+            ${ADMIN&&canPrev?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveDestKanban(${d.id},-1)" title="Etapa anterior">◀</button>`:''}
+            ${ADMIN&&canNext?`<button class="btn btn-ghost btn-sm" style="padding:2px 5px;font-size:10px" onclick="event.stopPropagation();moveDestKanban(${d.id},1)" title="Próxima etapa">▶</button>`:''}
           </div>
         </div>
       </div>`;
@@ -1996,28 +2539,30 @@ function renderDestTable(){
       <td><span class="pill" style="background:${ST_C[d.status]||'#888'}22;color:${ST_C[d.status]||'#888'};border:1px solid ${ST_C[d.status]||'#888'}44">${d.status}</span></td>
       <td><div style="display:flex;gap:2px">${EL.map(k=>`<div style="width:10px;height:4px;border-radius:2px;background:${d.etapas[k]?'var(--red)':'var(--bd)'}"></div>`).join('')}<span style="font-size:8px;color:var(--t3);margin-left:2px">${done}/7</span></div></td>
       <td style="font-size:10px;color:var(--wl);max-width:110px;line-height:1.3">${d.proxima||'—'}</td>
-      <td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDestForm(${d.id})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('dest',${d.id})">✕</button></div></td>
+      <td><div style="display:flex;gap:3px">${ADMIN?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDestForm(${d.id})">✏</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();confirmDel('dest',${d.id})">✕</button>`:''}</div></td>
     </tr>`;}).join(''):`<tr><td colspan="11" class="empty">Nenhuma destinação.</td></tr>`;
 }
 
 // ═══ PARLAMENTARES ═══
 function renderParlTable(){
+  if(!document.getElementById('parl-tb'))return;
   const q=(document.getElementById('pt-q')||{}).value?.toLowerCase()||'';
   const casa=(document.getElementById('pt-casa')||{}).value||'';
-  const rows=S.parl.filter(p=>(!q||(p.name+p.partido).toLowerCase().includes(q))&&(!casa||p.casa===casa));
+  const status=(document.getElementById('pt-status')||{}).value||'';
+  const rows=S.parl.filter(p=>(!q||(p.name+p.partido).toLowerCase().includes(q))&&(!casa||p.casa===casa)&&(!status||(status==='ativo'?p.ativo!==false:p.ativo===false)));
   document.getElementById('parl-cnt').textContent=`${rows.length} parlamentares`;
   const ints=S.inter.reduce((a,i)=>{a[i.parl_id]=(a[i.parl_id]||0)+1;return a;},{});
   const caps=S.dest.reduce((a,d)=>{a[d.parl_id]=(a[d.parl_id]||0)+d.vl_prev;return a;},{});
   const lastI=S.inter.reduce((a,i)=>{if(!a[i.parl_id]||i.data>a[i.parl_id])a[i.parl_id]=i.data;return a;},{});
-  document.getElementById('parl-tb').innerHTML=rows.map(l=>`<tr>
-    <td><div style="display:flex;align-items:center;gap:6px"><div class="av">${ini(l.name)}</div><span style="font-weight:600">${l.name}</span></div></td>
+  document.getElementById('parl-tb').innerHTML=rows.map(l=>`<tr style="${l.ativo===false?'opacity:.55':''}">
+    <td><div style="display:flex;align-items:center;gap:6px">${l.foto?`<img src="${l.foto}" style="width:22px;height:22px;object-fit:cover;border-radius:5px">`:`<div class="av">${ini(l.name)}</div>`}<span style="font-weight:600">${l.name}</span></div></td>
     <td><span class="pill ${l.casa.includes('Senado')?'p-p':'p-i'}">${l.casa.includes('Senado')?'Senado':'Câmara'}</span></td>
     <td style="font-weight:600;color:var(--t2)">${l.partido||'—'}</td>
-    <td style="color:var(--t3);font-size:10px">${l.comissao||'—'}</td>
+    <td style="color:var(--t3);font-size:10px">${l.nascimento?fmtD(l.nascimento):'—'}</td>
+    <td>${l.ativo===false?'<span class="pill p-n">Mandato encerrado</span>':'<span class="pill p-ok">Em exercício</span>'}</td>
     <td style="text-align:center;font-weight:700;color:${ints[l.id]>0?'var(--red)':'var(--t3)'}">${ints[l.id]||'—'}</td>
     <td style="font-weight:700;color:var(--red)">${caps[l.id]?fmtR(caps[l.id]):'—'}</td>
-    <td style="color:var(--t3);font-size:10px">${lastI[l.id]?fmtD(lastI[l.id]):'—'}</td>
-    <td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-sm" onclick="openParlForm(${l.id})">✏</button><button class="btn btn-danger btn-sm" onclick="confirmDel('parl',${l.id})">✕</button></div></td>
+    <td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-sm" onclick="openParlForm(${l.id})">✏</button><button class="btn btn-danger btn-sm" onclick="delParlSafe(${l.id})">✕</button></div></td>
   </tr>`).join('')||'<tr><td colspan="8" class="empty">Nenhum parlamentar.</td></tr>';
 }
 
@@ -2163,21 +2708,71 @@ function saveProj(){
   saveState();closeModal('modal-proj');renderAll();
 }
 
+let pendParlFoto=null;
+function syncParlCargo(){
+  const casa=document.getElementById('parlf-casa').value;
+  const cargoSel=document.getElementById('parlf-cargo');
+  if(!cargoSel.value||['Deputado Federal','Deputada Federal','Senador','Senadora'].includes(cargoSel.value)){
+    cargoSel.value=casa==='Senado Federal'?'Senador':'Deputado Federal';
+  }
+}
+function handleParlFoto(event){
+  const f=event.target.files[0];if(!f)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    pendParlFoto=e.target.result;
+    document.getElementById('parlf-foto').value=pendParlFoto;
+    document.getElementById('parlf-foto-prev').innerHTML=`<img src="${pendParlFoto}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)"><span>Clique para trocar a foto</span>`;
+  };
+  reader.readAsDataURL(f);
+}
 function openParlForm(id){
-  editId.parl=id;
+  editId.parl=id;pendParlFoto=null;
   document.getElementById('parl-tit').textContent=id?'Editar Parlamentar':'Novo Parlamentar';
   const p=id?S.parl.find(x=>x.id===id):null;
   document.getElementById('parlf-name').value=p?.name||'';document.getElementById('parlf-casa').value=p?.casa||'Câmara dos Deputados';
+  document.getElementById('parlf-cargo').value=p?.cargo||(p?.casa==='Senado Federal'?'Senador':'Deputado Federal');
   document.getElementById('parlf-partido').value=p?.partido||'';document.getElementById('parlf-comissao').value=p?.comissao||'';
+  document.getElementById('parlf-nascimento').value=p?.nascimento||'';
+  document.getElementById('parlf-telefone').value=p?.telefone||'';
   document.getElementById('parlf-email').value=p?.email||'';
+  document.getElementById('parlf-obs').value=p?.obs||'';
+  document.getElementById('parlf-ativo').value=(p?.ativo===false)?'0':'1';
+  document.getElementById('parlf-foto').value=p?.foto||'';
+  document.getElementById('parlf-foto-prev').innerHTML=p?.foto?`<img src="${p.foto}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)"><span>Clique para trocar a foto</span>`:'📷 Clique para adicionar/substituir a foto';
+  updateParlfFotoSearch();
   openModal('modal-parl');
+}
+function updateParlfFotoSearch(){
+  const name=document.getElementById('parlf-name').value.trim();
+  const casa=document.getElementById('parlf-casa').value;
+  const el=document.getElementById('parlf-foto-search');
+  if(!el)return;
+  el.innerHTML=name?`<a href="${officialSearchUrl({name,casa})}" target="_blank" rel="noopener" style="font-size:10px;color:var(--il)">🔎 Buscar foto oficial (${casa.includes('Senado')?'Senado':'Câmara'})</a>`:'';
 }
 function saveParl(){
   const name=document.getElementById('parlf-name').value.trim();if(!name){alert('Informe o nome.');return;}
-  const rec={name,casa:document.getElementById('parlf-casa').value,partido:document.getElementById('parlf-partido').value,comissao:document.getElementById('parlf-comissao').value,email:document.getElementById('parlf-email').value};
+  const rec={name,casa:document.getElementById('parlf-casa').value,cargo:document.getElementById('parlf-cargo').value,
+    partido:document.getElementById('parlf-partido').value,comissao:document.getElementById('parlf-comissao').value,
+    nascimento:document.getElementById('parlf-nascimento').value,telefone:document.getElementById('parlf-telefone').value,
+    email:document.getElementById('parlf-email').value,obs:document.getElementById('parlf-obs').value,
+    ativo:document.getElementById('parlf-ativo').value==='1',
+    foto:document.getElementById('parlf-foto').value||(editId.parl?S.parl.find(x=>x.id===editId.parl)?.foto||'':'')};
   if(editId.parl){const i=S.parl.findIndex(x=>x.id===editId.parl);if(i>=0)S.parl[i]={...S.parl[i],...rec};}
-  else{const maxId=Math.max(...S.parl.map(p=>p.id));S.parl.push({id:maxId+1,...rec});}
-  saveState();closeModal('modal-parl');renderParlTable();
+  else{const maxId=S.parl.length?Math.max(...S.parl.map(p=>p.id)):0;S.parl.push({id:maxId+1,...rec});}
+  saveState();closeModal('modal-parl');renderAll();
+}
+// Exclusão segura: se o parlamentar tiver reuniões/legislativo/captação vinculados,
+// não remove o registro (perderia o histórico) — apenas marca como mandato encerrado.
+function delParlSafe(id){
+  const hasLinks=S.dest.some(d=>d.parl_id===id)||S.proj.some(p=>p.parl_id===id)||S.inter.some(i=>i.parl_id===id)||S.events.some(e=>e.parl_id===id);
+  if(hasLinks){
+    const p=S.parl.find(x=>x.id===id);if(!p)return;
+    if(!confirm(`${p.name} possui reuniões, projetos ou destinações vinculados. Para preservar o histórico, o registro será marcado como "mandato encerrado" em vez de excluído. Continuar?`))return;
+    p.ativo=false;saveState();renderAll();
+    return;
+  }
+  confirmDel('parl',id);
 }
 
 function openAddAno(){openModal('modal-ano');document.getElementById('ano-ano').value='';document.getElementById('ano-obs').value='';}
@@ -2204,14 +2799,14 @@ function openDestDetail(id){
     <div class="df"><div class="dlbl">Status</div><div class="dval"><span class="pill" style="background:${ST_C[d.status]||'#888'}22;color:${ST_C[d.status]||'#888'};border:1px solid ${ST_C[d.status]||'#888'}44">${d.status}</span></div></div>
     <div class="df"><div class="dlbl">Valor Previsto</div><div class="dval" style="font-size:17px;font-weight:700;color:var(--red)">${fmtFull(d.vl_prev)}</div></div>
     <div class="df"><div class="dlbl">Valor Confirmado</div><div class="dval" style="font-size:17px;font-weight:700;color:var(--ok)">${d.vl_conf?fmtFull(d.vl_conf):'—'}</div></div>
-    <div class="df full"><div class="dlbl">Etapas (${done}/7) — clique para marcar/desmarcar</div>
-      <div class="steps" style="margin-top:8px">${EL.map((k,i)=>`${i>0?`<div class="sline ${d.etapas[EL[i-1]]?'done':''}"></div>`:''}<div class="step-n" onclick="event.stopPropagation();toggleDestEtapa(${d.id},'${k}')" title="${ELN[k]}" style="cursor:pointer"><div class="snode ${d.etapas[k]?'done':''}" style="transition:.15s">${d.etapas[k]?'✓':i+1}</div><div class="slbl">${ELN[k].split(' ')[0]}</div></div>`).join('')}</div>
-      <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
+    <div class="df full"><div class="dlbl">Etapas (${done}/7)${ADMIN?' — clique para marcar/desmarcar':''}</div>
+      <div class="steps" style="margin-top:8px">${EL.map((k,i)=>`${i>0?`<div class="sline ${d.etapas[EL[i-1]]?'done':''}"></div>`:''}<div class="step-n" ${ADMIN?`onclick="event.stopPropagation();toggleDestEtapa(${d.id},'${k}')" style="cursor:pointer"`:''} title="${ELN[k]}"><div class="snode ${d.etapas[k]?'done':''}" style="transition:.15s">${d.etapas[k]?'✓':i+1}</div><div class="slbl">${ELN[k].split(' ')[0]}</div></div>`).join('')}</div>
+      ${ADMIN?`<div style="margin-top:8px;display:flex;align-items:center;gap:8px">
         <span style="font-size:9px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.6px">Status</span>
         <select onchange="setDestStatus(${d.id},this.value);" style="background:var(--elev);border:1px solid var(--bd);border-radius:var(--r);padding:4px 8px;color:var(--t1);font-size:11px;cursor:pointer;outline:none;transition:.13s" onclick="event.stopPropagation()">
           ${['Em articulação','Indicado','Confirmado','Empenhado','Em licitação','Contratado','Entregue'].map(st=>`<option value="${st}"${d.status===st?' selected':''}>${st}</option>`).join('')}
         </select>
-      </div>
+      </div>`:''}
     </div>
     <div class="df full"><div class="dlbl">Próxima Ação</div><div class="dval" style="color:var(--wl)">${d.proxima||'—'}</div></div>
     <div class="df"><div class="dlbl">Responsável</div><div class="dval sec">${d.resp||'—'}</div></div>
@@ -2220,7 +2815,7 @@ function openDestDetail(id){
     <div class="df"><div class="dlbl">Observações</div><div class="dval sec">${d.obs||'—'}</div></div>
     ${d.fotos?.length?`<div class="df full"><div class="dlbl">Fotos</div><div class="ph-grid" style="margin-top:4px">${d.fotos.map(f=>`<img src="${f}" class="ph-th" onclick="window.open('${f}','_blank')">`).join('')}</div></div>`:''}
   </div>`;
-  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openDestForm(${id})">✏ Editar</button>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openDestForm(${id})">✏ Editar</button>`:''}`;
   openModal('modal-detail');
 }
 function openInterDetail(id){
@@ -2241,7 +2836,7 @@ function openInterDetail(id){
     <div class="df full"><div class="dlbl">Próxima Ação</div><div class="dval" style="color:var(--wl)">${it.prox||'—'}</div></div>
     ${it.fotos?.length?`<div class="df full"><div class="dlbl">Fotos</div><div class="ph-grid" style="margin-top:4px">${it.fotos.map(f=>`<img src="${f}" class="ph-th" onclick="window.open('${f}','_blank')">`).join('')}</div></div>`:''}
   </div>`;
-  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openInterForm(${id})">✏ Editar</button>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openInterForm(${id})">✏ Editar</button>`:''}`;
   openModal('modal-detail');
 }
 function openProjDetail(id){
@@ -2251,16 +2846,16 @@ function openProjDetail(id){
   document.getElementById('det-body').innerHTML=`<div class="dg">
     <div class="df full"><div class="dlbl">Ementa</div><div class="dval">${p.ementa||'—'}</div></div>
     <div class="df"><div class="dlbl">Parlamentar</div><div class="dval" style="display:flex;align-items:center;gap:5px"><div class="av">${ini(l.name)}</div><strong>${l.name}</strong></div></div>
-    <div class="df"><div class="dlbl">Status — clique para avançar</div>
+    <div class="df"><div class="dlbl">Status${ADMIN?' — clique para avançar':''}</div>
       <div class="dval" style="display:flex;flex-direction:column;gap:6px">
-        <select onchange="setProjStatus(${p.id},this.value);" style="background:var(--elev);border:1px solid var(--bd);border-radius:var(--r);padding:4px 8px;color:var(--t1);font-size:11px;cursor:pointer;outline:none;" onclick="event.stopPropagation()">
+        ${ADMIN?`<select onchange="setProjStatus(${p.id},this.value);" style="background:var(--elev);border:1px solid var(--bd);border-radius:var(--r);padding:4px 8px;color:var(--t1);font-size:11px;cursor:pointer;outline:none;" onclick="event.stopPropagation()">
           ${PROJ_STAGES.map(st=>`<option value="${st}"${p.status===st?' selected':''}>${st}</option>`).join('')}
-        </select>
+        </select>`:`<span class="pill" style="background:${PROJ_SC[p.status]||'#888'}22;color:${PROJ_SC[p.status]||'#888'};border:1px solid ${PROJ_SC[p.status]||'#888'}44;width:fit-content">${p.status}</span>`}
         <div style="display:flex;gap:3px;flex-wrap:wrap">${PROJ_STAGES.map((st,i)=>`<div style="height:4px;flex:1;min-width:18px;border-radius:2px;background:${PROJ_STATUS_STAGE[p.status]>=i&&p.status!=='Arquivado'?PROJ_SC[st]||'var(--red)':'var(--bd)'}"></div>`).join('')}</div>
-        <div style="display:flex;justify-content:space-between;margin-top:2px">
+        ${ADMIN?`<div style="display:flex;justify-content:space-between;margin-top:2px">
           ${PROJ_STATUS_STAGE[p.status]>0&&p.status!=='Arquivado'?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();moveProjKanban(${p.id},-1)">◀ Fase anterior</button>`:'<span></span>'}
           ${p.status!=='Aprovado'&&p.status!=='Arquivado'?`<button class="btn btn-info btn-sm" onclick="event.stopPropagation();moveProjKanban(${p.id},1)">Próxima fase ▶</button>`:''}
-        </div>
+        </div>`:''}
       </div>
     </div>
     <div class="df"><div class="dlbl">Posicionamento</div><div class="dval"><span class="pill ${POS_P[p.posic]||'p-n'}">${POS_L[p.posic]||p.posic}</span></div></div>
@@ -2269,7 +2864,7 @@ function openProjDetail(id){
     <div class="df full"><div class="dlbl">Próxima Ação</div><div class="dval" style="color:var(--wl)">${p.proxima||p.prox||'—'}</div></div>
     <div class="df full"><div class="dlbl">Observações</div><div class="dval sec">${p.obs||'—'}</div></div>
   </div>`;
-  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button><button class="btn btn-red" onclick="closeModal('modal-detail');openProjForm(${id})">✏ Editar</button>`;
+  document.getElementById('det-foot').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-detail')">Fechar</button>${ADMIN?`<button class="btn btn-red" onclick="closeModal('modal-detail');openProjForm(${id})">✏ Editar</button>`:''}`;
   openModal('modal-detail');
 }
 
@@ -2292,6 +2887,7 @@ function confirmDel(type,id){
     else if(type==='proj')S.proj=S.proj.filter(x=>x.id!==id);
     else if(type==='parl')S.parl=S.parl.filter(x=>x.id!==id);
     else if(type==='ev')S.events=S.events.filter(x=>x.id!==id);
+    else if(type==='propnac')S.propnac=S.propnac.filter(x=>x.id!==id);
     saveState();closeModal('modal-confirm');renderAll();
   };openModal('modal-confirm');
 }
@@ -2301,20 +2897,24 @@ document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',e=
 
 // ═══ RENDER ALL ═══
 function renderAll(){
-  if(activeMain==='cal')renderCal();
+  if(activeMain==='home')renderHome();
+  else if(activeMain==='parl')renderParlView();
+  else if(activeMain==='anv')renderAniversarios();
+  else if(activeMain==='cal')renderCal();
   else if(activeMain==='leg'){
     const sv=document.querySelector('[data-tab="leg"].stab.active')?.dataset.view||'dash';
-    if(sv==='dash')renderLegDash();else if(sv==='kanban')renderKanban();else renderTimeline();
+    if(sv==='dash')renderLegDash();else if(sv==='kanban')renderKanban();else if(sv==='timeline')renderTimeline();else if(sv==='nac')renderLegNac();else renderLegPorParl();
   } else if(activeMain==='rec'){
     renderYearBar();
     const sv=document.querySelector('[data-tab="rec"].stab.active')?.dataset.view||'dash';
     if(sv==='dash')renderRecDash();else if(sv==='kanban')renderRecKanban();else if(sv==='funil')renderFunil();else if(sv==='stk'){renderStkTable();renderRespTable();}else if(sv==='nec')renderQuartelTable();else renderDestTable();
-  } else renderParlTable();
+  } else if(activeMain==='ger')switchGer(gerSub||'parl');
 }
 
 // ═══ INIT ═══
 document.getElementById('nowDate').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'long',year:'numeric'});
-renderCal();
+applyAdminVisibility();
+renderHome();
 
 </script>
 </body>

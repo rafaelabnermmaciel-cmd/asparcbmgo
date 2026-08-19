@@ -1,0 +1,96 @@
+name: Atualizar dados — Painel Parlamentar Nacional
+
+# Roda os scripts de coleta (Câmara, Senado, TSE) num ambiente com acesso normal à internet
+# — diferente do sandbox onde estes scripts foram escritos, o GitHub Actions consegue acessar
+# dadosabertos.camara.leg.br, legis.senado.leg.br e dadosabertos.tse.jus.br sem bloqueio.
+#
+# Como usar:
+#   - Manual: aba "Actions" do repositório → "Atualizar dados — Painel Parlamentar Nacional" →
+#     botão "Run workflow". Não precisa instalar nada nem usar terminal.
+#   - Automático: roda sozinho toda segunda-feira às 06h (horário de Brasília).
+#
+# Ao final, se algum dado novo foi baixado, o workflow cria um commit automático com os
+# arquivos atualizados em painel-nacional/public/data/. Se o site estiver conectado ao
+# Netlify, esse commit dispara um novo deploy sozinho.
+
+on:
+  workflow_dispatch:
+    inputs:
+      buscar_votacoes:
+        description: 'Também buscar histórico de votações (mais demorado)'
+        type: boolean
+        default: true
+      buscar_eleicoes:
+        description: 'Também buscar votos da eleição via TSE'
+        type: boolean
+        default: false
+      eleicoes_limite:
+        description: 'Quantos parlamentares testar no cruzamento com o TSE (0 = todos os 594 — só use depois de conferir que os primeiros bateram certo)'
+        type: string
+        default: '10'
+      eleicoes_ano:
+        description: 'Ano da eleição a consultar no TSE'
+        type: string
+        default: '2022'
+  schedule:
+    - cron: '0 9 * * 1' # toda segunda-feira, 09:00 UTC = 06:00 em Brasília
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-dados:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: painel-nacional
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-nacional/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Buscar deputados e senadores (Câmara + Senado)
+        run: npm run fetch:parlamentares
+
+      - name: Buscar histórico de votações
+        if: ${{ github.event_name == 'schedule' || inputs.buscar_votacoes == true }}
+        run: npm run fetch:votacoes
+        continue-on-error: true # endpoint não verificado — não travar o workflow inteiro se falhar
+
+      - name: Buscar votos recebidos na eleição (TSE)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.buscar_eleicoes == true }}
+        run: npm run fetch:eleicoes -- --ano "${{ inputs.eleicoes_ano }}" ${{ inputs.eleicoes_limite == '0' && '--all' || format('--limit {0}', inputs.eleicoes_limite) }}
+        continue-on-error: true # parte menos confiável do pipeline — ver README
+
+      - name: Conferir se algo mudou
+        id: diff
+        run: |
+          if git diff --quiet -- public/data/*.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commitar dados atualizados
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/*.json
+          git commit -m "chore(dados): atualiza deputados/senadores/votações/eleições [automático]"
+          git push
+
+      - name: Resumo
+        run: |
+          echo "### Resultado da coleta" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dados alterados: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira os logs de cada etapa acima para ver avisos/erros de cada API." >> "$GITHUB_STEP_SUMMARY"
