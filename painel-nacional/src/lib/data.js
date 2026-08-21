@@ -6,7 +6,9 @@ import { useEffect, useState } from 'react';
 
 async function fetchJson(path, fallback) {
   try {
-    const res = await fetch(path);
+    // no-cache: revalida com o servidor a cada carregamento — esses JSONs são atualizados
+    // por automação (GitHub Actions), e cache heurístico do navegador esconderia dados novos.
+    const res = await fetch(path, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`${res.status} ao buscar ${path}`);
     return await res.json();
   } catch (err) {

@@ -11,6 +11,7 @@
     "fetch:parlamentares": "node scripts/fetch-parlamentares.js",
     "fetch:votacoes": "node scripts/fetch-votacoes.js",
     "fetch:eleicoes": "node scripts/fetch-eleicoes.js",
+    "fetch:tramitacoes": "node scripts/fetch-tramitacoes.js",
     "fetch:all": "npm run fetch:parlamentares && npm run fetch:votacoes && npm run fetch:eleicoes -- --limit 10"
   },
   "dependencies": {

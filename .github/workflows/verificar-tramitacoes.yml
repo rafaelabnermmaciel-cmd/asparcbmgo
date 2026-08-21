@@ -1,0 +1,80 @@
+name: Verificar tramitação de projetos — Painel Parlamentar Nacional
+
+# Roda o script leve de tramitação (~20 proposições, 1-2 chamadas cada) separado do fluxo
+# pesado de parlamentares/votações, porque aqui a frequência importa: quanto antes a
+# movimentação é detectada, antes o aviso de WhatsApp chega. Roda sozinho todo dia; também dá
+# pra disparar na hora pela aba Actions quando quiser conferir na hora.
+#
+# Configuração necessária (Settings → Secrets and variables → Actions → New repository
+# secret), só se quiser o aviso de WhatsApp — sem eles o painel ainda atualiza normalmente,
+# só não manda mensagem:
+#   CALLMEBOT_PHONE   — seu número com DDI, só dígitos (ex: 5562999999999)
+#   CALLMEBOT_APIKEY  — a chave que o CallMeBot devolve depois de você autorizar no WhatsApp
+#                       (ver README da pasta painel-nacional)
+#
+# Pra monitorar um projeto novo: adicione um item em painel-nacional/public/data/
+# acompanhamento-legislativo.json (array "proposicoes") com tipo/numero — a partir daí ele
+# entra automaticamente nesta checagem diária, sem precisar mexer em código.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 12 * * *' # todo dia, 12:00 UTC = 09:00 em Brasília
+
+permissions:
+  contents: write
+
+jobs:
+  verificar-tramitacoes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: painel-nacional
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-nacional/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Consultar tramitação e notificar WhatsApp (se houver novidade)
+        env:
+          CALLMEBOT_PHONE: ${{ secrets.CALLMEBOT_PHONE }}
+          CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+        run: npm run fetch:tramitacoes
+
+      - name: Conferir se algo mudou
+        id: diff
+        run: |
+          if git diff --quiet -- public/data/acompanhamento-legislativo.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Recompilar e commitar (só quando há movimentação nova)
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          npm run build
+          rm -rf ../painel-nacional-app
+          mkdir -p ../painel-nacional-app
+          cp -r dist/. ../painel-nacional-app/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/acompanhamento-legislativo.json ../painel-nacional-app
+          git commit -m "chore(dados): atualiza tramitação de projetos monitorados [automático]"
+          git push
+
+      - name: Resumo
+        run: |
+          echo "### Resultado da checagem de tramitação" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Movimentação nova encontrada: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira o log da etapa \"Consultar tramitação\" acima para detalhes por proposição." >> "$GITHUB_STEP_SUMMARY"

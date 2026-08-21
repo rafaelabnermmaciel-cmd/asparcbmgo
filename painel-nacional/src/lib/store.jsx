@@ -5,7 +5,10 @@ const StoreContext = createContext(null);
 
 async function fetchJson(path, fallback) {
   try {
-    const res = await fetch(path);
+    // no-cache: revalida com o servidor a cada carregamento em vez de confiar em cache
+    // heurístico do navegador — esses JSONs são atualizados por automação (GitHub Actions) e
+    // um retorno "à toa" do cache faria a sincronização de novidades nunca aparecer.
+    const res = await fetch(path, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`${res.status} ao buscar ${path}`);
     return await res.json();
   } catch (err) {
@@ -213,6 +216,40 @@ export function StoreProvider({ children }) {
         };
         persist(persisted);
       }
+      // Sincronização leve dos projetos de origem nacional: o GitHub Actions atualiza
+      // acompanhamento-legislativo.json quando alguma proposição monitorada tem movimentação
+      // nova (ver scripts/fetch-tramitacoes.js). Sem este passo, um navegador que já visitou o
+      // app uma vez nunca mais veria essa atualização — o resto do estado vem só do
+      // localStorage. Só os campos "de fonte" (ultimaMovimentacao/casaAtual/link/situacao) são
+      // sobrescritos; qualquer edição manual do usuário (status, responsável, próximo passo
+      // etc.) fica intacta.
+      if (persisted) {
+        try {
+          const legislativoRaw = await fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null);
+          if (legislativoRaw) {
+            const porChave = new Map((legislativoRaw.proposicoes || []).map((p) => [`${p.tipo}-${p.numero}`, p]));
+            let mudou = false;
+            const projetosAtualizados = (persisted.projetos || []).map((proj) => {
+              if (!proj.origemNacional) return proj;
+              const fresco = porChave.get(`${proj.tipo}-${proj.numero}`);
+              if (!fresco?.ultimaMovimentacao) return proj;
+              const igual = proj.ultimaMovimentacao?.data === fresco.ultimaMovimentacao.data && proj.ultimaMovimentacao?.descricao === fresco.ultimaMovimentacao.descricao;
+              if (igual) return proj;
+              mudou = true;
+              return { ...proj, ultimaMovimentacao: fresco.ultimaMovimentacao, casaAtual: fresco.casaAtual ?? proj.casaAtual, link: fresco.link ?? proj.link };
+            });
+            const fonteAtualizada = { fonte: legislativoRaw.fonte, observacao: legislativoRaw.observacao, atualizacoesRecentes: legislativoRaw.atualizacoesRecentes };
+            const fonteMudou = JSON.stringify(fonteAtualizada.atualizacoesRecentes) !== JSON.stringify(persisted.projetosFonte?.atualizacoesRecentes);
+            if (mudou || fonteMudou) {
+              persisted = { ...persisted, projetos: projetosAtualizados, projetosFonte: fonteAtualizada };
+              persist(persisted);
+            }
+          }
+        } catch (err) {
+          console.warn('[store] falha ao sincronizar acompanhamento-legislativo.json:', err.message);
+        }
+      }
+
       if (persisted) {
         setStore(persisted);
         return;
