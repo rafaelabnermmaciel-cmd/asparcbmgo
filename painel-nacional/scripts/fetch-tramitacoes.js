@@ -107,8 +107,17 @@ async function notificarWhatsApp(mensagem) {
   const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(CALLMEBOT_PHONE)}&text=${encodeURIComponent(mensagem)}&apikey=${encodeURIComponent(CALLMEBOT_APIKEY)}`;
   try {
     const res = await fetch(url);
-    if (!res.ok) console.warn(`[whatsapp] falha ao notificar: HTTP ${res.status}`);
-    else console.log('[whatsapp] notificação enviada.');
+    // O CallMeBot costuma responder HTTP 200 mesmo quando dá erro (chave inválida, número
+    // não confirmado, limite diário etc.) — o motivo real vem só no corpo da resposta, então
+    // status 200 sozinho não prova que a mensagem chegou. Sempre logamos o corpo pra dar pra
+    // diagnosticar; só tratamos como sucesso quando o texto confirma envio.
+    const corpo = await res.text();
+    const enviouDeVerdade = res.ok && /message queued|message.*sent/i.test(corpo);
+    if (enviouDeVerdade) {
+      console.log('[whatsapp] notificação enviada. Resposta do CallMeBot:', corpo.trim());
+    } else {
+      console.warn(`[whatsapp] CallMeBot não confirmou o envio (HTTP ${res.status}). Resposta:`, corpo.trim());
+    }
   } catch (err) {
     console.warn(`[whatsapp] falha ao notificar: ${err.message}`);
   }
