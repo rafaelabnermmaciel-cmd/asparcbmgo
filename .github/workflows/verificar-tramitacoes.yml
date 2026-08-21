@@ -19,7 +19,8 @@ name: Verificar tramitação de projetos — Painel Parlamentar Nacional
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 12 * * *' # todo dia, 12:00 UTC = 09:00 em Brasília
+    - cron: '0 15 * * *'  # todo dia, 15:00 UTC = 12:00 em Brasília
+    - cron: '20 18 * * *' # todo dia, 18:20 UTC = 15:20 em Brasília
 
 permissions:
   contents: write
@@ -54,13 +55,16 @@ jobs:
       - name: Conferir se algo mudou
         id: diff
         run: |
+          # O script grava "ultimaVerificacaoEm" a cada execução, mesmo sem movimentação nova —
+          # então esse diff praticamente sempre dá "true" agora. É proposital: é o que faz o
+          # painel mostrar a hora da última checagem, não só de quando algo mudou de verdade.
           if git diff --quiet -- public/data/acompanhamento-legislativo.json; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Recompilar e commitar (só quando há movimentação nova)
+      - name: Publicar dados atualizados
         if: steps.diff.outputs.mudou == 'true'
         run: |
           npm run build
@@ -76,5 +80,5 @@ jobs:
       - name: Resumo
         run: |
           echo "### Resultado da checagem de tramitação" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Movimentação nova encontrada: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Confira o log da etapa \"Consultar tramitação\" acima para detalhes por proposição." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dados publicados nesta execução: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira o log da etapa \"Consultar tramitação\" acima pra ver se houve movimentação nova de verdade e detalhes por proposição." >> "$GITHUB_STEP_SUMMARY"

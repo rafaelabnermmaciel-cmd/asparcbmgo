@@ -219,7 +219,7 @@ export default function Gerenciamento() {
           Destinações ({store.destinacoes.length})
         </button>
         <button onClick={() => setAba('projetos')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'projetos' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
-          Projetos de Lei ({store.projetos.length})
+          Acompanhamento Legislativo ({store.projetos.length})
         </button>
         <input
           className={`${inputClass} ml-auto max-w-xs`}

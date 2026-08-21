@@ -111,7 +111,6 @@ async function statusDe(tipo, numero, casaConhecida) {
 async function main() {
   const data = JSON.parse(readFileSync(PATH, 'utf-8'));
   const novidades = [];
-  let algoMudou = false;
 
   // Consulta as proposições com concorrência limitada em vez de uma de cada vez — em série,
   // 20 itens com retry pra quem não é encontrado deixava o script bem mais lento que precisa.
@@ -126,8 +125,8 @@ async function main() {
     // idCamara/idSenado são gravados mesmo sem novidade de tramitação — a checagem de pauta
     // (fetch-agenda.js) precisa deles pra saber qual proposição procurar, sem ter que refazer
     // essa mesma busca por número/ano de novo.
-    if (atual.idCamara && p.idCamara !== atual.idCamara) { p.idCamara = atual.idCamara; algoMudou = true; }
-    if (atual.idSenado && p.idSenado !== atual.idSenado) { p.idSenado = atual.idSenado; algoMudou = true; }
+    if (atual.idCamara && p.idCamara !== atual.idCamara) p.idCamara = atual.idCamara;
+    if (atual.idSenado && p.idSenado !== atual.idSenado) p.idSenado = atual.idSenado;
 
     const mudou = atual.ultimaMovimentacao.descricao !== p.ultimaMovimentacao?.descricao || atual.ultimaMovimentacao.data !== p.ultimaMovimentacao?.data;
     if (mudou) {
@@ -136,7 +135,6 @@ async function main() {
       p.casaAtual = atual.casaAtual;
       p.link = atual.link || p.link;
       p.situacao = atual.ultimaMovimentacao.descricao;
-      algoMudou = true;
     }
   }
 
@@ -152,7 +150,12 @@ async function main() {
     console.log('[fetch-tramitacoes] nenhuma movimentação nova desde a última checagem.');
   }
 
-  if (algoMudou) writeJson(PATH, data);
+  // Gravado sempre, mesmo sem novidade — o painel mostra esse horário como "última
+  // verificação" pra deixar claro que a checagem automática está rodando, não só quando algo
+  // muda. Por isso o commit no workflow também acontece a cada execução, não só quando
+  // algoMudou (ver o step "Publicar dados atualizados" em verificar-tramitacoes.yml).
+  data.ultimaVerificacaoEm = new Date().toISOString();
+  writeJson(PATH, data);
 }
 
 main().catch((err) => {

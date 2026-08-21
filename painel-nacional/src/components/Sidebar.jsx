@@ -7,7 +7,7 @@ const NAV = [
   { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
   { to: '/aniversarios', label: 'Aniversários', icon: LuCake },
   { to: '/agenda', label: 'Agenda', icon: LuCalendarDays },
-  { to: '/projetos-lei', label: 'Projetos de Lei', icon: LuFileText },
+  { to: '/projetos-lei', label: 'Acompanhamento Legislativo', icon: LuFileText },
   { to: '/captacao', label: 'Captação', icon: LuBanknote },
   { to: '/relatorios', label: 'Relatórios', icon: LuChartColumn },
   { to: '/gerenciamento', label: 'Gerenciamento', icon: LuSettings },

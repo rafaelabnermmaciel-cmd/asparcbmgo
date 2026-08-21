@@ -238,8 +238,15 @@ export function StoreProvider({ children }) {
               mudou = true;
               return { ...proj, ultimaMovimentacao: fresco.ultimaMovimentacao, casaAtual: fresco.casaAtual ?? proj.casaAtual, link: fresco.link ?? proj.link };
             });
-            const fonteAtualizada = { fonte: legislativoRaw.fonte, observacao: legislativoRaw.observacao, atualizacoesRecentes: legislativoRaw.atualizacoesRecentes };
-            const fonteMudou = JSON.stringify(fonteAtualizada.atualizacoesRecentes) !== JSON.stringify(persisted.projetosFonte?.atualizacoesRecentes);
+            const fonteAtualizada = {
+              fonte: legislativoRaw.fonte,
+              observacao: legislativoRaw.observacao,
+              atualizacoesRecentes: legislativoRaw.atualizacoesRecentes,
+              ultimaVerificacaoEm: legislativoRaw.ultimaVerificacaoEm,
+            };
+            const fonteMudou =
+              JSON.stringify(fonteAtualizada.atualizacoesRecentes) !== JSON.stringify(persisted.projetosFonte?.atualizacoesRecentes) ||
+              fonteAtualizada.ultimaVerificacaoEm !== persisted.projetosFonte?.ultimaVerificacaoEm;
             if (mudou || fonteMudou) {
               persisted = { ...persisted, projetos: projetosAtualizados, projetosFonte: fonteAtualizada };
               persist(persisted);
@@ -263,7 +270,14 @@ export function StoreProvider({ children }) {
         destinacoes,
         projetos: projetosNacionais,
         eventos: [],
-        projetosFonte: legislativoRaw ? { fonte: legislativoRaw.fonte, observacao: legislativoRaw.observacao, atualizacoesRecentes: legislativoRaw.atualizacoesRecentes } : null,
+        projetosFonte: legislativoRaw
+          ? {
+              fonte: legislativoRaw.fonte,
+              observacao: legislativoRaw.observacao,
+              atualizacoesRecentes: legislativoRaw.atualizacoesRecentes,
+              ultimaVerificacaoEm: legislativoRaw.ultimaVerificacaoEm,
+            }
+          : null,
         parlamentarNotas: {},
       };
       persist(initial);
