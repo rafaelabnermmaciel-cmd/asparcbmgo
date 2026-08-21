@@ -18,7 +18,7 @@
 //   CALLMEBOT_PHONE=5562999999999 CALLMEBOT_APIKEY=123456 node scripts/fetch-tramitacoes.js
 
 import { readFileSync } from 'node:fs';
-import { getJson } from './lib/http.js';
+import { getJson, mapWithConcurrency } from './lib/http.js';
 import { writeJson } from './lib/checkpoint.js';
 import { notificarWhatsApp } from './lib/callmebot.js';
 
@@ -104,9 +104,12 @@ async function main() {
   const novidades = [];
   let algoMudou = false;
 
-  for (const p of data.proposicoes) {
-    if (p.encerrada) continue; // já virou lei/foi arquivado — não muda mais
-    const atual = await statusDe(p.tipo, p.numero, p.casaAtual);
+  // Consulta as proposições com concorrência limitada em vez de uma de cada vez — em série,
+  // 20 itens com retry pra quem não é encontrado deixava o script bem mais lento que precisa.
+  const pendentes = data.proposicoes.filter((p) => !p.encerrada); // já virou lei/foi arquivado — não muda mais
+  const resultados = await mapWithConcurrency(pendentes, 4, async (p) => ({ p, atual: await statusDe(p.tipo, p.numero, p.casaAtual) }));
+
+  for (const { p, atual } of resultados) {
     if (!atual) {
       console.warn(`[tramitacoes] ${p.tipo} ${p.numero}: não encontrada em nenhuma das duas casas nesta rodada.`);
       continue;

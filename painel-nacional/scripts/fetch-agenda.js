@@ -22,12 +22,31 @@
 //   CALLMEBOT_PHONE=... CALLMEBOT_APIKEY=... node scripts/fetch-agenda.js
 
 import { readFileSync } from 'node:fs';
-import { getJson } from './lib/http.js';
+import { getJson, mapWithConcurrency } from './lib/http.js';
 import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
 const PATH = 'public/data/acompanhamento-legislativo.json';
-const PALAVRAS_CHAVE = ['segurança pública', 'bombeiro', 'corpo de bombeiros', 'militar', 'desastre'];
+// Cobre os quatro eixos que o CBM-GO acompanha (bombeiros, polícia, militares estaduais,
+// segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
+// só "polícia", que trariam ruído de assuntos sem relação (Forças Armadas federais etc.).
+const PALAVRAS_CHAVE = [
+  'segurança pública',
+  'bombeiro',
+  'corpo de bombeiros',
+  'bombeiro militar',
+  'polícia militar',
+  'polícia civil',
+  'policial militar',
+  'policial civil',
+  'militares estaduais',
+  'defesa civil',
+  'proteção civil',
+  'desastre',
+  'catástrofe',
+  'calamidade',
+  'emergência',
+];
 const MAX_ITENS_POR_SECAO = 10;
 
 function hojeISO() {
@@ -53,26 +72,32 @@ async function projetosPautados(monitorados, dataInicio, dataFim) {
 
   const eventosResp = await getJson(`${CAMARA_BASE}/eventos?dataInicio=${dataInicio}&dataFim=${dataFim}&itens=100&ordenarPor=dataHoraInicio`);
   const eventos = eventosResp?.dados || [];
-  const encontrados = [];
 
-  for (const evento of eventos) {
+  // Uma semana pode ter dezenas de eventos (plenário + várias comissões) — busca as pautas
+  // com concorrência limitada em vez de uma de cada vez.
+  const porEvento = await mapWithConcurrency(eventos, 4, async (evento) => {
     try {
       const pautaResp = await getJson(`${CAMARA_BASE}/eventos/${evento.id}/pauta`);
-      const itensPauta = pautaResp?.dados || [];
-      for (const item of itensPauta) {
-        const prop = item.proposicao_ || item.proposicao || null;
-        if (!prop?.id) continue;
-        const monitorado = idsMonitorados.get(prop.id);
-        if (!monitorado) continue;
-        encontrados.push({
-          tipo: monitorado.tipo,
-          numero: monitorado.numero,
-          orgao: evento.orgaos?.[0]?.nome || evento.orgaos?.[0]?.sigla || 'Câmara dos Deputados',
-          quando: fmtDataHora(evento.dataHoraInicio),
-        });
-      }
+      return { evento, itensPauta: pautaResp?.dados || [] };
     } catch (err) {
       console.warn(`[agenda] falha ao ler pauta do evento ${evento.id}: ${err.message}`);
+      return { evento, itensPauta: [] };
+    }
+  });
+
+  const encontrados = [];
+  for (const { evento, itensPauta } of porEvento) {
+    for (const item of itensPauta) {
+      const prop = item.proposicao_ || item.proposicao || null;
+      if (!prop?.id) continue;
+      const monitorado = idsMonitorados.get(prop.id);
+      if (!monitorado) continue;
+      encontrados.push({
+        tipo: monitorado.tipo,
+        numero: monitorado.numero,
+        orgao: evento.orgaos?.[0]?.nome || evento.orgaos?.[0]?.sigla || 'Câmara dos Deputados',
+        quando: fmtDataHora(evento.dataHoraInicio),
+      });
     }
   }
   return encontrados;
@@ -80,21 +105,28 @@ async function projetosPautados(monitorados, dataInicio, dataFim) {
 
 // Descobre projetos NOVOS relacionados aos temas de interesse, apresentados recentemente e
 // ainda fora do acompanhamento — vira sugestão pro usuário revisar e adicionar manualmente.
+// Busca os termos com concorrência limitada (não em série) — com 15 termos, um por vez
+// deixaria o script bem mais lento à toa.
 async function projetosNovosPorTema(monitorados, dataInicio) {
   const jaMonitorados = new Set(monitorados.map((p) => `${p.tipo}-${p.numero}`));
-  const candidatos = [];
-  for (const termo of PALAVRAS_CHAVE) {
+  const porTermo = await mapWithConcurrency(PALAVRAS_CHAVE, 4, async (termo) => {
     try {
       const resp = await getJson(
         `${CAMARA_BASE}/proposicoes?keywords=${encodeURIComponent(termo)}&dataApresentacaoInicio=${dataInicio}&itens=20&ordem=DESC&ordenarPor=id`
       );
-      for (const p of resp?.dados || []) {
-        const chave = `${p.siglaTipo}-${p.numero}/${p.ano}`;
-        if (jaMonitorados.has(chave) || candidatos.some((c) => c.chave === chave)) continue;
-        candidatos.push({ chave, tipo: p.siglaTipo, numero: `${p.numero}/${p.ano}`, ementa: (p.ementa || '').trim() });
-      }
+      return resp?.dados || [];
     } catch (err) {
       console.warn(`[agenda] falha na busca por "${termo}": ${err.message}`);
+      return [];
+    }
+  });
+
+  const candidatos = [];
+  for (const dados of porTermo) {
+    for (const p of dados) {
+      const chave = `${p.siglaTipo}-${p.numero}/${p.ano}`;
+      if (jaMonitorados.has(chave) || candidatos.some((c) => c.chave === chave)) continue;
+      candidatos.push({ chave, tipo: p.siglaTipo, numero: `${p.numero}/${p.ano}`, ementa: (p.ementa || '').trim() });
     }
   }
   return candidatos.slice(0, MAX_ITENS_POR_SECAO);
