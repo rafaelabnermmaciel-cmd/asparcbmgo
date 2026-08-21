@@ -25,7 +25,8 @@
     "responsavel": "Sgt. Kamila",
     "proximoPasso": "Aguardar processo licitatório",
     "riscos": "Adequação orçamentária",
-    "observacoes": "Atualiz. 03/02/26 – Sgt Kamila. Processo SEI: 20240001101075"
+    "observacoes": "Atualiz. 03/02/26 – Sgt Kamila. Processo SEI: 20240001101075",
+    "acordoVerbal": false
   },
   {
     "id": 2,
@@ -53,7 +54,8 @@
     "responsavel": "Sgt. Kamila",
     "proximoPasso": "Aguardar aprovação SENASP",
     "riscos": "Aprovação SENASP pendente",
-    "observacoes": "Fase de contratação – Remetido à SENASP para aprovação. Atualiz. 04/02/2026."
+    "observacoes": "Fase de contratação – Remetido à SENASP para aprovação. Atualiz. 04/02/2026.",
+    "acordoVerbal": false
   },
   {
     "id": 3,
@@ -81,7 +83,8 @@
     "responsavel": "Sgt. Kamila",
     "proximoPasso": "Acompanhar entrega",
     "riscos": "Prazo de entrega",
-    "observacoes": "Contrato assinado em 30/12/2025. Atualiz. 04/02/2026."
+    "observacoes": "Contrato assinado em 30/12/2025. Atualiz. 04/02/2026.",
+    "acordoVerbal": false
   },
   {
     "id": 4,
@@ -109,7 +112,8 @@
     "responsavel": "Sgt. Kamila",
     "proximoPasso": "Abrir processo licitatório DESAS",
     "riscos": "",
-    "observacoes": "DESAS adquiridas via recurso do Sen Vanderlan Cardoso (R$9.595,00) + Dep Gustavo Gayer (R$763.671,30)."
+    "observacoes": "DESAS adquiridas via recurso do Sen Vanderlan Cardoso (R$9.595,00) + Dep Gustavo Gayer (R$763.671,30).",
+    "acordoVerbal": false
   },
   {
     "id": 5,
@@ -137,7 +141,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "SEI: 202400011010758"
+    "observacoes": "SEI: 202400011010758",
+    "acordoVerbal": false
   },
   {
     "id": 6,
@@ -165,7 +170,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "01 UR adquirida a mais com economicidade das demais emendas."
+    "observacoes": "01 UR adquirida a mais com economicidade das demais emendas.",
+    "acordoVerbal": false
   },
   {
     "id": 7,
@@ -193,7 +199,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": ""
+    "observacoes": "",
+    "acordoVerbal": false
   },
   {
     "id": 8,
@@ -221,7 +228,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Processo licitatório compartilhado",
     "riscos": "",
-    "observacoes": "Valor total R$641.355,50 compartilhado: Silvye Alves + Magda Mofatto + Adriana Accorsi + economicidade."
+    "observacoes": "Valor total R$641.355,50 compartilhado: Silvye Alves + Magda Mofatto + Adriana Accorsi + economicidade.",
+    "acordoVerbal": false
   },
   {
     "id": 9,
@@ -249,7 +257,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": ""
+    "observacoes": "",
+    "acordoVerbal": false
   },
   {
     "id": 10,
@@ -277,7 +286,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Processo licitatório compartilhado",
     "riscos": "",
-    "observacoes": "Valor total R$641.355,50 compartilhado c/ Magda Mofatto e Adriana Accorsi."
+    "observacoes": "Valor total R$641.355,50 compartilhado c/ Magda Mofatto e Adriana Accorsi.",
+    "acordoVerbal": false
   },
   {
     "id": 11,
@@ -305,7 +315,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": ""
+    "observacoes": "",
+    "acordoVerbal": false
   },
   {
     "id": 12,
@@ -333,7 +344,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "SEI: 202400011010758"
+    "observacoes": "SEI: 202400011010758",
+    "acordoVerbal": false
   },
   {
     "id": 13,
@@ -361,7 +373,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório (2 un.)",
     "riscos": "Contrapartida do Estado",
-    "observacoes": "Aquisição de 02 UR: Sen Vanderlan (R$687.362,92) + Dep Gayer (R$5.547,03) + Contrapartida Estado (R$94.532,13)."
+    "observacoes": "Aquisição de 02 UR: Sen Vanderlan (R$687.362,92) + Dep Gayer (R$5.547,03) + Contrapartida Estado (R$94.532,13).",
+    "acordoVerbal": false
   },
   {
     "id": 14,
@@ -389,7 +402,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "SEI: 202400011017278"
+    "observacoes": "SEI: 202400011017278",
+    "acordoVerbal": false
   },
   {
     "id": 15,
@@ -417,7 +431,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "SEI: 202500011001336"
+    "observacoes": "SEI: 202500011001336",
+    "acordoVerbal": false
   },
   {
     "id": 16,
@@ -445,11 +460,12 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Abrir processo licitatório",
     "riscos": "Negociação com Prefeitura",
-    "observacoes": "Destinação confirmada. Neg. com prefeito via saúde."
+    "observacoes": "Destinação confirmada. Neg. com prefeito via saúde.",
+    "acordoVerbal": false
   },
   {
     "id": 17,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2025,
     "municipio": "Planaltina",
     "tipo": "Transferência especial",
@@ -473,11 +489,12 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Destinação confirmada."
+    "observacoes": "Destinação confirmada.",
+    "acordoVerbal": false
   },
   {
     "id": 18,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2025,
     "municipio": "Cidade Ocidental",
     "tipo": "Transferência especial",
@@ -501,7 +518,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Destinação confirmada."
+    "observacoes": "Destinação confirmada.",
+    "acordoVerbal": false
   },
   {
     "id": 19,
@@ -529,7 +547,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Valor destinado — 21BM."
+    "observacoes": "Valor destinado — 21BM.",
+    "acordoVerbal": false
   },
   {
     "id": 20,
@@ -557,7 +576,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Valor destinado — 21BM."
+    "observacoes": "Valor destinado — 21BM.",
+    "acordoVerbal": false
   },
   {
     "id": 21,
@@ -585,7 +605,8 @@
     "responsavel": "Ten. Cel. Rodrigues",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Destinação confirmada."
+    "observacoes": "Destinação confirmada.",
+    "acordoVerbal": false
   },
   {
     "id": 22,
@@ -613,7 +634,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Neg. com prefeito via saúde",
     "riscos": "",
-    "observacoes": "Destinação confirmada."
+    "observacoes": "Destinação confirmada.",
+    "acordoVerbal": false
   },
   {
     "id": 23,
@@ -641,7 +663,8 @@
     "responsavel": "Sgt. Kamila",
     "proximoPasso": "Processo licitatório",
     "riscos": "",
-    "observacoes": "Valor destinado — 21BM."
+    "observacoes": "Valor destinado — 21BM.",
+    "acordoVerbal": false
   },
   {
     "id": 24,
@@ -669,11 +692,12 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Neg. com prefeito via saúde",
     "riscos": "Depende de aprovação do prefeito",
-    "observacoes": "Previsão LOA 25/26 (ASPAR)."
+    "observacoes": "Previsão LOA 25/26 (ASPAR).",
+    "acordoVerbal": false
   },
   {
     "id": 25,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2026,
     "municipio": "Valparaíso",
     "tipo": "Transferência especial",
@@ -697,11 +721,12 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Assinatura de instrumento jurídico",
     "riscos": "Prazo de aprovação",
-    "observacoes": "Previsão LOA 25/26 (ASPAR). Extensão do Quartel."
+    "observacoes": "Previsão LOA 25/26 (ASPAR). Extensão do Quartel.",
+    "acordoVerbal": false
   },
   {
     "id": 26,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2026,
     "municipio": "Campos Lindos",
     "tipo": "Transferência especial",
@@ -725,7 +750,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Assinatura de instrumento jurídico",
     "riscos": "Prazo de aprovação",
-    "observacoes": "Previsão LOA 25/26 (ASPAR). Construção do Posto Avançado."
+    "observacoes": "Previsão LOA 25/26 (ASPAR). Construção do Posto Avançado.",
+    "acordoVerbal": false
   },
   {
     "id": 27,
@@ -753,11 +779,12 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Neg. com prefeito via saúde",
     "riscos": "Depende do prefeito",
-    "observacoes": "Previsão LOA 25/26."
+    "observacoes": "Previsão LOA 25/26.",
+    "acordoVerbal": false
   },
   {
     "id": 28,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2026,
     "municipio": "Formosa",
     "tipo": "Emenda individual",
@@ -781,7 +808,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26 (ASPAR)."
+    "observacoes": "Previsão LOA 25/26 (ASPAR).",
+    "acordoVerbal": false
   },
   {
     "id": 29,
@@ -809,7 +837,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26. Objeto: 1 ATP."
+    "observacoes": "Previsão LOA 25/26. Objeto: 1 ATP.",
+    "acordoVerbal": false
   },
   {
     "id": 30,
@@ -837,7 +866,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Promessa LOA 25/26."
+    "observacoes": "Promessa LOA 25/26.",
+    "acordoVerbal": false
   },
   {
     "id": 31,
@@ -865,7 +895,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26."
+    "observacoes": "Previsão LOA 25/26.",
+    "acordoVerbal": false
   },
   {
     "id": 32,
@@ -893,7 +924,8 @@
     "responsavel": "Maj. Ferreira",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26."
+    "observacoes": "Previsão LOA 25/26.",
+    "acordoVerbal": false
   },
   {
     "id": 33,
@@ -921,7 +953,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26. Complemento para UR."
+    "observacoes": "Previsão LOA 25/26. Complemento para UR.",
+    "acordoVerbal": false
   },
   {
     "id": 34,
@@ -949,7 +982,8 @@
     "responsavel": "Cap. Mendes",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
-    "observacoes": "Previsão LOA 25/26."
+    "observacoes": "Previsão LOA 25/26.",
+    "acordoVerbal": false
   },
   {
     "id": 35,
@@ -978,11 +1012,12 @@
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 25/26. Objeto definido: Bom Jesus."
+    "observacoes": "Previsão LOA 25/26. Objeto definido: Bom Jesus.",
+    "acordoVerbal": false
   },
   {
     "id": 36,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2027,
     "municipio": "Iporá",
     "tipo": "Emenda individual",
@@ -992,18 +1027,27 @@
     "valorPrevisto": 1800000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 37,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2027,
     "municipio": "Águas Lindas",
     "tipo": "Emenda individual",
@@ -1013,18 +1057,27 @@
     "valorPrevisto": 600000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 38,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2027,
     "municipio": "Águas Lindas",
     "tipo": "Emenda individual",
@@ -1034,18 +1087,27 @@
     "valorPrevisto": 1200000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 39,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2027,
     "municipio": "Campos Lindos",
     "tipo": "Emenda individual",
@@ -1055,18 +1117,27 @@
     "valorPrevisto": 600000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 40,
-    "parlamentarNome": "Leda Borges",
+    "parlamentarNome": "Lêda Borges",
     "ano": 2027,
     "municipio": "Porangatu",
     "tipo": "Emenda individual",
@@ -1076,14 +1147,23 @@
     "valorPrevisto": 1700000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 41,
@@ -1097,14 +1177,23 @@
     "valorPrevisto": 694000,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   },
   {
     "id": 42,
@@ -1118,13 +1207,22 @@
     "valorPrevisto": 593700,
     "valorConfirmado": 0,
     "status": "Em articulação",
-    "etapas": { "ind": 1, "cad": 0, "apv": 0, "emp": 0, "lic": 0, "con": 0, "entr": 0 },
+    "etapas": {
+      "ind": 1,
+      "cad": 0,
+      "apv": 0,
+      "emp": 0,
+      "lic": 0,
+      "con": 0,
+      "entr": 0
+    },
     "origem": "Reunião institucional",
     "dataOrigem": "2027-01-01",
     "responsavel": "",
     "proximoPasso": "Cadastro 21BM",
     "riscos": "",
     "sei": "",
-    "observacoes": "Previsão LOA 26/27."
+    "observacoes": "Previsão LOA 26/27.",
+    "acordoVerbal": true
   }
 ]

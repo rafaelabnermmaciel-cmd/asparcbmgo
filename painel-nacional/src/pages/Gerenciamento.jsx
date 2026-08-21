@@ -18,8 +18,8 @@ export const btnGhost =
   'rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300';
 export const btnDanger = 'rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30';
 
-export const emptyDest = { parlamentarNome: '', ano: new Date().getFullYear(), municipio: '', objeto: '', valorPrevisto: 0, valorConfirmado: 0, status: 'Em articulação', sei: '', responsavel: '', proximoPasso: '', riscos: '', observacoes: '' };
-export const emptyProj = { parlamentarNome: '', tipo: 'PL', numero: '', ementa: '', status: 'Protocolado', posicao: 'em análise', prioridade: 'média', responsavel: '', proximoPasso: '', observacoes: '' };
+export const emptyDest = { parlamentarNome: '', ano: new Date().getFullYear(), municipio: '', objeto: '', valorPrevisto: 0, valorConfirmado: 0, status: 'Em articulação', acordoVerbal: false, sei: '', responsavel: '', proximoPasso: '', riscos: '', observacoes: '' };
+export const emptyProj = { autor: '', relator: '', tipo: 'PL', numero: '', ementa: '', status: 'Protocolado', posicao: 'em análise', prioridade: 'média', responsavel: '', proximoPasso: '', observacoes: '' };
 
 export function DestForm({ initial, nomes, onSave, onCancel }) {
   const [f, setF] = useState(initial);
@@ -65,6 +65,18 @@ export function DestForm({ initial, nomes, onSave, onCancel }) {
         <p className={labelClass}>Responsável</p>
         <input className={inputClass} value={f.responsavel} onChange={set('responsavel')} />
       </div>
+      <div className="flex items-center gap-2 sm:col-span-2">
+        <input
+          id="acordoVerbal"
+          type="checkbox"
+          checked={!!f.acordoVerbal}
+          onChange={(e) => setF({ ...f, acordoVerbal: e.target.checked })}
+          className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-400"
+        />
+        <label htmlFor="acordoVerbal" className="text-xs text-slate-600 dark:text-slate-300">
+          Acordo verbal (promessa ainda não formalizada — não entra em totais/médias/ranking)
+        </label>
+      </div>
       <div className="sm:col-span-2">
         <p className={labelClass}>Próximo passo</p>
         <input className={inputClass} value={f.proximoPasso} onChange={set('proximoPasso')} />
@@ -87,9 +99,13 @@ export function ProjForm({ initial, nomes, onSave, onCancel }) {
   return (
     <div className="mt-3 grid grid-cols-1 gap-3 rounded-xl border border-indigo-100 bg-indigo-50/40 p-4 sm:grid-cols-2 dark:border-indigo-900/40 dark:bg-indigo-500/5">
       <div>
-        <p className={labelClass}>Parlamentar</p>
-        <input list="nomes-parl2" className={inputClass} value={f.parlamentarNome} onChange={set('parlamentarNome')} placeholder="Nome do parlamentar" />
+        <p className={labelClass}>Autor</p>
+        <input list="nomes-parl2" className={inputClass} value={f.autor || ''} onChange={set('autor')} placeholder="Quem apresentou o projeto" />
         <datalist id="nomes-parl2">{nomes.map((n) => <option key={n} value={n} />)}</datalist>
+      </div>
+      <div>
+        <p className={labelClass}>Relator</p>
+        <input list="nomes-parl2" className={inputClass} value={f.relator || ''} onChange={set('relator')} placeholder="Deixe em branco se aguardando designação" />
       </div>
       <div className="flex gap-2">
         <div className="w-24">
@@ -186,7 +202,8 @@ export default function Gerenciamento() {
       store.projetos.filter(
         (p) =>
           !busca ||
-          p.parlamentarNome?.toLowerCase().includes(busca.toLowerCase()) ||
+          p.autor?.toLowerCase().includes(busca.toLowerCase()) ||
+          p.relator?.toLowerCase().includes(busca.toLowerCase()) ||
           p.numero?.toLowerCase().includes(busca.toLowerCase()) ||
           p.ementa?.toLowerCase().includes(busca.toLowerCase())
       ),
@@ -297,10 +314,13 @@ export default function Gerenciamento() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                        {p.tipo} {p.numero} <span className="text-slate-400">· {p.parlamentarNome || p.casaAtual || 'sem parlamentar vinculado'}</span>
+                        {p.tipo} {p.numero}
                         {p.origemNacional && (
                           <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">relatório ASPAR</span>
                         )}
+                      </p>
+                      <p className="mt-0.5 text-xs text-slate-400">
+                        Autor: {p.autor || '—'} · Relator: {p.relator || 'aguardando designação'}
                       </p>
                       <p className="mt-0.5 truncate text-xs text-slate-500">{p.ementa}</p>
                       <EstagioStepper estagio={p.status} stages={STATUS_PROJETO} editable onChange={(st) => store.updateProjeto(p.id, { status: st })} />

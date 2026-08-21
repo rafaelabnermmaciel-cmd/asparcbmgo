@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { useStore, STATUS_DESTINACAO } from '../lib/store.jsx';
+import { useStore, STATUS_DESTINACAO, destinacaoConfirmada } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
 import { useTheme } from '../lib/theme.jsx';
@@ -132,12 +132,17 @@ export default function Captacao() {
     if (anoParam) setAno(parseInt(anoParam));
   }, [anoParam]);
 
-  const anos = useMemo(() => [...new Set(store.destinacoes.map((d) => d.ano))].sort((a, b) => a - b), [store.destinacoes]);
+  // Acordo verbal é promessa ainda não formalizada — fica de fora dos anos "normais" e de
+  // qualquer total/média/ranking, só aparece na aba própria (ver destinacaoConfirmada).
+  const confirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
+  const verbais = useMemo(() => store.destinacoes.filter((d) => d.acordoVerbal), [store.destinacoes]);
 
-  const filtradas = useMemo(
-    () => (ano === 'todos' ? store.destinacoes : store.destinacoes.filter((d) => d.ano === ano)),
-    [store.destinacoes, ano]
-  );
+  const anos = useMemo(() => [...new Set(confirmadas.map((d) => d.ano))].sort((a, b) => a - b), [confirmadas]);
+
+  const filtradas = useMemo(() => {
+    if (ano === 'verbal') return verbais;
+    return ano === 'todos' ? confirmadas : confirmadas.filter((d) => d.ano === ano);
+  }, [confirmadas, verbais, ano]);
 
   const totalPrevisto = filtradas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
 
@@ -174,9 +179,9 @@ export default function Captacao() {
   const porAnoChart = useMemo(() => {
     if (ano !== 'todos') return [];
     const porAno = new Map();
-    store.destinacoes.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
+    confirmadas.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
     return [...porAno.entries()].sort((a, b) => a[0] - b[0]).map(([a, v]) => ({ name: String(a), value: v }));
-  }, [store.destinacoes, ano]);
+  }, [confirmadas, ano]);
 
   const municipiosChart = useMemo(() => {
     const porMun = new Map();
@@ -199,12 +204,17 @@ export default function Captacao() {
   const corAzul = AZUL[theme];
   const tooltipStyle = { borderRadius: 12, border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0', fontSize: 12, background: theme === 'dark' ? '#0f172a' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#0f172a' };
 
+  const verbal = ano === 'verbal';
+  const anoLabel = ano === 'todos' ? 'Todos os anos' : verbal ? 'Acordo verbal' : String(ano);
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">💰 Captação de Recursos</h1>
-          <p className="mt-1 text-sm text-slate-400">{filtradas.length} destinações · {fmtR(totalPrevisto)} previsto{ano !== 'todos' ? ` em ${ano}` : ''}</p>
+          <p className="mt-1 text-sm text-slate-400">
+            {filtradas.length} {verbal ? 'promessas (acordo verbal)' : 'destinações'} · {fmtR(totalPrevisto)} {verbal ? 'prometido' : 'previsto'}{ano !== 'todos' && !verbal ? ` em ${ano}` : ''}
+          </p>
         </div>
         <Link to="/" className="text-xs text-slate-400 hover:text-indigo-600">← Resumo geral</Link>
       </ScrollReveal>
@@ -225,6 +235,15 @@ export default function Captacao() {
             {a}
           </button>
         ))}
+        {verbais.length > 0 && (
+          <button
+            onClick={() => setAno('verbal')}
+            title="Promessas ainda não formalizadas — não entram em totais, médias nem ranking"
+            className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${verbal ? 'border-amber-600 bg-amber-500 text-white' : 'border-dashed border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-500/10'}`}
+          >
+            🤝 Acordo Verbal
+          </button>
+        )}
       </ScrollReveal>
 
       {admin && (
@@ -237,28 +256,28 @@ export default function Captacao() {
 
       {filtradas.length === 0 && (
         <ScrollReveal delay={0.1} className="mt-5">
-          <EmptyState title="Nenhuma destinação neste ano" description="Ajuste o filtro de ano ou cadastre uma nova em Gerenciamento." />
+          <EmptyState title={verbal ? 'Nenhum acordo verbal registrado' : 'Nenhuma destinação neste ano'} description="Ajuste o filtro de ano ou cadastre uma nova em Gerenciamento." />
         </ScrollReveal>
       )}
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5 grid gap-4 sm:grid-cols-2">
-          <ChartCard title="Quem mais destinou" sub={`${ano === 'todos' ? 'Todos os anos' : ano} · valor previsto${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
+          <ChartCard title={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
             <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
           </ChartCard>
 
-          <ChartCard title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${ano}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
+          <ChartCard title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${anoLabel}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
             <StackedBarCard segments={ano === 'todos' ? statusChart : andamentoChart} valueLabel="destinações" tooltipStyle={tooltipStyle} />
           </ChartCard>
 
           {ano === 'todos' && porAnoChart.length > 1 && (
-            <ChartCard title="Captação por ano" sub="Valor previsto total">
+            <ChartCard title="Captação por ano" sub="Valor previsto total (sem acordos verbais)">
               <BarCard data={porAnoChart} valueFmt={fmtRCompact} height={140} color={corAzul} tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}
 
           {municipiosChart.length > 0 && (
-            <ChartCard title="Top municípios / unidades" sub={`${ano === 'todos' ? 'Todos os anos' : ano} · valor previsto`}>
+            <ChartCard title="Top municípios / unidades" sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}`}>
               <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}

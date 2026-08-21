@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 import { useParlamentares, proximosAniversarios, initials } from '../lib/data.js';
-import { useStore, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo } from '../lib/store.jsx';
+import { useStore, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, destinacaoConfirmada } from '../lib/store.jsx';
 import StatCard from '../components/StatCard.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -78,23 +78,25 @@ export default function Dashboard() {
   const porUf = useMemo(() => groupCount(parlamentares, 'uf').slice(0, 10), [parlamentares]);
   const recentes = useMemo(() => parlamentares.slice(0, 8), [parlamentares]);
 
-  const totalPrevisto = store.destinacoes.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
-  const anosCaptacao = useMemo(() => [...new Set(store.destinacoes.map((d) => d.ano))].sort((a, b) => b - a), [store.destinacoes]);
+  // Acordo verbal é promessa ainda não formalizada — nunca entra nesses totais/médias/ranking.
+  const destinacoesConfirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
+  const totalPrevisto = destinacoesConfirmadas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+  const anosCaptacao = useMemo(() => [...new Set(destinacoesConfirmadas.map((d) => d.ano))].sort((a, b) => b - a), [destinacoesConfirmadas]);
   const mediaUltimos3Anos = useMemo(() => {
     const ultimos3 = anosCaptacao.slice(0, 3);
     if (!ultimos3.length) return 0;
-    const total = store.destinacoes.filter((d) => ultimos3.includes(d.ano)).reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+    const total = destinacoesConfirmadas.filter((d) => ultimos3.includes(d.ano)).reduce((s, d) => s + (d.valorPrevisto || 0), 0);
     return total / ultimos3.length;
-  }, [anosCaptacao, store.destinacoes]);
+  }, [anosCaptacao, destinacoesConfirmadas]);
   const topParlamentar = useMemo(() => {
     const porParl = new Map();
-    store.destinacoes.forEach((d) => {
+    destinacoesConfirmadas.forEach((d) => {
       const nome = d.parlamentarNome || 'Não identificado';
       porParl.set(nome, (porParl.get(nome) || 0) + (d.valorPrevisto || 0));
     });
     const ordenado = [...porParl.entries()].sort((a, b) => b[1] - a[1]);
     return ordenado[0] ? { nome: ordenado[0][0], valor: ordenado[0][1] } : null;
-  }, [store.destinacoes]);
+  }, [destinacoesConfirmadas]);
 
   function findParlamentar(nome) {
     return parlamentares.find((p) => p.nome === nome);

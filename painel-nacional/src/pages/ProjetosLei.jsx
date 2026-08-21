@@ -39,7 +39,8 @@ export default function ProjetosLei() {
             !busca ||
             p.numero?.toLowerCase().includes(busca.toLowerCase()) ||
             p.ementa?.toLowerCase().includes(busca.toLowerCase()) ||
-            p.parlamentarNome?.toLowerCase().includes(busca.toLowerCase())
+            p.autor?.toLowerCase().includes(busca.toLowerCase()) ||
+            p.relator?.toLowerCase().includes(busca.toLowerCase())
         )
         .slice()
         .sort((a, b) => (b.ultimaMovimentacao?.data || '').localeCompare(a.ultimaMovimentacao?.data || '')),
@@ -135,8 +136,10 @@ export default function ProjetosLei() {
                           {p.casaAtual}
                         </span>
                       )}
-                      <span className="text-xs text-slate-400">{p.parlamentarNome || 'sem parlamentar vinculado'}</span>
                     </div>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Autor: {p.autor || '—'} · Relator: {p.relator || 'aguardando designação'}
+                    </p>
                     <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{p.ementa}</p>
                     <EstagioStepper estagio={p.status} stages={STATUS_PROJETO} editable={admin} onChange={(st) => store.updateProjeto(p.id, { status: st })} />
                   </div>

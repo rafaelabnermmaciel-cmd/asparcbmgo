@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useStore, TIPOS_EVENTO } from '../lib/store.jsx';
+import { useStore, TIPOS_EVENTO, destinacaoConfirmada } from '../lib/store.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import { btnGhost } from './Gerenciamento.jsx';
 
@@ -21,9 +21,14 @@ export default function Relatorios() {
   const store = useStore();
   const [periodo, setPeriodo] = useState(90);
 
+  // Acordo verbal é promessa ainda não formalizada — fica fora do relatório oficial de
+  // prestação de contas, e listada à parte (ver bloco "Acordos verbais" abaixo).
+  const destinacoesConfirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
+  const acordosVerbais = useMemo(() => store.destinacoes.filter((d) => d.acordoVerbal), [store.destinacoes]);
+
   const porAno = useMemo(() => {
     const grupos = new Map();
-    store.destinacoes.forEach((d) => {
+    destinacoesConfirmadas.forEach((d) => {
       const g = grupos.get(d.ano) || { ano: d.ano, itens: [], previsto: 0, confirmado: 0 };
       g.itens.push(d);
       g.previsto += d.valorPrevisto || 0;
@@ -31,10 +36,11 @@ export default function Relatorios() {
       grupos.set(d.ano, g);
     });
     return [...grupos.values()].sort((a, b) => b.ano - a.ano);
-  }, [store.destinacoes]);
+  }, [destinacoesConfirmadas]);
 
-  const totalGeral = store.destinacoes.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
-  const confirmadoGeral = store.destinacoes.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
+  const totalGeral = destinacoesConfirmadas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+  const confirmadoGeral = destinacoesConfirmadas.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
+  const totalVerbal = acordosVerbais.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
 
   const reunioesFiltradas = useMemo(() => {
     const eventos = store.eventos.filter((e) => e.status === 'Realizada');
@@ -76,7 +82,7 @@ export default function Relatorios() {
           </div>
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Destinações</p>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">{store.destinacoes.length}</p>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">{destinacoesConfirmadas.length}</p>
           </div>
         </div>
 
@@ -113,6 +119,36 @@ export default function Relatorios() {
         ))}
         {porAno.length === 0 && <p className="mt-3 text-xs text-slate-400">Nenhuma destinação cadastrada ainda.</p>}
       </ScrollReveal>
+
+      {acordosVerbais.length > 0 && (
+        <ScrollReveal delay={0.08} className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/40 p-6 dark:border-amber-900/40 dark:bg-amber-500/5 print:mt-4 print:break-inside-avoid print:rounded-none print:border print:border-amber-300 print:p-3 print:shadow-none">
+          <p className="text-base font-semibold text-slate-900 dark:text-white">🤝 Acordos verbais (promessas — não contabilizadas acima)</p>
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{acordosVerbais.length} promessas · {fmtR(totalVerbal)} no total, ainda não formalizadas</p>
+          <table className="mt-3 w-full text-left text-xs">
+            <thead className="text-slate-400">
+              <tr>
+                <th className="py-1 pr-2 font-medium">Parlamentar</th>
+                <th className="py-1 pr-2 font-medium">Município</th>
+                <th className="py-1 pr-2 font-medium">Ano</th>
+                <th className="py-1 font-medium text-right">Valor prometido</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-amber-100 dark:divide-amber-900/30">
+              {acordosVerbais
+                .slice()
+                .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
+                .map((d) => (
+                  <tr key={d.id} className="text-slate-600 dark:text-slate-300">
+                    <td className="py-1 pr-2">{d.parlamentarNome || '—'}</td>
+                    <td className="py-1 pr-2">{d.municipio}</td>
+                    <td className="py-1 pr-2">{d.ano}</td>
+                    <td className="py-1 text-right">{fmtR(d.valorPrevisto)}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </ScrollReveal>
+      )}
 
       <ScrollReveal delay={0.1} className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 print:mt-8 print:break-inside-avoid print:rounded-none print:border-0 print:p-0 print:shadow-none">
         <div className="flex flex-wrap items-center justify-between gap-3">

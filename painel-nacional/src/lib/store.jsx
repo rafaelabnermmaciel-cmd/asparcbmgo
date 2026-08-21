@@ -95,14 +95,54 @@ function classificarEstagio(situacao) {
   return 'Protocolado';
 }
 
+// O relatório ASPAR não tem um campo estruturado de autor/relator — quando cita esses nomes,
+// eles aparecem soltos no texto de "assunto"/"situacao" (ver observacao no próprio JSON). Essa
+// tabela foi montada lendo cada um dos 20 itens uma vez (chave "tipo-numero"); autor/relator
+// null significa que o relatório não menciona ninguém nesse papel para aquele item específico.
+const AUTOR_RELATOR_NACIONAL = {
+  'PLP-18/2021': { relator: 'Sen. Nelsinho Trad' },
+  'PL-317/2022': { relator: 'Dep. Sargento Portugal' },
+  'PL-241/2023': { relator: 'Dep. Cabo Gilberto Silva' },
+  'PL-4.804/2025': { relator: 'Dep. Allan Garcês' },
+  'PL-1.274/2024': { relator: 'Dep. Alex Manente' },
+  'PL-1.958/2023': { relator: 'Dep. Josenildo (PDT-AP)' },
+  'PL-1.451/2023': { relator: 'Sen. Efraim Filho' },
+  'PL-3.268/2020': { relator: 'Sen. Weverton' },
+  'PL-458/2024': { autor: 'Sen. Jayme Campos (União-MT)', relator: 'Sen. Hamilton Mourão' },
+  'PL-2.557/2026': { autor: 'Sen. Izalci Lucas' },
+  'PEC-17/2025': { autor: 'Dep. Coronel Meira (PL-PE), Dep. Delegado Fabio Costa (PP-AL) e Dep. Alfredo Gaspar (União-AL)' },
+  'PEC-10/2026': { relator: 'Sen. Styvenson Valentim' },
+};
+
+// Retira títulos/parênteses pra comparar nomes vindos de texto livre (ex: "Sen. Hamilton
+// Mourão") com o nome oficial do parlamentar na base (ex: "Hamilton Mourão").
+function normalizaNomeParlamentar(s) {
+  return (s || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\b(sen|sen\.|dep|dep\.|senador|senadora|deputado|deputada)\b\.?/gi, '')
+    .replace(/\([^)]*\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+export function nomesCorrespondem(a, b) {
+  const na = normalizaNomeParlamentar(a);
+  const nb = normalizaNomeParlamentar(b);
+  if (!na || !nb) return false;
+  return na === nb || na.includes(nb) || nb.includes(na);
+}
+
 // O relatório ASPAR (acompanhamento-legislativo.json) descreve proposições nacionais de
 // interesse do CBM-GO — isso É um projeto de lei de interesse, não uma categoria à parte.
 // Esta função converte cada item do relatório para o mesmo formato usado pelos projetos
 // cadastrados manualmente (ver emptyProj em Gerenciamento.jsx), para viverem na mesma lista.
 function nacionalToProjeto(p) {
   const estagio = p.estagio || classificarEstagio(p.situacao);
+  const autorRelator = AUTOR_RELATOR_NACIONAL[`${p.tipo}-${p.numero}`] || {};
   return {
-    parlamentarNome: p.parlamentar || '',
+    autor: autorRelator.autor || null,
+    relator: autorRelator.relator || null,
     tipo: p.tipo,
     numero: p.numero,
     ementa: p.assunto,
@@ -142,6 +182,29 @@ export function StoreProvider({ children }) {
         };
         delete persisted.legislativoNacional;
         delete persisted.legislativoFonte;
+        persist(persisted);
+      }
+      // Migração: projetos já fundidos numa sessão anterior (com o antigo campo
+      // parlamentarNome) ganham autor/relator extraídos do relatório ASPAR, uma única vez.
+      if (persisted?.projetos?.some((p) => p.origemNacional && p.autor === undefined)) {
+        persisted = {
+          ...persisted,
+          projetos: persisted.projetos.map((p) => {
+            if (!p.origemNacional || p.autor !== undefined) return p;
+            const autorRelator = AUTOR_RELATOR_NACIONAL[`${p.tipo}-${p.numero}`] || {};
+            const { parlamentarNome, ...resto } = p;
+            return { ...resto, autor: autorRelator.autor || null, relator: autorRelator.relator || null };
+          }),
+        };
+        persist(persisted);
+      }
+      // Migração: destinações salvas antes do campo acordoVerbal existir ganham o valor
+      // default (false) — 2027 já vem marcado como acordo verbal desde o seed original.
+      if (persisted?.destinacoes?.some((d) => d.acordoVerbal === undefined)) {
+        persisted = {
+          ...persisted,
+          destinacoes: persisted.destinacoes.map((d) => (d.acordoVerbal === undefined ? { ...d, acordoVerbal: d.ano === 2027 } : d)),
+        };
         persist(persisted);
       }
       if (persisted) {
@@ -320,6 +383,12 @@ export function destinacaoAtiva(d) {
 }
 export function projetoAtivo(p) {
   return p.status !== 'Aprovado' && p.status !== 'Arquivado';
+}
+
+// Acordo verbal é uma promessa ainda não formalizada — não entra em total captado, médias,
+// ranking "quem mais destinou" nem em relatórios de prestação de contas. Só é exibida à parte.
+export function destinacaoConfirmada(d) {
+  return !d.acordoVerbal;
 }
 
 export const STATUS_DESTINACAO = ['Em articulação', 'Indicado', 'Confirmado', 'Empenhado', 'Em licitação', 'Contratado', 'Entregue'];

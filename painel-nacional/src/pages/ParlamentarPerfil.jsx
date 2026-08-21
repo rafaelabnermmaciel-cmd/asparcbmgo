@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useParlamentares, useVotacoes, useResultadosEleitorais, initials } from '../lib/data.js';
-import { useStore, STATUS_PROJETO, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo } from '../lib/store.jsx';
+import { useStore, STATUS_PROJETO, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, nomesCorrespondem } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { DestForm, ProjForm, emptyDest, emptyProj, btnGhost, btnDanger } from './Gerenciamento.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -90,7 +90,7 @@ export default function ParlamentarPerfil() {
   const historicoVotos = votacoes[`${casa}:${id}`] || [];
   const eleicao = resultados[`${casa}:${id}`] || null;
   const destinacoes = p ? store.destinacoes.filter((d) => d.parlamentarNome === p.nome) : [];
-  const projetos = p ? store.projetos.filter((pr) => pr.parlamentarNome === p.nome) : [];
+  const projetos = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.autor, p.nome) || nomesCorrespondem(pr.relator, p.nome)) : [];
   const reunioes = p ? store.eventos.filter((e) => e.parlamentarNome === p.nome).slice().sort((a, b) => b.data.localeCompare(a.data)) : [];
 
   function labelDoVinculo(e) {
@@ -157,11 +157,13 @@ export default function ParlamentarPerfil() {
 
       <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <p className="text-sm font-semibold text-slate-900 dark:text-white">Contato</p>
-        <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 flex flex-col gap-5">
           <InfoRow label="E-mail" value={p.email} copyable />
-          <InfoRow label="Telefone" value={p.telefone} copyable />
-          {formatGabinete(p.gabinete) && <InfoRow label="Gabinete" value={formatGabinete(p.gabinete)} />}
-          <InfoRow label="Situação" value={p.situacao} />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <InfoRow label="Telefone" value={p.telefone} copyable />
+            {formatGabinete(p.gabinete) && <InfoRow label="Gabinete" value={formatGabinete(p.gabinete)} />}
+            <InfoRow label="Situação" value={p.situacao} />
+          </div>
         </div>
       </ScrollReveal>
 
@@ -234,6 +236,9 @@ export default function ParlamentarPerfil() {
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{d.municipio} <span className="font-normal text-slate-400">· {d.ano}</span></p>
                       <p className="mt-0.5 text-xs text-slate-500">{d.objeto} · {fmtR(d.valorPrevisto)} previsto{d.valorConfirmado ? ` · ${fmtR(d.valorConfirmado)} confirmado` : ''}{d.sei ? ` · SEI: ${d.sei}` : ''}</p>
                       <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{d.status}</span>
+                      {d.acordoVerbal && (
+                        <span className="ml-1.5 mt-1 inline-block rounded-full border border-dashed border-amber-300 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-800 dark:text-amber-300">🤝 Acordo verbal — não contabilizado</span>
+                      )}
                       {destinacaoAtiva(d) && <GargaloBadge tipo="destinacao" id={d.id} eventos={store.eventos} />}
                       <EtapasTracker etapas={d.etapas} editable={admin} onToggle={(key) => store.toggleDestinacaoEtapa(d.id, key)} />
                     </div>
@@ -255,12 +260,12 @@ export default function ParlamentarPerfil() {
 
       <ScrollReveal delay={0.25} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Projetos de Lei de Interesse do CBM-GO</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Autoria e Relatoria de Projetos de Interesse do CBM-GO</p>
           {admin && <button className={btnGhost} onClick={() => setEditingProj(null)}>+ Adicionar</button>}
         </div>
         {editingProj === null && (
           <ProjForm
-            initial={{ ...emptyProj, parlamentarNome: p.nome }}
+            initial={{ ...emptyProj, autor: p.nome }}
             nomes={[p.nome]}
             onCancel={() => setEditingProj(undefined)}
             onSave={(f) => { store.addProjeto(f); setEditingProj(undefined); }}
@@ -282,6 +287,12 @@ export default function ParlamentarPerfil() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
                         {pr.tipo} {pr.numero}
+                        {nomesCorrespondem(pr.autor, p.nome) && (
+                          <span className="ml-1.5 rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">✍️ Autor</span>
+                        )}
+                        {nomesCorrespondem(pr.relator, p.nome) && (
+                          <span className="ml-1.5 rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">⚖️ Relator</span>
+                        )}
                         {projetoAtivo(pr) && <GargaloBadge tipo="projeto" id={pr.id} eventos={store.eventos} />}
                       </p>
                       <p className="mt-0.5 truncate text-xs text-slate-500">{pr.ementa}</p>
@@ -299,7 +310,7 @@ export default function ParlamentarPerfil() {
             ))}
           </div>
         ) : (
-          <p className="mt-2 text-xs text-slate-400">Nenhum projeto de lei registrado para este parlamentar.</p>
+          <p className="mt-2 text-xs text-slate-400">Nenhum projeto com autoria ou relatoria deste parlamentar registrado ainda.</p>
         )}
       </ScrollReveal>
 
