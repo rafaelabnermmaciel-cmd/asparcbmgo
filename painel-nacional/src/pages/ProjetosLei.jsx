@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { LuFileText } from 'react-icons/lu';
 import { useStore, STATUS_PROJETO, TIPOS_PROJETO } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
@@ -58,7 +59,9 @@ export default function ProjetosLei() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">📄 Projetos de Lei de Interesse do CBM-GO</h1>
+        <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-slate-900 dark:text-white">
+          <LuFileText className="h-6 w-6 text-indigo-500" /> Projetos de Lei de Interesse do CBM-GO
+        </h1>
         <p className="mt-1 text-sm text-slate-400">
           {store.projetosFonte?.fonte?.nome
             ? `Fonte: ${store.projetosFonte.fonte.nome} — atualizado em ${fmtData(store.projetosFonte.fonte.data)}, mais itens cadastrados manualmente`

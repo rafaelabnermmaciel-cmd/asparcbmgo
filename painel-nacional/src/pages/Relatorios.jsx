@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { LuChartColumn, LuPrinter, LuBanknote, LuHandshake } from 'react-icons/lu';
 import { useStore, TIPOS_EVENTO, destinacaoConfirmada } from '../lib/store.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import { btnGhost } from './Gerenciamento.jsx';
@@ -57,10 +58,14 @@ export default function Relatorios() {
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8 print:px-0 print:py-0">
       <ScrollReveal className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">📊 Relatórios</h1>
+          <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-slate-900 dark:text-white">
+            <LuChartColumn className="h-6 w-6 text-indigo-500" /> Relatórios
+          </h1>
           <p className="mt-1 text-sm text-slate-400">Resumo pronto pra prestar contas — imprima ou exporte como PDF.</p>
         </div>
-        <button onClick={() => window.print()} className={btnGhost}>🖨️ Imprimir / gerar PDF</button>
+        <button onClick={() => window.print()} className={`${btnGhost} flex items-center gap-1.5`}>
+          <LuPrinter className="h-3.5 w-3.5" /> Imprimir / gerar PDF
+        </button>
       </ScrollReveal>
 
       {/* Cabeçalho só na impressão */}
@@ -70,7 +75,9 @@ export default function Relatorios() {
       </div>
 
       <ScrollReveal delay={0.05} className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 print:mt-4 print:break-inside-avoid print:rounded-none print:border-0 print:p-0 print:shadow-none">
-        <p className="text-base font-semibold text-slate-900 dark:text-white">💰 Destinações de recursos</p>
+        <p className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+          <LuBanknote className="h-4 w-4 text-red-500" /> Destinações de recursos
+        </p>
         <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Total previsto</p>
@@ -122,7 +129,9 @@ export default function Relatorios() {
 
       {acordosVerbais.length > 0 && (
         <ScrollReveal delay={0.08} className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/40 p-6 dark:border-amber-900/40 dark:bg-amber-500/5 print:mt-4 print:break-inside-avoid print:rounded-none print:border print:border-amber-300 print:p-3 print:shadow-none">
-          <p className="text-base font-semibold text-slate-900 dark:text-white">🤝 Acordos verbais (promessas — não contabilizadas acima)</p>
+          <p className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+            <LuHandshake className="h-4 w-4 text-amber-600" /> Acordos verbais (promessas — não contabilizadas acima)
+          </p>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{acordosVerbais.length} promessas · {fmtR(totalVerbal)} no total, ainda não formalizadas</p>
           <table className="mt-3 w-full text-left text-xs">
             <thead className="text-slate-400">
@@ -152,7 +161,9 @@ export default function Relatorios() {
 
       <ScrollReveal delay={0.1} className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 print:mt-8 print:break-inside-avoid print:rounded-none print:border-0 print:p-0 print:shadow-none">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-base font-semibold text-slate-900 dark:text-white">🤝 Reuniões realizadas</p>
+          <p className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+            <LuHandshake className="h-4 w-4 text-indigo-500" /> Reuniões realizadas
+          </p>
           <div className="flex flex-wrap gap-1.5 print:hidden">
             {PERIODOS.map((p) => (
               <button

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { LuTriangleAlert, LuBanknote, LuFileText, LuHandshake, LuPenLine, LuScale } from 'react-icons/lu';
 import { useParlamentares, useVotacoes, useResultadosEleitorais, initials } from '../lib/data.js';
 import { useStore, STATUS_PROJETO, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, nomesCorrespondem } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
@@ -46,8 +47,8 @@ function GargaloBadge({ tipo, id, eventos }) {
   const nivel = nivelGargalo(dias);
   if (!nivel) return null;
   return (
-    <span className={`ml-1.5 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${GARGALO_ESTILO[nivel]}`}>
-      ⚠️ {dias}d sem contato
+    <span className={`ml-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${GARGALO_ESTILO[nivel]}`}>
+      <LuTriangleAlert className="h-3 w-3" /> {dias}d sem contato
     </span>
   );
 }
@@ -100,11 +101,11 @@ export default function ParlamentarPerfil() {
   function labelDoVinculo(e) {
     if (e.destinacaoId) {
       const d = store.destinacoes.find((x) => x.id === e.destinacaoId);
-      return d ? `💰 ${d.municipio} — ${d.objeto}` : null;
+      return d ? { Icon: LuBanknote, texto: `${d.municipio} — ${d.objeto}` } : null;
     }
     if (e.projetoId) {
       const pr = store.projetos.find((x) => x.id === e.projetoId);
-      return pr ? `📄 ${pr.tipo} ${pr.numero}` : null;
+      return pr ? { Icon: LuFileText, texto: `${pr.tipo} ${pr.numero}` } : null;
     }
     return null;
   }
@@ -241,7 +242,9 @@ export default function ParlamentarPerfil() {
                       <p className="mt-0.5 text-xs text-slate-500">{d.objeto} · {fmtR(d.valorPrevisto)} previsto{d.valorConfirmado ? ` · ${fmtR(d.valorConfirmado)} confirmado` : ''}{d.sei ? ` · SEI: ${d.sei}` : ''}</p>
                       <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{d.status}</span>
                       {d.acordoVerbal && (
-                        <span className="ml-1.5 mt-1 inline-block rounded-full border border-dashed border-amber-300 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-800 dark:text-amber-300">🤝 Acordo verbal — não contabilizado</span>
+                        <span className="ml-1.5 mt-1 inline-flex items-center gap-1 rounded-full border border-dashed border-amber-300 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-800 dark:text-amber-300">
+                          <LuHandshake className="h-3 w-3" /> Acordo verbal — não contabilizado
+                        </span>
                       )}
                       {destinacaoAtiva(d) && <GargaloBadge tipo="destinacao" id={d.id} eventos={store.eventos} />}
                       <EtapasTracker etapas={d.etapas} editable={admin} onToggle={(key) => store.toggleDestinacaoEtapa(d.id, key)} />
@@ -263,12 +266,14 @@ export default function ParlamentarPerfil() {
       </ScrollReveal>
 
       {[
-        { role: 'autor', titulo: '✍️ Autoria de Projetos de Interesse do CBM-GO', lista: projetosAutoria, vazio: 'Nenhum projeto de autoria deste parlamentar registrado ainda.' },
-        { role: 'relator', titulo: '⚖️ Relatoria de Projetos de Interesse do CBM-GO', lista: projetosRelatoria, vazio: 'Nenhum projeto sob relatoria deste parlamentar registrado ainda.' },
-      ].map(({ role, titulo, lista, vazio }, blocoIdx) => (
+        { role: 'autor', Icon: LuPenLine, titulo: 'Autoria de Projetos de Interesse do CBM-GO', lista: projetosAutoria, vazio: 'Nenhum projeto de autoria deste parlamentar registrado ainda.' },
+        { role: 'relator', Icon: LuScale, titulo: 'Relatoria de Projetos de Interesse do CBM-GO', lista: projetosRelatoria, vazio: 'Nenhum projeto sob relatoria deste parlamentar registrado ainda.' },
+      ].map(({ role, Icon, titulo, lista, vazio }, blocoIdx) => (
         <ScrollReveal key={role} delay={0.25 + blocoIdx * 0.03} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">{titulo}</p>
+            <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+              <Icon className="h-4 w-4 text-indigo-500" /> {titulo}
+            </p>
             {admin && <button className={btnGhost} onClick={() => setAddingComo(role)}>+ Adicionar</button>}
           </div>
           {addingComo === role && (
@@ -330,14 +335,20 @@ export default function ParlamentarPerfil() {
         </div>
         {reunioes.length ? (
           <div className="mt-3 flex flex-col gap-2">
-            {reunioes.map((e) => (
+            {reunioes.map((e) => {
+              const vinculo = labelDoVinculo(e);
+              return (
               <div key={e.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-semibold text-slate-500">{e.data?.split('-').reverse().join('/')}</span>
                   <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">{e.status}</span>
                   <span className="text-sm text-slate-700 dark:text-slate-200">{e.titulo}</span>
                 </div>
-                {labelDoVinculo(e) && <p className="mt-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">{labelDoVinculo(e)}</p>}
+                {vinculo && (
+                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                    <vinculo.Icon className="h-3 w-3" /> {vinculo.texto}
+                  </p>
+                )}
                 {e.pauta && <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{e.pauta}</p>}
                 {e.anexos?.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
@@ -345,13 +356,16 @@ export default function ParlamentarPerfil() {
                       a.tipo === 'foto' ? (
                         <img key={a.id} src={a.dataUri} alt={a.nome} className="h-12 w-12 rounded-lg object-cover" />
                       ) : (
-                        <a key={a.id} href={a.dataUri} download={a.nome} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:text-slate-300">📄 {a.nome}</a>
+                        <a key={a.id} href={a.dataUri} download={a.nome} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:text-slate-300">
+                          <LuFileText className="h-3 w-3" /> {a.nome}
+                        </a>
                       )
                     ))}
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <p className="mt-2 text-xs text-slate-400">Nenhuma reunião registrada ainda — cadastre pela Agenda e vincule a este parlamentar.</p>

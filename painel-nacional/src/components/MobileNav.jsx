@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { LuEllipsis, LuX } from 'react-icons/lu';
 import { NAV } from './Sidebar.jsx';
 
 // 8 itens não cabem numa barra inferior de celular sem espremer/embaralhar o texto — os 4
 // mais usados no dia a dia ficam fixos, o resto entra num menu "Mais" que abre por cima.
 const PRINCIPAIS = ['/', '/parlamentares', '/captacao', '/agenda'];
 
-function ItemNav({ to, label, icon, end, onClick, className }) {
+function ItemNav({ to, label, icon: Icon, end, onClick, className }) {
   return (
     <NavLink
       to={to}
@@ -17,7 +18,7 @@ function ItemNav({ to, label, icon, end, onClick, className }) {
         `${className} ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-500'}`
       }
     >
-      <span className="text-lg leading-none">{icon}</span>
+      <Icon className="h-5 w-5" />
       {label}
     </NavLink>
   );
@@ -87,7 +88,7 @@ export default function MobileNav() {
             aberto || outroAtivo ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-500'
           }`}
         >
-          <span className="text-lg leading-none">{aberto ? '✕' : '⋯'}</span>
+          {aberto ? <LuX className="h-5 w-5" /> : <LuEllipsis className="h-5 w-5" />}
           Mais
         </button>
       </nav>

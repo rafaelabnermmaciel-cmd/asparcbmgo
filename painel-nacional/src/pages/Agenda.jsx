@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LuCalendarDays, LuCamera, LuPaperclip, LuFileText } from 'react-icons/lu';
 import { useStore, TIPOS_EVENTO, TIPOS_REUNIAO, STATUS_EVENTO } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
@@ -36,7 +37,7 @@ function getBirthdayEvts(parlamentares) {
     if (partes.length < 3) return;
     const [, m, d] = partes;
     for (let y = anoAtual - 1; y <= anoAtual + 1; y++) {
-      evts.push({ id: `b:${p.casa}:${p.id}:${y}`, data: `${y}-${m}-${d}`, titulo: `🎂 Aniversário — ${p.nome}`, tipo: 'aniv', parlamentar: p });
+      evts.push({ id: `b:${p.casa}:${p.id}:${y}`, data: `${y}-${m}-${d}`, titulo: `Aniversário — ${p.nome}`, tipo: 'aniv', parlamentar: p });
     }
   });
   return evts;
@@ -77,12 +78,12 @@ function AnexosField({ anexos, onChange }) {
     <div className="sm:col-span-2">
       <p className={labelClass}>Anexos (foto e documento)</p>
       <div className="mt-1 flex flex-wrap gap-2">
-        <label className={`${btnGhost} cursor-pointer`}>
-          📷 Adicionar foto
+        <label className={`${btnGhost} flex cursor-pointer items-center gap-1.5`}>
+          <LuCamera className="h-3.5 w-3.5" /> Adicionar foto
           <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e, 'foto')} />
         </label>
-        <label className={`${btnGhost} cursor-pointer`}>
-          📎 Adicionar documento
+        <label className={`${btnGhost} flex cursor-pointer items-center gap-1.5`}>
+          <LuPaperclip className="h-3.5 w-3.5" /> Adicionar documento
           <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" multiple className="hidden" onChange={(e) => handleFiles(e, 'documento')} />
         </label>
       </div>
@@ -93,7 +94,7 @@ function AnexosField({ anexos, onChange }) {
               {a.tipo === 'foto' ? (
                 <img src={a.dataUri} alt={a.nome} className="h-6 w-6 rounded object-cover" />
               ) : (
-                <span>📄</span>
+                <LuFileText className="h-3.5 w-3.5 text-slate-400" />
               )}
               <span className="max-w-[110px] truncate text-slate-600 dark:text-slate-300">{a.nome}</span>
               <button type="button" onClick={() => remover(a.id)} className="ml-0.5 text-slate-400 hover:text-red-500">×</button>
@@ -114,10 +115,10 @@ function EventoForm({ initial, nomes, onSave, onCancel }) {
     if (!f.parlamentarNome) return [];
     const dests = store.destinacoes
       .filter((d) => d.parlamentarNome === f.parlamentarNome)
-      .map((d) => ({ tipo: 'destinacao', id: d.id, label: `💰 ${d.municipio} — ${d.objeto} (${d.ano})` }));
+      .map((d) => ({ tipo: 'destinacao', id: d.id, label: `${d.municipio} — ${d.objeto} (${d.ano})` }));
     const projs = store.projetos
       .filter((p) => p.parlamentarNome === f.parlamentarNome)
-      .map((p) => ({ tipo: 'projeto', id: p.id, label: `📄 ${p.tipo} ${p.numero}` }));
+      .map((p) => ({ tipo: 'projeto', id: p.id, label: `${p.tipo} ${p.numero}` }));
     return [...dests, ...projs];
   }, [f.parlamentarNome, store.destinacoes, store.projetos]);
 
@@ -278,7 +279,9 @@ export default function Agenda() {
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">📅 Agenda</h1>
+          <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-slate-900 dark:text-white">
+            <LuCalendarDays className="h-6 w-6 text-indigo-500" /> Agenda
+          </h1>
           <p className="mt-1 text-sm text-slate-400">Reuniões, audiências e aniversários dos parlamentares.</p>
         </div>
         <div className="flex gap-1 rounded-full bg-slate-100 p-1 dark:bg-slate-800">
@@ -407,7 +410,11 @@ export default function Agenda() {
                 <span className="w-20 shrink-0 text-xs font-semibold text-slate-500">{e.data.split('-').reverse().join('/')}</span>
                 <span className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${TIPO_COR[e.tipo]}`}>{TIPO_LABEL[e.tipo]}</span>
                 <span className="min-w-0 flex-1 truncate text-sm text-slate-700 dark:text-slate-200">{e.titulo}{e.parlamentarNome ? ` · ${e.parlamentarNome}` : ''}</span>
-                {e.anexos?.length > 0 && <span className="shrink-0 text-xs text-slate-400">📎 {e.anexos.length}</span>}
+                {e.anexos?.length > 0 && (
+                  <span className="flex shrink-0 items-center gap-1 text-xs text-slate-400">
+                    <LuPaperclip className="h-3 w-3" /> {e.anexos.length}
+                  </span>
+                )}
                 {admin && (
                   <button className={btnDanger} onClick={(ev) => { ev.stopPropagation(); if (confirm('Remover este evento?')) store.removeEvento(e.id); }}>Remover</button>
                 )}

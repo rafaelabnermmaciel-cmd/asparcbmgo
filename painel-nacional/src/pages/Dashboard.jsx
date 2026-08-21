@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
 import { useParlamentares, proximosAniversarios, initials } from '../lib/data.js';
 import { useStore, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, destinacaoConfirmada } from '../lib/store.jsx';
+import { LuCircleCheck, LuFootprints, LuPhoneOff, LuCake, LuBanknote } from 'react-icons/lu';
 import StatCard from '../components/StatCard.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -17,10 +18,12 @@ const GARGALO_ESTILO = {
   amarelo: 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300',
 };
 
-function AcoesCard({ icone, titulo, children, vazio }) {
+function AcoesCard({ icon: Icon, titulo, children, vazio }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <p className="text-sm font-semibold text-slate-900 dark:text-white">{icone} {titulo}</p>
+      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+        <Icon className="h-4 w-4 text-indigo-500" /> {titulo}
+      </p>
       {children || <p className="mt-3 text-xs text-slate-400">{vazio}</p>}
     </div>
   );
@@ -151,9 +154,11 @@ export default function Dashboard() {
 
       {!store.loading && totalAcoes > 0 && (
         <ScrollReveal delay={0.07} className="mt-6">
-          <p className="mb-3 text-sm font-semibold text-slate-900 dark:text-white">✅ Central de ações — o que fazer agora</p>
+          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <LuCircleCheck className="h-4 w-4 text-emerald-500" /> Central de ações — o que fazer agora
+          </p>
           <div className="grid gap-4 lg:grid-cols-3">
-            <AcoesCard icone="👉" titulo="Próximo passo pendente" vazio="Nenhuma destinação com próximo passo em aberto.">
+            <AcoesCard icon={LuFootprints} titulo="Próximo passo pendente" vazio="Nenhuma destinação com próximo passo em aberto.">
               {proximosPassos.length > 0 && (
                 <div className="mt-3 flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
                   {proximosPassos.map((d) => (
@@ -166,7 +171,7 @@ export default function Dashboard() {
               )}
             </AcoesCard>
 
-            <AcoesCard icone="📵" titulo="Contato esfriando" vazio="Nenhuma tarefa em acompanhamento esfriando no momento.">
+            <AcoesCard icon={LuPhoneOff} titulo="Contato esfriando" vazio="Nenhuma tarefa em acompanhamento esfriando no momento.">
               {gargalos.length > 0 && (
                 <div className="mt-3 flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
                   {gargalos.map((g) => (
@@ -182,7 +187,7 @@ export default function Dashboard() {
               )}
             </AcoesCard>
 
-            <AcoesCard icone="🎂" titulo="Aniversários (14 dias)" vazio="Nenhum aniversário nos próximos 14 dias.">
+            <AcoesCard icon={LuCake} titulo="Aniversários (14 dias)" vazio="Nenhum aniversário nos próximos 14 dias.">
               {aniversariosProximos.length > 0 && (
                 <div className="mt-3 flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
                   {aniversariosProximos.map((p) => (
@@ -203,7 +208,9 @@ export default function Dashboard() {
         <ScrollReveal delay={0.08} className="mt-6 rounded-2xl border border-red-100 bg-red-50/40 p-6 dark:border-red-900/40 dark:bg-red-500/5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">💰 Captação de Recursos — CBM-GO</p>
+              <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+                <LuBanknote className="h-4 w-4 text-red-500" /> Captação de Recursos — CBM-GO
+              </p>
               <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Destinações de recursos ao Corpo de Bombeiros Militar de Goiás</p>
             </div>
             <Link to="/captacao" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-red-700">

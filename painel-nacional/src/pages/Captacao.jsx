@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
+import { LuBanknote, LuCircleCheck, LuTrendingUp, LuTrophy, LuUsers, LuChartColumn, LuMapPin, LuHandshake } from 'react-icons/lu';
 import { useStore, STATUS_DESTINACAO, destinacaoConfirmada } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
@@ -8,6 +9,7 @@ import { useTheme } from '../lib/theme.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EtapasTracker from '../components/EtapasTracker.jsx';
 import EmptyState from '../components/EmptyState.jsx';
+import StatCard from '../components/StatCard.jsx';
 
 function fmtR(v) {
   return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
@@ -43,11 +45,20 @@ function grupoDoStatus(status) {
   return 'Em execução';
 }
 
-function ChartCard({ title, sub, children }) {
+function ChartCard({ title, sub, icon: Icon, children }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <p className="text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
-      {sub && <p className="mt-0.5 text-xs text-slate-400">{sub}</p>}
+      <div className="flex items-center gap-2.5">
+        {Icon && (
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
+            <Icon className="h-4 w-4" />
+          </span>
+        )}
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
+          {sub && <p className="truncate text-xs text-slate-400">{sub}</p>}
+        </div>
+      </div>
       {children}
     </div>
   );
@@ -145,6 +156,14 @@ export default function Captacao() {
   }, [confirmadas, verbais, ano]);
 
   const totalPrevisto = filtradas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+  const totalConfirmado = filtradas.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
+
+  // Total captado por ano, sempre visível como número — não só escondido dentro de um gráfico.
+  const totaisPorAno = useMemo(() => {
+    const porAno = new Map();
+    confirmadas.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
+    return [...porAno.entries()].sort((a, b) => a[0] - b[0]);
+  }, [confirmadas]);
 
   const ranking = useMemo(() => {
     const porParl = new Map();
@@ -176,13 +195,6 @@ export default function Captacao() {
     return GRUPOS_ANDAMENTO.map((g) => ({ name: g.key, value: contagem[g.key], cor: g.cor[theme] })).filter((g) => g.value > 0);
   }, [filtradas, theme]);
 
-  const porAnoChart = useMemo(() => {
-    if (ano !== 'todos') return [];
-    const porAno = new Map();
-    confirmadas.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
-    return [...porAno.entries()].sort((a, b) => a[0] - b[0]).map(([a, v]) => ({ name: String(a), value: v }));
-  }, [confirmadas, ano]);
-
   const municipiosChart = useMemo(() => {
     const porMun = new Map();
     filtradas.forEach((d) => {
@@ -208,10 +220,12 @@ export default function Captacao() {
   const anoLabel = ano === 'todos' ? 'Todos os anos' : verbal ? 'Acordo verbal' : String(ano);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
+    <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal className="flex flex-wrap items-baseline justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">💰 Captação de Recursos</h1>
+          <h1 className="flex items-center gap-2.5 text-2xl font-semibold text-slate-900 dark:text-white">
+            <LuBanknote className="h-6 w-6 text-red-500" /> Captação de Recursos
+          </h1>
           <p className="mt-1 text-sm text-slate-400">
             {filtradas.length} {verbal ? 'promessas (acordo verbal)' : 'destinações'} · {fmtR(totalPrevisto)} {verbal ? 'prometido' : 'previsto'}{ano !== 'todos' && !verbal ? ` em ${ano}` : ''}
           </p>
@@ -241,10 +255,38 @@ export default function Captacao() {
             title="Promessas ainda não formalizadas — não entram em totais, médias nem ranking"
             className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${verbal ? 'border-amber-600 bg-amber-500 text-white' : 'border-dashed border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-500/10'}`}
           >
-            🤝 Acordo Verbal
+            <LuHandshake className="h-4 w-4" /> Acordo Verbal
           </button>
         )}
       </ScrollReveal>
+
+      {filtradas.length > 0 && (
+        <ScrollReveal delay={0.07} className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard valueSize="text-2xl" label={verbal ? 'Total prometido' : 'Total previsto'} value={fmtRCompact(totalPrevisto)} icon={<LuBanknote />} accent="indigo" />
+          <StatCard valueSize="text-2xl" label="Total confirmado" value={fmtRCompact(totalConfirmado)} icon={<LuCircleCheck />} accent="emerald" />
+          {ano === 'todos' ? (
+            <StatCard valueSize="text-2xl" label="Média por ano" value={fmtRCompact(totalPrevisto / (anos.length || 1))} icon={<LuTrendingUp />} accent="amber" />
+          ) : (
+            <StatCard valueSize="text-2xl" label={verbal ? 'Promessas' : 'Destinações'} value={filtradas.length} icon={<LuUsers />} accent="amber" />
+          )}
+          <StatCard valueSize="text-xl" label={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} value={ranking[0]?.nome || '—'} sub={ranking[0] ? fmtRCompact(ranking[0].previsto) : undefined} icon={<LuTrophy />} accent="rose" />
+        </ScrollReveal>
+      )}
+
+      {ano === 'todos' && totaisPorAno.length > 0 && (
+        <ScrollReveal delay={0.09} className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {totaisPorAno.map(([a, v]) => (
+            <button
+              key={a}
+              onClick={() => setAno(a)}
+              className="rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-red-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+            >
+              <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Total captado {a}</p>
+              <p className="mt-1 text-xl font-semibold text-slate-900 dark:text-white">{fmtRCompact(v)}</p>
+            </button>
+          ))}
+        </ScrollReveal>
+      )}
 
       {admin && (
         <ScrollReveal delay={0.07} className="mt-4 flex justify-end">
@@ -262,22 +304,16 @@ export default function Captacao() {
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5 grid gap-4 sm:grid-cols-2">
-          <ChartCard title={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
+          <ChartCard icon={LuTrophy} title={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
             <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
           </ChartCard>
 
-          <ChartCard title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${anoLabel}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
+          <ChartCard icon={LuChartColumn} title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${anoLabel}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
             <StackedBarCard segments={ano === 'todos' ? statusChart : andamentoChart} valueLabel="destinações" tooltipStyle={tooltipStyle} />
           </ChartCard>
 
-          {ano === 'todos' && porAnoChart.length > 1 && (
-            <ChartCard title="Captação por ano" sub="Valor previsto total (sem acordos verbais)">
-              <BarCard data={porAnoChart} valueFmt={fmtRCompact} height={140} color={corAzul} tooltipStyle={tooltipStyle} />
-            </ChartCard>
-          )}
-
           {municipiosChart.length > 0 && (
-            <ChartCard title="Top municípios / unidades" sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}`}>
+            <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}`}>
               <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}

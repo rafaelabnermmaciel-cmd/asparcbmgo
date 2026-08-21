@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { LuFlame } from 'react-icons/lu';
 import { useParlamentares, UFS } from '../lib/data.js';
 import ParlamentarCard from '../components/ParlamentarCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -41,9 +42,9 @@ export default function Parlamentares() {
       <ScrollReveal delay={0.04} className="mt-5 flex flex-wrap gap-2">
         <button
           onClick={() => setUf(uf === 'GO' ? '' : 'GO')}
-          className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${uf === 'GO' ? 'bg-red-600 text-white' : 'border border-red-200 text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-500/10'}`}
+          className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-medium transition ${uf === 'GO' ? 'bg-red-600 text-white' : 'border border-red-200 text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-500/10'}`}
         >
-          🚒 {uf === 'GO' ? '✓ Priorizando Goiás' : 'Priorizar Goiás'}
+          <LuFlame className="h-3.5 w-3.5" /> {uf === 'GO' ? '✓ Priorizando Goiás' : 'Priorizar Goiás'}
         </button>
       </ScrollReveal>
 

@@ -1,18 +1,19 @@
 import { NavLink } from 'react-router-dom';
+import { LuHouse, LuLandmark, LuCake, LuCalendarDays, LuFileText, LuBanknote, LuChartColumn, LuSettings } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 
 const NAV = [
-  { to: '/', label: 'Visão Geral', icon: '🏠', end: true },
-  { to: '/parlamentares', label: 'Parlamentares', icon: '🏛️' },
-  { to: '/aniversarios', label: 'Aniversários', icon: '🎂' },
-  { to: '/agenda', label: 'Agenda', icon: '📅' },
-  { to: '/projetos-lei', label: 'Projetos de Lei', icon: '📄' },
-  { to: '/captacao', label: 'Captação', icon: '💰' },
-  { to: '/relatorios', label: 'Relatórios', icon: '📊' },
-  { to: '/gerenciamento', label: 'Gerenciamento', icon: '⚙️' },
+  { to: '/', label: 'Visão Geral', icon: LuHouse, end: true },
+  { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
+  { to: '/aniversarios', label: 'Aniversários', icon: LuCake },
+  { to: '/agenda', label: 'Agenda', icon: LuCalendarDays },
+  { to: '/projetos-lei', label: 'Projetos de Lei', icon: LuFileText },
+  { to: '/captacao', label: 'Captação', icon: LuBanknote },
+  { to: '/relatorios', label: 'Relatórios', icon: LuChartColumn },
+  { to: '/gerenciamento', label: 'Gerenciamento', icon: LuSettings },
 ];
 
-function NavItem({ to, label, icon, end }) {
+function NavItem({ to, label, icon: Icon, end }) {
   return (
     <NavLink
       to={to}
@@ -25,7 +26,7 @@ function NavItem({ to, label, icon, end }) {
         }`
       }
     >
-      <span className="text-base leading-none">{icon}</span>
+      <Icon className="h-[18px] w-[18px] shrink-0" />
       {label}
     </NavLink>
   );
