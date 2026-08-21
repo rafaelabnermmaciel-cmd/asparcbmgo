@@ -1,0 +1,57 @@
+name: Agenda legislativa semanal — Painel Parlamentar Nacional
+
+# Manda um resumo por WhatsApp (via fetch-agenda.js): quais dos projetos monitorados estão
+# pautados pra sessão/comissão nos próximos 7 dias, e quais projetos NOVOS relacionados a
+# segurança pública/bombeiros/desastres/militares foram apresentados na última semana (pra
+# revisar e adicionar manualmente ao acompanhamento — este workflow nunca adiciona nada
+# sozinho). Sempre manda a mensagem, mesmo sem nada de novo — é um resumo periódico, não um
+# alerta de mudança (esse é o workflow "Verificar tramitação de projetos").
+#
+# Dois horários fixos:
+#   - Domingo às 21h (Brasília) — panorama da semana que começa.
+#   - Todo dia às 8h (Brasília) — atualização diária, já que a pauta muda dia a dia.
+# Também disparável na hora pela aba Actions.
+#
+# Usa as mesmas secrets CALLMEBOT_PHONE/CALLMEBOT_APIKEY do workflow de tramitação — ver
+# README da pasta painel-nacional.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 0 * * 1'  # domingo 21h em Brasília (UTC-3) = segunda 00:00 UTC
+    - cron: '0 11 * * *' # todo dia 8h em Brasília = 11:00 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  agenda-legislativa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: painel-nacional
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-nacional/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Montar e enviar agenda da semana
+        env:
+          CALLMEBOT_PHONE: ${{ secrets.CALLMEBOT_PHONE }}
+          CALLMEBOT_APIKEY: ${{ secrets.CALLMEBOT_APIKEY }}
+        run: npm run fetch:agenda
+
+      - name: Resumo
+        run: |
+          echo "### Agenda legislativa enviada" >> "$GITHUB_STEP_SUMMARY"
+          echo "Confira o log da etapa \"Montar e enviar agenda da semana\" acima pro texto completo enviado." >> "$GITHUB_STEP_SUMMARY"

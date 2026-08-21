@@ -20,13 +20,11 @@
 import { readFileSync } from 'node:fs';
 import { getJson } from './lib/http.js';
 import { writeJson } from './lib/checkpoint.js';
+import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
 const SENADO_BASE = 'https://legis.senado.leg.br/dadosabertos';
 const PATH = 'public/data/acompanhamento-legislativo.json';
-
-const CALLMEBOT_PHONE = process.env.CALLMEBOT_PHONE;
-const CALLMEBOT_APIKEY = process.env.CALLMEBOT_APIKEY;
 
 function parseNumeroAno(numero) {
   const [num, ano] = String(numero).split('/');
@@ -43,6 +41,7 @@ async function statusCamara(tipo, numero) {
   if (!st?.dataHora) return null;
   return {
     casaAtual: 'Câmara dos Deputados',
+    idCamara: achado.id,
     link: `https://www.camara.leg.br/propostas-legislativas/${achado.id}`,
     ultimaMovimentacao: {
       data: st.dataHora.slice(0, 10),
@@ -66,6 +65,7 @@ async function statusSenado(tipo, numero) {
   if (!situ?.DataSituacao) return null;
   return {
     casaAtual: 'Senado Federal',
+    idSenado: codigo,
     link: `https://www25.senado.leg.br/web/atividade/materias/-/materia/${codigo}`,
     ultimaMovimentacao: { data: situ.DataSituacao, descricao: situ.DescricaoSituacao || 'Sem descrição informada.' },
   };
@@ -99,33 +99,10 @@ async function statusDe(tipo, numero, casaConhecida) {
   return null;
 }
 
-async function notificarWhatsApp(mensagem) {
-  if (!CALLMEBOT_PHONE || !CALLMEBOT_APIKEY) {
-    console.log('[whatsapp] CALLMEBOT_PHONE/CALLMEBOT_APIKEY não configurados — pulando notificação (só atualiza o painel).');
-    return;
-  }
-  const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(CALLMEBOT_PHONE)}&text=${encodeURIComponent(mensagem)}&apikey=${encodeURIComponent(CALLMEBOT_APIKEY)}`;
-  try {
-    const res = await fetch(url);
-    // O CallMeBot costuma responder HTTP 200 mesmo quando dá erro (chave inválida, número
-    // não confirmado, limite diário etc.) — o motivo real vem só no corpo da resposta, então
-    // status 200 sozinho não prova que a mensagem chegou. Sempre logamos o corpo pra dar pra
-    // diagnosticar; só tratamos como sucesso quando o texto confirma envio.
-    const corpo = await res.text();
-    const enviouDeVerdade = res.ok && /message queued|message.*sent/i.test(corpo);
-    if (enviouDeVerdade) {
-      console.log('[whatsapp] notificação enviada. Resposta do CallMeBot:', corpo.trim());
-    } else {
-      console.warn(`[whatsapp] CallMeBot não confirmou o envio (HTTP ${res.status}). Resposta:`, corpo.trim());
-    }
-  } catch (err) {
-    console.warn(`[whatsapp] falha ao notificar: ${err.message}`);
-  }
-}
-
 async function main() {
   const data = JSON.parse(readFileSync(PATH, 'utf-8'));
   const novidades = [];
+  let algoMudou = false;
 
   for (const p of data.proposicoes) {
     if (p.encerrada) continue; // já virou lei/foi arquivado — não muda mais
@@ -134,6 +111,12 @@ async function main() {
       console.warn(`[tramitacoes] ${p.tipo} ${p.numero}: não encontrada em nenhuma das duas casas nesta rodada.`);
       continue;
     }
+    // idCamara/idSenado são gravados mesmo sem novidade de tramitação — a checagem de pauta
+    // (fetch-agenda.js) precisa deles pra saber qual proposição procurar, sem ter que refazer
+    // essa mesma busca por número/ano de novo.
+    if (atual.idCamara && p.idCamara !== atual.idCamara) { p.idCamara = atual.idCamara; algoMudou = true; }
+    if (atual.idSenado && p.idSenado !== atual.idSenado) { p.idSenado = atual.idSenado; algoMudou = true; }
+
     const mudou = atual.ultimaMovimentacao.descricao !== p.ultimaMovimentacao?.descricao || atual.ultimaMovimentacao.data !== p.ultimaMovimentacao?.data;
     if (mudou) {
       novidades.push({ tipo: p.tipo, numero: p.numero, assunto: p.assunto, ...atual.ultimaMovimentacao });
@@ -141,6 +124,7 @@ async function main() {
       p.casaAtual = atual.casaAtual;
       p.link = atual.link || p.link;
       p.situacao = atual.ultimaMovimentacao.descricao;
+      algoMudou = true;
     }
   }
 
@@ -149,14 +133,14 @@ async function main() {
       ...novidades.map((n) => ({ proposicao: `${n.tipo} ${n.numero}`, data: n.data, fato: n.descricao })),
       ...(data.atualizacoesRecentes || []),
     ].slice(0, 20);
-    writeJson(PATH, data);
-
     const resumo = novidades.map((n) => `• ${n.tipo} ${n.numero}: ${n.descricao}`).join('\n');
     await notificarWhatsApp(`📋 Movimentação em projetos monitorados (CBM-GO):\n\n${resumo}`);
-    console.log(`[fetch-tramitacoes] ${novidades.length} movimentação(ões) nova(s) detectada(s) e gravada(s) em ${PATH}.`);
+    console.log(`[fetch-tramitacoes] ${novidades.length} movimentação(ões) nova(s) detectada(s) em ${PATH}.`);
   } else {
     console.log('[fetch-tramitacoes] nenhuma movimentação nova desde a última checagem.');
   }
+
+  if (algoMudou) writeJson(PATH, data);
 }
 
 main().catch((err) => {
