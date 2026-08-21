@@ -41,34 +41,9 @@
       "fato": "Notificacao para Publicação Intermediária — Tramitando em Conjunto"
     },
     {
-      "proposicao": "PL 5.045/2005",
-      "data": "2026-03-03",
-      "fato": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
-    },
-    {
-      "proposicao": "PL 5.967/2023",
-      "data": "2026-05-04",
-      "fato": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
-    },
-    {
-      "proposicao": "PL 1.451/2023",
-      "data": "2026-03-31",
-      "fato": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
-    },
-    {
       "proposicao": "PEC 17/2025",
       "data": "2025-04-23",
       "fato": "Relatório de Conferência de Assinaturas — Aguardando Despacho do Presidente da Câmara dos Deputados (Chancela)"
-    },
-    {
-      "proposicao": "PEC 18/2025",
-      "data": "2026-03-10",
-      "fato": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
-    },
-    {
-      "proposicao": "PEC 44/2023",
-      "data": "2024-07-16",
-      "fato": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
     },
     {
       "proposicao": "PLP 18/2021",
@@ -243,17 +218,17 @@
       "tipo": "PL",
       "numero": "5.045/2005",
       "parlamentar": null,
-      "casaAtual": "Câmara dos Deputados",
+      "casaAtual": "Senado Federal",
       "assunto": "Autoriza os Governadores a convocarem policiais e bombeiros militares da reserva remunerada em situações de grave perturbação da ordem pública.",
-      "situacao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal",
+      "situacao": "Redação Final aprovada na CCJC da Câmara em 24/02/2026 e remetida ao Senado em 03/03/2026 (Ofício nº 52/2026/PS-GSE). Situação oficial: \"Aguardando Apreciação pelo Senado Federal\".",
       "ultimaMovimentacao": {
         "data": "2026-03-03",
-        "descricao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
+        "descricao": "Remetida ao Senado Federal (Ofício nº 52/2026/PS-GSE)."
       },
       "proximosPassos": "Acompanhar a recepção formal (autuação) e a distribuição às comissões do Senado.",
       "pontoAtencao": "Trata do emprego da reserva remunerada em situações excepcionais, com impacto na gestão de efetivo.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/281460"
+      "link": null
     },
     {
       "id": 10,
@@ -277,34 +252,34 @@
       "tipo": "PL",
       "numero": "5.967/2023",
       "parlamentar": null,
-      "casaAtual": "Câmara dos Deputados",
+      "casaAtual": "Senado Federal",
       "assunto": "Limita a 144 horas mensais a jornada de policiais e bombeiros militares, com banco de horas e pagamento em dobro em feriados.",
-      "situacao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal",
+      "situacao": "Aprovado no Plenário da Câmara e recebido no Senado. Despachado em 03/06/2026 para a CCJ, onde está desde 08/06/2026 aguardando designação de relator.",
       "ultimaMovimentacao": {
-        "data": "2026-05-04",
-        "descricao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
+        "data": "2026-06-08",
+        "descricao": "Despachado à CCJ, aguardando designação de relator."
       },
       "proximosPassos": "Após designação de relator na CCJ, segue à Comissão de Segurança Pública (CSP).",
       "pontoAtencao": "Exclusão dos CBMs do escopo já obtida na Câmara. Verificar, quando houver relator, se foi preservada no texto remetido ao Senado.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2412181"
+      "link": null
     },
     {
       "id": 12,
       "tipo": "PL",
       "numero": "1.451/2023",
       "parlamentar": null,
-      "casaAtual": "Câmara dos Deputados",
+      "casaAtual": "Senado Federal",
       "assunto": "Restringe a contribuição previdenciária de militares inativos e pensionistas à parcela que exceder o teto do RGPS.",
-      "situacao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal",
+      "situacao": "Aprovado em caráter conclusivo na CCJC da Câmara em 17/03/2026; recebido no Senado e despachado à CAE e à CAS. Em 12/08/2026 foi designado relator na CAE: Senador Efraim Filho.",
       "ultimaMovimentacao": {
-        "data": "2026-03-31",
-        "descricao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
+        "data": "2026-08-12",
+        "descricao": "Relator designado na CAE do Senado: Senador Efraim Filho."
       },
       "proximosPassos": "Aguarda apresentação do relatório pelo Sen. Efraim Filho na CAE; depois segue também à CAS.",
       "pontoAtencao": "Tema conexo ao PL 2.557/2026. Bom momento para buscar reunião com o gabinete do Sen. Efraim Filho antes do relatório.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2353684"
+      "link": null
     },
     {
       "id": 13,
@@ -396,34 +371,34 @@
       "tipo": "PEC",
       "numero": "18/2025",
       "parlamentar": null,
-      "casaAtual": "Câmara dos Deputados",
+      "casaAtual": "Senado Federal",
       "assunto": "PEC da Segurança Pública (iniciativa do Poder Executivo). Altera os arts. 5º, 15, 22, 23, 24, 40, 49, 84, 103-B, 130-A e 144 da CF, cria os arts. 144-A e 144-B, e estabelece novas fontes de recursos para o FNSP e o Funpen (incluindo parte da arrecadação de apostas esportivas e do Fundo Social do pré-sal).",
-      "situacao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal",
+      "situacao": "Aprovada pela Câmara em dois turnos em março/2026 e recebida (autuada) no Senado. Em 14/08/2026 o Presidente Davi Alcolumbre encaminhou a PEC à CCJ como pauta prioritária; em 18/08/2026 o presidente da CCJ, Sen. Otto Alencar, afirma que a comissão ainda aguarda o recebimento formal do texto.",
       "ultimaMovimentacao": {
-        "data": "2026-03-10",
-        "descricao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
+        "data": "2026-08-18",
+        "descricao": "CCJ do Senado aguarda o recebimento formal do texto para iniciar a análise."
       },
       "proximosPassos": "Aguarda chegada formal à CCJ para exame de constitucionalidade, juridicidade e técnica legislativa; depois exige 2 turnos no Plenário (quórum de 49 votos). Expectativa de conclusão na CCJ antes do fim do período eleitoral.",
       "pontoAtencao": "Prioridade do Poder Executivo, com forte pressão política. Acompanhar de perto a designação de relator na CCJ assim que recebida formalmente.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2500080"
+      "link": null
     },
     {
       "id": 19,
       "tipo": "PEC",
       "numero": "44/2023",
       "parlamentar": null,
-      "casaAtual": "Câmara dos Deputados",
+      "casaAtual": "Senado Federal",
       "assunto": "Reserva 5% das emendas parlamentares para ações de prevenção e resposta a desastres.",
-      "situacao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal",
+      "situacao": "Recebida no Senado, na Secretaria de Expediente, aguardando despacho de distribuição e indicação de relatoria.",
       "ultimaMovimentacao": {
-        "data": "2024-07-16",
-        "descricao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
+        "data": null,
+        "descricao": "Recebida na Secretaria de Expediente do Senado."
       },
       "proximosPassos": "Exige aprovação em 2 turnos no Plenário do Senado (quórum de 49 votos) após parecer da CCJ.",
       "pontoAtencao": "Baixa priorização orçamentária no exercício atual, agravada pelo contexto eleitoral de 2026.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2388029"
+      "link": null
     },
     {
       "id": 20,

@@ -71,18 +71,30 @@ async function statusSenado(tipo, numero) {
   };
 }
 
-async function statusDe(tipo, numero) {
-  try {
-    const c = await statusCamara(tipo, numero);
-    if (c) return c;
-  } catch (err) {
-    console.warn(`[camara] ${tipo} ${numero}: ${err.message}`);
+// Câmara e Senado numeram proposições de forma independente — "PL 1451/2023" pode existir,
+// sem nenhuma relação, nos dois. Tentar as duas casas às cegas já causou um caso real: uma
+// proposição sabidamente no Senado teve os dados substituídos pelos de um PL homônimo e
+// completamente diferente da Câmara. Por isso, quando já sabemos a casa atual (todo item do
+// acompanhamento tem esse campo), consultamos só ela — nunca a outra como fallback "porque
+// sim". Só tenta as duas quando a casa é realmente desconhecida (nenhum item hoje cai aqui).
+async function statusDe(tipo, numero, casaConhecida) {
+  const tentarCamara = !casaConhecida || casaConhecida.includes('Câmara');
+  const tentarSenado = !casaConhecida || casaConhecida.includes('Senado');
+  if (tentarCamara) {
+    try {
+      const c = await statusCamara(tipo, numero);
+      if (c) return c;
+    } catch (err) {
+      console.warn(`[camara] ${tipo} ${numero}: ${err.message}`);
+    }
   }
-  try {
-    const s = await statusSenado(tipo, numero);
-    if (s) return s;
-  } catch (err) {
-    console.warn(`[senado] ${tipo} ${numero}: ${err.message}`);
+  if (tentarSenado) {
+    try {
+      const s = await statusSenado(tipo, numero);
+      if (s) return s;
+    } catch (err) {
+      console.warn(`[senado] ${tipo} ${numero}: ${err.message}`);
+    }
   }
   return null;
 }
@@ -108,7 +120,7 @@ async function main() {
 
   for (const p of data.proposicoes) {
     if (p.encerrada) continue; // já virou lei/foi arquivado — não muda mais
-    const atual = await statusDe(p.tipo, p.numero);
+    const atual = await statusDe(p.tipo, p.numero, p.casaAtual);
     if (!atual) {
       console.warn(`[tramitacoes] ${p.tipo} ${p.numero}: não encontrada em nenhuma das duas casas nesta rodada.`);
       continue;
