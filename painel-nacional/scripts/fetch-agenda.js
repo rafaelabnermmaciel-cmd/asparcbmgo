@@ -27,21 +27,19 @@ import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
 const PATH = 'public/data/acompanhamento-legislativo.json';
-// Cobre os quatro eixos que o CBM-GO acompanha (bombeiros, polícia, militares estaduais,
+// Cobre os eixos que o CBM-GO acompanha (bombeiros, polícia militar, militares estaduais,
 // segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
 // só "polícia", que trariam ruído de assuntos sem relação (Forças Armadas federais etc.).
+// Polícia civil fica de fora — não é o foco do acompanhamento.
 const PALAVRAS_CHAVE = [
   'segurança pública',
   'bombeiro',
   'corpo de bombeiros',
   'bombeiro militar',
   'polícia militar',
-  'polícia civil',
   'policial militar',
-  'policial civil',
   'militares estaduais',
   'defesa civil',
-  'proteção civil',
   'desastre',
   'catástrofe',
   'calamidade',
