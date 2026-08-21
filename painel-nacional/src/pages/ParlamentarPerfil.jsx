@@ -175,12 +175,39 @@ export default function ParlamentarPerfil() {
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos Recebidos na Eleição</p>
         {eleicao ? (
-          <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <InfoRow label="Ano" value={eleicao.ano} />
-            <InfoRow label="Nº de urna" value={eleicao.numeroCandidato} />
-            <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
-            <InfoRow label="Cargo" value={eleicao.cargo} />
-          </div>
+          <>
+            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              <InfoRow label="Ano" value={eleicao.ano} />
+              <InfoRow label="Partido" value={eleicao.partido} />
+              <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
+              <InfoRow label="Cargo" value={eleicao.cargo} />
+            </div>
+            {eleicao.topMunicipios?.length > 0 && (
+              <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Top 5 municípios em votos</p>
+                <div className="mt-3 flex flex-col gap-2.5">
+                  {eleicao.topMunicipios.map((m, i) => {
+                    const max = eleicao.topMunicipios[0].votos || 1;
+                    const pct = Math.max(6, (m.votos / max) * 100);
+                    return (
+                      <div key={m.municipio} className="flex items-center gap-3">
+                        <span className="w-4 shrink-0 text-right text-xs font-semibold text-slate-400">{i + 1}</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="truncate text-xs font-medium text-slate-700 dark:text-slate-200">{m.municipio}</span>
+                            <span className="shrink-0 text-xs text-slate-400">{m.votos.toLocaleString('pt-BR')}</span>
+                          </div>
+                          <div className="mt-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800">
+                            <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <p className="mt-2 text-xs text-slate-400">
             Sem dado eleitoral carregado ainda — rode <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">npm run fetch:eleicoes</code>.
