@@ -27,9 +27,42 @@ export default function Relatorios() {
   const destinacoesConfirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
   const acordosVerbais = useMemo(() => store.destinacoes.filter((d) => d.status === 'Acordo Verbal'), [store.destinacoes]);
 
+  // Relatório de captação flexível: sem filtro nenhum já é o relatório geral; qualquer
+  // combinação de ano/parlamentar/objeto recorta o mesmo relatório, sem precisar de telas
+  // separadas por tipo.
+  const [filtroAno, setFiltroAno] = useState('todos');
+  const [filtroParl, setFiltroParl] = useState('todos');
+  const [filtroObjeto, setFiltroObjeto] = useState('todos');
+  const filtrosAtivos = filtroAno !== 'todos' || filtroParl !== 'todos' || filtroObjeto !== 'todos';
+
+  const anosDisponiveis = useMemo(() => [...new Set(destinacoesConfirmadas.map((d) => d.ano))].sort((a, b) => b - a), [destinacoesConfirmadas]);
+  const parlamentaresDisponiveis = useMemo(
+    () => [...new Set(destinacoesConfirmadas.map((d) => d.parlamentarNome).filter(Boolean))].sort(),
+    [destinacoesConfirmadas]
+  );
+  const objetosDisponiveis = useMemo(
+    () => [...new Set(destinacoesConfirmadas.map((d) => d.objeto).filter(Boolean))].sort(),
+    [destinacoesConfirmadas]
+  );
+
+  const destinacoesRelatorio = useMemo(
+    () =>
+      destinacoesConfirmadas.filter(
+        (d) =>
+          (filtroAno === 'todos' || d.ano === filtroAno) &&
+          (filtroParl === 'todos' || d.parlamentarNome === filtroParl) &&
+          (filtroObjeto === 'todos' || d.objeto === filtroObjeto)
+      ),
+    [destinacoesConfirmadas, filtroAno, filtroParl, filtroObjeto]
+  );
+
+  const tituloRelatorio = [filtroAno !== 'todos' ? String(filtroAno) : null, filtroParl !== 'todos' ? filtroParl : null, filtroObjeto !== 'todos' ? filtroObjeto : null]
+    .filter(Boolean)
+    .join(' · ') || 'Relatório geral';
+
   const porAno = useMemo(() => {
     const grupos = new Map();
-    destinacoesConfirmadas.forEach((d) => {
+    destinacoesRelatorio.forEach((d) => {
       const g = grupos.get(d.ano) || { ano: d.ano, itens: [], previsto: 0, confirmado: 0 };
       g.itens.push(d);
       g.previsto += d.valorPrevisto || 0;
@@ -37,11 +70,12 @@ export default function Relatorios() {
       grupos.set(d.ano, g);
     });
     return [...grupos.values()].sort((a, b) => b.ano - a.ano);
-  }, [destinacoesConfirmadas]);
+  }, [destinacoesRelatorio]);
 
-  const totalGeral = destinacoesConfirmadas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
-  const confirmadoGeral = destinacoesConfirmadas.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
+  const totalGeral = destinacoesRelatorio.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+  const confirmadoGeral = destinacoesRelatorio.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
   const totalVerbal = acordosVerbais.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
+  const selectCls = 'rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300';
 
   const reunioesFiltradas = useMemo(() => {
     const eventos = store.eventos.filter((e) => e.status === 'Realizada');
@@ -75,9 +109,43 @@ export default function Relatorios() {
       </div>
 
       <ScrollReveal delay={0.05} className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 print:mt-4 print:break-inside-avoid print:rounded-none print:border-0 print:p-0 print:shadow-none">
-        <p className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
-          <LuBanknote className="h-4 w-4 text-red-500" /> Destinações de recursos
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="flex items-center gap-2 text-base font-semibold text-slate-900 dark:text-white">
+              <LuBanknote className="h-4 w-4 text-red-500" /> Destinações de recursos
+            </p>
+            <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{tituloRelatorio}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 print:hidden">
+            <select value={filtroAno} onChange={(e) => setFiltroAno(e.target.value === 'todos' ? 'todos' : parseInt(e.target.value, 10))} className={selectCls}>
+              <option value="todos">Todos os anos</option>
+              {anosDisponiveis.map((a) => (
+                <option key={a} value={a}>{a}</option>
+              ))}
+            </select>
+            <select value={filtroParl} onChange={(e) => setFiltroParl(e.target.value)} className={selectCls}>
+              <option value="todos">Todos os parlamentares</option>
+              {parlamentaresDisponiveis.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+            <select value={filtroObjeto} onChange={(e) => setFiltroObjeto(e.target.value)} className={selectCls}>
+              <option value="todos">Todos os objetos</option>
+              {objetosDisponiveis.map((o) => (
+                <option key={o} value={o}>{o}</option>
+              ))}
+            </select>
+            {filtrosAtivos && (
+              <button
+                onClick={() => { setFiltroAno('todos'); setFiltroParl('todos'); setFiltroObjeto('todos'); }}
+                className="text-xs font-medium text-indigo-600 hover:underline dark:text-indigo-400"
+              >
+                Limpar filtros
+              </button>
+            )}
+          </div>
+        </div>
+
         <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-3">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Total previsto</p>
@@ -89,7 +157,7 @@ export default function Relatorios() {
           </div>
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Destinações</p>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">{destinacoesConfirmadas.length}</p>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">{destinacoesRelatorio.length}</p>
           </div>
         </div>
 
@@ -99,13 +167,14 @@ export default function Relatorios() {
               <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{g.ano}</p>
               <p className="text-xs text-slate-400">{g.itens.length} destinações · {fmtR(g.previsto)} previsto · {fmtR(g.confirmado)} confirmado</p>
             </div>
-            <table className="mt-2 w-full text-left text-xs">
+            <table className="mt-2 w-full text-left text-xs print:border-collapse">
               <thead className="text-slate-400">
                 <tr>
-                  <th className="py-1 pr-2 font-medium">Parlamentar</th>
-                  <th className="py-1 pr-2 font-medium">Município</th>
-                  <th className="py-1 pr-2 text-right font-medium">Valor previsto</th>
-                  <th className="py-1 font-medium">Status</th>
+                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Parlamentar</th>
+                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Município</th>
+                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Objeto</th>
+                  <th className="py-1 pr-2 text-right font-medium print:border-b print:border-slate-300 print:py-1.5">Valor previsto</th>
+                  <th className="py-1 font-medium print:border-b print:border-slate-300 print:py-1.5">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60">
@@ -114,17 +183,22 @@ export default function Relatorios() {
                   .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
                   .map((d) => (
                     <tr key={d.id} className="text-slate-600 dark:text-slate-300">
-                      <td className="py-1 pr-2">{d.parlamentarNome || '—'}</td>
-                      <td className="py-1 pr-2">{d.municipio}</td>
-                      <td className="py-1 pr-2 text-right">{fmtR(d.valorPrevisto)}</td>
-                      <td className="py-1">{d.status}</td>
+                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.parlamentarNome || '—'}</td>
+                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.municipio}</td>
+                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.objeto || '—'}</td>
+                      <td className="py-1 pr-2 text-right print:border-b print:border-slate-100 print:py-1">{fmtR(d.valorPrevisto)}</td>
+                      <td className="py-1 print:border-b print:border-slate-100 print:py-1">{d.status}</td>
                     </tr>
                   ))}
               </tbody>
             </table>
           </div>
         ))}
-        {porAno.length === 0 && <p className="mt-3 text-xs text-slate-400">Nenhuma destinação cadastrada ainda.</p>}
+        {porAno.length === 0 && (
+          <p className="mt-3 text-xs text-slate-400">
+            {filtrosAtivos ? 'Nenhuma destinação encontrada para esses filtros.' : 'Nenhuma destinação cadastrada ainda.'}
+          </p>
+        )}
       </ScrollReveal>
 
       {acordosVerbais.length > 0 && (
