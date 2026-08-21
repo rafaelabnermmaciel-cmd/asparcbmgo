@@ -67,6 +67,19 @@ export function statusToEtapas(status) {
 
 export const ESTAGIOS_LEGISLATIVOS = ['Protocolado', 'Aguardando Despacho', 'Em Comissão', 'Aprovado em Comissão', 'Em Plenário', 'Aprovado/Sancionado', 'Arquivado'];
 
+// Ponte entre o vocabulário de estágio usado na importação nacional (ESTAGIOS_LEGISLATIVOS)
+// e o vocabulário de status usado nos projetos de lei geridos manualmente (STATUS_PROJETO) —
+// usada só na hora de compor um projeto a partir do relatório ASPAR (ver nacionalToProjeto).
+const ESTAGIO_PARA_STATUS_PROJETO = {
+  Protocolado: 'Protocolado',
+  'Aguardando Despacho': 'Aguardando Relator',
+  'Em Comissão': 'Em Comissão',
+  'Aprovado em Comissão': 'Aprovado em Comissão',
+  'Em Plenário': 'Em Plenário',
+  'Aprovado/Sancionado': 'Aprovado',
+  Arquivado: 'Arquivado',
+};
+
 // Classificação automática (best-effort) do estágio a partir do texto real de "situação" —
 // usada só como ponto de partida visual; o texto original nunca é alterado, e o estágio
 // pode ser corrigido manualmente a qualquer momento em Gerenciamento.
@@ -82,28 +95,69 @@ function classificarEstagio(situacao) {
   return 'Protocolado';
 }
 
+// O relatório ASPAR (acompanhamento-legislativo.json) descreve proposições nacionais de
+// interesse do CBM-GO — isso É um projeto de lei de interesse, não uma categoria à parte.
+// Esta função converte cada item do relatório para o mesmo formato usado pelos projetos
+// cadastrados manualmente (ver emptyProj em Gerenciamento.jsx), para viverem na mesma lista.
+function nacionalToProjeto(p) {
+  const estagio = p.estagio || classificarEstagio(p.situacao);
+  return {
+    parlamentarNome: p.parlamentar || '',
+    tipo: p.tipo,
+    numero: p.numero,
+    ementa: p.assunto,
+    status: ESTAGIO_PARA_STATUS_PROJETO[estagio] || 'Protocolado',
+    posicao: 'em análise',
+    prioridade: 'média',
+    responsavel: '',
+    proximoPasso: p.proximosPassos || '',
+    observacoes: [p.situacao, p.pontoAtencao].filter(Boolean).join(' — '),
+    casaAtual: p.casaAtual || null,
+    link: p.link || null,
+    ultimaMovimentacao: p.ultimaMovimentacao || null,
+    origemNacional: true,
+  };
+}
+
 export function StoreProvider({ children }) {
   const [store, setStore] = useState(null);
 
   useEffect(() => {
     (async () => {
-      const persisted = loadPersisted();
+      let persisted = loadPersisted();
+      // Migração: navegadores que já tinham o antigo "legislativoNacional" separado (bug
+      // corrigido — essa lista sempre foi, na prática, a mesma coisa que projetos de lei)
+      // ganham esses itens fundidos dentro de projetos, uma única vez.
+      if (persisted && persisted.legislativoNacional) {
+        const jaExistem = new Set((persisted.projetos || []).map((p) => `${p.tipo}-${p.numero}`));
+        const novos = persisted.legislativoNacional
+          .map(nacionalToProjeto)
+          .filter((p) => !jaExistem.has(`${p.tipo}-${p.numero}`));
+        const projetosBase = persisted.projetos || [];
+        const migrados = novos.map((p, i) => ({ ...p, id: nextId(projetosBase) + i }));
+        persisted = {
+          ...persisted,
+          projetos: [...projetosBase, ...migrados],
+          projetosFonte: persisted.legislativoFonte || persisted.projetosFonte || null,
+        };
+        delete persisted.legislativoNacional;
+        delete persisted.legislativoFonte;
+        persist(persisted);
+      }
       if (persisted) {
         setStore(persisted);
         return;
       }
-      const [destinacoes, projetos, legislativoRaw] = await Promise.all([
+      const [destinacoes, legislativoRaw] = await Promise.all([
         fetchJson(`${import.meta.env.BASE_URL}data/destinacoes-seed.json`, []),
-        fetchJson(`${import.meta.env.BASE_URL}data/projetos-seed.json`, []),
         fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null),
       ]);
-      const legislativoNacional = (legislativoRaw?.proposicoes || []).map((p) => ({ ...p, estagio: classificarEstagio(p.situacao) }));
+      const projetosNacionais = (legislativoRaw?.proposicoes || []).map((p, i) => ({ ...nacionalToProjeto(p), id: i + 1 }));
       const initial = {
         destinacoes,
-        projetos,
+        projetos: projetosNacionais,
         eventos: [],
-        legislativoNacional,
-        legislativoFonte: legislativoRaw ? { fonte: legislativoRaw.fonte, observacao: legislativoRaw.observacao, atualizacoesRecentes: legislativoRaw.atualizacoesRecentes } : null,
+        projetosFonte: legislativoRaw ? { fonte: legislativoRaw.fonte, observacao: legislativoRaw.observacao, atualizacoesRecentes: legislativoRaw.atualizacoesRecentes } : null,
         parlamentarNotas: {},
       };
       persist(initial);
@@ -124,8 +178,7 @@ export function StoreProvider({ children }) {
     destinacoes: store?.destinacoes || [],
     projetos: store?.projetos || [],
     eventos: store?.eventos || [],
-    legislativoNacional: store?.legislativoNacional || [],
-    legislativoFonte: store?.legislativoFonte || null,
+    projetosFonte: store?.projetosFonte || null,
     parlamentarNotas: store?.parlamentarNotas || {},
 
     addDestinacao(dest) {
@@ -206,27 +259,6 @@ export function StoreProvider({ children }) {
     removeEvento(id) {
       update((s) => {
         s.eventos = (s.eventos || []).filter((x) => x.id !== id);
-        return s;
-      });
-    },
-
-    addLegislativoNacional(item) {
-      update((s) => {
-        s.legislativoNacional = s.legislativoNacional || [];
-        s.legislativoNacional.push({ ...item, estagio: item.estagio || classificarEstagio(item.situacao), id: nextId(s.legislativoNacional) });
-        return s;
-      });
-    },
-    updateLegislativoNacional(id, patch) {
-      update((s) => {
-        const i = (s.legislativoNacional || []).findIndex((x) => x.id === id);
-        if (i >= 0) s.legislativoNacional[i] = { ...s.legislativoNacional[i], ...patch };
-        return s;
-      });
-    },
-    removeLegislativoNacional(id) {
-      update((s) => {
-        s.legislativoNacional = (s.legislativoNacional || []).filter((x) => x.id !== id);
         return s;
       });
     },

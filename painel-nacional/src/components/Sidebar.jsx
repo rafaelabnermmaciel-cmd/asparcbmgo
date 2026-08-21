@@ -6,7 +6,7 @@ const NAV = [
   { to: '/parlamentares', label: 'Parlamentares', icon: '🏛️' },
   { to: '/aniversarios', label: 'Aniversários', icon: '🎂' },
   { to: '/agenda', label: 'Agenda', icon: '📅' },
-  { to: '/legislativo', label: 'Legislativo', icon: '📄' },
+  { to: '/projetos-lei', label: 'Projetos de Lei', icon: '📄' },
   { to: '/captacao', label: 'Captação', icon: '💰' },
   { to: '/relatorios', label: 'Relatórios', icon: '📊' },
   { to: '/gerenciamento', label: 'Gerenciamento', icon: '⚙️' },

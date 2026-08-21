@@ -25,6 +25,16 @@ const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
 const SENADO_BASE = 'https://legis.senado.leg.br/dadosabertos';
 const CONCURRENCY = 5; // não sobrecarregar as APIs públicas
 
+// A API do Senado devolve o telefone só com dígitos (ex: "33036333"), diferente da Câmara
+// que já vem formatada (ex: "3215-5414") — sem isso, o número fica ilegível/parece errado.
+function formatTelefone(raw) {
+  if (!raw) return null;
+  const digitos = String(raw).replace(/\D/g, '');
+  if (digitos.length === 8) return `${digitos.slice(0, 4)}-${digitos.slice(4)}`;
+  if (digitos.length === 9) return `${digitos.slice(0, 5)}-${digitos.slice(5)}`;
+  return String(raw);
+}
+
 const args = process.argv.slice(2);
 const onlyCamara = args.includes('--so-camara');
 const onlySenado = args.includes('--so-senado');
@@ -120,7 +130,7 @@ async function fetchSenadores() {
         situacao: mandato.DescricaoParticipacao || null,
         foto: ident.UrlFotoParlamentar || ident.urlFotoParlamentar || null,
         email: ident.EmailParlamentar || ident.emailParlamentar || null,
-        telefone: Array.isArray(gabinete) ? gabinete[0]?.NumeroTelefone : gabinete?.NumeroTelefone || null,
+        telefone: formatTelefone(Array.isArray(gabinete) ? gabinete[0]?.NumeroTelefone : gabinete?.NumeroTelefone),
         gabinete: null,
         dataNascimento: dados.DataNascimento || null,
         municipioNascimento: dados.NaturalidadeUF ? null : dados.Naturalidade || null,

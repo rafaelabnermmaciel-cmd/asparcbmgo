@@ -54,14 +54,26 @@ function GargaloBadge({ tipo, id, eventos }) {
 
 function InfoRow({ label, value, copyable }) {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-0.5 flex items-center text-sm text-slate-700 dark:text-slate-200">
-        {value || '—'}
+      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <p className="break-words text-sm font-medium text-slate-700 dark:text-slate-200">{value || '—'}</p>
         {copyable && value && <CopyButton value={value} />}
-      </p>
+      </div>
     </div>
   );
+}
+
+// Câmara identifica o gabinete por prédio (anexo)/sala/andar; Senado não expõe esse nível de
+// detalhe pela API pública — por isso a seção só aparece quando há pelo menos um dado real,
+// em vez de mostrar um "—" confuso pra quem é senador.
+function formatGabinete(g) {
+  if (!g) return null;
+  const partes = [];
+  if (g.predio) partes.push(`Anexo ${g.predio}`);
+  if (g.sala) partes.push(`Sala ${g.sala}`);
+  if (g.andar) partes.push(`${g.andar}º andar`);
+  return partes.length ? partes.join(' · ') : null;
 }
 
 export default function ParlamentarPerfil() {
@@ -143,20 +155,20 @@ export default function ParlamentarPerfil() {
         </div>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.05} className="mt-4 grid grid-cols-2 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-4 dark:border-slate-800 dark:bg-slate-900">
-        <InfoRow label="E-mail" value={p.email} copyable />
-        <InfoRow label="Telefone" value={p.telefone} copyable />
-        <InfoRow
-          label="Gabinete"
-          value={p.gabinete ? [p.gabinete.predio, p.gabinete.sala, p.gabinete.andar].filter(Boolean).join(' · ') : null}
-        />
-        <InfoRow label="Situação" value={p.situacao} />
+      <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">Contato</p>
+        <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <InfoRow label="E-mail" value={p.email} copyable />
+          <InfoRow label="Telefone" value={p.telefone} copyable />
+          {formatGabinete(p.gabinete) && <InfoRow label="Gabinete" value={formatGabinete(p.gabinete)} />}
+          <InfoRow label="Situação" value={p.situacao} />
+        </div>
       </ScrollReveal>
 
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos Recebidos na Eleição</p>
         {eleicao ? (
-          <div className="mt-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             <InfoRow label="Ano" value={eleicao.ano} />
             <InfoRow label="Nº de urna" value={eleicao.numeroCandidato} />
             <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />

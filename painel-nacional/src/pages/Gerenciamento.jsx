@@ -20,7 +20,6 @@ export const btnDanger = 'rounded-lg border border-red-200 px-3 py-1.5 text-xs f
 
 export const emptyDest = { parlamentarNome: '', ano: new Date().getFullYear(), municipio: '', objeto: '', valorPrevisto: 0, valorConfirmado: 0, status: 'Em articulação', sei: '', responsavel: '', proximoPasso: '', riscos: '', observacoes: '' };
 export const emptyProj = { parlamentarNome: '', tipo: 'PL', numero: '', ementa: '', status: 'Protocolado', posicao: 'em análise', prioridade: 'média', responsavel: '', proximoPasso: '', observacoes: '' };
-export const emptyNacional = { tipo: 'PL', numero: '', casaAtual: '', assunto: '', situacao: '', estagio: 'Protocolado', proximosPassos: '', pontoAtencao: '', encerrada: false, link: null, parlamentar: null, ultimaMovimentacao: { data: null, descricao: null } };
 
 export function DestForm({ initial, nomes, onSave, onCancel }) {
   const [f, setF] = useState(initial);
@@ -151,55 +150,6 @@ export function ProjForm({ initial, nomes, onSave, onCancel }) {
   );
 }
 
-export function NacionalForm({ initial, onSave, onCancel }) {
-  const [f, setF] = useState(initial);
-  const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
-  return (
-    <div className="mt-3 grid grid-cols-1 gap-3 rounded-xl border border-indigo-100 bg-indigo-50/40 p-4 sm:grid-cols-2 dark:border-indigo-900/40 dark:bg-indigo-500/5">
-      <div className="flex gap-2">
-        <div className="w-24">
-          <p className={labelClass}>Tipo</p>
-          <select className={inputClass} value={f.tipo} onChange={set('tipo')}>
-            {TIPOS_PROJETO.map((t) => <option key={t}>{t}</option>)}
-          </select>
-        </div>
-        <div className="flex-1">
-          <p className={labelClass}>Número</p>
-          <input className={inputClass} value={f.numero} onChange={set('numero')} placeholder="Ex: 458/2024" />
-        </div>
-      </div>
-      <div>
-        <p className={labelClass}>Casa atual</p>
-        <input className={inputClass} value={f.casaAtual} onChange={set('casaAtual')} placeholder="Câmara dos Deputados / Senado Federal" />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Assunto</p>
-        <textarea rows={2} className={inputClass} value={f.assunto} onChange={set('assunto')} />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Situação (texto oficial de tramitação)</p>
-        <textarea rows={3} className={inputClass} value={f.situacao} onChange={set('situacao')} />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Estágio (classificação visual)</p>
-        <EstagioStepper estagio={f.estagio} editable onChange={(st) => setF({ ...f, estagio: st })} />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Próximos passos</p>
-        <textarea rows={2} className={inputClass} value={f.proximosPassos} onChange={set('proximosPassos')} />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Ponto de atenção</p>
-        <textarea rows={2} className={inputClass} value={f.pontoAtencao} onChange={set('pontoAtencao')} />
-      </div>
-      <div className="flex gap-2 sm:col-span-2">
-        <button className={btnPrimary} onClick={() => onSave(f)}>Salvar</button>
-        <button className={btnGhost} onClick={onCancel}>Cancelar</button>
-      </div>
-    </div>
-  );
-}
-
 function Section({ title, action, children }) {
   return (
     <ScrollReveal className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -219,7 +169,6 @@ export default function Gerenciamento() {
   const [aba, setAba] = useState('destinacoes');
   const [editingDest, setEditingDest] = useState(undefined); // undefined=fechado, null=novo, id=editando
   const [editingProj, setEditingProj] = useState(undefined);
-  const [editingNac, setEditingNac] = useState(undefined);
   const [busca, setBusca] = useState('');
 
   useEffect(() => {
@@ -233,12 +182,15 @@ export default function Gerenciamento() {
     [store.destinacoes, busca]
   );
   const projetosFiltrados = useMemo(
-    () => store.projetos.filter((p) => !busca || p.parlamentarNome?.toLowerCase().includes(busca.toLowerCase()) || p.numero?.toLowerCase().includes(busca.toLowerCase())),
+    () =>
+      store.projetos.filter(
+        (p) =>
+          !busca ||
+          p.parlamentarNome?.toLowerCase().includes(busca.toLowerCase()) ||
+          p.numero?.toLowerCase().includes(busca.toLowerCase()) ||
+          p.ementa?.toLowerCase().includes(busca.toLowerCase())
+      ),
     [store.projetos, busca]
-  );
-  const nacionalFiltrado = useMemo(
-    () => store.legislativoNacional.filter((x) => !busca || x.numero?.toLowerCase().includes(busca.toLowerCase()) || x.assunto?.toLowerCase().includes(busca.toLowerCase())),
-    [store.legislativoNacional, busca]
   );
 
   if (store.loading) return null;
@@ -263,9 +215,6 @@ export default function Gerenciamento() {
         </button>
         <button onClick={() => setAba('projetos')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'projetos' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
           Projetos de Lei ({store.projetos.length})
-        </button>
-        <button onClick={() => setAba('nacional')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'nacional' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
-          Legislativo Nacional ({store.legislativoNacional.length})
         </button>
         <input
           className={`${inputClass} ml-auto max-w-xs`}
@@ -347,7 +296,12 @@ export default function Gerenciamento() {
                 ) : (
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{p.tipo} {p.numero} <span className="text-slate-400">· {p.parlamentarNome || '—'}</span></p>
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                        {p.tipo} {p.numero} <span className="text-slate-400">· {p.parlamentarNome || p.casaAtual || 'sem parlamentar vinculado'}</span>
+                        {p.origemNacional && (
+                          <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">relatório ASPAR</span>
+                        )}
+                      </p>
                       <p className="mt-0.5 truncate text-xs text-slate-500">{p.ementa}</p>
                       <EstagioStepper estagio={p.status} stages={STATUS_PROJETO} editable onChange={(st) => store.updateProjeto(p.id, { status: st })} />
                     </div>
@@ -360,47 +314,6 @@ export default function Gerenciamento() {
               </div>
             ))}
             {projetosFiltrados.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhum projeto encontrado.</p>}
-          </div>
-        </Section>
-      )}
-
-      {aba === 'nacional' && (
-        <Section
-          title="Proposições legislativas nacionais de interesse do CBM (fonte: relatório ASPAR)"
-          action={<button className={btnGhost} onClick={() => setEditingNac(null)}>+ Nova proposição</button>}
-        >
-          {editingNac === null && (
-            <NacionalForm
-              initial={emptyNacional}
-              onCancel={() => setEditingNac(undefined)}
-              onSave={(f) => { store.addLegislativoNacional(f); setEditingNac(undefined); }}
-            />
-          )}
-          <div className="mt-3 flex flex-col gap-2">
-            {nacionalFiltrado.map((p) => (
-              <div key={p.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
-                {editingNac === p.id ? (
-                  <NacionalForm
-                    initial={p}
-                    onCancel={() => setEditingNac(undefined)}
-                    onSave={(f) => { store.updateLegislativoNacional(p.id, f); setEditingNac(undefined); }}
-                  />
-                ) : (
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{p.tipo} {p.numero} <span className="text-slate-400">· {p.casaAtual}</span></p>
-                      <p className="mt-0.5 truncate text-xs text-slate-500">{p.assunto}</p>
-                      <EstagioStepper estagio={p.estagio} editable onChange={(st) => store.updateLegislativoNacional(p.id, { estagio: st })} />
-                    </div>
-                    <div className="flex shrink-0 gap-2">
-                      <button className={btnGhost} onClick={() => setEditingNac(p.id)}>Editar</button>
-                      <button className={btnDanger} onClick={() => { if (confirm('Remover esta proposição?')) store.removeLegislativoNacional(p.id); }}>Remover</button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            {nacionalFiltrado.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhuma proposição encontrada.</p>}
           </div>
         </Section>
       )}

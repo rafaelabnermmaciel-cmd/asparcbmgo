@@ -6,7 +6,7 @@ import MobileNav from './components/MobileNav.jsx';
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Parlamentares = lazy(() => import('./pages/Parlamentares.jsx'));
 const ParlamentarPerfil = lazy(() => import('./pages/ParlamentarPerfil.jsx'));
-const Legislativo = lazy(() => import('./pages/Legislativo.jsx'));
+const ProjetosLei = lazy(() => import('./pages/ProjetosLei.jsx'));
 const Captacao = lazy(() => import('./pages/Captacao.jsx'));
 const Aniversarios = lazy(() => import('./pages/Aniversarios.jsx'));
 const Agenda = lazy(() => import('./pages/Agenda.jsx'));
@@ -23,7 +23,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/parlamentares" element={<Parlamentares />} />
             <Route path="/parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
-            <Route path="/legislativo" element={<Legislativo />} />
+            <Route path="/projetos-lei" element={<ProjetosLei />} />
             <Route path="/captacao" element={<Captacao />} />
             <Route path="/aniversarios" element={<Aniversarios />} />
             <Route path="/agenda" element={<Agenda />} />

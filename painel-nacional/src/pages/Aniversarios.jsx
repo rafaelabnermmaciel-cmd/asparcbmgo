@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParlamentares, initials } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -15,6 +15,7 @@ function diaMes(dataISO) {
 
 export default function Aniversarios() {
   const { loading, parlamentares } = useParlamentares();
+  const [uf, setUf] = useState('');
 
   const hoje = new Date();
   const hojeMes = hoje.getMonth() + 1;
@@ -29,7 +30,9 @@ export default function Aniversarios() {
     [parlamentares]
   );
 
-  const aniversariantesHoje = comData.filter((p) => p.dm.mes === hojeMes && p.dm.dia === hojeDia);
+  const filtrados = useMemo(() => (uf ? comData.filter((p) => p.uf === uf) : comData), [comData, uf]);
+
+  const aniversariantesHoje = filtrados.filter((p) => p.dm.mes === hojeMes && p.dm.dia === hojeDia);
 
   if (loading) return null;
 
@@ -38,6 +41,15 @@ export default function Aniversarios() {
       <ScrollReveal>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">🎂 Aniversários</h1>
         <p className="mt-1 text-sm text-slate-400">Todos os parlamentares, em ordem cronológica pelo dia de nascimento.</p>
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.04} className="mt-5 flex flex-wrap gap-2">
+        <button
+          onClick={() => setUf(uf === 'GO' ? '' : 'GO')}
+          className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${uf === 'GO' ? 'bg-red-600 text-white' : 'border border-red-200 text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-500/10'}`}
+        >
+          🚒 {uf === 'GO' ? '✓ Priorizando Goiás' : 'Priorizar Goiás'}
+        </button>
       </ScrollReveal>
 
       {aniversariantesHoje.length > 0 && (
@@ -60,10 +72,16 @@ export default function Aniversarios() {
         </ScrollReveal>
       )}
 
-      {comData.length > 0 && (
+      {comData.length > 0 && filtrados.length === 0 && (
+        <ScrollReveal delay={0.1} className="mt-6">
+          <EmptyState title="Nenhum aniversário em Goiás" description="Nenhum parlamentar de GO com data de nascimento carregada." />
+        </ScrollReveal>
+      )}
+
+      {filtrados.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {comData.map((p) => {
+            {filtrados.map((p) => {
               const ehHoje = p.dm.mes === hojeMes && p.dm.dia === hojeDia;
               return (
                 <Link

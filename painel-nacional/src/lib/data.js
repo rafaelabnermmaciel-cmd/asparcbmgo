@@ -69,20 +69,6 @@ export function useResultadosEleitorais() {
   return state;
 }
 
-export function useLegislativo() {
-  const [state, setState] = useState({ loading: true, dados: null });
-  useEffect(() => {
-    let cancelled = false;
-    fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null).then((dados) => {
-      if (!cancelled) setState({ loading: false, dados });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-  return state;
-}
-
 export const UFS = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB',
   'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
