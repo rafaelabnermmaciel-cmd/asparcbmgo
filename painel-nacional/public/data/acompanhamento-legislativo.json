@@ -109,7 +109,8 @@
       "proximosPassos": "Aguardar autuação formal no Senado Federal.",
       "pontoAtencao": "Redirecionar articulação para o Senado. Sen. Styvenson Valentim já se manifestou favorável; mapear relator assim que distribuída.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2314848"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2314848",
+      "idCamara": 2314848
     },
     {
       "id": 3,
@@ -126,7 +127,8 @@
       "proximosPassos": "Em regime de urgência, pode ser pautada e votada em qualquer sessão sem passar pelas comissões. Se aprovada, segue ao Senado.",
       "pontoAtencao": "Monitorar a Ordem do Dia diariamente — pode ser votada a qualquer momento. Articulação mantida com o Dep. Sargento Portugal.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2347038"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2347038",
+      "idCamara": 2347038
     },
     {
       "id": 4,
@@ -143,7 +145,8 @@
       "proximosPassos": "Tramitação conclusiva: após CSaúde, segue à CFT e depois à CCJC. Se não houver recurso, vai direto ao Senado, sem Plenário.",
       "pontoAtencao": "Interface direta com o atendimento pré-hospitalar dos CBMs.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2565231"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2565231",
+      "idCamara": 2565231
     },
     {
       "id": 5,
@@ -160,7 +163,8 @@
       "proximosPassos": "Tramitação conclusiva: se não houver recurso após aprovação na CCJC, segue ao Senado, sem Plenário.",
       "pontoAtencao": "Impacto na padronização de protocolos operacionais em cenários de desastre com populações vulneráveis.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2427036"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2427036",
+      "idCamara": 2427036
     },
     {
       "id": 6,
@@ -177,7 +181,8 @@
       "proximosPassos": "Tramitação conclusiva: segue à CFT e depois à CCJC.",
       "pontoAtencao": "Possível impacto na integração com protocolos de atendimento pré-hospitalar dos CBMs.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2527169"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2527169",
+      "idCamara": 2527169
     },
     {
       "id": 7,
@@ -194,7 +199,8 @@
       "proximosPassos": "Tramitação conclusiva: após a CFT, segue à CCJC; se não houver recurso, vai direto ao Senado.",
       "pontoAtencao": "Mesmo tema do PL 3.268/2020 e do PL 3.846/2025 (Senado). Bom momento para reunião com o Dep. Josenildo antes da apresentação do parecer.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2356791"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2356791",
+      "idCamara": 2356791
     },
     {
       "id": 8,
@@ -211,7 +217,8 @@
       "proximosPassos": "Segue exatamente a tramitação do PL 1.958/2023.",
       "pontoAtencao": "Acompanhamento deve ser feito pelo PL 1.958/2023.",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2408363"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2408363",
+      "idCamara": 2408363
     },
     {
       "id": 9,
@@ -364,7 +371,8 @@
       "proximosPassos": "Aguarda despacho do Presidente da Câmara para formação de Comissão Especial; depois exige aprovação em 2 turnos no Plenário (quórum de 3/5) e segue ao Senado.",
       "pontoAtencao": "Grande interesse para o CBM-GO, com apoio de 175 deputados. Mais ampla que a PEC 10/2026 (cobre também policiais civis e outras carreiras). Monitorar despacho inicial e buscar contato com os autores, em especial o Dep. Coronel Meira (presidente da CSPCCO da Câmara).",
       "encerrada": false,
-      "link": "https://www.camara.leg.br/propostas-legislativas/2499794"
+      "link": "https://www.camara.leg.br/propostas-legislativas/2499794",
+      "idCamara": 2499794
     },
     {
       "id": 18,
