@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { useParlamentares, proximosAniversarios, initials } from '../lib/data.js';
 import { useStore, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, destinacaoConfirmada } from '../lib/store.jsx';
 import { LuCircleCheck, LuFootprints, LuPhoneOff, LuCake, LuBanknote } from 'react-icons/lu';
+import { CATEGORICO } from '../lib/palette.js';
+import { useTheme } from '../lib/theme.jsx';
 import StatCard from '../components/StatCard.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -29,8 +31,6 @@ function AcoesCard({ icon: Icon, titulo, children, vazio }) {
   );
 }
 
-const PARTY_COLORS = ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b', '#ef4444', '#a855f7', '#ec4899', '#14b8a6'];
-
 function groupCount(list, key) {
   const map = new Map();
   for (const item of list) {
@@ -40,7 +40,9 @@ function groupCount(list, key) {
   return [...map.entries()].map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
 }
 
-function ChartCard({ title, sub, data, height = 260 }) {
+// Barra com gradiente + track claro atrás — mesmo tratamento visual da Captação, um hue só
+// por gráfico (magnitude, não identidade por barra) pra manter consistência no app inteiro.
+function ChartCard({ title, sub, data, color, trackColor, gradId, height = 260 }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <p className="text-sm font-semibold text-slate-900 dark:text-white">{title}</p>
@@ -49,6 +51,12 @@ function ChartCard({ title, sub, data, height = 260 }) {
         <div style={{ height }} className="mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ left: 4, right: 16 }}>
+              <defs>
+                <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor={color} stopOpacity={0.45} />
+                  <stop offset="100%" stopColor={color} stopOpacity={1} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} className="stroke-slate-100 dark:stroke-slate-800" />
               <XAxis type="number" tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-400" allowDecimals={false} />
               <YAxis type="category" dataKey="name" width={56} tick={{ fontSize: 12 }} stroke="currentColor" className="text-slate-500" />
@@ -56,11 +64,7 @@ function ChartCard({ title, sub, data, height = 260 }) {
                 cursor={{ fill: 'rgba(99,102,241,0.06)' }}
                 contentStyle={{ borderRadius: 12, border: '1px solid #e2e8f0', fontSize: 12 }}
               />
-              <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={18}>
-                {data.map((_, i) => (
-                  <Cell key={i} fill={PARTY_COLORS[i % PARTY_COLORS.length]} />
-                ))}
-              </Bar>
+              <Bar dataKey="value" radius={[0, 8, 8, 0]} maxBarSize={20} fill={`url(#${gradId})`} background={{ fill: trackColor, radius: [0, 8, 8, 0] }} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -74,6 +78,8 @@ function ChartCard({ title, sub, data, height = 260 }) {
 export default function Dashboard() {
   const { loading, parlamentares } = useParlamentares();
   const store = useStore();
+  const { theme } = useTheme();
+  const trackColor = theme === 'dark' ? '#1e293b' : '#f1f5f9';
 
   const deputados = useMemo(() => parlamentares.filter((p) => p.casa === 'camara'), [parlamentares]);
   const senadores = useMemo(() => parlamentares.filter((p) => p.casa === 'senado'), [parlamentares]);
@@ -259,8 +265,8 @@ export default function Dashboard() {
       {parlamentares.length > 0 && (
         <>
           <ScrollReveal delay={0.1} className="mt-6 grid gap-4 lg:grid-cols-2">
-            <ChartCard title="Por Partido" sub="Top 10 bancadas" data={porPartido} />
-            <ChartCard title="Por Estado (UF)" sub="Top 10 delegações" data={porUf} />
+            <ChartCard title="Por Partido" sub="Top 10 bancadas" data={porPartido} color={CATEGORICO[0][theme]} trackColor={trackColor} gradId="gradPartido" />
+            <ChartCard title="Por Estado (UF)" sub="Top 10 delegações" data={porUf} color={CATEGORICO[2][theme]} trackColor={trackColor} gradId="gradUf" />
           </ScrollReveal>
 
           <ScrollReveal delay={0.15} className="mt-8">

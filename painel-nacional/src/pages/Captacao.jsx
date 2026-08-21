@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { LuBanknote, LuCircleCheck, LuTrendingUp, LuTrophy, LuUsers, LuChartColumn, LuMapPin, LuHandshake } from 'react-icons/lu';
+import { LuBanknote, LuCircleCheck, LuTrendingUp, LuTrophy, LuUsers, LuChartColumn, LuMapPin, LuHandshake, LuGauge } from 'react-icons/lu';
 import { useStore, STATUS_DESTINACAO, destinacaoConfirmada } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
 import { useTheme } from '../lib/theme.jsx';
+import { CATEGORICO } from '../lib/palette.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EtapasTracker from '../components/EtapasTracker.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import StatCard from '../components/StatCard.jsx';
+import RadialGauge from '../components/RadialGauge.jsx';
 
 function fmtR(v) {
   return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
@@ -21,18 +23,8 @@ function fmtRCompact(v) {
   return fmtR(v);
 }
 
-// Paleta categórica validada (dataviz skill, references/palette.md) — ordem fixa, nunca ciclada.
-const CATEGORICO = [
-  { light: '#2a78d6', dark: '#3987e5' }, // blue
-  { light: '#eb6834', dark: '#d95926' }, // orange
-  { light: '#1baf7a', dark: '#199e70' }, // aqua
-  { light: '#eda100', dark: '#c98500' }, // yellow
-  { light: '#e87ba4', dark: '#d55181' }, // magenta
-  { light: '#008300', dark: '#008300' }, // green
-  { light: '#4a3aa7', dark: '#9085e9' }, // violet
-  { light: '#e34948', dark: '#e66767' }, // red
-];
 const AZUL = CATEGORICO[0];
+const AQUA = CATEGORICO[2];
 const GRUPOS_ANDAMENTO = [
   { key: 'Planejamento', cor: CATEGORICO[0] },
   { key: 'Em execução', cor: CATEGORICO[1] },
@@ -73,16 +65,25 @@ function EndLabel(valueFmt) {
   );
 }
 
-function BarCard({ data, valueFmt, height, color, tooltipStyle }) {
+// Barra com gradiente (um hue só, claro→sólido — leitura de magnitude, não identidade) e
+// "track" claro atrás de cada barra — o toque que dá o ar de dashboard moderno sem virar
+// arco-íris por barra (que aqui seriam apenas ranks, não categorias com identidade própria).
+function BarCard({ data, valueFmt, height, color, trackColor, gradId, tooltipStyle }) {
   return (
     <div style={{ height: height ?? Math.max(140, data.length * 34 + 20) }} className="mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ left: 4, right: 48 }}>
+          <defs>
+            <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor={color} stopOpacity={0.45} />
+              <stop offset="100%" stopColor={color} stopOpacity={1} />
+            </linearGradient>
+          </defs>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} className="stroke-slate-100 dark:stroke-slate-800" />
           <XAxis type="number" domain={[0, (max) => Math.ceil(max * 1.2)]} tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-400" tickFormatter={valueFmt} />
           <YAxis type="category" dataKey="name" width={110} tick={{ fontSize: 12 }} stroke="currentColor" className="text-slate-500" />
           <Tooltip cursor={{ fill: 'rgba(42,120,214,0.08)' }} formatter={(v) => valueFmt(v)} contentStyle={tooltipStyle} />
-          <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={18} fill={color}>
+          <Bar dataKey="value" radius={[0, 8, 8, 0]} maxBarSize={20} fill={`url(#${gradId})`} background={{ fill: trackColor, radius: [0, 8, 8, 0] }}>
             <LabelList dataKey="value" content={EndLabel(valueFmt)} />
           </Bar>
         </BarChart>
@@ -96,11 +97,20 @@ function BarCard({ data, valueFmt, height, color, tooltipStyle }) {
 // abaixo já carrega o valor direto, sem depender só do tooltip.
 function StackedBarCard({ segments, valueLabel, tooltipStyle }) {
   const row = segments.reduce((acc, s) => ({ ...acc, [s.name]: s.value }), { name: '' });
+  const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
   return (
     <div className="mt-4">
-      <div style={{ height: 40 }}>
+      <div style={{ height: 48 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={[row]} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+            <defs>
+              {segments.map((s) => (
+                <linearGradient key={s.name} id={`seg-${s.name.replace(/\s+/g, '')}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor={s.cor} stopOpacity={0.75} />
+                  <stop offset="100%" stopColor={s.cor} />
+                </linearGradient>
+              ))}
+            </defs>
             <XAxis type="number" hide />
             <YAxis type="category" dataKey="name" hide />
             <Tooltip cursor={{ fill: 'transparent' }} formatter={(v, name) => [`${v} ${valueLabel}`, name]} contentStyle={tooltipStyle} />
@@ -109,19 +119,19 @@ function StackedBarCard({ segments, valueLabel, tooltipStyle }) {
                 key={s.name}
                 dataKey={s.name}
                 stackId="a"
-                fill={s.cor}
-                radius={[i === 0 ? 6 : 0, i === segments.length - 1 ? 6 : 0, i === segments.length - 1 ? 6 : 0, i === 0 ? 6 : 0]}
+                fill={`url(#seg-${s.name.replace(/\s+/g, '')})`}
+                radius={[i === 0 ? 10 : 0, i === segments.length - 1 ? 10 : 0, i === segments.length - 1 ? 10 : 0, i === 0 ? 10 : 0]}
               />
             ))}
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         {segments.map((s) => (
-          <div key={s.name} className="flex items-center gap-1.5 text-xs">
-            <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: s.cor }} />
-            <span className="text-slate-500 dark:text-slate-400">{s.name}</span>
-            <span className="font-semibold text-slate-700 dark:text-slate-200">{s.value}</span>
+          <div key={s.name} className="flex items-center gap-1.5 rounded-full py-1 pl-1.5 pr-2.5 text-xs" style={{ background: `${s.cor}1a` }}>
+            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: s.cor }} />
+            <span className="font-medium" style={{ color: s.cor }}>{s.name}</span>
+            <span className="text-slate-500 dark:text-slate-400">{s.value} · {Math.round((s.value / total) * 100)}%</span>
           </div>
         ))}
       </div>
@@ -190,11 +200,16 @@ export default function Captacao() {
     return STATUS_DESTINACAO.map((s, i) => ({ name: s, value: contagem[s] || 0, cor: CATEGORICO[i % CATEGORICO.length][theme] })).filter((s) => s.value > 0);
   }, [filtradas, theme]);
 
-  const andamentoChart = useMemo(() => {
+  const andamentoContagem = useMemo(() => {
     const contagem = { Planejamento: 0, 'Em execução': 0, Entregue: 0 };
     filtradas.forEach((d) => { contagem[grupoDoStatus(d.status)] += 1; });
-    return GRUPOS_ANDAMENTO.map((g) => ({ name: g.key, value: contagem[g.key], cor: g.cor[theme] })).filter((g) => g.value > 0);
-  }, [filtradas, theme]);
+    return contagem;
+  }, [filtradas]);
+
+  const andamentoChart = useMemo(
+    () => GRUPOS_ANDAMENTO.map((g) => ({ name: g.key, value: andamentoContagem[g.key], cor: g.cor[theme] })).filter((g) => g.value > 0),
+    [andamentoContagem, theme]
+  );
 
   const municipiosChart = useMemo(() => {
     const porMun = new Map();
@@ -222,9 +237,12 @@ export default function Captacao() {
   if (store.loading) return null;
 
   const corAzul = AZUL[theme];
+  const corAqua = AQUA[theme];
+  const trackColor = theme === 'dark' ? '#1e293b' : '#f1f5f9';
   const tooltipStyle = { borderRadius: 12, border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0', fontSize: 12, background: theme === 'dark' ? '#0f172a' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#0f172a' };
 
   const anoLabel = ano === 'todos' ? 'Todos os anos' : String(ano);
+  const confirmadoPct = totalPrevisto > 0 ? (totalConfirmado / totalPrevisto) * 100 : 0;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -301,9 +319,28 @@ export default function Captacao() {
       )}
 
       {filtradas.length > 0 && (
-        <ScrollReveal delay={0.1} className="mt-5 grid gap-4 sm:grid-cols-2">
+        <ScrollReveal delay={0.1} className="mt-5">
+          <ChartCard icon={LuGauge} title="Panorama do período" sub={`${anoLabel} · ${filtradas.length} destinações`}>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <RadialGauge value={confirmadoPct} label="Confirmado" sub={`${fmtRCompact(totalConfirmado)} de ${fmtRCompact(totalPrevisto)}`} color="#10b981" />
+              {GRUPOS_ANDAMENTO.map((g) => (
+                <RadialGauge
+                  key={g.key}
+                  value={filtradas.length ? (andamentoContagem[g.key] / filtradas.length) * 100 : 0}
+                  label={g.key}
+                  sub={`${andamentoContagem[g.key]} destinaç${andamentoContagem[g.key] === 1 ? 'ão' : 'ões'}`}
+                  color={g.cor[theme]}
+                />
+              ))}
+            </div>
+          </ChartCard>
+        </ScrollReveal>
+      )}
+
+      {filtradas.length > 0 && (
+        <ScrollReveal delay={0.12} className="mt-4 grid gap-4 sm:grid-cols-2">
           <ChartCard icon={LuTrophy} title="Quem mais destinou" sub={`${anoLabel} · valor previsto${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
-            <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
+            <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} trackColor={trackColor} gradId="gradRanking" tooltipStyle={tooltipStyle} />
           </ChartCard>
 
           <ChartCard icon={LuChartColumn} title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${anoLabel}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
@@ -312,7 +349,7 @@ export default function Captacao() {
 
           {municipiosChart.length > 0 && (
             <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor previsto`}>
-              <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
+              <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAqua} trackColor={trackColor} gradId="gradMunicipios" tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}
         </ScrollReveal>

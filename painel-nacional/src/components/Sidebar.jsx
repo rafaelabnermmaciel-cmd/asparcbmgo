@@ -36,8 +36,16 @@ export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white/80 px-4 py-6 backdrop-blur lg:flex dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
       <div className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-base font-bold text-white">
-          🇧🇷
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white">
+          <svg viewBox="0 0 100 100" className="h-6 w-6" fill="currentColor" aria-hidden="true">
+            <rect x="6" y="70" width="88" height="6" rx="3" />
+            <rect x="19" y="54" width="8" height="16" />
+            <path d="M8 54 A15 15 0 0 1 38 54 Z" />
+            <rect x="44" y="18" width="7" height="52" rx="1.5" />
+            <rect x="55" y="18" width="7" height="52" rx="1.5" />
+            <rect x="78" y="54" width="8" height="16" />
+            <ellipse cx="82" cy="48" rx="14" ry="6" />
+          </svg>
         </div>
         <div>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Painel Parlamentar</p>
