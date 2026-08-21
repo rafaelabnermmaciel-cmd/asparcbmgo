@@ -26,10 +26,12 @@ function fmtRCompact(v) {
 const AZUL = CATEGORICO[0];
 const AQUA = CATEGORICO[2];
 
-// As 5 etapas do funil que o usuário acompanha passo a passo por captação — panorama
-// simplificado (fora Acordo Verbal, Confirmado e Contratado, que ficam só no detalhe de
-// cada item) pra não confundir com números demais na visão geral.
+// As 5 etapas do funil que o usuário acompanha passo a passo por captação. O que sobrar
+// (Acordo Verbal, Confirmado, Contratado) entra num anel "Outros" — nunca escondido: a soma
+// dos anéis tem que fechar 100% do total, senão parece que sumiu dinheiro do painel.
 const PAINEL_STATUSES = ['Em articulação', 'Indicado', 'Empenhado', 'Em licitação', 'Entregue'];
+const OUTROS_STATUSES = STATUS_DESTINACAO.filter((s) => !PAINEL_STATUSES.includes(s));
+const COR_OUTROS = { light: '#94a3b8', dark: '#64748b' };
 
 function ChartCard({ title, sub, icon: Icon, children }) {
   return (
@@ -147,6 +149,9 @@ export default function Captacao() {
     return contagem;
   }, [filtradas]);
 
+  const contagemOutros = OUTROS_STATUSES.reduce((s, st) => s + (statusContagem[st] || 0), 0);
+  const detalheOutros = OUTROS_STATUSES.filter((s) => statusContagem[s] > 0).map((s) => `${statusContagem[s]} ${s}`).join(', ');
+
   const municipiosChart = useMemo(() => {
     const porMun = new Map();
     filtradas.forEach((d) => {
@@ -253,8 +258,8 @@ export default function Captacao() {
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5">
-          <ChartCard icon={LuGauge} title="Panorama do período" sub={`${anoLabel} · ${filtradas.length} destinações · % em cada etapa`}>
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
+          <ChartCard icon={LuGauge} title="Panorama do período" sub={`${anoLabel} · ${filtradas.length} destinações · % em cada etapa, soma 100%`}>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {PAINEL_STATUSES.map((s) => (
                 <RadialGauge
                   key={s}
@@ -264,6 +269,14 @@ export default function Captacao() {
                   color={CATEGORICO[STATUS_DESTINACAO.indexOf(s) % CATEGORICO.length][theme]}
                 />
               ))}
+              {contagemOutros > 0 && (
+                <RadialGauge
+                  value={filtradas.length ? (contagemOutros / filtradas.length) * 100 : 0}
+                  label="Outros"
+                  sub={detalheOutros}
+                  color={COR_OUTROS[theme]}
+                />
+              )}
             </div>
           </ChartCard>
         </ScrollReveal>
