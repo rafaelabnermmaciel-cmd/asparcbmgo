@@ -58,11 +58,20 @@ async function statusSenado(tipo, numero) {
   const materias = busca?.PesquisaBasicaMateria?.Materias?.Materia;
   const item = Array.isArray(materias) ? materias[0] : materias;
   const codigo = item?.IdentificacaoMateria?.CodigoMateria;
-  if (!codigo) return null;
+  if (!codigo) {
+    // Nenhum item do Senado resolveu na primeira execução real (confirmado em produção) — sem
+    // lançar erro, o que indica formato de resposta diferente do documentado, não falha de
+    // rede. Loga a resposta bruta (truncada) pra diagnosticar o formato real no próximo log.
+    console.warn(`[senado] ${tipo} ${numero}: matéria não encontrada na busca — resposta bruta: ${JSON.stringify(busca).slice(0, 500)}`);
+    return null;
+  }
   const detalhe = await getJson(`${SENADO_BASE}/materia/${codigo}`);
   const autuacao = detalhe?.DetalheMateria?.Materia?.SituacaoAtual?.Autuacoes?.Autuacao;
   const situ = Array.isArray(autuacao) ? autuacao[0]?.Situacao : autuacao?.Situacao;
-  if (!situ?.DataSituacao) return null;
+  if (!situ?.DataSituacao) {
+    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — resposta bruta: ${JSON.stringify(detalhe).slice(0, 500)}`);
+    return null;
+  }
   return {
     casaAtual: 'Senado Federal',
     idSenado: codigo,
