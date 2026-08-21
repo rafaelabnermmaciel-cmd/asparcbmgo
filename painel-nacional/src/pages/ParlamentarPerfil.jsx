@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useParlamentares, useVotacoes, useResultadosEleitorais, initials } from '../lib/data.js';
 import { useStore, STATUS_PROJETO, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, nomesCorrespondem } from '../lib/store.jsx';
@@ -84,13 +84,17 @@ export default function ParlamentarPerfil() {
   const store = useStore();
   const { admin } = useAdmin();
   const [editingDest, setEditingDest] = useState(undefined);
-  const [editingProj, setEditingProj] = useState(undefined);
+  const [editingProj, setEditingProj] = useState(undefined); // id do projeto sendo editado (existente)
+  const [addingComo, setAddingComo] = useState(null); // null | 'autor' | 'relator' — novo projeto
+
+  const todosNomes = useMemo(() => parlamentares.map((x) => x.nome).sort(), [parlamentares]);
 
   const p = parlamentares.find((x) => x.casa === casa && String(x.id) === String(id));
   const historicoVotos = votacoes[`${casa}:${id}`] || [];
   const eleicao = resultados[`${casa}:${id}`] || null;
   const destinacoes = p ? store.destinacoes.filter((d) => d.parlamentarNome === p.nome) : [];
-  const projetos = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.autor, p.nome) || nomesCorrespondem(pr.relator, p.nome)) : [];
+  const projetosAutoria = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.autor, p.nome)) : [];
+  const projetosRelatoria = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.relator, p.nome)) : [];
   const reunioes = p ? store.eventos.filter((e) => e.parlamentarNome === p.nome).slice().sort((a, b) => b.data.localeCompare(a.data)) : [];
 
   function labelDoVinculo(e) {
@@ -258,61 +262,66 @@ export default function ParlamentarPerfil() {
         )}
       </ScrollReveal>
 
-      <ScrollReveal delay={0.25} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Autoria e Relatoria de Projetos de Interesse do CBM-GO</p>
-          {admin && <button className={btnGhost} onClick={() => setEditingProj(null)}>+ Adicionar</button>}
-        </div>
-        {editingProj === null && (
-          <ProjForm
-            initial={{ ...emptyProj, autor: p.nome }}
-            nomes={[p.nome]}
-            onCancel={() => setEditingProj(undefined)}
-            onSave={(f) => { store.addProjeto(f); setEditingProj(undefined); }}
-          />
-        )}
-        {projetos.length ? (
-          <div className="mt-3 flex flex-col gap-2">
-            {projetos.map((pr) => (
-              <div key={pr.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
-                {editingProj === pr.id ? (
-                  <ProjForm
-                    initial={pr}
-                    nomes={[p.nome]}
-                    onCancel={() => setEditingProj(undefined)}
-                    onSave={(f) => { store.updateProjeto(pr.id, f); setEditingProj(undefined); }}
-                  />
-                ) : (
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                        {pr.tipo} {pr.numero}
-                        {nomesCorrespondem(pr.autor, p.nome) && (
-                          <span className="ml-1.5 rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">✍️ Autor</span>
-                        )}
-                        {nomesCorrespondem(pr.relator, p.nome) && (
-                          <span className="ml-1.5 rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-700 dark:bg-teal-500/10 dark:text-teal-300">⚖️ Relator</span>
-                        )}
-                        {projetoAtivo(pr) && <GargaloBadge tipo="projeto" id={pr.id} eventos={store.eventos} />}
-                      </p>
-                      <p className="mt-0.5 truncate text-xs text-slate-500">{pr.ementa}</p>
-                      <EstagioStepper estagio={pr.status} stages={STATUS_PROJETO} editable={admin} onChange={(st) => store.updateProjeto(pr.id, { status: st })} />
-                    </div>
-                    {admin && (
-                      <div className="flex shrink-0 gap-2">
-                        <button className={btnGhost} onClick={() => setEditingProj(pr.id)}>Editar</button>
-                        <button className={btnDanger} onClick={() => { if (confirm('Remover este projeto?')) store.removeProjeto(pr.id); }}>Remover</button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
+      {[
+        { role: 'autor', titulo: '✍️ Autoria de Projetos de Interesse do CBM-GO', lista: projetosAutoria, vazio: 'Nenhum projeto de autoria deste parlamentar registrado ainda.' },
+        { role: 'relator', titulo: '⚖️ Relatoria de Projetos de Interesse do CBM-GO', lista: projetosRelatoria, vazio: 'Nenhum projeto sob relatoria deste parlamentar registrado ainda.' },
+      ].map(({ role, titulo, lista, vazio }, blocoIdx) => (
+        <ScrollReveal key={role} delay={0.25 + blocoIdx * 0.03} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">{titulo}</p>
+            {admin && <button className={btnGhost} onClick={() => setAddingComo(role)}>+ Adicionar</button>}
           </div>
-        ) : (
-          <p className="mt-2 text-xs text-slate-400">Nenhum projeto com autoria ou relatoria deste parlamentar registrado ainda.</p>
-        )}
-      </ScrollReveal>
+          {addingComo === role && (
+            <ProjForm
+              initial={{ ...emptyProj, [role]: p.nome }}
+              nomes={todosNomes}
+              onCancel={() => setAddingComo(null)}
+              onSave={(f) => { store.addProjeto(f); setAddingComo(null); }}
+            />
+          )}
+          {lista.length ? (
+            <div className="mt-3 flex flex-col gap-2">
+              {lista.map((pr) => (
+                <div key={pr.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                  {editingProj === pr.id ? (
+                    <ProjForm
+                      initial={pr}
+                      nomes={todosNomes}
+                      onCancel={() => setEditingProj(undefined)}
+                      onSave={(f) => { store.updateProjeto(pr.id, f); setEditingProj(undefined); }}
+                    />
+                  ) : (
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                          {pr.tipo} {pr.numero}
+                          {projetoAtivo(pr) && <GargaloBadge tipo="projeto" id={pr.id} eventos={store.eventos} />}
+                        </p>
+                        {role === 'autor' && pr.relator && (
+                          <p className="mt-0.5 text-xs text-slate-400">Relator: {pr.relator}</p>
+                        )}
+                        {role === 'relator' && pr.autor && (
+                          <p className="mt-0.5 text-xs text-slate-400">Autor: {pr.autor}</p>
+                        )}
+                        <p className="mt-0.5 truncate text-xs text-slate-500">{pr.ementa}</p>
+                        <EstagioStepper estagio={pr.status} stages={STATUS_PROJETO} editable={admin} onChange={(st) => store.updateProjeto(pr.id, { status: st })} />
+                      </div>
+                      {admin && (
+                        <div className="flex shrink-0 gap-2">
+                          <button className={btnGhost} onClick={() => setEditingProj(pr.id)}>Editar</button>
+                          <button className={btnDanger} onClick={() => { if (confirm('Remover este projeto?')) store.removeProjeto(pr.id); }}>Remover</button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 text-xs text-slate-400">{vazio}</p>
+          )}
+        </ScrollReveal>
+      ))}
 
       <ScrollReveal delay={0.3} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">

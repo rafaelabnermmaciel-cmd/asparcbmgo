@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useStore, STATUS_PROJETO, TIPOS_PROJETO } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
+import { useParlamentares } from '../lib/data.js';
 import { ProjForm, emptyProj, btnGhost, btnDanger } from './Gerenciamento.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -22,6 +23,8 @@ const TIPO_COLOR = {
 export default function ProjetosLei() {
   const store = useStore();
   const { admin } = useAdmin();
+  const { parlamentares } = useParlamentares();
+  const nomes = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
   const [tipo, setTipo] = useState('');
   const [status, setStatus] = useState('');
   const [busca, setBusca] = useState('');
@@ -106,7 +109,7 @@ export default function ProjetosLei() {
         <ScrollReveal delay={0.12} className="mt-4">
           <ProjForm
             initial={emptyProj}
-            nomes={[]}
+            nomes={nomes}
             onCancel={() => setEditando(undefined)}
             onSave={(f) => { store.addProjeto(f); setEditando(undefined); }}
           />
@@ -119,7 +122,7 @@ export default function ProjetosLei() {
             {editando === p.id ? (
               <ProjForm
                 initial={p}
-                nomes={[]}
+                nomes={nomes}
                 onCancel={() => setEditando(undefined)}
                 onSave={(f) => { store.updateProjeto(p.id, f); setEditando(undefined); }}
               />
