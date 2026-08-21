@@ -52,17 +52,22 @@ async function statusCamara(tipo, numero) {
 
 async function statusSenado(tipo, numero) {
   const { num, ano } = parseNumeroAno(numero);
-  // ⚠️ endpoint/estrutura de resposta não verificados com rede real — conferir na primeira
-  // execução via GitHub Actions e ajustar os caminhos abaixo se a chave real for diferente.
+  // ⚠️ Confirmado em produção: este endpoint está descontinuado pelo próprio Senado (a
+  // resposta inclui um aviso "Descontinuacao" apontando /dadosabertos/processo como
+  // substituto), mas pra boa parte das proposições ele ainda devolve Materias.Materia
+  // preenchido — só não bate com os nomes de campo que a doc antiga descrevia
+  // (IdentificacaoMateria.CodigoMateria). Loga o objeto Materia inteiro (sem cortar tão cedo)
+  // pra descobrir os nomes reais dos campos no próximo log real.
   const busca = await getJson(`${SENADO_BASE}/materia/pesquisa/lista?sigla=${encodeURIComponent(tipo)}&numero=${num}&ano=${ano}`);
   const materias = busca?.PesquisaBasicaMateria?.Materias?.Materia;
   const item = Array.isArray(materias) ? materias[0] : materias;
   const codigo = item?.IdentificacaoMateria?.CodigoMateria;
   if (!codigo) {
-    // Nenhum item do Senado resolveu na primeira execução real (confirmado em produção) — sem
-    // lançar erro, o que indica formato de resposta diferente do documentado, não falha de
-    // rede. Loga a resposta bruta (truncada) pra diagnosticar o formato real no próximo log.
-    console.warn(`[senado] ${tipo} ${numero}: matéria não encontrada na busca — resposta bruta: ${JSON.stringify(busca).slice(0, 500)}`);
+    if (item) {
+      console.warn(`[senado] ${tipo} ${numero}: matéria encontrada na busca, mas sem IdentificacaoMateria.CodigoMateria — objeto Materia: ${JSON.stringify(item).slice(0, 2000)}`);
+    } else {
+      console.warn(`[senado] ${tipo} ${numero}: matéria não encontrada na busca — resposta bruta: ${JSON.stringify(busca).slice(0, 500)}`);
+    }
     return null;
   }
   const detalhe = await getJson(`${SENADO_BASE}/materia/${codigo}`);
