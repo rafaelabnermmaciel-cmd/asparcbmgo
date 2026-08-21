@@ -75,7 +75,9 @@ export default function Relatorios() {
   const totalGeral = destinacoesRelatorio.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
   const confirmadoGeral = destinacoesRelatorio.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
   const totalVerbal = acordosVerbais.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
-  const selectCls = 'rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300';
+  // max-w trava a caixa fechada do <select> — sem isso, o navegador pode dimensioná-la pelo
+  // texto da opção mais longa (ex: um nome de parlamentar) e estourar a largura no celular.
+  const selectCls = 'max-w-[42vw] truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 sm:max-w-[220px]';
 
   const reunioesFiltradas = useMemo(() => {
     const eventos = store.eventos.filter((e) => e.status === 'Realizada');
@@ -167,31 +169,33 @@ export default function Relatorios() {
               <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{g.ano}</p>
               <p className="text-xs text-slate-400">{g.itens.length} destinações · {fmtR(g.previsto)} previsto · {fmtR(g.confirmado)} confirmado</p>
             </div>
-            <table className="mt-2 w-full text-left text-xs print:border-collapse">
-              <thead className="text-slate-400">
-                <tr>
-                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Parlamentar</th>
-                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Município</th>
-                  <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Objeto</th>
-                  <th className="py-1 pr-2 text-right font-medium print:border-b print:border-slate-300 print:py-1.5">Valor previsto</th>
-                  <th className="py-1 font-medium print:border-b print:border-slate-300 print:py-1.5">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60">
-                {g.itens
-                  .slice()
-                  .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
-                  .map((d) => (
-                    <tr key={d.id} className="text-slate-600 dark:text-slate-300">
-                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.parlamentarNome || '—'}</td>
-                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.municipio}</td>
-                      <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.objeto || '—'}</td>
-                      <td className="py-1 pr-2 text-right print:border-b print:border-slate-100 print:py-1">{fmtR(d.valorPrevisto)}</td>
-                      <td className="py-1 print:border-b print:border-slate-100 print:py-1">{d.status}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+            <div className="mt-2 overflow-x-auto print:overflow-visible">
+              <table className="w-full min-w-[560px] text-left text-xs print:border-collapse print:min-w-0">
+                <thead className="text-slate-400">
+                  <tr>
+                    <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Parlamentar</th>
+                    <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Município</th>
+                    <th className="py-1 pr-2 font-medium print:border-b print:border-slate-300 print:py-1.5">Objeto</th>
+                    <th className="py-1 pr-2 text-right font-medium print:border-b print:border-slate-300 print:py-1.5">Valor previsto</th>
+                    <th className="py-1 font-medium print:border-b print:border-slate-300 print:py-1.5">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60">
+                  {g.itens
+                    .slice()
+                    .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
+                    .map((d) => (
+                      <tr key={d.id} className="text-slate-600 dark:text-slate-300">
+                        <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.parlamentarNome || '—'}</td>
+                        <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.municipio}</td>
+                        <td className="py-1 pr-2 print:border-b print:border-slate-100 print:py-1">{d.objeto || '—'}</td>
+                        <td className="py-1 pr-2 text-right print:border-b print:border-slate-100 print:py-1">{fmtR(d.valorPrevisto)}</td>
+                        <td className="py-1 print:border-b print:border-slate-100 print:py-1">{d.status}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ))}
         {porAno.length === 0 && (
@@ -207,29 +211,31 @@ export default function Relatorios() {
             <LuHandshake className="h-4 w-4 text-amber-600" /> Acordos verbais (promessas — não contabilizadas acima)
           </p>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{acordosVerbais.length} promessas · {fmtR(totalVerbal)} no total, ainda não formalizadas</p>
-          <table className="mt-3 w-full text-left text-xs">
-            <thead className="text-slate-400">
-              <tr>
-                <th className="py-1 pr-2 font-medium">Parlamentar</th>
-                <th className="py-1 pr-2 font-medium">Município</th>
-                <th className="py-1 pr-2 font-medium">Ano</th>
-                <th className="py-1 font-medium text-right">Valor prometido</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-amber-100 dark:divide-amber-900/30">
-              {acordosVerbais
-                .slice()
-                .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
-                .map((d) => (
-                  <tr key={d.id} className="text-slate-600 dark:text-slate-300">
-                    <td className="py-1 pr-2">{d.parlamentarNome || '—'}</td>
-                    <td className="py-1 pr-2">{d.municipio}</td>
-                    <td className="py-1 pr-2">{d.ano}</td>
-                    <td className="py-1 text-right">{fmtR(d.valorPrevisto)}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+          <div className="mt-3 overflow-x-auto print:overflow-visible">
+            <table className="w-full min-w-[420px] text-left text-xs print:min-w-0">
+              <thead className="text-slate-400">
+                <tr>
+                  <th className="py-1 pr-2 font-medium">Parlamentar</th>
+                  <th className="py-1 pr-2 font-medium">Município</th>
+                  <th className="py-1 pr-2 font-medium">Ano</th>
+                  <th className="py-1 font-medium text-right">Valor prometido</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-amber-100 dark:divide-amber-900/30">
+                {acordosVerbais
+                  .slice()
+                  .sort((a, b) => (b.valorPrevisto || 0) - (a.valorPrevisto || 0))
+                  .map((d) => (
+                    <tr key={d.id} className="text-slate-600 dark:text-slate-300">
+                      <td className="py-1 pr-2">{d.parlamentarNome || '—'}</td>
+                      <td className="py-1 pr-2">{d.municipio}</td>
+                      <td className="py-1 pr-2">{d.ano}</td>
+                      <td className="py-1 text-right">{fmtR(d.valorPrevisto)}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </ScrollReveal>
       )}
 
@@ -251,26 +257,28 @@ export default function Relatorios() {
           </div>
           <p className="hidden text-xs text-slate-500 print:block">{PERIODOS.find((p) => p.key === periodo)?.label}</p>
         </div>
-        <table className="mt-3 w-full text-left text-xs">
-          <thead className="text-slate-400">
-            <tr>
-              <th className="py-1 pr-2 font-medium">Data</th>
-              <th className="py-1 pr-2 font-medium">Categoria</th>
-              <th className="py-1 pr-2 font-medium">Assunto</th>
-              <th className="py-1 font-medium">Parlamentar</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60">
-            {reunioesFiltradas.map((e) => (
-              <tr key={e.id} className="text-slate-600 dark:text-slate-300">
-                <td className="py-1 pr-2 whitespace-nowrap">{fmtData(e.data)}</td>
-                <td className="py-1 pr-2">{TIPOS_EVENTO[e.tipo] || e.tipo}</td>
-                <td className="py-1 pr-2">{e.titulo}</td>
-                <td className="py-1">{e.parlamentarNome || '—'}</td>
+        <div className="mt-3 overflow-x-auto print:overflow-visible">
+          <table className="w-full min-w-[480px] text-left text-xs print:min-w-0">
+            <thead className="text-slate-400">
+              <tr>
+                <th className="py-1 pr-2 font-medium">Data</th>
+                <th className="py-1 pr-2 font-medium">Categoria</th>
+                <th className="py-1 pr-2 font-medium">Assunto</th>
+                <th className="py-1 font-medium">Parlamentar</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-50 dark:divide-slate-800/60">
+              {reunioesFiltradas.map((e) => (
+                <tr key={e.id} className="text-slate-600 dark:text-slate-300">
+                  <td className="py-1 pr-2 whitespace-nowrap">{fmtData(e.data)}</td>
+                  <td className="py-1 pr-2">{TIPOS_EVENTO[e.tipo] || e.tipo}</td>
+                  <td className="py-1 pr-2">{e.titulo}</td>
+                  <td className="py-1">{e.parlamentarNome || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         {reunioesFiltradas.length === 0 && <p className="mt-3 text-xs text-slate-400">Nenhuma reunião realizada registrada nesse período.</p>}
       </ScrollReveal>
     </div>
