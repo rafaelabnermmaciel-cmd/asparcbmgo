@@ -23,8 +23,8 @@ export function useParlamentares() {
     let cancelled = false;
     (async () => {
       const [deputados, senadores] = await Promise.all([
-        fetchJson('/data/deputados.json', []),
-        fetchJson('/data/senadores.json', []),
+        fetchJson(`${import.meta.env.BASE_URL}data/deputados.json`, []),
+        fetchJson(`${import.meta.env.BASE_URL}data/senadores.json`, []),
       ]);
       if (cancelled) return;
       const parlamentares = [
@@ -45,7 +45,7 @@ export function useVotacoes() {
   const [state, setState] = useState({ loading: true, votacoes: {} });
   useEffect(() => {
     let cancelled = false;
-    fetchJson('/data/votacoes.json', {}).then((votacoes) => {
+    fetchJson(`${import.meta.env.BASE_URL}data/votacoes.json`, {}).then((votacoes) => {
       if (!cancelled) setState({ loading: false, votacoes });
     });
     return () => {
@@ -59,7 +59,7 @@ export function useResultadosEleitorais() {
   const [state, setState] = useState({ loading: true, resultados: {} });
   useEffect(() => {
     let cancelled = false;
-    fetchJson('/data/resultados-eleitorais.json', {}).then((resultados) => {
+    fetchJson(`${import.meta.env.BASE_URL}data/resultados-eleitorais.json`, {}).then((resultados) => {
       if (!cancelled) setState({ loading: false, resultados });
     });
     return () => {
@@ -73,7 +73,7 @@ export function useLegislativo() {
   const [state, setState] = useState({ loading: true, dados: null });
   useEffect(() => {
     let cancelled = false;
-    fetchJson('/data/acompanhamento-legislativo.json', null).then((dados) => {
+    fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null).then((dados) => {
       if (!cancelled) setState({ loading: false, dados });
     });
     return () => {
@@ -87,6 +87,25 @@ export const UFS = [
   'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB',
   'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO',
 ];
+
+/** Parlamentares com aniversário nos próximos `dias` dias (hoje incluso), mais próximo primeiro. */
+export function proximosAniversarios(parlamentares, dias = 14) {
+  const hoje = new Date();
+  const hojeUTC = Date.UTC(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  return parlamentares
+    .map((p) => {
+      const partes = p.dataNascimento?.split('-');
+      if (!partes || partes.length < 3) return null;
+      const mes = parseInt(partes[1], 10) - 1;
+      const dia = parseInt(partes[2], 10);
+      let proxUTC = Date.UTC(hoje.getFullYear(), mes, dia);
+      if (proxUTC < hojeUTC) proxUTC = Date.UTC(hoje.getFullYear() + 1, mes, dia);
+      const diffDias = Math.round((proxUTC - hojeUTC) / 86400000);
+      return diffDias <= dias ? { ...p, diffDias } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.diffDias - b.diffDias);
+}
 
 export function initials(name) {
   if (!name) return '';

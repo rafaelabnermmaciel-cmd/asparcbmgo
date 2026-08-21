@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { initials } from '../lib/data.js';
+import { useStore } from '../lib/store.jsx';
 
 export default function ParlamentarCard({ p }) {
+  const store = useStore();
+  const tracked = !store.loading && (store.destinacoes.some((d) => d.parlamentarNome === p.nome) || store.projetos.some((pr) => pr.parlamentarNome === p.nome));
+
   return (
     <Link
       to={`/parlamentares/${p.casa}/${p.id}`}
@@ -14,10 +18,17 @@ export default function ParlamentarCard({ p }) {
           {initials(p.nome)}
         </div>
       )}
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-slate-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
-          {p.nome}
-        </p>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-1.5">
+          <p className="truncate text-sm font-semibold text-slate-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
+            {p.nome}
+          </p>
+          {tracked && (
+            <span className="shrink-0 rounded-full bg-red-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
+              CBM-GO
+            </span>
+          )}
+        </div>
         <p className="truncate text-xs text-slate-400">
           {p.cargo} · {p.partido || '—'} · {p.uf || '—'}
         </p>

@@ -3,7 +3,7 @@ import { NAV } from './Sidebar.jsx';
 
 export default function MobileNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200 bg-white/95 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200 bg-white/95 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95 print:hidden">
       {NAV.map(({ to, label, icon, end }) => (
         <NavLink
           key={to}
