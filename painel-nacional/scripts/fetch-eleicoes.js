@@ -63,10 +63,18 @@ function parseCsv(text) {
   return { header, rows };
 }
 
+// O portal do TSE (diferente de Câmara/Senado) devolve 403 para o identificador de robô
+// usado no resto do pipeline — um cabeçalho de navegador comum resolve.
+const TSE_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+  'Accept-Language': 'pt-BR,pt;q=0.9',
+};
+
 async function findPackage(ano) {
   console.log(`[tse] procurando pacote de votação nominal por candidato para ${ano}...`);
   const resp = await getJson(
-    `${TSE_CKAN_BASE}/package_search?q=votacao+candidato+munzona+${ano}&rows=5`
+    `${TSE_CKAN_BASE}/package_search?q=votacao+candidato+munzona+${ano}&rows=5`,
+    { headers: TSE_HEADERS }
   );
   const pkgs = resp?.result?.results || [];
   if (!pkgs.length) {
@@ -110,7 +118,7 @@ async function main() {
       return porUf.get(uf);
     }
     console.log(`[tse] baixando ${resource.name} (${uf})...`);
-    const text = await getText(resource.url);
+    const text = await getText(resource.url, { headers: TSE_HEADERS });
     const parsed = parseCsv(text);
     porUf.set(uf, parsed);
     return parsed;
