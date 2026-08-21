@@ -35,6 +35,7 @@ export const ETAPAS_ORDEM = ['ind', 'cad', 'apv', 'emp', 'lic', 'con', 'entr'];
 export const ETAPAS_NOMES = { ind: 'Indicação', cad: 'Cadastro', apv: 'Aprovação', emp: 'Empenho', lic: 'Licitação', con: 'Contratação', entr: 'Entrega' };
 
 const STATUS_TO_ETAPAS = {
+  'Acordo Verbal': { ind: 0, cad: 0, apv: 0, emp: 0, lic: 0, con: 0, entr: 0 },
   'Em articulação': { ind: 1, cad: 0, apv: 0, emp: 0, lic: 0, con: 0, entr: 0 },
   Indicado: { ind: 1, cad: 1, apv: 0, emp: 0, lic: 0, con: 0, entr: 0 },
   Confirmado: { ind: 1, cad: 1, apv: 1, emp: 0, lic: 0, con: 0, entr: 0 },
@@ -198,12 +199,17 @@ export function StoreProvider({ children }) {
         };
         persist(persisted);
       }
-      // Migração: destinações salvas antes do campo acordoVerbal existir ganham o valor
-      // default (false) — 2027 já vem marcado como acordo verbal desde o seed original.
-      if (persisted?.destinacoes?.some((d) => d.acordoVerbal === undefined)) {
+      // Migração: "acordo verbal" era um campo booleano à parte (tirava o item do ano
+      // normal) — virou o primeiro status do fluxo, pra 2027 continuar navegável como
+      // qualquer outro ano. Quem já tinha o campo booleano marcado vira status.
+      if (persisted?.destinacoes?.some((d) => d.acordoVerbal !== undefined)) {
         persisted = {
           ...persisted,
-          destinacoes: persisted.destinacoes.map((d) => (d.acordoVerbal === undefined ? { ...d, acordoVerbal: d.ano === 2027 } : d)),
+          destinacoes: persisted.destinacoes.map((d) => {
+            if (d.acordoVerbal === undefined) return d;
+            const { acordoVerbal, ...resto } = d;
+            return acordoVerbal ? { ...resto, status: 'Acordo Verbal' } : resto;
+          }),
         };
         persist(persisted);
       }
@@ -385,13 +391,15 @@ export function projetoAtivo(p) {
   return p.status !== 'Aprovado' && p.status !== 'Arquivado';
 }
 
-// Acordo verbal é uma promessa ainda não formalizada — não entra em total captado, médias,
-// ranking "quem mais destinou" nem em relatórios de prestação de contas. Só é exibida à parte.
+// "Acordo Verbal" é o primeiro estágio do fluxo — uma promessa ainda não formalizada. Conta
+// no total previsto do próprio ano (é a previsão real daquele ano), mas fica de fora das
+// médias/ranking "quem mais destinou" (que olham só o que já saiu de mera promessa) até
+// evoluir de estágio — a exclusão é dinâmica pelo status atual, não uma marcação fixa.
 export function destinacaoConfirmada(d) {
-  return !d.acordoVerbal;
+  return d.status !== 'Acordo Verbal';
 }
 
-export const STATUS_DESTINACAO = ['Em articulação', 'Indicado', 'Confirmado', 'Empenhado', 'Em licitação', 'Contratado', 'Entregue'];
+export const STATUS_DESTINACAO = ['Acordo Verbal', 'Em articulação', 'Indicado', 'Confirmado', 'Empenhado', 'Em licitação', 'Contratado', 'Entregue'];
 export const STATUS_PROJETO = ['Protocolado', 'Em Análise Técnica', 'Aguardando Relator', 'Em Comissão', 'Aprovado em Comissão', 'Em Plenário', 'Aprovado', 'Arquivado'];
 export const TIPOS_PROJETO = ['PL', 'PLP', 'PEC', 'REQ', 'MPV'];
 

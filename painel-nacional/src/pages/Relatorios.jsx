@@ -25,7 +25,7 @@ export default function Relatorios() {
   // Acordo verbal é promessa ainda não formalizada — fica fora do relatório oficial de
   // prestação de contas, e listada à parte (ver bloco "Acordos verbais" abaixo).
   const destinacoesConfirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
-  const acordosVerbais = useMemo(() => store.destinacoes.filter((d) => d.acordoVerbal), [store.destinacoes]);
+  const acordosVerbais = useMemo(() => store.destinacoes.filter((d) => d.status === 'Acordo Verbal'), [store.destinacoes]);
 
   const porAno = useMemo(() => {
     const grupos = new Map();

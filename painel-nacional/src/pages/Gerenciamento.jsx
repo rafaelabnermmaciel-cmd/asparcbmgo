@@ -18,7 +18,7 @@ export const btnGhost =
   'rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-indigo-300 hover:text-indigo-600 dark:border-slate-700 dark:text-slate-300';
 export const btnDanger = 'rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30';
 
-export const emptyDest = { parlamentarNome: '', ano: new Date().getFullYear(), municipio: '', objeto: '', valorPrevisto: 0, valorConfirmado: 0, status: 'Em articulação', acordoVerbal: false, sei: '', responsavel: '', proximoPasso: '', riscos: '', observacoes: '' };
+export const emptyDest = { parlamentarNome: '', ano: new Date().getFullYear(), municipio: '', objeto: '', valorPrevisto: 0, valorConfirmado: 0, status: 'Em articulação', sei: '', responsavel: '', proximoPasso: '', riscos: '', observacoes: '' };
 export const emptyProj = { autor: '', relator: '', tipo: 'PL', numero: '', ementa: '', status: 'Protocolado', posicao: 'em análise', prioridade: 'média', responsavel: '', proximoPasso: '', observacoes: '' };
 
 export function DestForm({ initial, nomes, onSave, onCancel }) {
@@ -64,18 +64,6 @@ export function DestForm({ initial, nomes, onSave, onCancel }) {
       <div>
         <p className={labelClass}>Responsável</p>
         <input className={inputClass} value={f.responsavel} onChange={set('responsavel')} />
-      </div>
-      <div className="flex items-center gap-2 sm:col-span-2">
-        <input
-          id="acordoVerbal"
-          type="checkbox"
-          checked={!!f.acordoVerbal}
-          onChange={(e) => setF({ ...f, acordoVerbal: e.target.checked })}
-          className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-400"
-        />
-        <label htmlFor="acordoVerbal" className="text-xs text-slate-600 dark:text-slate-300">
-          Acordo verbal (promessa ainda não formalizada — não entra em totais/médias/ranking)
-        </label>
       </div>
       <div className="sm:col-span-2">
         <p className={labelClass}>Próximo passo</p>

@@ -240,12 +240,9 @@ export default function ParlamentarPerfil() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{d.municipio} <span className="font-normal text-slate-400">· {d.ano}</span></p>
                       <p className="mt-0.5 text-xs text-slate-500">{d.objeto} · {fmtR(d.valorPrevisto)} previsto{d.valorConfirmado ? ` · ${fmtR(d.valorConfirmado)} confirmado` : ''}{d.sei ? ` · SEI: ${d.sei}` : ''}</p>
-                      <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{d.status}</span>
-                      {d.acordoVerbal && (
-                        <span className="ml-1.5 mt-1 inline-flex items-center gap-1 rounded-full border border-dashed border-amber-300 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:border-amber-800 dark:text-amber-300">
-                          <LuHandshake className="h-3 w-3" /> Acordo verbal — não contabilizado
-                        </span>
-                      )}
+                      <span className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${d.status === 'Acordo Verbal' ? 'border border-dashed border-amber-300 text-amber-700 dark:border-amber-800 dark:text-amber-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
+                        {d.status === 'Acordo Verbal' && <LuHandshake className="h-3 w-3" />} {d.status}
+                      </span>
                       {destinacaoAtiva(d) && <GargaloBadge tipo="destinacao" id={d.id} eventos={store.eventos} />}
                       <EtapasTracker etapas={d.etapas} editable={admin} onToggle={(key) => store.toggleDestinacaoEtapa(d.id, key)} />
                     </div>

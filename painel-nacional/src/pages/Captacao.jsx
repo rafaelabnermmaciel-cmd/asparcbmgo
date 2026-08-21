@@ -41,7 +41,7 @@ const GRUPOS_ANDAMENTO = [
 
 function grupoDoStatus(status) {
   if (status === 'Entregue') return 'Entregue';
-  if (status === 'Em articulação' || status === 'Indicado') return 'Planejamento';
+  if (status === 'Acordo Verbal' || status === 'Em articulação' || status === 'Indicado') return 'Planejamento';
   return 'Em execução';
 }
 
@@ -143,27 +143,28 @@ export default function Captacao() {
     if (anoParam) setAno(parseInt(anoParam));
   }, [anoParam]);
 
-  // Acordo verbal é promessa ainda não formalizada — fica de fora dos anos "normais" e de
-  // qualquer total/média/ranking, só aparece na aba própria (ver destinacaoConfirmada).
-  const confirmadas = useMemo(() => store.destinacoes.filter(destinacaoConfirmada), [store.destinacoes]);
-  const verbais = useMemo(() => store.destinacoes.filter((d) => d.acordoVerbal), [store.destinacoes]);
+  // Anos aparecem todos, sem exceção — inclusive o que só tem acordo verbal (ex: 2027) — pra
+  // dar pra navegar e ver a previsão daquele ano. "Acordo Verbal" é só o primeiro estágio do
+  // fluxo normal, não uma categoria à parte (ver STATUS_DESTINACAO e destinacaoConfirmada).
+  const anos = useMemo(() => [...new Set(store.destinacoes.map((d) => d.ano))].sort((a, b) => a - b), [store.destinacoes]);
 
-  const anos = useMemo(() => [...new Set(confirmadas.map((d) => d.ano))].sort((a, b) => a - b), [confirmadas]);
-
+  // Visão "Todos" soma o pipeline já formalizado (fora acordo verbal) — dinâmico pelo status
+  // atual de cada item. Um ano específico mostra o retrato completo daquele ano, sem filtrar.
   const filtradas = useMemo(() => {
-    if (ano === 'verbal') return verbais;
-    return ano === 'todos' ? confirmadas : confirmadas.filter((d) => d.ano === ano);
-  }, [confirmadas, verbais, ano]);
+    if (ano === 'todos') return store.destinacoes.filter(destinacaoConfirmada);
+    return store.destinacoes.filter((d) => d.ano === ano);
+  }, [store.destinacoes, ano]);
 
   const totalPrevisto = filtradas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
   const totalConfirmado = filtradas.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
 
-  // Total captado por ano, sempre visível como número — não só escondido dentro de um gráfico.
+  // Total captado por ano (sem filtrar por status) — sempre visível como número, inclusive
+  // pra anos só com acordo verbal, como 2027 — não escondido dentro de um gráfico.
   const totaisPorAno = useMemo(() => {
     const porAno = new Map();
-    confirmadas.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
+    store.destinacoes.forEach((d) => porAno.set(d.ano, (porAno.get(d.ano) || 0) + (d.valorPrevisto || 0)));
     return [...porAno.entries()].sort((a, b) => a[0] - b[0]);
-  }, [confirmadas]);
+  }, [store.destinacoes]);
 
   const ranking = useMemo(() => {
     const porParl = new Map();
@@ -207,6 +208,13 @@ export default function Captacao() {
       .map(([name, value]) => ({ name: name.length > 20 ? `${name.slice(0, 19)}…` : name, value }));
   }, [filtradas]);
 
+  // Denominador da média: só anos com algo além de acordo verbal — 2027 (ainda 100% promessa)
+  // não deve "diluir" a média dos anos com pipeline já formalizado.
+  const anosComPipelineFormal = useMemo(
+    () => [...new Set(store.destinacoes.filter(destinacaoConfirmada).map((d) => d.ano))],
+    [store.destinacoes]
+  );
+
   function findParlamentar(nome) {
     return parlamentares.find((p) => p.nome === nome);
   }
@@ -216,8 +224,7 @@ export default function Captacao() {
   const corAzul = AZUL[theme];
   const tooltipStyle = { borderRadius: 12, border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0', fontSize: 12, background: theme === 'dark' ? '#0f172a' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#0f172a' };
 
-  const verbal = ano === 'verbal';
-  const anoLabel = ano === 'todos' ? 'Todos os anos' : verbal ? 'Acordo verbal' : String(ano);
+  const anoLabel = ano === 'todos' ? 'Todos os anos' : String(ano);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -227,7 +234,7 @@ export default function Captacao() {
             <LuBanknote className="h-6 w-6 text-red-500" /> Captação de Recursos
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            {filtradas.length} {verbal ? 'promessas (acordo verbal)' : 'destinações'} · {fmtR(totalPrevisto)} {verbal ? 'prometido' : 'previsto'}{ano !== 'todos' && !verbal ? ` em ${ano}` : ''}
+            {filtradas.length} destinações · {fmtR(totalPrevisto)} previsto{ano !== 'todos' ? ` em ${ano}` : ''}
           </p>
         </div>
         <Link to="/" className="text-xs text-slate-400 hover:text-indigo-600">← Resumo geral</Link>
@@ -249,27 +256,18 @@ export default function Captacao() {
             {a}
           </button>
         ))}
-        {verbais.length > 0 && (
-          <button
-            onClick={() => setAno('verbal')}
-            title="Promessas ainda não formalizadas — não entram em totais, médias nem ranking"
-            className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${verbal ? 'border-amber-600 bg-amber-500 text-white' : 'border-dashed border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-800 dark:text-amber-300 dark:hover:bg-amber-500/10'}`}
-          >
-            <LuHandshake className="h-4 w-4" /> Acordo Verbal
-          </button>
-        )}
       </ScrollReveal>
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.07} className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard valueSize="text-2xl" label={verbal ? 'Total prometido' : 'Total previsto'} value={fmtRCompact(totalPrevisto)} icon={<LuBanknote />} accent="indigo" />
+          <StatCard valueSize="text-2xl" label="Total previsto" value={fmtRCompact(totalPrevisto)} icon={<LuBanknote />} accent="indigo" />
           <StatCard valueSize="text-2xl" label="Total confirmado" value={fmtRCompact(totalConfirmado)} icon={<LuCircleCheck />} accent="emerald" />
           {ano === 'todos' ? (
-            <StatCard valueSize="text-2xl" label="Média por ano" value={fmtRCompact(totalPrevisto / (anos.length || 1))} icon={<LuTrendingUp />} accent="amber" />
+            <StatCard valueSize="text-2xl" label="Média por ano" value={fmtRCompact(totalPrevisto / (anosComPipelineFormal.length || 1))} icon={<LuTrendingUp />} accent="amber" />
           ) : (
-            <StatCard valueSize="text-2xl" label={verbal ? 'Promessas' : 'Destinações'} value={filtradas.length} icon={<LuUsers />} accent="amber" />
+            <StatCard valueSize="text-2xl" label="Destinações" value={filtradas.length} icon={<LuUsers />} accent="amber" />
           )}
-          <StatCard valueSize="text-xl" label={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} value={ranking[0]?.nome || '—'} sub={ranking[0] ? fmtRCompact(ranking[0].previsto) : undefined} icon={<LuTrophy />} accent="rose" />
+          <StatCard valueSize="text-xl" label="Quem mais destinou" value={ranking[0]?.nome || '—'} sub={ranking[0] ? fmtRCompact(ranking[0].previsto) : undefined} icon={<LuTrophy />} accent="rose" />
         </ScrollReveal>
       )}
 
@@ -298,13 +296,13 @@ export default function Captacao() {
 
       {filtradas.length === 0 && (
         <ScrollReveal delay={0.1} className="mt-5">
-          <EmptyState title={verbal ? 'Nenhum acordo verbal registrado' : 'Nenhuma destinação neste ano'} description="Ajuste o filtro de ano ou cadastre uma nova em Gerenciamento." />
+          <EmptyState title="Nenhuma destinação neste ano" description="Ajuste o filtro de ano ou cadastre uma nova em Gerenciamento." />
         </ScrollReveal>
       )}
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5 grid gap-4 sm:grid-cols-2">
-          <ChartCard icon={LuTrophy} title={verbal ? 'Quem mais prometeu' : 'Quem mais destinou'} sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
+          <ChartCard icon={LuTrophy} title="Quem mais destinou" sub={`${anoLabel} · valor previsto${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
             <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
           </ChartCard>
 
@@ -313,7 +311,7 @@ export default function Captacao() {
           </ChartCard>
 
           {municipiosChart.length > 0 && (
-            <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor ${verbal ? 'prometido' : 'previsto'}`}>
+            <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor previsto`}>
               <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAzul} tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}
@@ -373,7 +371,9 @@ export default function Captacao() {
                       </p>
                       <p className="mt-0.5 truncate text-xs text-slate-500">{d.objeto} · {fmtRCompact(d.valorPrevisto)}{d.valorConfirmado ? ` · ${fmtRCompact(d.valorConfirmado)} conf.` : ''}</p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{d.status}</span>
+                    <span className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium ${d.status === 'Acordo Verbal' ? 'border border-dashed border-amber-300 text-amber-700 dark:border-amber-800 dark:text-amber-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
+                      {d.status === 'Acordo Verbal' && <LuHandshake className="h-3 w-3" />} {d.status}
+                    </span>
                   </summary>
                   <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-800">
                     <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
