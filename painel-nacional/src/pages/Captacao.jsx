@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { LuBanknote, LuCircleCheck, LuTrendingUp, LuTrophy, LuUsers, LuChartColumn, LuMapPin, LuHandshake, LuGauge } from 'react-icons/lu';
+import { LuBanknote, LuTrendingUp, LuTrophy, LuUsers, LuMapPin, LuHandshake, LuGauge } from 'react-icons/lu';
 import { useStore, STATUS_DESTINACAO, destinacaoConfirmada } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
@@ -25,17 +25,11 @@ function fmtRCompact(v) {
 
 const AZUL = CATEGORICO[0];
 const AQUA = CATEGORICO[2];
-const GRUPOS_ANDAMENTO = [
-  { key: 'Planejamento', cor: CATEGORICO[0] },
-  { key: 'Em execução', cor: CATEGORICO[1] },
-  { key: 'Entregue', cor: CATEGORICO[2] },
-];
 
-function grupoDoStatus(status) {
-  if (status === 'Entregue') return 'Entregue';
-  if (status === 'Acordo Verbal' || status === 'Em articulação' || status === 'Indicado') return 'Planejamento';
-  return 'Em execução';
-}
+// As 5 etapas do funil que o usuário acompanha passo a passo por captação — panorama
+// simplificado (fora Acordo Verbal, Confirmado e Contratado, que ficam só no detalhe de
+// cada item) pra não confundir com números demais na visão geral.
+const PAINEL_STATUSES = ['Em articulação', 'Indicado', 'Empenhado', 'Em licitação', 'Entregue'];
 
 function ChartCard({ title, sub, icon: Icon, children }) {
   return (
@@ -92,53 +86,6 @@ function BarCard({ data, valueFmt, height, color, trackColor, gradId, tooltipSty
   );
 }
 
-// Parte-do-todo (status/andamento): uma única barra horizontal empilhada, em vez de donut —
-// lê melhor com várias categorias e nomes longos (ex: "Aprovado em Comissão"), e a legenda
-// abaixo já carrega o valor direto, sem depender só do tooltip.
-function StackedBarCard({ segments, valueLabel, tooltipStyle }) {
-  const row = segments.reduce((acc, s) => ({ ...acc, [s.name]: s.value }), { name: '' });
-  const total = segments.reduce((s, seg) => s + seg.value, 0) || 1;
-  return (
-    <div className="mt-4">
-      <div style={{ height: 48 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={[row]} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-            <defs>
-              {segments.map((s) => (
-                <linearGradient key={s.name} id={`seg-${s.name.replace(/\s+/g, '')}`} x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor={s.cor} stopOpacity={0.75} />
-                  <stop offset="100%" stopColor={s.cor} />
-                </linearGradient>
-              ))}
-            </defs>
-            <XAxis type="number" hide />
-            <YAxis type="category" dataKey="name" hide />
-            <Tooltip cursor={{ fill: 'transparent' }} formatter={(v, name) => [`${v} ${valueLabel}`, name]} contentStyle={tooltipStyle} />
-            {segments.map((s, i) => (
-              <Bar
-                key={s.name}
-                dataKey={s.name}
-                stackId="a"
-                fill={`url(#seg-${s.name.replace(/\s+/g, '')})`}
-                radius={[i === 0 ? 10 : 0, i === segments.length - 1 ? 10 : 0, i === segments.length - 1 ? 10 : 0, i === 0 ? 10 : 0]}
-              />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {segments.map((s) => (
-          <div key={s.name} className="flex items-center gap-1.5 rounded-full py-1 pl-1.5 pr-2.5 text-xs" style={{ background: `${s.cor}1a` }}>
-            <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: s.cor }} />
-            <span className="font-medium" style={{ color: s.cor }}>{s.name}</span>
-            <span className="text-slate-500 dark:text-slate-400">{s.value} · {Math.round((s.value / total) * 100)}%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function Captacao() {
   const store = useStore();
   const { admin } = useAdmin();
@@ -166,7 +113,6 @@ export default function Captacao() {
   }, [store.destinacoes, ano]);
 
   const totalPrevisto = filtradas.reduce((s, d) => s + (d.valorPrevisto || 0), 0);
-  const totalConfirmado = filtradas.reduce((s, d) => s + (d.valorConfirmado || 0), 0);
 
   // Total captado por ano (sem filtrar por status) — sempre visível como número, inclusive
   // pra anos só com acordo verbal, como 2027 — não escondido dentro de um gráfico.
@@ -194,22 +140,12 @@ export default function Captacao() {
     [ranking]
   );
 
-  const statusChart = useMemo(() => {
+  const statusContagem = useMemo(() => {
     const contagem = {};
+    STATUS_DESTINACAO.forEach((s) => { contagem[s] = 0; });
     filtradas.forEach((d) => { contagem[d.status] = (contagem[d.status] || 0) + 1; });
-    return STATUS_DESTINACAO.map((s, i) => ({ name: s, value: contagem[s] || 0, cor: CATEGORICO[i % CATEGORICO.length][theme] })).filter((s) => s.value > 0);
-  }, [filtradas, theme]);
-
-  const andamentoContagem = useMemo(() => {
-    const contagem = { Planejamento: 0, 'Em execução': 0, Entregue: 0 };
-    filtradas.forEach((d) => { contagem[grupoDoStatus(d.status)] += 1; });
     return contagem;
   }, [filtradas]);
-
-  const andamentoChart = useMemo(
-    () => GRUPOS_ANDAMENTO.map((g) => ({ name: g.key, value: andamentoContagem[g.key], cor: g.cor[theme] })).filter((g) => g.value > 0),
-    [andamentoContagem, theme]
-  );
 
   const municipiosChart = useMemo(() => {
     const porMun = new Map();
@@ -242,7 +178,6 @@ export default function Captacao() {
   const tooltipStyle = { borderRadius: 12, border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0', fontSize: 12, background: theme === 'dark' ? '#0f172a' : '#fff', color: theme === 'dark' ? '#e2e8f0' : '#0f172a' };
 
   const anoLabel = ano === 'todos' ? 'Todos os anos' : String(ano);
-  const confirmadoPct = totalPrevisto > 0 ? (totalConfirmado / totalPrevisto) * 100 : 0;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -252,7 +187,7 @@ export default function Captacao() {
             <LuBanknote className="h-6 w-6 text-red-500" /> Captação de Recursos
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            {filtradas.length} destinações · {fmtR(totalPrevisto)} previsto{ano !== 'todos' ? ` em ${ano}` : ''}
+            {filtradas.length} destinações · {fmtR(totalPrevisto)} captado{ano !== 'todos' ? ` em ${ano}` : ''}
           </p>
         </div>
         <Link to="/" className="text-xs text-slate-400 hover:text-indigo-600">← Resumo geral</Link>
@@ -277,13 +212,11 @@ export default function Captacao() {
       </ScrollReveal>
 
       {filtradas.length > 0 && (
-        <ScrollReveal delay={0.07} className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard valueSize="text-2xl" label="Total previsto" value={fmtRCompact(totalPrevisto)} icon={<LuBanknote />} accent="indigo" />
-          <StatCard valueSize="text-2xl" label="Total confirmado" value={fmtRCompact(totalConfirmado)} icon={<LuCircleCheck />} accent="emerald" />
-          {ano === 'todos' ? (
-            <StatCard valueSize="text-2xl" label="Média por ano" value={fmtRCompact(totalPrevisto / (anosComPipelineFormal.length || 1))} icon={<LuTrendingUp />} accent="amber" />
-          ) : (
-            <StatCard valueSize="text-2xl" label="Destinações" value={filtradas.length} icon={<LuUsers />} accent="amber" />
+        <ScrollReveal delay={0.07} className={`mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 ${ano === 'todos' ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+          <StatCard valueSize="text-2xl" label="Total captado" value={fmtRCompact(totalPrevisto)} icon={<LuBanknote />} accent="indigo" />
+          <StatCard valueSize="text-2xl" label="Destinações" value={filtradas.length} icon={<LuUsers />} accent="amber" />
+          {ano === 'todos' && (
+            <StatCard valueSize="text-2xl" label="Média por ano" value={fmtRCompact(totalPrevisto / (anosComPipelineFormal.length || 1))} icon={<LuTrendingUp />} accent="emerald" />
           )}
           <StatCard valueSize="text-xl" label="Quem mais destinou" value={ranking[0]?.nome || '—'} sub={ranking[0] ? fmtRCompact(ranking[0].previsto) : undefined} icon={<LuTrophy />} accent="rose" />
         </ScrollReveal>
@@ -320,16 +253,15 @@ export default function Captacao() {
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.1} className="mt-5">
-          <ChartCard icon={LuGauge} title="Panorama do período" sub={`${anoLabel} · ${filtradas.length} destinações`}>
-            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <RadialGauge value={confirmadoPct} label="Confirmado" sub={`${fmtRCompact(totalConfirmado)} de ${fmtRCompact(totalPrevisto)}`} color="#10b981" />
-              {GRUPOS_ANDAMENTO.map((g) => (
+          <ChartCard icon={LuGauge} title="Panorama do período" sub={`${anoLabel} · ${filtradas.length} destinações · % em cada etapa`}>
+            <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-5">
+              {PAINEL_STATUSES.map((s) => (
                 <RadialGauge
-                  key={g.key}
-                  value={filtradas.length ? (andamentoContagem[g.key] / filtradas.length) * 100 : 0}
-                  label={g.key}
-                  sub={`${andamentoContagem[g.key]} destinaç${andamentoContagem[g.key] === 1 ? 'ão' : 'ões'}`}
-                  color={g.cor[theme]}
+                  key={s}
+                  value={filtradas.length ? (statusContagem[s] / filtradas.length) * 100 : 0}
+                  label={s}
+                  sub={`${statusContagem[s]} destinaç${statusContagem[s] === 1 ? 'ão' : 'ões'}`}
+                  color={CATEGORICO[STATUS_DESTINACAO.indexOf(s) % CATEGORICO.length][theme]}
                 />
               ))}
             </div>
@@ -339,16 +271,12 @@ export default function Captacao() {
 
       {filtradas.length > 0 && (
         <ScrollReveal delay={0.12} className="mt-4 grid gap-4 sm:grid-cols-2">
-          <ChartCard icon={LuTrophy} title="Quem mais destinou" sub={`${anoLabel} · valor previsto${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
+          <ChartCard icon={LuTrophy} title="Quem mais destinou" sub={`${anoLabel} · valor captado${ranking.length > 8 ? ` · top 8 de ${ranking.length}` : ''}`}>
             <BarCard data={rankingChart} valueFmt={fmtRCompact} color={corAzul} trackColor={trackColor} gradId="gradRanking" tooltipStyle={tooltipStyle} />
           </ChartCard>
 
-          <ChartCard icon={LuChartColumn} title={ano === 'todos' ? 'Status das destinações' : `Andamento em ${anoLabel}`} sub={ano === 'todos' ? 'Por etapa atual' : 'Destinações por etapa'}>
-            <StackedBarCard segments={ano === 'todos' ? statusChart : andamentoChart} valueLabel="destinações" tooltipStyle={tooltipStyle} />
-          </ChartCard>
-
           {municipiosChart.length > 0 && (
-            <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor previsto`}>
+            <ChartCard icon={LuMapPin} title="Top municípios / unidades" sub={`${anoLabel} · valor captado`}>
               <BarCard data={municipiosChart} valueFmt={fmtRCompact} color={corAqua} trackColor={trackColor} gradId="gradMunicipios" tooltipStyle={tooltipStyle} />
             </ChartCard>
           )}
