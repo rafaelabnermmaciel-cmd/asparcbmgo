@@ -51,6 +51,10 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 
 ## 4. Editar a lista de quartéis (direto na tela, sem código)
 
+O script já cadastra as 60 unidades da Convocação nº 106/2026, cada uma com o(s) militar(es)
+designado(s) pra relações institucionais (coluna `responsavel_padrao` — é só a sugestão que
+aparece pré-preenchida no campo "Responsável" do Cadastro; quem preenche pode trocar).
+
 1. Menu da esquerda → **Table Editor** → clique na tabela **quarteis**.
 2. É uma planilha: clique em cima de qualquer célula pra editar o texto direto.
 3. Pra adicionar um quartel novo: botão **Insert** → **Insert row** → preencha:
@@ -58,6 +62,7 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
    - `nome`: como deve aparecer no site (ex: `10º BBM`)
    - `municipio`: cidade onde fica
    - `tipo`: livre (ex: `BBM`, `CIBM`, `Comando`)
+   - `responsavel_padrao`: nome(s) sugerido(s) pro campo Responsável (opcional)
 4. Pra apagar um quartel errado: clique na linha (seleciona) → ícone de lixeira.
 
 Você pode voltar aqui a qualquer momento pra ajustar — o site sempre mostra a lista atual
