@@ -12,10 +12,12 @@
 // sempre manda a mensagem, mesmo sem nada de novo — é um resumo periódico, não um alerta de
 // mudança (esse é o fetch-tramitacoes.js).
 //
-// ⚠️ Senado ainda não é coberto na pauta (só a Câmara) — cobrir o Senado exige descobrir o
-// endpoint certo de agenda dele, e o histórico deste projeto (ver fetch-tramitacoes.js) mostra
-// que os endpoints "legado" do Senado costumam ter formato bem diferente do documentado, então
-// isso fica pra uma próxima rodada com log real em vez de chute.
+// ⚠️ A pauta do Senado (pautaSenadoDaSemana) usa um endpoint cujo formato de resposta nunca foi
+// confirmado com uma execução real — o mesmo aconteceu com a checagem de tramitação do Senado
+// (fetch-tramitacoes.js) e o "formato documentado" acabou nem batendo com a resposta de verdade.
+// Por isso ela sempre loga a resposta bruta, além de tentar um parsing best-effort: se o
+// palpite de formato estiver errado, a lista fica vazia por enquanto e o log é o que permite
+// corrigir de verdade na próxima rodada, sem chutar de novo às cegas.
 //
 // Uso:
 //   node scripts/fetch-agenda.js
@@ -26,6 +28,7 @@ import { getJson, mapWithConcurrency } from './lib/http.js';
 import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
+const SENADO_BASE = 'https://legis.senado.leg.br/dadosabertos';
 const PATH = 'public/data/acompanhamento-legislativo.json';
 // Cobre os eixos que o CBM-GO acompanha (bombeiros, polícia militar, militares estaduais,
 // segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
@@ -140,9 +143,65 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
   return porDia;
 }
 
+// Busca a agenda do Senado (plenário + comissões) pra mesma janela — ver a ressalva no topo do
+// arquivo: o formato de resposta é especulativo, então sempre loga a resposta bruta e nunca
+// deixa uma falha de parsing derrubar o script (só volta um Map vazio nesse caso).
+async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
+  const idsMonitorados = new Set(monitorados.filter((p) => p.idSenado).map((p) => p.idSenado));
+  let resp;
+  try {
+    resp = await getJson(`${SENADO_BASE}/agenda/${dataInicio}/${dataFim}`);
+  } catch (err) {
+    console.warn(`[agenda] falha ao buscar agenda do Senado: ${err.message}`);
+    return new Map();
+  }
+  console.log(`[agenda] resposta bruta da agenda do Senado (formato ainda não confirmado): ${JSON.stringify(resp).slice(0, 2000)}`);
+
+  try {
+    const reunioes = resp?.AgendaReunioes?.Reunioes?.Reuniao || resp?.Reunioes?.Reuniao || resp?.agenda?.reunioes || [];
+    const lista = Array.isArray(reunioes) ? reunioes : [reunioes].filter(Boolean);
+
+    const porDia = new Map();
+    for (const r of lista) {
+      const dataReuniao = r?.Data || r?.data || '';
+      const dia = dataReuniao.slice(0, 10);
+      if (!dia) continue;
+      const orgao = r?.NomeOrgao || r?.Colegiado || r?.nomeOrgao || 'Senado Federal';
+      const itensBrutos = r?.Materias?.Materia || r?.Itens?.Item || [];
+      const itens = (Array.isArray(itensBrutos) ? itensBrutos : [itensBrutos].filter(Boolean))
+        .map((m) => {
+          const ementa = m?.Ementa || m?.ementa || '';
+          const relevante = (m?.Codigo && idsMonitorados.has(m.Codigo)) || bateComPalavraChave(ementa);
+          if (!relevante) return null;
+          const rotulo = m?.Sigla && m?.Numero ? `${m.Sigla} ${m.Numero}${m.Ano ? `/${m.Ano}` : ''}` : 'Item da pauta';
+          return { rotulo, ementa: truncar(ementa, 220) };
+        })
+        .filter(Boolean);
+      if (itens.length === 0) continue;
+      if (!porDia.has(dia)) porDia.set(dia, []);
+      porDia.get(dia).push({ hora: r?.Hora || r?.hora || '', orgao, itens });
+    }
+    return porDia;
+  } catch (err) {
+    console.warn(`[agenda] resposta da agenda do Senado veio num formato inesperado, ignorando desta vez: ${err.message}`);
+    return new Map();
+  }
+}
+
+function mesclarPorDia(...mapas) {
+  const combinado = new Map();
+  for (const mapa of mapas) {
+    for (const [dia, sessoes] of mapa) {
+      if (!combinado.has(dia)) combinado.set(dia, []);
+      combinado.get(dia).push(...sessoes);
+    }
+  }
+  return combinado;
+}
+
 function formatarPauta(porDia) {
   if (porDia.size === 0) {
-    return 'Nenhuma sessão com item de interesse do CBM-GO na Câmara nos próximos 7 dias.';
+    return 'Nenhuma sessão com item de interesse do CBM-GO na Câmara ou no Senado nos próximos 7 dias.';
   }
   const dias = [...porDia.keys()].sort();
   return dias
@@ -201,9 +260,13 @@ async function main() {
   const fim = maisDias(inicio, 7);
   const inicioMenos7 = maisDias(inicio, -7);
 
-  const [porDia, novos] = await Promise.all([
+  const [porDiaCamara, porDiaSenado, novos] = await Promise.all([
     pautaDaSemana(monitorados, inicio, fim).catch((err) => {
-      console.warn(`[agenda] falha ao checar pauta: ${err.message}`);
+      console.warn(`[agenda] falha ao checar pauta da Câmara: ${err.message}`);
+      return new Map();
+    }),
+    pautaSenadoDaSemana(monitorados, inicio, fim).catch((err) => {
+      console.warn(`[agenda] falha ao checar pauta do Senado: ${err.message}`);
       return new Map();
     }),
     projetosNovosPorTema(monitorados, inicioMenos7).catch((err) => {
@@ -211,6 +274,7 @@ async function main() {
       return [];
     }),
   ]);
+  const porDia = mesclarPorDia(porDiaCamara, porDiaSenado);
 
   const linhasNovos = novos.length
     ? novos.map((c) => `• ${c.tipo} ${c.numero} — ${truncar(c.ementa, 180)}`).join('\n')
