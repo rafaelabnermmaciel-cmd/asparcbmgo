@@ -52,19 +52,20 @@ async function statusCamara(tipo, numero) {
 
 async function statusSenado(tipo, numero) {
   const { num, ano } = parseNumeroAno(numero);
-  // ⚠️ Confirmado em produção: este endpoint está descontinuado pelo próprio Senado (a
-  // resposta inclui um aviso "Descontinuacao" apontando /dadosabertos/processo como
-  // substituto), mas pra boa parte das proposições ele ainda devolve Materias.Materia
-  // preenchido — só não bate com os nomes de campo que a doc antiga descrevia
-  // (IdentificacaoMateria.CodigoMateria). Loga o objeto Materia inteiro (sem cortar tão cedo)
-  // pra descobrir os nomes reais dos campos no próximo log real.
+  // ⚠️ Este endpoint está descontinuado pelo próprio Senado (a resposta inclui um aviso
+  // "Descontinuacao" apontando /dadosabertos/processo como substituto), mas segue respondendo
+  // pra boa parte das proposições — só que com um formato bem mais simples do que a doc antiga
+  // descrevia. Confirmado em produção: o item de Materia vem achatado (ex: {"Codigo": "156228",
+  // "Sigla": "PL", "Numero": "01146", "Ano": "2023", "Ementa": ..., "Autor": ..., "Data": ...}),
+  // não aninhado em "IdentificacaoMateria". O endpoint de detalhe (/materia/{codigo}) ainda não
+  // teve seu formato confirmado — se a situação não bater, loga a resposta inteira.
   const busca = await getJson(`${SENADO_BASE}/materia/pesquisa/lista?sigla=${encodeURIComponent(tipo)}&numero=${num}&ano=${ano}`);
   const materias = busca?.PesquisaBasicaMateria?.Materias?.Materia;
   const item = Array.isArray(materias) ? materias[0] : materias;
-  const codigo = item?.IdentificacaoMateria?.CodigoMateria;
+  const codigo = item?.Codigo || item?.IdentificacaoMateria?.CodigoMateria;
   if (!codigo) {
     if (item) {
-      console.warn(`[senado] ${tipo} ${numero}: matéria encontrada na busca, mas sem IdentificacaoMateria.CodigoMateria — objeto Materia: ${JSON.stringify(item).slice(0, 2000)}`);
+      console.warn(`[senado] ${tipo} ${numero}: matéria encontrada na busca, mas sem campo Codigo — objeto Materia: ${JSON.stringify(item).slice(0, 2000)}`);
     } else {
       console.warn(`[senado] ${tipo} ${numero}: matéria não encontrada na busca — resposta bruta: ${JSON.stringify(busca).slice(0, 500)}`);
     }
@@ -74,7 +75,7 @@ async function statusSenado(tipo, numero) {
   const autuacao = detalhe?.DetalheMateria?.Materia?.SituacaoAtual?.Autuacoes?.Autuacao;
   const situ = Array.isArray(autuacao) ? autuacao[0]?.Situacao : autuacao?.Situacao;
   if (!situ?.DataSituacao) {
-    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — resposta bruta: ${JSON.stringify(detalhe).slice(0, 500)}`);
+    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — resposta bruta: ${JSON.stringify(detalhe).slice(0, 2000)}`);
     return null;
   }
   return {
