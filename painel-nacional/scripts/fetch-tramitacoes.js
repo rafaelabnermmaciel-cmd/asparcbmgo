@@ -57,8 +57,7 @@ async function statusSenado(tipo, numero) {
   // pra boa parte das proposições — só que com um formato bem mais simples do que a doc antiga
   // descrevia. Confirmado em produção: o item de Materia vem achatado (ex: {"Codigo": "156228",
   // "Sigla": "PL", "Numero": "01146", "Ano": "2023", "Ementa": ..., "Autor": ..., "Data": ...}),
-  // não aninhado em "IdentificacaoMateria". O endpoint de detalhe (/materia/{codigo}) ainda não
-  // teve seu formato confirmado — se a situação não bater, loga a resposta inteira.
+  // não aninhado em "IdentificacaoMateria".
   const busca = await getJson(`${SENADO_BASE}/materia/pesquisa/lista?sigla=${encodeURIComponent(tipo)}&numero=${num}&ano=${ano}`);
   const materias = busca?.PesquisaBasicaMateria?.Materias?.Materia;
   const item = Array.isArray(materias) ? materias[0] : materias;
@@ -71,18 +70,19 @@ async function statusSenado(tipo, numero) {
     }
     return null;
   }
-  const detalhe = await getJson(`${SENADO_BASE}/materia/${codigo}`);
-  const autuacao = detalhe?.DetalheMateria?.Materia?.SituacaoAtual?.Autuacoes?.Autuacao;
-  const situ = Array.isArray(autuacao) ? autuacao[0]?.Situacao : autuacao?.Situacao;
+  // ⚠️ /materia/{codigo} (usado antes aqui) NUNCA tem "SituacaoAtual" — confirmado em produção
+  // (loga as seções presentes, e ela nunca aparece). A própria resposta desse endpoint lista,
+  // em OutrasInformacoes.Servico, o serviço certo pra isso: "SituacaoAtualMateria", em
+  // /materia/situacaoatual/{codigo}. Formato de resposta desse endpoint ainda não confirmado —
+  // loga sempre até confirmar.
+  const situacao = await getJson(`${SENADO_BASE}/materia/situacaoatual/${codigo}`);
+  console.log(`[senado] ${tipo} ${numero}: resposta de /materia/situacaoatual/${codigo}: ${JSON.stringify(situacao).slice(0, 3000)}`);
+  const materiaSitu = situacao?.SituacaoAtualMateria?.Materias?.Materia;
+  const itemSitu = Array.isArray(materiaSitu) ? materiaSitu[0] : materiaSitu;
+  const situAtual = itemSitu?.SituacaoAtual?.Autuacoes?.Autuacao;
+  const situ = Array.isArray(situAtual) ? situAtual[0]?.Situacao : situAtual?.Situacao;
   if (!situ?.DataSituacao) {
-    // Loga as seções que a matéria realmente tem (barato e sempre conclusivo, mesmo se o objeto
-    // for grande) e, por garantia, o objeto inteiro também — pra confirmar se "SituacaoAtual"
-    // simplesmente não existe mais nesse endpoint (aí precisa migrar pra
-    // /dadosabertos/processo/{IdentificacaoProcesso}, que a própria resposta indica como
-    // substituto) ou se só está em outro caminho.
-    const secoes = Object.keys(detalhe?.DetalheMateria?.Materia || {});
-    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — seções presentes: ${secoes.join(', ')}`);
-    console.warn(`[senado] ${tipo} ${numero}: resposta bruta completa: ${JSON.stringify(detalhe).slice(0, 5000)}`);
+    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} — /materia/situacaoatual não bateu com o formato esperado, ver log acima.`);
     return null;
   }
   return {
