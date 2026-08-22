@@ -25,16 +25,16 @@ clicável, sem precisar programar.
 `public/data/` (só leitura, filtrado do painel-nacional — ver
 `scripts/gerar-parlamentares-go.js`).
 
-**Quartéis, interlocutores e captações** vivem num banco **Supabase** (Postgres gerenciado,
-plano gratuito). O navegador acessa o Supabase diretamente — sem servidor próprio no meio —
-usando a "anon public key", uma chave feita pra ficar visível no código do site: quem protege
-os dados são as regras de segurança (RLS) definidas em `supabase/schema.sql`, não o sigilo da
-chave. Isso significa:
+**Quartéis, militares, interlocutores e captações** vivem num banco **Supabase** (Postgres
+gerenciado, plano gratuito). O navegador acessa o Supabase diretamente — sem servidor próprio
+no meio — usando a "anon public key", uma chave feita pra ficar visível no código do site:
+quem protege os dados são as regras de segurança (RLS) definidas em `supabase/schema.sql`, não
+o sigilo da chave. Isso significa:
 
 - **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
 - **Escrita**: só a tabela `captacoes` aceita gravação vinda do site (o formulário de
-  Cadastro). As tabelas `quarteis` e `interlocutores` são editadas direto no painel do
-  Supabase (Table Editor — uma tela de planilha, sem precisar de código nem de git).
+  Cadastro). As tabelas `quarteis`, `militares` e `interlocutores` são editadas direto no
+  painel do Supabase (Table Editor — uma tela de planilha, sem precisar de código nem de git).
 - **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
   por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
@@ -53,9 +53,10 @@ do Supabase ficam versionadas em `src/lib/supabase-config.js` (ver **SETUP.md**,
 
 ## Pendências de dados
 
-- **Lista de quartéis** — o `supabase/schema.sql` já semeia uma lista provisória (extraída de
-  registros antigos do painel-nacional). Ajuste direto na tabela `quarteis` pelo Table Editor
-  do Supabase (SETUP.md, seção 4) — sem precisar rodar SQL de novo.
+- **Quartéis e militares** — o `supabase/schema.sql` já semeia as 61 unidades (60 do CBMGO +
+  SENASP/MJ) e os 122 militares da Convocação nº 106/2026 (posto, RG, nome de guerra, OBM).
+  Ajuste direto nas tabelas `quarteis`/`militares` pelo Table Editor do Supabase (SETUP.md,
+  seção 4) — sem precisar rodar SQL de novo.
 - **Interlocutores por parlamentar** — tabela vazia até alguém preencher (SETUP.md, última
   seção).
 

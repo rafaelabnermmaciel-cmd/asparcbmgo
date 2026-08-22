@@ -45,16 +45,19 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 
 ### Conferir se deu certo
 
-- Menu da esquerda → **Table Editor**: devem aparecer 3 tabelas — `quarteis` (já com 10 linhas
-  de exemplo), `interlocutores` (vazia) e `captacoes` (vazia).
+- Menu da esquerda → **Table Editor**: devem aparecer 4 tabelas — `quarteis` (61 linhas: as 60
+  unidades do CBMGO + SENASP/MJ), `militares` (122 linhas — um militar por linha), `interlocutores`
+  (vazia) e `captacoes` (vazia).
 - Menu da esquerda → **Storage**: deve aparecer um bucket chamado `anexos`.
 
-## 4. Editar a lista de quartéis (direto na tela, sem código)
+## 4. Editar quartéis e militares (direto na tela, sem código)
 
-O script já cadastra as 60 unidades da Convocação nº 106/2026, cada uma com o(s) militar(es)
-designado(s) pra relações institucionais (coluna `responsavel_padrao` — é só a sugestão que
-aparece pré-preenchida no campo "Responsável" do Cadastro; quem preenche pode trocar).
+O script já cadastra as 61 unidades e os 122 militares da Convocação nº 106/2026 (posto, RG,
+nome de guerra e a unidade de cada um — exatamente como no documento). No Cadastro, quando só
+há um militar designado pra um quartel, o campo "Responsável" já vem sugerido com ele; quando
+há mais de um, os nomes aparecem como dica abaixo do campo (a pessoa escolhe/edita).
 
+**Tabela `quarteis`** (a unidade em si):
 1. Menu da esquerda → **Table Editor** → clique na tabela **quarteis**.
 2. É uma planilha: clique em cima de qualquer célula pra editar o texto direto.
 3. Pra adicionar um quartel novo: botão **Insert** → **Insert row** → preencha:
@@ -62,11 +65,16 @@ aparece pré-preenchida no campo "Responsável" do Cadastro; quem preenche pode 
    - `nome`: como deve aparecer no site (ex: `10º BBM`)
    - `municipio`: cidade onde fica
    - `tipo`: livre (ex: `BBM`, `CIBM`, `Comando`)
-   - `responsavel_padrao`: nome(s) sugerido(s) pro campo Responsável (opcional)
 4. Pra apagar um quartel errado: clique na linha (seleciona) → ícone de lixeira.
 
-Você pode voltar aqui a qualquer momento pra ajustar — o site sempre mostra a lista atual
-desta tabela, sem precisar de nenhum passo extra.
+**Tabela `militares`** (quem está designado em cada quartel):
+1. Table Editor → tabela **militares**.
+2. Pra adicionar: **Insert** → **Insert row** → preencha `posto`, `rg`, `nome` e `quartel_id`
+   (tem que ser um `id` que já exista na tabela `quarteis`).
+3. Pra corrigir ou remover alguém, edite/apague a linha normalmente.
+
+Você pode voltar aqui a qualquer momento pra ajustar — o site sempre mostra os dados atuais
+dessas tabelas, sem precisar de nenhum passo extra.
 
 ## 5. Pegar a URL e a chave do projeto (os 2 valores que preciso)
 

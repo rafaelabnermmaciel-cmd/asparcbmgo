@@ -55,6 +55,24 @@ export function useQuarteis() {
   return state;
 }
 
+// Um militar por linha, exatamente como na Convocação 106/2026 (ver supabase/schema.sql):
+// posto, RG, nome de guerra e o quartel (quartel_id). Usado no Cadastro pra sugerir quem já
+// está designado pra articulação institucional naquele quartel.
+export function useMilitares() {
+  const [state, setState] = useState({ loading: true, militares: [] });
+  useEffect(() => {
+    if (!supabaseConfigurado) { setState({ loading: false, militares: [] }); return; }
+    let cancelled = false;
+    supabase.from('militares').select('*').then(({ data, error }) => {
+      if (cancelled) return;
+      if (error) console.warn('[data] falha ao carregar militares:', error.message);
+      setState({ loading: false, militares: data || [] });
+    });
+    return () => { cancelled = true; };
+  }, []);
+  return state;
+}
+
 export function useInterlocutores() {
   const [state, setState] = useState({ loading: true, interlocutores: {} });
   useEffect(() => {

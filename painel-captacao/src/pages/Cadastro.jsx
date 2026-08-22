@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { LuCircleCheck, LuTriangleAlert, LuFileText, LuImage } from 'react-icons/lu';
-import { useParlamentaresGO, useQuarteis, useCaptacoes, STATUS_CAPTACAO } from '../lib/data.js';
+import { useParlamentaresGO, useQuarteis, useMilitares, useCaptacoes, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import FileField from '../components/FileField.jsx';
@@ -29,6 +29,7 @@ const VAZIO = {
 export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
   const { quarteis } = useQuarteis();
+  const { militares } = useMilitares();
   const { captacoes, submitCaptacao } = useCaptacoes();
 
   const [f, setF] = useState(VAZIO);
@@ -40,19 +41,19 @@ export default function Cadastro() {
 
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
+  const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
+  const militaresDoQuartel = useMemo(() => militares.filter((m) => m.quartel_id === f.quartelId), [militares, f.quartelId]);
+
   // Ao escolher o quartel, sugere como responsável o militar designado pra articulação
   // institucional naquela unidade (Convocação 106/2026) — só como ponto de partida, sem
-  // travar o campo: se já tiver algo digitado, ou vier mais de um nome sugerido, a pessoa
-  // decide/edita normalmente.
+  // travar o campo: se já tiver algo digitado, ou tiver mais de um militar designado, a
+  // pessoa decide/edita normalmente (a lista completa aparece como dica abaixo do campo).
   function selecionarQuartel(e) {
     const quartelId = e.target.value;
-    const quartel = quarteis.find((q) => q.id === quartelId);
-    const sugestao = quartel?.responsavel_padrao?.includes(';') ? '' : quartel?.responsavel_padrao || '';
+    const doQuartel = militares.filter((m) => m.quartel_id === quartelId);
+    const sugestao = doQuartel.length === 1 ? `${doQuartel[0].posto} ${doQuartel[0].nome}` : '';
     setF((prev) => ({ ...prev, quartelId, responsavel: prev.responsavel || sugestao }));
   }
-
-  const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
-  const quartelSelecionado = useMemo(() => quarteis.find((q) => q.id === f.quartelId), [quarteis, f.quartelId]);
 
   const cadastrosFiltrados = useMemo(
     () => (filtroQuartel ? captacoes.filter((c) => c.quartelId === filtroQuartel) : captacoes),
@@ -139,8 +140,10 @@ export default function Cadastro() {
           <div>
             <p className={labelClass}>Responsável pela articulação *</p>
             <input className={inputClass} value={f.responsavel} onChange={set('responsavel')} placeholder="Quem do quartel está conduzindo" />
-            {quartelSelecionado?.responsavel_padrao && (
-              <p className="mt-1 text-[11px] text-slate-400">Designado(s) pra este quartel: {quartelSelecionado.responsavel_padrao}</p>
+            {militaresDoQuartel.length > 0 && (
+              <p className="mt-1 text-[11px] text-slate-400">
+                Designado(s) pra este quartel: {militaresDoQuartel.map((m) => `${m.posto} ${m.nome}`).join('; ')}
+              </p>
             )}
           </div>
           <div>
