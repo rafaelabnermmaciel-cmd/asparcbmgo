@@ -1,0 +1,562 @@
+{
+  "camara:121948": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PP",
+    "votosNominais": 95518,
+    "topMunicipios": [
+      {
+        "municipio": "Goiatuba",
+        "votos": 6103
+      },
+      {
+        "municipio": "Cidade Ocidental",
+        "votos": 3652
+      },
+      {
+        "municipio": "Mineiros",
+        "votos": 3598
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 3309
+      },
+      {
+        "municipio": "Itapuranga",
+        "votos": 3187
+      }
+    ]
+  },
+  "camara:178876": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "MDB",
+    "votosNominais": 92469,
+    "topMunicipios": [
+      {
+        "municipio": "Luziânia",
+        "votos": 25850
+      },
+      {
+        "municipio": "Valparaíso de Goiás",
+        "votos": 9060
+      },
+      {
+        "municipio": "Planaltina",
+        "votos": 4368
+      },
+      {
+        "municipio": "Itapaci",
+        "votos": 4073
+      },
+      {
+        "municipio": "Cristalina",
+        "votos": 3552
+      }
+    ]
+  },
+  "camara:220571": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PL",
+    "votosNominais": 70529,
+    "topMunicipios": [
+      {
+        "municipio": "Bom Jesus de Goiás",
+        "votos": 9800
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 5682
+      },
+      {
+        "municipio": "Itumbiara",
+        "votos": 4552
+      },
+      {
+        "municipio": "Goiatuba",
+        "votos": 2473
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 2265
+      }
+    ]
+  },
+  "camara:220565": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PT",
+    "votosNominais": 96714,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 44560
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 10302
+      },
+      {
+        "municipio": "Senador Canedo",
+        "votos": 1914
+      },
+      {
+        "municipio": "Trindade",
+        "votos": 1635
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 1614
+      }
+    ]
+  },
+  "camara:220570": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PSD",
+    "votosNominais": 54791,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 13140
+      },
+      {
+        "municipio": "São Luís de Montes Belos",
+        "votos": 9217
+      },
+      {
+        "municipio": "Palmeiras de Goiás",
+        "votos": 4438
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 2202
+      },
+      {
+        "municipio": "Formosa",
+        "votos": 1440
+      }
+    ]
+  },
+  "camara:204412": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "UNIÃO",
+    "votosNominais": 87919,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 45315
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 12617
+      },
+      {
+        "municipio": "Trindade",
+        "votos": 3053
+      },
+      {
+        "municipio": "Senador Canedo",
+        "votos": 3002
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 2163
+      }
+    ]
+  },
+  "camara:160598": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PDT",
+    "votosNominais": 142155,
+    "topMunicipios": [
+      {
+        "municipio": "Trindade",
+        "votos": 12755
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 3900
+      },
+      {
+        "municipio": "Caiapônia",
+        "votos": 3387
+      },
+      {
+        "municipio": "Quirinópolis",
+        "votos": 3304
+      },
+      {
+        "municipio": "Cabeceiras",
+        "votos": 3238
+      }
+    ]
+  },
+  "camara:204419": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PSC",
+    "votosNominais": 117981,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 14310
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 8667
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 5657
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 4202
+      },
+      {
+        "municipio": "Anicuns",
+        "votos": 3805
+      }
+    ]
+  },
+  "camara:220568": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PL",
+    "votosNominais": 200586,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 83604
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 14547
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 11654
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 5525
+      },
+      {
+        "municipio": "Rio Verde",
+        "votos": 4766
+      }
+    ]
+  },
+  "camara:220567": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "REPUBLICANOS",
+    "votosNominais": 56026,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 15734
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 5441
+      },
+      {
+        "municipio": "Planaltina",
+        "votos": 2861
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 2338
+      },
+      {
+        "municipio": "Águas Lindas de Goiás",
+        "votos": 2289
+      }
+    ]
+  },
+  "camara:204391": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PP",
+    "votosNominais": 104504,
+    "topMunicipios": [
+      {
+        "municipio": "Águas Lindas de Goiás",
+        "votos": 11908
+      },
+      {
+        "municipio": "Catalão",
+        "votos": 9088
+      },
+      {
+        "municipio": "Jaraguá",
+        "votos": 6917
+      },
+      {
+        "municipio": "Formosa",
+        "votos": 5795
+      },
+      {
+        "municipio": "Porangatu",
+        "votos": 4106
+      }
+    ]
+  },
+  "camara:220566": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PSDB",
+    "votosNominais": 51346,
+    "topMunicipios": [
+      {
+        "municipio": "Valparaíso de Goiás",
+        "votos": 18331
+      },
+      {
+        "municipio": "Novo Gama",
+        "votos": 4661
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 4518
+      },
+      {
+        "municipio": "Cidade Ocidental",
+        "votos": 4332
+      },
+      {
+        "municipio": "Planaltina",
+        "votos": 3159
+      }
+    ]
+  },
+  "camara:166402": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PL",
+    "votosNominais": 81996,
+    "topMunicipios": [
+      {
+        "municipio": "Caldas Novas",
+        "votos": 7515
+      },
+      {
+        "municipio": "Novo Gama",
+        "votos": 7098
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 6794
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 5303
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 2493
+      }
+    ]
+  },
+  "camara:220572": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "MDB",
+    "votosNominais": 80464,
+    "topMunicipios": [
+      {
+        "municipio": "Rio Verde",
+        "votos": 15462
+      },
+      {
+        "municipio": "Mineiros",
+        "votos": 4092
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 4046
+      },
+      {
+        "municipio": "Uruaçu",
+        "votos": 2937
+      },
+      {
+        "municipio": "Morrinhos",
+        "votos": 2626
+      }
+    ]
+  },
+  "camara:204390": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PL",
+    "votosNominais": 90162,
+    "topMunicipios": [
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 33596
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 7887
+      },
+      {
+        "municipio": "Pontalina",
+        "votos": 3343
+      },
+      {
+        "municipio": "Porangatu",
+        "votos": 2771
+      },
+      {
+        "municipio": "Niquelândia",
+        "votos": 2001
+      }
+    ]
+  },
+  "camara:74371": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "PT",
+    "votosNominais": 83539,
+    "topMunicipios": [
+      {
+        "municipio": "Anápolis",
+        "votos": 17228
+      },
+      {
+        "municipio": "Goiânia",
+        "votos": 5461
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 3964
+      },
+      {
+        "municipio": "Valparaíso de Goiás",
+        "votos": 3581
+      },
+      {
+        "municipio": "Planaltina",
+        "votos": 2146
+      }
+    ]
+  },
+  "camara:220569": {
+    "ano": 2022,
+    "cargo": "Deputado Federal",
+    "partido": "UNIÃO",
+    "votosNominais": 254653,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 117297
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 43846
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 20319
+      },
+      {
+        "municipio": "Senador Canedo",
+        "votos": 11335
+      },
+      {
+        "municipio": "Trindade",
+        "votos": 10464
+      }
+    ]
+  },
+  "senado:5895": {
+    "ano": 2018,
+    "cargo": "Senador",
+    "partido": "PRP",
+    "votosNominais": 1557415,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 395277
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 110504
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 87001
+      },
+      {
+        "municipio": "Rio Verde",
+        "votos": 47958
+      },
+      {
+        "municipio": "Trindade",
+        "votos": 29846
+      }
+    ]
+  },
+  "senado:5899": {
+    "ano": 2018,
+    "cargo": "Senador",
+    "partido": "PP",
+    "votosNominais": 1729637,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 522008
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 153904
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 92133
+      },
+      {
+        "municipio": "Senador Canedo",
+        "votos": 46832
+      },
+      {
+        "municipio": "Rio Verde",
+        "votos": 45668
+      }
+    ]
+  },
+  "senado:5070": {
+    "ano": 2022,
+    "cargo": "Senador",
+    "partido": "PL",
+    "votosNominais": 799022,
+    "topMunicipios": [
+      {
+        "municipio": "Goiânia",
+        "votos": 208630
+      },
+      {
+        "municipio": "Anápolis",
+        "votos": 56853
+      },
+      {
+        "municipio": "Aparecida de Goiânia",
+        "votos": 45962
+      },
+      {
+        "municipio": "Rio Verde",
+        "votos": 29945
+      },
+      {
+        "municipio": "Luziânia",
+        "votos": 19198
+      }
+    ]
+  }
+}
