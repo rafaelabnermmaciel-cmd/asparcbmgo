@@ -8,7 +8,7 @@ captação) e um formulário de cadastro de articulações.
 **Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
 clicável, sem precisar programar.
 
-## Estrutura das 3 seções
+## Estrutura das 4 seções
 
 1. **Dashboard** (`/`) — pódio e ranking dos quartéis que mais captam (R$) e mais articulam
    (cadastros + reuniões), com níveis (bronze/prata/ouro/diamante) e atividade recente.
@@ -18,6 +18,8 @@ clicável, sem precisar programar.
 3. **Cadastrar captação** (`/cadastro`) — formulário: quartel, responsável, stakeholder,
    parlamentar, objeto, valor previsto, nº de reuniões, estágio (Primeiro contato → Em
    articulação → Agenda marcada → ... → Entregue), anexos (documentos/fotos).
+4. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
+   direto no site (sem precisar entrar no Supabase).
 
 ## Como os dados funcionam
 
@@ -32,13 +34,19 @@ quem protege os dados são as regras de segurança (RLS) definidas em `supabase/
 o sigilo da chave. Isso significa:
 
 - **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
-- **Escrita**: só a tabela `captacoes` aceita gravação vinda do site (o formulário de
-  Cadastro). As tabelas `quarteis`, `militares` e `interlocutores` são editadas direto no
-  painel do Supabase (Table Editor — uma tela de planilha, sem precisar de código nem de git).
+- **Escrita**: `captacoes` aceita gravação vinda do formulário de Cadastro; `quarteis` e
+  `militares` aceitam criar/editar/remover pela aba **Gerenciamento**, direto no site.
+  `interlocutores` continua só leitura pelo site — edite pelo Table Editor do Supabase.
 - **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
   por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
   público pra leitura) — limite de ~4MB por arquivo (ver `src/components/FileField.jsx`).
+
+⚠️ **Sobre segurança**: o site não tem login — qualquer pessoa com o link consegue cadastrar
+captações e editar quartéis/militares pela aba Gerenciamento (é o mesmo modelo do formulário
+de Cadastro). Pra um painel interno pequeno costuma ser um risco aceitável; se um dia isso
+precisar de controle de quem pode editar o quê, dá pra adicionar login do Supabase (Auth) sem
+redesenhar o resto — me avise quando chegar nesse ponto.
 
 ## Deploy (GitHub Pages — mesma automação do painel-nacional)
 

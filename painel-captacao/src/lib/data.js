@@ -40,37 +40,76 @@ export function useResultadosEleitorais() {
   return state;
 }
 
+// Quartéis são totalmente editáveis pelo próprio site (aba Gerenciamento) — adicionar,
+// renomear, apagar — sem precisar entrar no Supabase (RLS permite, ver supabase/schema.sql).
 export function useQuarteis() {
   const [state, setState] = useState({ loading: true, quarteis: [] });
-  useEffect(() => {
+
+  const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, quarteis: [] }); return; }
-    let cancelled = false;
-    supabase.from('quarteis').select('*').order('nome').then(({ data, error }) => {
-      if (cancelled) return;
-      if (error) console.warn('[data] falha ao carregar quarteis:', error.message);
-      setState({ loading: false, quarteis: data || [] });
-    });
-    return () => { cancelled = true; };
+    const { data, error } = await supabase.from('quarteis').select('*').order('nome');
+    if (error) console.warn('[data] falha ao carregar quarteis:', error.message);
+    setState({ loading: false, quarteis: data || [] });
   }, []);
-  return state;
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const addQuartel = useCallback(async (q) => {
+    const { error } = await supabase.from('quarteis').insert(q);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const updateQuartel = useCallback(async (id, patch) => {
+    const { error } = await supabase.from('quarteis').update(patch).eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const removeQuartel = useCallback(async (id) => {
+    const { error } = await supabase.from('quarteis').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, quarteis: state.quarteis, addQuartel, updateQuartel, removeQuartel };
 }
 
 // Um militar por linha, exatamente como na Convocação 106/2026 (ver supabase/schema.sql):
 // posto, RG, nome de guerra e o quartel (quartel_id). Usado no Cadastro pra sugerir quem já
-// está designado pra articulação institucional naquele quartel.
+// está designado pra articulação institucional naquele quartel, e editável pela aba
+// Gerenciamento (apagar um quartel também apaga os militares dele — on delete cascade).
 export function useMilitares() {
   const [state, setState] = useState({ loading: true, militares: [] });
-  useEffect(() => {
+
+  const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, militares: [] }); return; }
-    let cancelled = false;
-    supabase.from('militares').select('*').then(({ data, error }) => {
-      if (cancelled) return;
-      if (error) console.warn('[data] falha ao carregar militares:', error.message);
-      setState({ loading: false, militares: data || [] });
-    });
-    return () => { cancelled = true; };
+    const { data, error } = await supabase.from('militares').select('*').order('id');
+    if (error) console.warn('[data] falha ao carregar militares:', error.message);
+    setState({ loading: false, militares: data || [] });
   }, []);
-  return state;
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const addMilitar = useCallback(async (m) => {
+    const { error } = await supabase.from('militares').insert(m);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const updateMilitar = useCallback(async (id, patch) => {
+    const { error } = await supabase.from('militares').update(patch).eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const removeMilitar = useCallback(async (id) => {
+    const { error } = await supabase.from('militares').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, militares: state.militares, addMilitar, updateMilitar, removeMilitar };
 }
 
 export function useInterlocutores() {
@@ -190,6 +229,17 @@ export function useCaptacoes() {
   }, []);
 
   return { loading: state.loading, captacoes: state.captacoes, submitCaptacao };
+}
+
+// Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
+// cadastro pela aba Gerenciamento — a pessoa pode editar antes de salvar.
+export function slugify(texto) {
+  return (texto || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 export const UFS = ['GO'];

@@ -6,9 +6,11 @@
 -- / "sem duplicar"), então não tem problema clicar duas vezes.
 --
 -- O que este script cria:
---   1. Tabela "quarteis"       — as unidades (OBMs) do CBMGO (edite direto pelo Table Editor)
+--   1. Tabela "quarteis"       — as unidades (OBMs) do CBMGO (editável no site, aba
+--                                 Gerenciamento, ou pelo Table Editor do Supabase)
 --   2. Tabela "militares"      — um militar por linha, exatamente como na Convocação
---                                 106/2026: posto, RG, nome de guerra e OBM
+--                                 106/2026: posto, RG, nome de guerra e OBM (também editável
+--                                 no site, aba Gerenciamento)
 --   3. Tabela "interlocutores" — contato de captação de cada parlamentar
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site
 --   5. Regras de segurança (RLS) de cada tabela
@@ -37,8 +39,14 @@ create table if not exists militares (
   posto text not null default '',
   rg text not null default '',
   nome text not null default '',
-  quartel_id text not null references quarteis(id)
+  quartel_id text not null references quarteis(id) on delete cascade
 );
+
+-- Garante "on delete cascade" mesmo se a tabela já existia de uma execução anterior sem
+-- isso — apagar um quartel pela aba Gerenciamento remove junto os militares dele, em vez de
+-- travar com erro de referência.
+alter table militares drop constraint if exists militares_quartel_id_fkey;
+alter table militares add constraint militares_quartel_id_fkey foreign key (quartel_id) references quarteis(id) on delete cascade;
 
 -- 3) INTERLOCUTORES -----------------------------------------------------------
 -- "parlamentar_key" é "camara:<id>" ou "senado:<id>" — o <id> é o número que aparece na URL
@@ -75,10 +83,15 @@ create table if not exists captacoes (
 
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
--- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público); só a
--- tabela de captações aceita CRIAR linha vindo do site (o formulário de Cadastro) — as
--- outras 3 vocês editam direto aqui no Table Editor (login no Supabase sempre ignora RLS),
--- não precisam de política pública de escrita.
+-- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público); "quarteis"
+-- e "militares" também aceitam criar/editar/apagar linha vindo do site (a aba Gerenciamento),
+-- e "captacoes" aceita criar linha (o formulário de Cadastro). "interlocutores" continua só
+-- leitura pelo site — edite pelo Table Editor do Supabase (login sempre ignora RLS).
+--
+-- Aviso: como o site não tem login, esse acesso de escrita em quarteis/militares/captacoes
+-- fica aberto pra qualquer pessoa que tenha o link do site — não só quem administra. Pra um
+-- painel interno pequeno isso costuma ser um risco aceitável (é o mesmo modelo do formulário
+-- de Cadastro), mas não é o ideal pra um sistema com muita gente de fora tendo acesso.
 alter table quarteis enable row level security;
 alter table militares enable row level security;
 alter table interlocutores enable row level security;
@@ -86,9 +99,21 @@ alter table captacoes enable row level security;
 
 drop policy if exists "Leitura pública" on quarteis;
 create policy "Leitura pública" on quarteis for select using (true);
+drop policy if exists "Inserção pública" on quarteis;
+create policy "Inserção pública" on quarteis for insert with check (true);
+drop policy if exists "Atualização pública" on quarteis;
+create policy "Atualização pública" on quarteis for update using (true) with check (true);
+drop policy if exists "Remoção pública" on quarteis;
+create policy "Remoção pública" on quarteis for delete using (true);
 
 drop policy if exists "Leitura pública" on militares;
 create policy "Leitura pública" on militares for select using (true);
+drop policy if exists "Inserção pública" on militares;
+create policy "Inserção pública" on militares for insert with check (true);
+drop policy if exists "Atualização pública" on militares;
+create policy "Atualização pública" on militares for update using (true) with check (true);
+drop policy if exists "Remoção pública" on militares;
+create policy "Remoção pública" on militares for delete using (true);
 
 drop policy if exists "Leitura pública" on interlocutores;
 create policy "Leitura pública" on interlocutores for select using (true);
