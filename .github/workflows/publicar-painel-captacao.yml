@@ -1,0 +1,63 @@
+name: Publicar — Painel de Captação (CBM-GO)
+
+# Builda o painel-captacao e publica o resultado em painel-captacao-app/ (na raiz do
+# repositório), mesmo padrão do painel-nacional — o GitHub Pages já está servindo esse
+# repositório, então um novo commit ali já fica no ar sozinho, sem precisar configurar nada
+# a mais no GitHub Pages.
+#
+# Como usar:
+#   - Automático: roda sozinho a cada push que mexer em algo dentro de painel-captacao/.
+#   - Manual: aba "Actions" → "Publicar — Painel de Captação (CBM-GO)" → "Run workflow".
+#
+# Não depende de nenhum segredo/variável de ambiente: a URL e a chave pública do Supabase
+# ficam no próprio código (src/lib/supabase-config.js) — ver painel-captacao/SETUP.md.
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - 'painel-captacao/**'
+      - '.github/workflows/publicar-painel-captacao.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: painel-captacao
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-captacao/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Publicar painel-captacao-app/
+        run: |
+          rm -rf ../painel-captacao-app
+          mkdir -p ../painel-captacao-app
+          cp -r dist/. ../painel-captacao-app/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ../painel-captacao-app
+          if git diff --cached --quiet; then
+            echo "Nada mudou no build — nada pra commitar."
+          else
+            git commit -m "chore(painel-captacao): republica build [automático]"
+            git push
+          fi

@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* Ativa a variante `dark:` do Tailwind via classe .dark no <html>, em vez de depender só do
+   prefers-color-scheme do sistema — assim o toggle manual de tema funciona. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700;
+  border-radius: 8px;
+}
