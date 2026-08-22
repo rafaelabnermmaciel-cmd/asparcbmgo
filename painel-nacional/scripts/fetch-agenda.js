@@ -81,6 +81,12 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
 
   const eventosResp = await getJson(`${CAMARA_BASE}/eventos?dataInicio=${dataInicio}&dataFim=${dataFim}&itens=100&ordenarPor=dataHoraInicio`);
   const eventos = eventosResp?.dados || [];
+  // A primeira execução real veio com 0 eventos e sem nenhum log — sem isso, não dava pra saber
+  // se a semana realmente não tem sessão nenhuma ou se a busca em si veio vazia/quebrada.
+  console.log(`[agenda] eventos encontrados entre ${dataInicio} e ${dataFim}: ${eventos.length}`);
+  if (eventos.length === 0) {
+    console.log(`[agenda] resposta bruta de /eventos: ${JSON.stringify(eventosResp).slice(0, 1000)}`);
+  }
 
   // Uma semana pode ter dezenas de eventos (plenário + várias comissões) — busca as pautas
   // com concorrência limitada em vez de uma de cada vez.
@@ -99,7 +105,10 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
   let logouExemplo = false;
 
   const porDia = new Map(); // 'YYYY-MM-DD' -> [{ hora, orgao, itens: [{ rotulo, ementa }] }]
+  let totalItensPauta = 0;
+  let totalRelevantes = 0;
   for (const { evento, itensPauta } of porEvento) {
+    totalItensPauta += itensPauta.length;
     if (!logouExemplo && itensPauta.length > 0) {
       logouExemplo = true;
       console.log(`[agenda] exemplo de item de pauta (evento ${evento.id}): ${JSON.stringify(itensPauta[0]).slice(0, 1500)}`);
@@ -116,6 +125,7 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
           : (item.titulo || '').split(' - ')[0] || 'Item da pauta';
       relevantes.push({ rotulo, ementa: truncar(ementa, 220) });
     }
+    totalRelevantes += relevantes.length;
     if (relevantes.length === 0) continue;
     const dia = (evento.dataHoraInicio || '').slice(0, 10);
     if (!dia) continue;
@@ -126,6 +136,7 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
       itens: relevantes,
     });
   }
+  console.log(`[agenda] total de itens de pauta na semana: ${totalItensPauta}, relevantes (palavra-chave ou monitorado): ${totalRelevantes}`);
   return porDia;
 }
 
