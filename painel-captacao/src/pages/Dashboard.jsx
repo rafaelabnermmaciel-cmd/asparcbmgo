@@ -75,7 +75,7 @@ function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle }) {
 
 export default function Dashboard() {
   const { loading, captacoes } = useCaptacoes();
-  const { loading: loadingQuarteis, quarteis, rascunho, observacao } = useQuarteis();
+  const { loading: loadingQuarteis, quarteis } = useQuarteis();
   const { theme } = useTheme();
 
   const ranking = useMemo(() => computeQuartelRanking(captacoes, quarteis), [captacoes, quarteis]);
@@ -113,10 +113,10 @@ export default function Dashboard() {
         </Link>
       </ScrollReveal>
 
-      {rascunho && (
+      {quarteis.length === 0 && (
         <ScrollReveal delay={0.03} className="mt-4 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-300">
           <LuTriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
-          <p>{observacao}</p>
+          <p>Nenhum quartel cadastrado ainda no banco. Adicione (ou confira) a lista em Supabase → Table Editor → tabela "quarteis" — ver SETUP.md.</p>
         </ScrollReveal>
       )}
 

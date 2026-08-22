@@ -1,9 +1,12 @@
 # Painel de Captação — CBM-GO
 
-App novo e independente (deploy próprio, separado do `painel-nacional`) focado só em captação
-de recursos: dashboard gamificado com ranking de quartéis, parlamentares de Goiás (com foto,
-votos recebidos, gabinete e interlocutor de captação) e um formulário de cadastro de
-articulações.
+App novo e independente (deploy próprio, separado do `painel-nacional`, mas publicado no
+mesmo GitHub Pages) focado só em captação de recursos: dashboard gamificado com ranking de
+quartéis, parlamentares de Goiás (com foto, votos recebidos, gabinete e interlocutor de
+captação) e um formulário de cadastro de articulações.
+
+**Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
+clicável, sem precisar programar.
 
 ## Estrutura das 3 seções
 
@@ -16,86 +19,56 @@ articulações.
    parlamentar, objeto, valor previsto, nº de reuniões, estágio (Primeiro contato → Em
    articulação → Agenda marcada → ... → Entregue), anexos (documentos/fotos).
 
-## Como os dados funcionam (leitura vs. escrita)
+## Como os dados funcionam
 
-**Leitura**: como no painel-nacional, os dados são arquivos JSON estáticos em `public/data/`,
-buscados em tempo de execução pelo navegador. Isso significa que depois de qualquer commit
-novo nesses arquivos, o site só reflete a mudança depois do próximo deploy (automático, se o
-site estiver conectado ao Netlify via Git).
+**Deputados/senadores de Goiás e votos recebidos** continuam sendo JSON estático em
+`public/data/` (só leitura, filtrado do painel-nacional — ver
+`scripts/gerar-parlamentares-go.js`).
 
-**Escrita** (o formulário de Cadastro): como pedido, usamos o **GitHub como banco de dados**,
-igual ao painel-nacional — só que lá quem escreve é uma automação (GitHub Actions) buscando
-dados públicos, e aqui quem escreve é gente, pelo formulário do site. Por segurança, o
-navegador **nunca** tem acesso a nenhum token do GitHub — ele só envia os dados do formulário
-pra uma function serverless (`netlify/functions/cadastrar.js`), que é a única peça que guarda
-a credencial e faz o commit em `public/data/captacoes.json` (e os anexos em
-`public/data/anexos/<id>/`) via API do GitHub. O commit dispara um novo deploy automático no
-Netlify, publicando o cadastro pra todo mundo.
+**Quartéis, interlocutores e captações** vivem num banco **Supabase** (Postgres gerenciado,
+plano gratuito). O navegador acessa o Supabase diretamente — sem servidor próprio no meio —
+usando a "anon public key", uma chave feita pra ficar visível no código do site: quem protege
+os dados são as regras de segurança (RLS) definidas em `supabase/schema.sql`, não o sigilo da
+chave. Isso significa:
 
-Isso tem duas implicações importantes:
-- **Não existe leitura/escrita em tempo real** — depois de cadastrar, o próprio autor já vê o
-  cadastro na hora (fica guardado em memória, com um selo "sincronizando"), mas outras pessoas
-  só veem depois que o deploy terminar (segundos a poucos minutos).
-- **Cada arquivo por requisição tem limite de ~4MB** (ver `src/components/FileField.jsx`) — é
-  o tamanho de payload que uma function serverless aguenta numa chamada só. Fotos muito grandes
-  precisam ser comprimidas antes de anexar.
+- **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
+- **Escrita**: só a tabela `captacoes` aceita gravação vinda do site (o formulário de
+  Cadastro). As tabelas `quarteis` e `interlocutores` são editadas direto no painel do
+  Supabase (Table Editor — uma tela de planilha, sem precisar de código nem de git).
+- **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
+  por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
+- **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
+  público pra leitura) — limite de ~4MB por arquivo (ver `src/components/FileField.jsx`).
 
-## Configuração necessária antes do primeiro deploy
+## Deploy (GitHub Pages — mesma automação do painel-nacional)
 
-### 1. Criar um token do GitHub (só pra este repositório)
+Não precisa de Netlify nem de nenhuma conta nova além do Supabase. O workflow
+`.github/workflows/publicar-painel-captacao.yml` builda este app e publica em
+`painel-captacao-app/` (raiz do repositório) a cada push que mexer em `painel-captacao/**` —
+o GitHub Pages já serve esse repositório, então o site fica no ar sozinho. Pra disparar na
+mão: aba **Actions** → **"Publicar — Painel de Captação (CBM-GO)"** → **Run workflow**.
 
-GitHub → **Settings → Developer settings → Fine-grained tokens → Generate new token**:
-- **Repository access**: só o repositório `asparcbmgo` (não "todos os repositórios").
-- **Permissions**: `Contents` → **Read and write** (nenhuma outra permissão é necessária).
-- Copie o token gerado (só aparece uma vez).
+Não há nenhuma variável de ambiente/segredo pra configurar no GitHub — a URL e a chave pública
+do Supabase ficam versionadas em `src/lib/supabase-config.js` (ver **SETUP.md**, passo 5).
 
-### 2. Criar o site no Netlify
+## Pendências de dados
 
-- **New site from Git** → escolha este repositório.
-- **Base directory**: `painel-captacao`
-- **Build command**: `npm run build`
-- **Publish directory**: `dist` (relativo à base directory)
-- **Functions directory**: `netlify/functions` (relativo à base directory) — o `netlify.toml`
-  já define isso, mas confira nas configurações do site se o Netlify não reconheceu sozinho.
-
-### 3. Variáveis de ambiente do site (Netlify → Site configuration → Environment variables)
-
-| Variável | Obrigatória | Padrão | Descrição |
-|---|---|---|---|
-| `GITHUB_TOKEN` | **sim** | — | o token criado no passo 1 |
-| `GITHUB_REPO` | não | `rafaelabnermmaciel-cmd/asparcbmgo` | `owner/repo` |
-| `GITHUB_BRANCH` | não | `main` | branch onde os commits do formulário são feitos |
-| `GITHUB_BASE_PATH` | não | `painel-captacao` | pasta deste app dentro do repositório |
-
-Depois de configurar, dispare um deploy manual (ou dê push) pra aplicar.
-
-## Pendências de dados (rascunho, aguardando confirmação)
-
-- **`public/data/quarteis.json`** — a lista de quartéis está marcada como rascunho
-  (`"rascunho": true`), extraída dos registros que já existiam no painel-nacional. Assim que a
-  lista oficial completa chegar, substitua o array `quarteis` (mesmo formato
-  `{ id, nome, municipio, tipo }`) e apague o campo `rascunho`/`observacao`.
-- **`public/data/interlocutores.json`** — vazio (`{}`). Cada entrada usa a chave
-  `"<casa>:<id>"` (ex: `"camara:220565"`, achado em `parlamentares-go.json`) com
-  `{ nome, cargo, telefone, email, observacoes }` — o assessor/gabinete responsável por tratar
-  de captação com aquele parlamentar.
+- **Lista de quartéis** — o `supabase/schema.sql` já semeia uma lista provisória (extraída de
+  registros antigos do painel-nacional). Ajuste direto na tabela `quarteis` pelo Table Editor
+  do Supabase (SETUP.md, seção 4) — sem precisar rodar SQL de novo.
+- **Interlocutores por parlamentar** — tabela vazia até alguém preencher (SETUP.md, última
+  seção).
 
 ## Rodando localmente
 
 ```bash
 npm install
-npm run dev          # só o front-end — o formulário de Cadastro não vai conseguir gravar,
-                      # porque a function do Netlify não roda no `vite dev` puro
+npm run dev
 ```
 
-Pra testar o fluxo completo (incluindo o cadastro gravando de verdade), use a CLI do Netlify,
-que roda front-end + functions juntos:
-
-```bash
-npm install -g netlify-cli
-netlify dev           # pede GITHUB_TOKEN (e as outras variáveis) num arquivo .env local,
-                       # ou configuradas via `netlify env:set`
-```
+Pra testar o formulário de Cadastro gravando de verdade, primeiro configure
+`src/lib/supabase-config.js` (ver SETUP.md) — sem isso, o site mostra uma tela avisando que
+falta configurar, em vez de quebrar.
 
 ### Atualizar a lista de parlamentares de Goiás
 
@@ -108,10 +81,10 @@ npm run sync:parlamentares-go
 ```
 
 Isso regrava `public/data/parlamentares-go.json` só com os 20 parlamentares de Goiás (17
-deputados federais + 3 senadores) e comita normalmente.
+deputados federais + 3 senadores).
 
 ## Stack
 
-Mesma stack do painel-nacional: Vite + React + React Router, Tailwind CSS v4, Recharts, Framer
-Motion. A única peça nova é a function serverless (`netlify/functions/cadastrar.js`, Node, sem
-dependências além do `fetch` nativo).
+Vite + React + React Router, Tailwind CSS v4, Recharts, Framer Motion, `@supabase/supabase-js`
+(banco de dados, autenticação de acesso via RLS, Storage de arquivos e tempo real — tudo pelo
+mesmo pacote, direto do navegador).

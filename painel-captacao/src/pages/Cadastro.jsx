@@ -28,7 +28,7 @@ const VAZIO = {
 
 export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
-  const { quarteis, rascunho, observacao } = useQuarteis();
+  const { quarteis } = useQuarteis();
   const { captacoes, submitCaptacao } = useCaptacoes();
 
   const [f, setF] = useState(VAZIO);
@@ -80,7 +80,7 @@ export default function Cadastro() {
         observacoes: f.observacoes.trim(),
         anexos,
       });
-      setSucesso('Captação cadastrada! Pode levar alguns minutos até o site publicar pra todo mundo — mas já ficou salva.');
+      setSucesso('Captação cadastrada! Já está salva e visível pra todo mundo.');
       setF(VAZIO);
       setAnexos([]);
     } catch (err) {
@@ -97,10 +97,10 @@ export default function Cadastro() {
         <p className="mt-1 text-sm text-slate-400">Registre o andamento de uma articulação com parlamentar — desde o primeiro contato até a entrega do recurso.</p>
       </ScrollReveal>
 
-      {rascunho && (
+      {quarteis.length === 0 && (
         <ScrollReveal delay={0.03} className="mt-4 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-300">
           <LuTriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
-          <p>{observacao}</p>
+          <p>Nenhum quartel cadastrado ainda no banco. Adicione (ou confira) a lista em Supabase → Table Editor → tabela "quarteis" — ver SETUP.md.</p>
         </ScrollReveal>
       )}
 
@@ -215,7 +215,6 @@ export default function Cadastro() {
                       ))}
                     </div>
                   )}
-                  {c.pendente && <p className="mt-2 text-[11px] italic text-slate-400">sincronizando...</p>}
                 </div>
               ))}
           </div>
