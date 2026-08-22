@@ -38,13 +38,11 @@ export default function Sidebar() {
       <div className="mb-8 flex items-center gap-2.5 px-2">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white">
           <svg viewBox="0 0 100 100" className="h-6 w-6" fill="currentColor" aria-hidden="true">
-            <rect x="6" y="70" width="88" height="6" rx="3" />
-            <rect x="19" y="54" width="8" height="16" />
-            <path d="M8 54 A15 15 0 0 1 38 54 Z" />
-            <rect x="44" y="18" width="7" height="52" rx="1.5" />
-            <rect x="55" y="18" width="7" height="52" rx="1.5" />
-            <rect x="78" y="54" width="8" height="16" />
-            <ellipse cx="82" cy="48" rx="14" ry="6" />
+            <rect x="4" y="76" width="92" height="4" rx="2" />
+            <path d="M4 76 A16 16 0 0 1 36 76 Z" />
+            <rect x="44" y="20" width="6" height="56" />
+            <rect x="52" y="20" width="6" height="56" />
+            <path d="M66 76 A16 8 0 0 1 98 76 Z" />
           </svg>
         </div>
         <div>
