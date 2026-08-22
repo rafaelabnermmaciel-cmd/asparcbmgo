@@ -75,7 +75,14 @@ async function statusSenado(tipo, numero) {
   const autuacao = detalhe?.DetalheMateria?.Materia?.SituacaoAtual?.Autuacoes?.Autuacao;
   const situ = Array.isArray(autuacao) ? autuacao[0]?.Situacao : autuacao?.Situacao;
   if (!situ?.DataSituacao) {
-    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — resposta bruta: ${JSON.stringify(detalhe).slice(0, 2000)}`);
+    // Loga as seções que a matéria realmente tem (barato e sempre conclusivo, mesmo se o objeto
+    // for grande) e, por garantia, o objeto inteiro também — pra confirmar se "SituacaoAtual"
+    // simplesmente não existe mais nesse endpoint (aí precisa migrar pra
+    // /dadosabertos/processo/{IdentificacaoProcesso}, que a própria resposta indica como
+    // substituto) ou se só está em outro caminho.
+    const secoes = Object.keys(detalhe?.DetalheMateria?.Materia || {});
+    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} encontrada mas sem situação atual — seções presentes: ${secoes.join(', ')}`);
+    console.warn(`[senado] ${tipo} ${numero}: resposta bruta completa: ${JSON.stringify(detalhe).slice(0, 5000)}`);
     return null;
   }
   return {
