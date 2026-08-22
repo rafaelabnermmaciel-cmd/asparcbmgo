@@ -148,13 +148,31 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
 // deixa uma falha de parsing derrubar o script (só volta um Map vazio nesse caso).
 async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
   const idsMonitorados = new Set(monitorados.filter((p) => p.idSenado).map((p) => p.idSenado));
+  // O primeiro palpite (/agenda/{dataInicio}/{dataFim}, formato de segmento) deu 404 — errado
+  // de vez, não só formato diferente. Tenta mais candidatos até um responder 200; loga qual
+  // funcionou (ou que nenhum funcionou) pra não precisar chutar de novo depois. Barato agora que
+  // getJson não fica reinsistindo em 404 (erro permanente).
+  const candidatos = [
+    `${SENADO_BASE}/agenda?dataInicio=${dataInicio}&dataFim=${dataFim}`,
+    `${SENADO_BASE}/plenario/agenda/${dataInicio}/${dataFim}`,
+    `${SENADO_BASE}/agenda/senado/${dataInicio}/${dataFim}`,
+  ];
   let resp;
-  try {
-    resp = await getJson(`${SENADO_BASE}/agenda/${dataInicio}/${dataFim}`);
-  } catch (err) {
-    console.warn(`[agenda] falha ao buscar agenda do Senado: ${err.message}`);
+  let urlCerta;
+  for (const url of candidatos) {
+    try {
+      resp = await getJson(url, { retries: 1 });
+      urlCerta = url;
+      break;
+    } catch (err) {
+      console.warn(`[agenda] agenda do Senado — ${url} falhou: ${err.message}`);
+    }
+  }
+  if (!urlCerta) {
+    console.warn('[agenda] nenhum dos candidatos de URL da agenda do Senado funcionou desta vez.');
     return new Map();
   }
+  console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
   console.log(`[agenda] resposta bruta da agenda do Senado (formato ainda não confirmado): ${JSON.stringify(resp).slice(0, 2000)}`);
 
   try {

@@ -39,6 +39,11 @@ async function getJson(url, opts = {}) {
       return await res.json();
     } catch (err) {
       lastErr = err;
+      // 4xx (exceto 429, já tratado no getJson) é erro permanente — endpoint errado, parâmetro
+      // inválido etc. — nunca muda com retry. Insistir só atrasa o script à toa (visto na
+      // prática: um 404 de endpoint chutado errado gastou ~12s em retries inúteis).
+      const permanente = /^HTTP 4\d\d/.test(err.message);
+      if (permanente) break;
       if (attempt < retries) {
         const delay = baseDelayMs * 2 ** attempt;
         console.warn(`[http] falha (${err.message}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
@@ -46,7 +51,7 @@ async function getJson(url, opts = {}) {
       }
     }
   }
-  throw new Error(`[http] esgotadas ${retries + 1} tentativas em ${url}: ${lastErr?.message}`);
+  throw new Error(`[http] esgotadas tentativas em ${url}: ${lastErr?.message}`);
 }
 
 /**
@@ -62,6 +67,11 @@ async function getText(url, opts = {}) {
       return await res.text();
     } catch (err) {
       lastErr = err;
+      // 4xx (exceto 429, já tratado no getJson) é erro permanente — endpoint errado, parâmetro
+      // inválido etc. — nunca muda com retry. Insistir só atrasa o script à toa (visto na
+      // prática: um 404 de endpoint chutado errado gastou ~12s em retries inúteis).
+      const permanente = /^HTTP 4\d\d/.test(err.message);
+      if (permanente) break;
       if (attempt < retries) {
         const delay = baseDelayMs * 2 ** attempt;
         console.warn(`[http] falha (${err.message}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
@@ -69,7 +79,7 @@ async function getText(url, opts = {}) {
       }
     }
   }
-  throw new Error(`[http] esgotadas ${retries + 1} tentativas em ${url}: ${lastErr?.message}`);
+  throw new Error(`[http] esgotadas tentativas em ${url}: ${lastErr?.message}`);
 }
 
 /**
