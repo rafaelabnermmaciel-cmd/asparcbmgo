@@ -38,21 +38,40 @@ export default function Cadastro() {
   const [erro, setErro] = useState(null);
   const [sucesso, setSucesso] = useState(null);
   const [filtroQuartel, setFiltroQuartel] = useState('');
+  const [responsavelManual, setResponsavelManual] = useState(false);
 
   const set = (k) => (e) => setF({ ...f, [k]: e.target.value });
 
   const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
   const militaresDoQuartel = useMemo(() => militares.filter((m) => m.quartel_id === f.quartelId), [militares, f.quartelId]);
 
-  // Ao escolher o quartel, sugere como responsável o militar designado pra articulação
-  // institucional naquela unidade (Convocação 106/2026) — só como ponto de partida, sem
-  // travar o campo: se já tiver algo digitado, ou tiver mais de um militar designado, a
-  // pessoa decide/edita normalmente (a lista completa aparece como dica abaixo do campo).
+  function nomeMilitar(m) {
+    return `${m.posto} ${m.nome}`.trim();
+  }
+
+  // Ao escolher o quartel, já lista os militares vinculados a ele (cadastrados em
+  // Gerenciamento) como opções prontas de Responsável — se só tiver um, já vem selecionado;
+  // se tiver mais de um, a pessoa escolhe; sempre dá pra digitar outro nome via "Outro".
   function selecionarQuartel(e) {
     const quartelId = e.target.value;
     const doQuartel = militares.filter((m) => m.quartel_id === quartelId);
-    const sugestao = doQuartel.length === 1 ? `${doQuartel[0].posto} ${doQuartel[0].nome}` : '';
-    setF((prev) => ({ ...prev, quartelId, responsavel: prev.responsavel || sugestao }));
+    if (doQuartel.length === 1) {
+      setResponsavelManual(false);
+      setF((prev) => ({ ...prev, quartelId, responsavel: nomeMilitar(doQuartel[0]) }));
+    } else {
+      setResponsavelManual(doQuartel.length === 0);
+      setF((prev) => ({ ...prev, quartelId, responsavel: '' }));
+    }
+  }
+
+  function selecionarResponsavel(e) {
+    const valor = e.target.value;
+    if (valor === '__outro__') {
+      setResponsavelManual(true);
+      setF((prev) => ({ ...prev, responsavel: '' }));
+    } else {
+      setF((prev) => ({ ...prev, responsavel: valor }));
+    }
   }
 
   const cadastrosFiltrados = useMemo(
@@ -107,7 +126,7 @@ export default function Cadastro() {
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Cadastrar captação</h1>
-        <p className="mt-1 text-sm text-slate-400">Registre o andamento de uma articulação com parlamentar — desde o primeiro contato até a entrega do recurso.</p>
+        <p className="mt-1 text-sm text-slate-400">Registre o andamento de uma articulação com parlamentar — desde o primeiro contato até a captação ser destinada (o que acontece depois disso é acompanhado no outro painel).</p>
       </ScrollReveal>
 
       {quarteis.length === 0 && (
@@ -139,11 +158,23 @@ export default function Cadastro() {
           </div>
           <div>
             <p className={labelClass}>Responsável pela articulação *</p>
-            <input className={inputClass} value={f.responsavel} onChange={set('responsavel')} placeholder="Quem do quartel está conduzindo" />
-            {militaresDoQuartel.length > 0 && (
-              <p className="mt-1 text-[11px] text-slate-400">
-                Designado(s) pra este quartel: {militaresDoQuartel.map((m) => `${m.posto} ${m.nome}`).join('; ')}
-              </p>
+            {militaresDoQuartel.length > 0 && !responsavelManual ? (
+              <select className={inputClass} value={f.responsavel} onChange={selecionarResponsavel}>
+                <option value="">Selecione...</option>
+                {militaresDoQuartel.map((m) => (
+                  <option key={m.id} value={nomeMilitar(m)}>{nomeMilitar(m)}</option>
+                ))}
+                <option value="__outro__">Outro (digitar nome)</option>
+              </select>
+            ) : (
+              <div className="flex gap-2">
+                <input className={inputClass} value={f.responsavel} onChange={set('responsavel')} placeholder="Quem do quartel está conduzindo" />
+                {militaresDoQuartel.length > 0 && (
+                  <button type="button" onClick={() => setResponsavelManual(false)} className="shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                    Escolher da lista
+                  </button>
+                )}
+              </div>
             )}
           </div>
           <div>

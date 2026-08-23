@@ -15,9 +15,13 @@ clicável, sem precisar programar.
 2. **Parlamentares** (`/parlamentares`) — bancada de Goiás (17 deputados federais + 3
    senadores), com busca/filtro; cada perfil mostra contato, gabinete, votos recebidos na
    eleição, interlocutor de captação e as captações vinculadas a ele.
-3. **Cadastrar captação** (`/cadastro`) — formulário: quartel, responsável, stakeholder,
-   parlamentar, objeto, valor previsto, nº de reuniões, estágio (Primeiro contato → Em
-   articulação → Agenda marcada → ... → Entregue), anexos (documentos/fotos).
+3. **Cadastrar captação** (`/cadastro`) — formulário: quartel (o campo Responsável já lista os
+   militares daquele quartel), stakeholder, parlamentar, objeto, valor previsto, nº de
+   reuniões, estágio (Primeiro contato → Em articulação → Agenda marcada → um desfecho:
+   Destinado, Adiado, Recusado ou Arquivado), anexos (documentos/fotos). Este painel só
+   acompanha até a captação ser destinada — o que acontece depois (empenho, licitação,
+   entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por e-mail
+   sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 4. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase).
 
@@ -59,6 +63,15 @@ mão: aba **Actions** → **"Publicar — Painel de Captação (CBM-GO)"** → *
 Não há nenhuma variável de ambiente/segredo pra configurar no GitHub — a URL e a chave pública
 do Supabase ficam versionadas em `src/lib/supabase-config.js` (ver **SETUP.md**, passo 5).
 
+## Notificação por e-mail
+
+Cada captação cadastrada dispara um e-mail (via **EmailJS**, mesmo modelo client-side do
+Supabase — sem servidor no meio) pra `asparcbmgo@gmail.com` (endereço configurável em
+`src/lib/emailjs-config.js`, constante `EMAIL_NOTIFICACAO_PARA`). Se o EmailJS ainda não
+estiver configurado, ou se o envio falhar por qualquer motivo, a captação continua sendo
+salva normalmente — o e-mail é só um aviso a mais, nunca bloqueia o cadastro. Configuração
+passo a passo em **SETUP.md**, seção 6.
+
 ## Pendências de dados
 
 - **Quartéis e militares** — o `supabase/schema.sql` já semeia as 61 unidades (60 do CBMGO +
@@ -96,4 +109,4 @@ deputados federais + 3 senadores).
 
 Vite + React + React Router, Tailwind CSS v4, Recharts, Framer Motion, `@supabase/supabase-js`
 (banco de dados, autenticação de acesso via RLS, Storage de arquivos e tempo real — tudo pelo
-mesmo pacote, direto do navegador).
+mesmo pacote, direto do navegador) e a API REST do EmailJS (notificação por e-mail).

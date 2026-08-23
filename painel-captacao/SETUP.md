@@ -53,9 +53,9 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 ## 4. Editar quartéis e militares (direto na tela, sem código)
 
 O script já cadastra as 61 unidades e os 122 militares da Convocação nº 106/2026 (posto, RG,
-nome de guerra e a unidade de cada um — exatamente como no documento). No Cadastro, quando só
-há um militar designado pra um quartel, o campo "Responsável" já vem sugerido com ele; quando
-há mais de um, os nomes aparecem como dica abaixo do campo (a pessoa escolhe/edita).
+nome de guerra e a unidade de cada um — exatamente como no documento). No Cadastro, ao
+escolher o quartel, o campo "Responsável" vira uma lista com os militares daquela unidade
+(inclui a opção "Outro" pra digitar um nome que não esteja na lista).
 
 **Tabela `quarteis`** (a unidade em si):
 1. Menu da esquerda → **Table Editor** → clique na tabela **quarteis**.
@@ -90,6 +90,63 @@ dessas tabelas, sem precisar de nenhum passo extra.
    ```
 5. Eu edito `src/lib/supabase-config.js` com esses valores, commito e publico — o site fica no
    ar sozinho graças à automação do GitHub Actions (não precisa fazer mais nada).
+
+## 6. Notificação por e-mail (toda vez que alguém cadastrar uma captação)
+
+Usa o **EmailJS** — manda e-mail direto do navegador, sem precisar de servidor (mesma lógica
+do Supabase: uma chave pública, sem custo pra uso pequeno). Free tier: até 200 e-mails/mês.
+
+### 6.1. Criar a conta e conectar o Gmail
+
+1. Acesse **https://www.emailjs.com** → **Sign Up**. Pode criar com o e-mail
+   `asparcbmgo@gmail.com` mesmo (ou qualquer outro — só quem administra precisa acessar essa
+   conta depois).
+2. Confirme o e-mail se for pedido, e faça login.
+3. Menu da esquerda → **Email Services** → **Add New Service**.
+4. Escolha **Gmail** → **Connect Account** → faça login com `asparcbmgo@gmail.com` e autorize.
+5. Dê um nome pro serviço (ex: `gmail-asparcbmgo`) e salve.
+6. **Copie o "Service ID"** que aparece na lista (algo como `service_abc1234`).
+
+### 6.2. Criar o modelo (template) do e-mail
+
+1. Menu da esquerda → **Email Templates** → **Create New Template**.
+2. Em **To Email**, coloque `{{to_email}}`.
+3. Em **Subject**, coloque algo como: `Nova captação — {{quartel}}`.
+4. No corpo do e-mail (**Content**), cole este texto (todos os `{{...}}` são preenchidos
+   automaticamente pelo site a cada cadastro):
+   ```
+   Nova captação cadastrada no painel.
+
+   Quartel: {{quartel}} ({{municipio}})
+   Parlamentar: {{parlamentar}}
+   Responsável: {{responsavel}}
+   Stakeholder: {{stakeholder}}
+   Objeto: {{objeto}}
+   Valor previsto: {{valor_previsto}}
+   Nº de reuniões: {{num_reunioes}}
+   Estágio: {{status}}
+   Observações: {{observacoes}}
+   ```
+5. Clique em **Save**.
+6. **Copie o "Template ID"** (aparece no topo da tela, algo como `template_xyz789`).
+
+### 6.3. Pegar a chave pública e me mandar os 3 valores
+
+1. Menu da esquerda → ícone da conta (canto superior direito) → **Account** → aba **General**.
+2. Copie o campo **Public Key**.
+3. Cole os 3 valores aqui no chat:
+   ```
+   Service ID: service_...
+   Template ID: template_...
+   Public Key: ...
+   ```
+4. Eu edito `src/lib/emailjs-config.js`, commito e publico.
+
+### 6.4. (Recomendado) Restringir de onde os e-mails podem ser disparados
+
+No EmailJS: **Account → Security → Allowed origins** → adicione a URL do site publicado
+(`https://rafaelabnermmaciel-cmd.github.io`). Isso impede que outra pessoa use sua chave
+pública fora do seu próprio site.
 
 ---
 
