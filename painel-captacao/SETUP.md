@@ -152,14 +152,19 @@ pública fora do seu próprio site.
 
 ---
 
-## 7. Login e acesso (só a aba Gerenciamento)
+## 7. Login e aprovação de acesso (só a aba Gerenciamento)
 
-Quartéis e militares são dado interno, então essa aba exige login — o resto do site (Cadastro,
-Stakeholders, Parlamentares) continua igual, sem login nenhum. Cada pessoa cria a própria conta
-(e-mail/senha, ou entrando com Google) e **já entra liberada na hora**, sem precisar de
-aprovação de ninguém — inclusive você, na primeira vez. Se um dia precisar tirar o acesso de
-alguém (ex: saiu da equipe), isso é feito direto no site, na aba Gerenciamento → Acessos, botão
-"Revogar" — sem precisar voltar aqui no Supabase.
+Quartéis e militares são dado interno, então essa aba exige login **e** aprovação sua — o
+resto do site (Cadastro, Stakeholders, Parlamentares) continua igual, sem login nenhum. Como
+fica na prática:
+
+- **Você** (o e-mail `asparcbmgo@gmail.com`, já fixado no script — me avise se quiser trocar)
+  cria a própria conta e **já entra liberado na hora**, sem passo extra nenhum.
+- **Qualquer outra pessoa** cria a própria conta (e-mail/senha, ou entrando com Google) e fica
+  **"Pendente"**, esperando você aprovar. Assim que alguém pede acesso, **você recebe um
+  e-mail avisando** (configurado no passo 7.6) — daí é só entrar em **Gerenciamento →
+  Acessos** e clicar em **Aprovar**. Pra tirar o acesso de alguém depois, mesmo lugar, botão
+  **Revogar**.
 
 ### 7.1. Rodar o script atualizado
 
@@ -209,22 +214,51 @@ sempre, é seguro rodar de novo (não duplica nada).
 13. Ative o botão **Enable Sign in with Google**, cole o **Client ID** e o **Client Secret** que
     você copiou, e clique em **Save**.
 
-### 7.4. Criar sua conta (você vira o primeiro acesso, sem passo extra nenhum)
+### 7.4. Criar sua conta de administrador (libera sozinha, sem passo extra)
 
 1. No site publicado, abra a aba **Gerenciamento**.
 2. Clique em **Criar conta**, preencha e-mail e senha (ou clique em **Continuar com Google**) —
-   use o e-mail que vai administrar o painel (ex: `asparcbmgo@gmail.com`).
+   use exatamente `asparcbmgo@gmail.com` (é o e-mail que o script reconhece como
+   administrador; se quiser usar outro, me avisa que eu troco no script).
 3. Se aparecer um aviso pedindo confirmação por e-mail, abra sua caixa de entrada e clique no
    link que o Supabase mandou antes de tentar entrar.
-4. Pronto — já libera direto, sem precisar rodar nada no Supabase nem esperar aprovação. A
+4. Pronto — como é o e-mail do administrador, já libera direto, sem esperar nada. A
    Gerenciamento abre normalmente, com uma aba a mais: **Acessos**.
 
-### 7.5. As próximas pessoas (mesma coisa, sem você precisar fazer nada)
+### 7.5. As próximas pessoas (elas pedem, você aprova)
 
 Cada pessoa nova entra em Gerenciamento → cria a própria conta (ou entra com Google, se você
-adicionou o e-mail dela como "Test user" no passo 7.3, ou se já publicou o app) → já entra
-liberada, igual você. Se um dia precisar tirar o acesso de alguém, abra **Gerenciamento →
-Acessos** e clique em **Revogar** na linha da pessoa (dá pra **Reativar** depois, se precisar).
+adicionou o e-mail dela como "Test user" no passo 7.3, ou se já publicou o app) → cai como
+**"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você abre **Gerenciamento →
+Acessos** e clica em **Aprovar** na linha da pessoa. Pra tirar o acesso de alguém depois, mesmo
+lugar, botão **Revogar** (dá pra **Aprovar** de novo se precisar).
+
+### 7.6. Configurar o aviso por e-mail de "alguém pediu acesso"
+
+Usa o mesmo EmailJS da seção 6, só que com um **template novo** (variáveis diferentes das do
+e-mail de captação).
+
+1. Acesse **https://www.emailjs.com** e faça login na mesma conta da seção 6.
+2. Menu da esquerda → **Email Templates** → **Create New Template**.
+3. Em **To Email**, coloque `{{to_email}}`.
+4. Em **Subject**, coloque: `Pedido de acesso à Gerenciamento`.
+5. No corpo do e-mail (**Content**), cole:
+   ```
+   O e-mail {{email_solicitante}} pediu acesso pra editar a aba Gerenciamento do
+   Painel de Captação (CBM-GO).
+
+   Pra aprovar ou recusar, entre em:
+   https://rafaelabnermmaciel-cmd.github.io/asparcbmgo/painel-captacao-app/#/gerenciamento
+
+   E vá em Gerenciamento → Acessos.
+   ```
+6. Clique em **Save**.
+7. **Copie o "Template ID"** (aparece no topo da tela) e me manda aqui no chat:
+   ```
+   Template ID de acesso: template_...
+   ```
+8. Eu edito `src/lib/emailjs-config.js` (constante `EMAILJS_TEMPLATE_ID_ACESSO`), commito e
+   publico.
 
 ---
 

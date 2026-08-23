@@ -132,25 +132,28 @@ create table if not exists captacao_eventos (
   criado_em timestamptz not null default now()
 );
 
--- 4.2) LOGIN E ACESSO (só pra aba Gerenciamento) --------------------------------
+-- 4.2) LOGIN E APROVAÇÃO DE ACESSO (só pra aba Gerenciamento) -------------------
 -- Quartéis/militares são dado sensível de organização interna, então quem edita precisa
--- entrar com login (e-mail/senha ou Google) — o resto do site (Cadastro, Stakeholders,
--- Parlamentares) continua aberto pra quem tiver o link, sem mudança nenhuma.
+-- entrar com login (e-mail/senha ou Google) E já ter sido aprovado pelo administrador — o
+-- resto do site (Cadastro, Stakeholders, Parlamentares) continua aberto pra quem tiver o
+-- link, sem mudança nenhuma.
 --
--- Toda conta nova (criada ao entrar pela primeira vez, por e-mail/senha ou Google) já entra
--- liberada — "aprovado = true" — sem precisar de nenhuma aprovação manual, nem da primeira
--- pessoa (o administrador) nem de quem vier depois. A coluna "aprovado" fica guardada mesmo
--- assim porque serve de "chave-geral": quem já tem acesso pode revogar alguém pela aba
--- Gerenciamento → Acessos (ex: alguém saiu da equipe) — só isso vira "aprovado = false".
+-- O e-mail do administrador (trocar aqui se não for esse) já entra liberado sozinho, sem
+-- precisar de nenhum passo manual — é comparado sem diferenciar maiúscula/minúscula.
+-- Qualquer outra conta nova (criada ao entrar pela primeira vez, por e-mail/senha ou Google)
+-- cai "aprovado = false" e fica esperando o administrador liberar pela aba Gerenciamento →
+-- Acessos — e o administrador recebe um e-mail avisando (ver EMAILJS_TEMPLATE_ID_ACESSO em
+-- src/lib/emailjs-config.js e SETUP.md, seção 7).
 create table if not exists usuarios_aprovados (
   user_id uuid primary key references auth.users(id) on delete cascade,
   email text not null default '',
-  aprovado boolean not null default true,
+  aprovado boolean not null default false,
   criado_em timestamptz not null default now()
 );
 
--- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui,
--- já entrando como "aprovado = true" (acesso liberado na hora, sem espera).
+-- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui —
+-- "aprovado = true" só se o e-mail for o do administrador, "false" (esperando aprovação) pra
+-- qualquer outro.
 create or replace function public.lidar_com_novo_usuario()
 returns trigger
 language plpgsql
@@ -158,7 +161,7 @@ security definer set search_path = public
 as $$
 begin
   insert into public.usuarios_aprovados (user_id, email, aprovado)
-  values (new.id, new.email, true)
+  values (new.id, new.email, lower(new.email) = lower('asparcbmgo@gmail.com'))
   on conflict (user_id) do nothing;
   return new;
 end;
@@ -169,15 +172,14 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.lidar_com_novo_usuario();
 
--- Se alguém já tinha se cadastrado numa versão anterior deste script (quando começava
--- "aprovado = false" e ficava esperando aprovação manual), libera o acesso de quem ainda
--- estava pendente — ninguém deve continuar preso na tela de espera depois dessa atualização.
-update usuarios_aprovados set aprovado = true where aprovado = false;
+-- Garante que o administrador está liberado e que ninguém mais ficou liberado por engano
+-- (ex: numa execução anterior deste script, quando todo mundo entrava liberado na hora).
+update usuarios_aprovados set aprovado = true where lower(email) = lower('asparcbmgo@gmail.com');
+update usuarios_aprovados set aprovado = false where lower(email) <> lower('asparcbmgo@gmail.com');
 
 -- Função auxiliar (roda com privilégio de dono da tabela, ignorando RLS por dentro) pra
--- checar se quem está logado agora ainda tem acesso liberado (não foi revogado) — evita loop
--- de RLS "checando a própria tabela que tem RLS" e é reaproveitada nas políticas de
--- quarteis/militares logo abaixo.
+-- checar se quem está logado agora já foi aprovado — evita loop de RLS "checando a própria
+-- tabela que tem RLS" e é reaproveitada nas políticas de quarteis/militares logo abaixo.
 create or replace function public.esta_aprovado()
 returns boolean
 language sql
