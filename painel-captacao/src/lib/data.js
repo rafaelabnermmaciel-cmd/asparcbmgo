@@ -295,6 +295,36 @@ export function useCaptacoes() {
   return { loading: state.loading, captacoes: state.captacoes, submitCaptacao, updateCaptacao, removeCaptacao };
 }
 
+// Linha do tempo de cada captação (um "passo" por linha: data + o que aconteceu). Carrega
+// tudo de uma vez (como quarteis/militares/stakeholders) e cada tela filtra pelo captacao_id
+// que precisa — totalmente editável no site.
+export function useEventos() {
+  const [state, setState] = useState({ loading: true, eventos: [] });
+
+  const recarregar = useCallback(async () => {
+    if (!supabaseConfigurado) { setState({ loading: false, eventos: [] }); return; }
+    const { data, error } = await supabase.from('captacao_eventos').select('*').order('data');
+    if (error) console.warn('[data] falha ao carregar eventos:', error.message);
+    setState({ loading: false, eventos: data || [] });
+  }, []);
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const addEvento = useCallback(async (e) => {
+    const { error } = await supabase.from('captacao_eventos').insert(e);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const removeEvento = useCallback(async (id) => {
+    const { error } = await supabase.from('captacao_eventos').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, eventos: state.eventos, addEvento, removeEvento };
+}
+
 // Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
 // cadastro pela aba Gerenciamento — a pessoa pode editar antes de salvar.
 export function slugify(texto) {

@@ -8,6 +8,7 @@ import { supabaseConfigurado } from './lib/supabase.js';
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Parlamentares = lazy(() => import('./pages/Parlamentares.jsx'));
 const ParlamentarPerfil = lazy(() => import('./pages/ParlamentarPerfil.jsx'));
+const Stakeholders = lazy(() => import('./pages/Stakeholders.jsx'));
 const Cadastro = lazy(() => import('./pages/Cadastro.jsx'));
 const Gerenciamento = lazy(() => import('./pages/Gerenciamento.jsx'));
 
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/parlamentares" element={<Parlamentares />} />
             <Route path="/parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
+            <Route path="/stakeholders" element={<Stakeholders />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/gerenciamento" element={<Gerenciamento />} />
           </Routes>

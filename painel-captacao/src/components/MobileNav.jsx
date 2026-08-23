@@ -18,7 +18,7 @@ function ItemNav({ to, label, icon: Icon, end }) {
   );
 }
 
-// Só 3 seções nesse app — cabem todas na barra inferior, sem precisar de um menu "Mais".
+// As seções cabem todas na barra inferior, sem precisar de um menu "Mais".
 export default function MobileNav() {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200 bg-white/95 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95 print:hidden">

@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp } from 'react-icons/lu';
-import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, initials, STATUS_CAPTACAO } from '../lib/data.js';
+import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { btnDanger, fmtR, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
+import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 import { FormularioStakeholder } from '../components/StakeholderForm.jsx';
 
 function CopyButton({ value }) {
@@ -50,6 +51,7 @@ export default function ParlamentarPerfil() {
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
   const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
+  const { eventos, addEvento, removeEvento } = useEventos();
 
   const [editandoStakeholderId, setEditandoStakeholderId] = useState(null);
   const [expandidaId, setExpandidaId] = useState(null);
@@ -139,7 +141,7 @@ export default function ParlamentarPerfil() {
           <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
             <LuUserRound className="h-4 w-4 text-red-500" /> Stakeholders
           </p>
-          <Link to="/cadastro" className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
+          <Link to="/stakeholders" className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
         </div>
 
         <div className="mt-4 flex flex-col gap-3">
@@ -177,7 +179,7 @@ export default function ParlamentarPerfil() {
           )}
 
           {stakeholdersDoParlamentar.length === 0 && (
-            <p className="text-xs text-slate-400">Ainda não há stakeholder vinculado a este parlamentar. Cadastre pela aba "Cadastrar captação" (seção Stakeholders) e marque este parlamentar na lista.</p>
+            <p className="text-xs text-slate-400">Ainda não há stakeholder vinculado a este parlamentar. Cadastre pela aba "Stakeholders" e marque este parlamentar na lista.</p>
           )}
         </div>
       </ScrollReveal>
@@ -244,7 +246,10 @@ export default function ParlamentarPerfil() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.quartelNome} <span className="font-normal text-slate-400">· {c.objeto}</span></p>
                       <p className="mt-0.5 text-xs text-slate-500">{c.valorPrevisto ? `${fmtR(c.valorPrevisto)} previsto` : 'sem valor definido ainda'}{c.numReunioes ? ` · ${c.numReunioes} reunião(ões)` : ''}</p>
-                      <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                        <span className="inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                        <AlertaParado captacao={c} eventos={eventos} />
+                      </div>
                     </div>
                     {aberta ? <LuChevronUp className="mt-1 h-4 w-4 shrink-0 text-slate-400" /> : <LuChevronDown className="mt-1 h-4 w-4 shrink-0 text-slate-400" />}
                   </button>
@@ -278,6 +283,7 @@ export default function ParlamentarPerfil() {
                               <LuTrash2 className="h-3 w-3" /> Excluir
                             </button>
                           </div>
+                          <LinhaDoTempo captacaoId={c.id} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} />
                         </>
                       )}
                     </div>
