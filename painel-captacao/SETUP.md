@@ -91,7 +91,7 @@ dessas tabelas, sem precisar de nenhum passo extra.
 5. Eu edito `src/lib/supabase-config.js` com esses valores, commito e publico — o site fica no
    ar sozinho graças à automação do GitHub Actions (não precisa fazer mais nada).
 
-## 6. Notificação por e-mail (toda vez que alguém cadastrar uma captação)
+## 6. Notificação por e-mail (a cada captação cadastrada, editada ou excluída)
 
 Usa o **EmailJS** — manda e-mail direto do navegador, sem precisar de servidor (mesma lógica
 do Supabase: uma chave pública, sem custo pra uso pequeno). Free tier: até 200 e-mails/mês.
@@ -111,11 +111,12 @@ do Supabase: uma chave pública, sem custo pra uso pequeno). Free tier: até 200
 
 1. Menu da esquerda → **Email Templates** → **Create New Template**.
 2. Em **To Email**, coloque `{{to_email}}`.
-3. Em **Subject**, coloque algo como: `Nova captação — {{quartel}}`.
+3. Em **Subject**, coloque algo como: `Captação {{acao}} — {{quartel}}` (`{{acao}}` vira
+   "cadastrada", "editada" ou "excluída", dependendo do que a pessoa fez no site).
 4. No corpo do e-mail (**Content**), cole este texto (todos os `{{...}}` são preenchidos
-   automaticamente pelo site a cada cadastro):
+   automaticamente pelo site a cada cadastro, edição ou exclusão):
    ```
-   Nova captação cadastrada no painel.
+   Uma captação foi {{acao}} no painel.
 
    Quartel: {{quartel}} ({{municipio}})
    Parlamentar: {{parlamentar}}
@@ -123,6 +124,7 @@ do Supabase: uma chave pública, sem custo pra uso pequeno). Free tier: até 200
    Stakeholder: {{stakeholder}}
    Objeto: {{objeto}}
    Valor previsto: {{valor_previsto}}
+   Valor confirmado: {{valor_confirmado}}
    Nº de reuniões: {{num_reunioes}}
    Estágio: {{status}}
    Observações: {{observacoes}}
