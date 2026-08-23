@@ -14,6 +14,7 @@
 --   3. Tabela "stakeholders"   — pessoas que tratam de captação com um ou mais parlamentares
 --                                 ao mesmo tempo (cadastrado na aba Cadastro do site)
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site
+--   4.1. Tabela "captacao_eventos" — a linha do tempo (passos) de cada captação
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
 --   7. Tempo real pra tabela de captações
@@ -117,6 +118,19 @@ create table if not exists captacoes (
   anexos jsonb not null default '[]'::jsonb  -- [{ nome, tipo, tamanho, url }, ...]
 );
 
+-- 4.1) LINHA DO TEMPO DA CAPTAÇÃO ------------------------------------------------
+-- Cada "passo" registrado dentro de uma captação (ex: "primeiro contato feito",
+-- "reunião marcada", "foram ao Congresso Nacional"), com a data em que aconteceu. É o que
+-- alimenta a linha do tempo mostrada dentro da captação, e o alerta de "esfriando" (calculado
+-- no site a partir da data do passo mais recente — não precisa de coluna calculada aqui).
+create table if not exists captacao_eventos (
+  id bigint generated always as identity primary key,
+  captacao_id bigint not null references captacoes(id) on delete cascade,
+  data date not null default current_date,
+  descricao text not null default '',
+  criado_em timestamptz not null default now()
+);
+
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
 -- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público), e todas as
@@ -133,6 +147,7 @@ alter table quarteis enable row level security;
 alter table militares enable row level security;
 alter table stakeholders enable row level security;
 alter table captacoes enable row level security;
+alter table captacao_eventos enable row level security;
 
 drop policy if exists "Leitura pública" on quarteis;
 create policy "Leitura pública" on quarteis for select using (true);
@@ -170,6 +185,15 @@ drop policy if exists "Edição pública" on captacoes;
 create policy "Edição pública" on captacoes for update using (true) with check (true);
 drop policy if exists "Remoção pública" on captacoes;
 create policy "Remoção pública" on captacoes for delete using (true);
+
+drop policy if exists "Leitura pública" on captacao_eventos;
+create policy "Leitura pública" on captacao_eventos for select using (true);
+drop policy if exists "Inserção pública" on captacao_eventos;
+create policy "Inserção pública" on captacao_eventos for insert with check (true);
+drop policy if exists "Atualização pública" on captacao_eventos;
+create policy "Atualização pública" on captacao_eventos for update using (true) with check (true);
+drop policy if exists "Remoção pública" on captacao_eventos;
+create policy "Remoção pública" on captacao_eventos for delete using (true);
 
 -- 6) ARMAZENAMENTO DE ANEXOS (fotos/documentos do formulário) -----------------
 insert into storage.buckets (id, name, public)

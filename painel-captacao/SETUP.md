@@ -45,9 +45,9 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 
 ### Conferir se deu certo
 
-- Menu da esquerda → **Table Editor**: devem aparecer 4 tabelas — `quarteis` (61 linhas: as 60
+- Menu da esquerda → **Table Editor**: devem aparecer 5 tabelas — `quarteis` (61 linhas: as 60
   unidades do CBMGO + SENASP/MJ), `militares` (122 linhas — um militar por linha), `stakeholders`
-  (vazia) e `captacoes` (vazia).
+  (vazia), `captacoes` (vazia) e `captacao_eventos` (vazia — a linha do tempo de cada captação).
 - Menu da esquerda → **Storage**: deve aparecer um bucket chamado `anexos`.
 
 ## 4. Editar quartéis e militares (direto na tela, sem código)
@@ -161,9 +161,9 @@ project**; clique nele e em ~1 minuto volta ao normal. Não perde nenhum dado, s
 
 ## Onde entram os stakeholders
 
-Aba **Cadastrar captação** → seção **Stakeholders**, no topo da página → botão **+ Novo
-stakeholder**. Preencha nome, cargo/função, telefone e qual projeto ele está tratando, e
-marque na lista **todos os parlamentares** com quem essa pessoa articula (pode marcar mais de
+Aba própria **Stakeholders** (menu lateral, entre Parlamentares e Cadastrar captação) → botão
+**+ Novo stakeholder**. Preencha nome, cargo/função, telefone e qual projeto ele está tratando,
+e marque na lista **todos os parlamentares** com quem essa pessoa articula (pode marcar mais de
 um — ex: um prefeito conversando com 3 deputados ao mesmo tempo pelo mesmo projeto). Depois de
 cadastrado:
 
@@ -173,3 +173,13 @@ cadastrado:
   parlamentar daquela captação, o campo "Stakeholder" já sugere quem está vinculado a ele.
 
 Tudo isso é editável direto no site, sem precisar entrar no Supabase.
+
+## Linha do tempo de cada captação (e o alerta de "esfriando")
+
+Dentro de qualquer captação (botão **"Linha do tempo"** no Cadastro, ou abrindo a captação no
+perfil do parlamentar) dá pra registrar cada passo — data + o que aconteceu (ex: "primeiro
+contato feito", "reunião marcada", "foram ao Congresso Nacional") — e ver todo o histórico em
+ordem. Se uma captação que ainda está em andamento (não chegou em Destinado/Adiado/
+Recusado/Arquivado) fica **15 dias** sem nenhum passo novo, aparece um aviso amarelo
+"🟡 Esfriando"; com **30 dias** ou mais, vira um aviso vermelho "🔴 Parado há X dias" — pra
+não deixar nenhuma articulação esfriar sem perceber.

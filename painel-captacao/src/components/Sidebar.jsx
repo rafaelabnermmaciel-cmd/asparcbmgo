@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { LuHouse, LuLandmark, LuClipboardPlus, LuSettings } from 'react-icons/lu';
+import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuSettings } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 
 export const NAV = [
   { to: '/', label: 'Dashboard', icon: LuHouse, end: true },
   { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
+  { to: '/stakeholders', label: 'Stakeholders', icon: LuUsers },
   { to: '/cadastro', label: 'Cadastrar captação', icon: LuClipboardPlus },
   { to: '/gerenciamento', label: 'Gerenciamento', icon: LuSettings },
 ];

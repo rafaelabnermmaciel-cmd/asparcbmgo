@@ -8,25 +8,29 @@ captação) e um formulário de cadastro de articulações.
 **Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
 clicável, sem precisar programar.
 
-## Estrutura das 4 seções
+## Estrutura das 5 seções
 
 1. **Dashboard** (`/`) — pódio e ranking dos quartéis que mais captam (R$) e mais articulam
    (cadastros + reuniões), com níveis (bronze/prata/ouro/diamante) e atividade recente.
 2. **Parlamentares** (`/parlamentares`) — bancada de Goiás (17 deputados federais + 3
    senadores), com busca/filtro; cada perfil mostra contato, gabinete, votos recebidos na
    eleição, os stakeholders vinculados a ele (editáveis/excluíveis ali — cadastrar um novo é
-   só pela aba Cadastro) e as captações vinculadas a ele (clique numa pra ver o detalhe e
-   editar/excluir).
-3. **Cadastrar captação** (`/cadastro`) — duas seções: **Stakeholders** (cadastre uma pessoa —
-   ex: um prefeito — e marque um ou mais parlamentares com quem ela articula ao mesmo tempo) e
-   o formulário de **captação** em si: quartel (o campo Responsável já lista os militares
-   daquele quartel), parlamentar, stakeholder (sugere quem está vinculado ao parlamentar
-   escolhido), objeto, valor previsto, nº de reuniões, estágio (Primeiro contato → Em
-   articulação → Agenda marcada → um desfecho: Destinado, Adiado, Recusado ou Arquivado),
-   anexos (documentos/fotos). Este painel só acompanha até a captação ser destinada — o que
-   acontece depois (empenho, licitação, entrega) é acompanhado no painel-nacional. A cada
-   cadastro, uma notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
-4. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
+   só pela aba Stakeholders) e as captações vinculadas a ele (clique numa pra ver o detalhe,
+   a linha do tempo, e editar/excluir).
+3. **Stakeholders** (`/stakeholders`) — cadastre uma pessoa (ex: um prefeito) e marque um ou
+   mais parlamentares com quem ela articula ao mesmo tempo. Depois de cadastrado, aparece pra
+   escolher no formulário de Cadastro de captação e no perfil de cada parlamentar vinculado.
+4. **Cadastrar captação** (`/cadastro`) — formulário: quartel (o campo Responsável já lista os
+   militares daquele quartel), parlamentar, stakeholder (sugere quem está vinculado ao
+   parlamentar escolhido), objeto, valor previsto, nº de reuniões, estágio (Primeiro contato →
+   Em articulação → Agenda marcada → um desfecho: Destinado, Adiado, Recusado ou Arquivado),
+   anexos (documentos/fotos). Cada captação tem uma **linha do tempo** (data + o que aconteceu
+   em cada passo) com um alerta automático se ela ficar 15+ dias (🟡 esfriando) ou 30+ dias
+   (🔴 parada) sem nenhum passo novo registrado — só enquanto ainda está em andamento. Este
+   painel só acompanha até a captação ser destinada — o que acontece depois (empenho,
+   licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por
+   e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
+5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase).
 
 ## Como os dados funcionam
@@ -35,19 +39,20 @@ clicável, sem precisar programar.
 `public/data/` (só leitura, filtrado do painel-nacional — ver
 `scripts/gerar-parlamentares-go.js`).
 
-**Quartéis, militares, stakeholders e captações** vivem num banco **Supabase** (Postgres
-gerenciado, plano gratuito). O navegador acessa o Supabase diretamente — sem servidor próprio
-no meio — usando a "anon public key", uma chave feita pra ficar visível no código do site:
-quem protege os dados são as regras de segurança (RLS) definidas em `supabase/schema.sql`, não
-o sigilo da chave. Isso significa:
+**Quartéis, militares, stakeholders, captações e a linha do tempo de cada captação** vivem num
+banco **Supabase** (Postgres gerenciado, plano gratuito). O navegador acessa o Supabase
+diretamente — sem servidor próprio no meio — usando a "anon public key", uma chave feita pra
+ficar visível no código do site: quem protege os dados são as regras de segurança (RLS)
+definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 
 - **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
-- **Escrita**: as 4 tabelas aceitam criar/editar/remover direto do site — `captacoes` pelo
+- **Escrita**: as 5 tabelas aceitam criar/editar/remover direto do site — `captacoes` pelo
   formulário de Cadastro (e a edição/exclusão inline, tanto lá quanto no perfil do
-  parlamentar); `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` é
-  cadastrado pela aba **Cadastro** (vinculando um ou mais parlamentares) e editável/excluível
-  tanto ali quanto no perfil de cada parlamentar vinculado. Nenhuma delas precisa do Table
-  Editor do Supabase pro dia a dia.
+  parlamentar); `captacao_eventos` (a linha do tempo) pelo botão "Linha do tempo" de cada
+  captação; `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` pela aba
+  **Stakeholders** (vinculando um ou mais parlamentares), editável/excluível tanto ali quanto
+  no perfil de cada parlamentar vinculado. Nenhuma delas precisa do Table Editor do Supabase
+  pro dia a dia.
 - **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
   por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
@@ -85,7 +90,7 @@ passo a passo em **SETUP.md**, seção 6.
   SENASP/MJ) e os 122 militares da Convocação nº 106/2026 (posto, RG, nome de guerra, OBM).
   Ajuste direto nas tabelas `quarteis`/`militares` pelo Table Editor do Supabase (SETUP.md,
   seção 4) — sem precisar rodar SQL de novo.
-- **Stakeholders** — tabela vazia até alguém cadastrar pela aba Cadastro (SETUP.md, última
+- **Stakeholders** — tabela vazia até alguém cadastrar pela aba Stakeholders (SETUP.md, última
   seção).
 
 ## Rodando localmente
