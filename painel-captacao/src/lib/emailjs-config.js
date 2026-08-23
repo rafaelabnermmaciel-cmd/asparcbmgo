@@ -7,6 +7,10 @@ export const EMAILJS_SERVICE_ID = 'COLE_AQUI_O_SERVICE_ID';
 export const EMAILJS_TEMPLATE_ID = 'COLE_AQUI_O_TEMPLATE_ID';
 export const EMAILJS_PUBLIC_KEY = 'COLE_AQUI_A_PUBLIC_KEY';
 
+// Template separado (mesmo Service ID e Public Key acima) pro aviso de "alguém pediu acesso à
+// Gerenciamento" — ver SETUP.md, seção 7.6.
+export const EMAILJS_TEMPLATE_ID_ACESSO = 'COLE_AQUI_O_TEMPLATE_ID_DE_ACESSO';
+
 // Pra onde a notificação é enviada a cada novo cadastro. Se um dia precisar trocar, é só
 // mudar aqui (não precisa mexer no template do EmailJS, que usa {{to_email}}).
 export const EMAIL_NOTIFICACAO_PARA = 'asparcbmgo@gmail.com';
