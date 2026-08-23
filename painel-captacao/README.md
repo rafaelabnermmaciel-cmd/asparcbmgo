@@ -2,7 +2,7 @@
 
 App novo e independente (deploy próprio, separado do `painel-nacional`, mas publicado no
 mesmo GitHub Pages) focado só em captação de recursos: dashboard gamificado com ranking de
-quartéis, parlamentares de Goiás (com foto, votos recebidos, gabinete e interlocutor de
+quartéis, parlamentares de Goiás (com foto, votos recebidos, gabinete e stakeholders de
 captação) e um formulário de cadastro de articulações.
 
 **Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
@@ -14,7 +14,8 @@ clicável, sem precisar programar.
    (cadastros + reuniões), com níveis (bronze/prata/ouro/diamante) e atividade recente.
 2. **Parlamentares** (`/parlamentares`) — bancada de Goiás (17 deputados federais + 3
    senadores), com busca/filtro; cada perfil mostra contato, gabinete, votos recebidos na
-   eleição, interlocutor de captação e as captações vinculadas a ele.
+   eleição, os stakeholders de captação (editáveis ali mesmo — adicionar/editar/excluir) e as
+   captações vinculadas a ele (clique numa pra ver o detalhe e editar/excluir).
 3. **Cadastrar captação** (`/cadastro`) — formulário: quartel (o campo Responsável já lista os
    militares daquele quartel), stakeholder, parlamentar, objeto, valor previsto, nº de
    reuniões, estágio (Primeiro contato → Em articulação → Agenda marcada → um desfecho:
@@ -31,16 +32,17 @@ clicável, sem precisar programar.
 `public/data/` (só leitura, filtrado do painel-nacional — ver
 `scripts/gerar-parlamentares-go.js`).
 
-**Quartéis, militares, interlocutores e captações** vivem num banco **Supabase** (Postgres
+**Quartéis, militares, stakeholders e captações** vivem num banco **Supabase** (Postgres
 gerenciado, plano gratuito). O navegador acessa o Supabase diretamente — sem servidor próprio
 no meio — usando a "anon public key", uma chave feita pra ficar visível no código do site:
 quem protege os dados são as regras de segurança (RLS) definidas em `supabase/schema.sql`, não
 o sigilo da chave. Isso significa:
 
 - **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
-- **Escrita**: `captacoes` aceita gravação vinda do formulário de Cadastro; `quarteis` e
-  `militares` aceitam criar/editar/remover pela aba **Gerenciamento**, direto no site.
-  `interlocutores` continua só leitura pelo site — edite pelo Table Editor do Supabase.
+- **Escrita**: as 4 tabelas aceitam criar/editar/remover direto do site — `captacoes` pelo
+  formulário de Cadastro (e a edição/exclusão inline, tanto lá quanto no perfil do
+  parlamentar); `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` pelo
+  perfil de cada parlamentar. Nenhuma delas precisa do Table Editor do Supabase pro dia a dia.
 - **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
   por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
@@ -78,8 +80,8 @@ passo a passo em **SETUP.md**, seção 6.
   SENASP/MJ) e os 122 militares da Convocação nº 106/2026 (posto, RG, nome de guerra, OBM).
   Ajuste direto nas tabelas `quarteis`/`militares` pelo Table Editor do Supabase (SETUP.md,
   seção 4) — sem precisar rodar SQL de novo.
-- **Interlocutores por parlamentar** — tabela vazia até alguém preencher (SETUP.md, última
-  seção).
+- **Stakeholders por parlamentar** — tabela vazia até alguém preencher pelo perfil de cada
+  parlamentar no site (SETUP.md, última seção).
 
 ## Rodando localmente
 

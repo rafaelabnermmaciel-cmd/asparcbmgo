@@ -46,7 +46,7 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 ### Conferir se deu certo
 
 - Menu da esquerda → **Table Editor**: devem aparecer 4 tabelas — `quarteis` (61 linhas: as 60
-  unidades do CBMGO + SENASP/MJ), `militares` (122 linhas — um militar por linha), `interlocutores`
+  unidades do CBMGO + SENASP/MJ), `militares` (122 linhas — um militar por linha), `stakeholders`
   (vazia) e `captacoes` (vazia).
 - Menu da esquerda → **Storage**: deve aparecer um bucket chamado `anexos`.
 
@@ -159,11 +159,10 @@ nenhum acesso**. Se um dia o site parar de carregar dados do nada, é provavelme
 volte no painel do Supabase (supabase.com → seu projeto) que vai aparecer um botão **Restore
 project**; clique nele e em ~1 minuto volta ao normal. Não perde nenhum dado, só "hiberna".
 
-## Onde entram os interlocutores de cada parlamentar
+## Onde entram os stakeholders de cada parlamentar
 
-A tabela `interlocutores` (Table Editor → `interlocutores` → Insert row) usa a coluna
-`parlamentar_key` no formato `camara:<id>` ou `senado:<id>` — o `<id>` é o número que aparece
-na URL do perfil daquele parlamentar dentro do site (ex.:
-`.../#/parlamentares/camara/220565` → chave `camara:220565`). Preencha `nome`, `cargo`,
-`telefone`, `email` e `observacoes` com os dados do assessor/gabinete responsável por tratar
-de captação com aquele parlamentar.
+Direto no perfil do parlamentar no site (aba **Parlamentares** → clique no nome → seção
+**Stakeholders**) — botão **+ Adicionar**, preencha nome, cargo, telefone, e-mail e
+observações do assessor/gabinete responsável por tratar de captação com aquele parlamentar, e
+salve. Dá pra cadastrar mais de um stakeholder por parlamentar, e editar ou apagar a qualquer
+momento pelos botões "Editar"/"Excluir" de cada um — não precisa entrar no Supabase pra isso.
