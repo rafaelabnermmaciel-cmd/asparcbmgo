@@ -33,9 +33,9 @@ clicável, sem precisar programar.
    notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase). **Única aba com login** (dado de
-   organização interna): entra com e-mail/senha ou Google, e só edita quem já foi aprovado por
-   alguém que já tem acesso — aprovação é feita ali mesmo, numa sub-aba **Acessos** (ver
-   "Login e aprovação de acesso" abaixo).
+   organização interna): entra com e-mail/senha ou Google e já edita na hora, sem espera —
+   quem já tem acesso pode revogar o de outra pessoa numa sub-aba **Acessos** (ver "Login e
+   acesso" abaixo).
 
 ## Como os dados funcionam
 
@@ -65,9 +65,11 @@ definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 ⚠️ **Sobre segurança**: a maior parte do site não tem login — qualquer pessoa com o link
 consegue cadastrar captações, stakeholders etc. (é dado que a equipe toda mexe no dia a dia).
 A aba **Gerenciamento** é diferente: exige **login do Supabase Auth** (e-mail/senha ou Google)
-**e** aprovação manual de alguém que já tem acesso (tabela `usuarios_aprovados` + RLS — ver
-`supabase/schema.sql`, seção 4.2, e `SETUP.md`, seção 7). Se um dia o resto do site também
-precisar desse controle, dá pra estender o mesmo esquema sem redesenhar nada — me avise.
+— quem cria conta já entra liberado na hora, sem aprovação manual nenhuma (nem a primeira
+pessoa) — mas quem já tem acesso pode revogar o de outra pessoa a qualquer momento pela aba
+Acessos (tabela `usuarios_aprovados` + RLS — ver `supabase/schema.sql`, seção 4.2, e
+`SETUP.md`, seção 7). Se um dia o resto do site também precisar desse controle, dá pra
+estender o mesmo esquema sem redesenhar nada — me avise.
 
 ## Deploy (GitHub Pages — mesma automação do painel-nacional)
 
@@ -122,13 +124,14 @@ npm run sync:parlamentares-go
 Isso regrava `public/data/parlamentares-go.json` só com os 20 parlamentares de Goiás (17
 deputados federais + 3 senadores).
 
-## Login e aprovação de acesso (aba Gerenciamento)
+## Login e acesso (aba Gerenciamento)
 
 Usa o **Supabase Auth** (já incluso no mesmo projeto, sem conta nova) — e-mail/senha e Google.
-Toda conta nova entra como "pendente" (via gatilho em `auth.users`, ver `schema.sql`); alguém
-que já tem acesso aprova ou revoga pela própria aba **Gerenciamento → Acessos**. Configuração
-completa (Google Cloud, Site URL/Redirect URLs no Supabase, e como virar o primeiro aprovado)
-em **SETUP.md**, seção 7.
+Toda conta nova (a sua, na primeira vez, e a de qualquer pessoa depois) já entra liberada na
+hora, via gatilho em `auth.users` (ver `schema.sql`) — sem fila de aprovação. Quem já tem
+acesso pode revogar o de outra pessoa (ou reativar depois) pela própria aba **Gerenciamento →
+Acessos**. Configuração completa (Google Cloud, Site URL/Redirect URLs no Supabase) em
+**SETUP.md**, seção 7.
 
 ## Stack
 
