@@ -8,9 +8,10 @@ function fmtR(v) {
 
 // Manda a notificação direto do navegador pra API do EmailJS — sem servidor no meio (mesmo
 // modelo do Supabase: uma chave pública, protegida pelas "Allowed origins" da conta, não por
-// sigilo). Nunca lança erro: se o e-mail falhar, a captação já está salva no Supabase de
-// qualquer forma — só avisa no console pra não confundir quem cadastrou com uma falha real.
-export async function notificarNovaCaptacao(registro) {
+// sigilo). Nunca lança erro: se o e-mail falhar, a captação já está salva/editada/excluída no
+// Supabase de qualquer forma — só avisa no console pra não confundir quem mexeu com uma falha
+// real. `acao` é "cadastrada" | "editada" | "excluída" — vira a variável {{acao}} no template.
+export async function notificarCaptacao(registro, acao) {
   if (!emailjsConfigurado) {
     console.warn('[emailjs] não configurado ainda — ver SETUP.md ("Notificação por e-mail"). Pulando notificação.');
     return;
@@ -25,6 +26,7 @@ export async function notificarNovaCaptacao(registro) {
         user_id: EMAILJS_PUBLIC_KEY,
         template_params: {
           to_email: EMAIL_NOTIFICACAO_PARA,
+          acao,
           quartel: registro.quartelNome,
           municipio: registro.municipio || '—',
           parlamentar: registro.parlamentarNome,
@@ -32,6 +34,7 @@ export async function notificarNovaCaptacao(registro) {
           stakeholder: registro.stakeholder || '—',
           objeto: registro.objeto,
           valor_previsto: fmtR(registro.valorPrevisto),
+          valor_confirmado: fmtR(registro.valorConfirmado),
           num_reunioes: registro.numReunioes || 0,
           status: registro.status,
           observacoes: registro.observacoes || '—',

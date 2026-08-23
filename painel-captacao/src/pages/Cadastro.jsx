@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { LuCircleCheck, LuTriangleAlert, LuFileText, LuImage, LuPencil } from 'react-icons/lu';
+import { LuCircleCheck, LuTriangleAlert, LuFileText, LuImage, LuPencil, LuTrash2 } from 'react-icons/lu';
 import { useParlamentaresGO, useQuarteis, useMilitares, useCaptacoes, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -11,6 +11,8 @@ const labelClass = 'text-[11px] font-medium uppercase tracking-wide text-slate-4
 const btnPrimary = 'rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:opacity-50';
 const btnGhost =
   'rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300';
+const btnDanger =
+  'rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/30';
 
 function fmtR(v) {
   return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
@@ -221,7 +223,7 @@ export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
-  const { captacoes, submitCaptacao, updateCaptacao } = useCaptacoes();
+  const { captacoes, submitCaptacao, updateCaptacao, removeCaptacao } = useCaptacoes();
 
   const [f, setF] = useState(VAZIO);
   const [anexos, setAnexos] = useState([]);
@@ -237,6 +239,15 @@ export default function Cadastro() {
     () => (filtroQuartel ? captacoes.filter((c) => c.quartelId === filtroQuartel) : captacoes),
     [captacoes, filtroQuartel]
   );
+
+  async function removerCaptacao(c) {
+    if (!confirm(`Excluir a captação "${c.objeto}" (${c.quartelNome} · ${c.parlamentarNome})? Essa ação não pode ser desfeita.`)) return;
+    try {
+      await removeCaptacao(c.id);
+    } catch (err) {
+      alert(err.message || 'Falha ao excluir. Tente novamente.');
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -333,6 +344,9 @@ export default function Cadastro() {
                           <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
                           <button type="button" onClick={() => setEditandoId(c.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
                             <LuPencil className="h-3 w-3" /> Editar
+                          </button>
+                          <button type="button" onClick={() => removerCaptacao(c)} className={`flex items-center gap-1 ${btnDanger}`}>
+                            <LuTrash2 className="h-3 w-3" /> Excluir
                           </button>
                         </div>
                       </div>

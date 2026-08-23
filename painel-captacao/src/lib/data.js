@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase, supabaseConfigurado } from './supabase.js';
-import { notificarNovaCaptacao } from './emailjs.js';
+import { notificarCaptacao } from './emailjs.js';
 
 // Deputados/senadores/votos de Goiás continuam vindo de JSON estático (são dados só de
 // leitura, filtrados do painel-nacional — ver scripts/gerar-parlamentares-go.js). Quartéis,
@@ -233,7 +233,7 @@ export function useCaptacoes() {
     const registro = rowParaCaptacao(inserido);
     idsConhecidos.current.add(registro.id);
     setState((prev) => ({ ...prev, captacoes: [registro, ...prev.captacoes] }));
-    notificarNovaCaptacao(registro); // não bloqueia o cadastro — falha de e-mail nunca desfaz o que já foi salvo
+    notificarCaptacao(registro, 'cadastrada'); // não bloqueia o cadastro — falha de e-mail nunca desfaz o que já foi salvo
     return registro;
   }, []);
 
@@ -261,13 +261,15 @@ export function useCaptacoes() {
 
     const registro = rowParaCaptacao(atualizado);
     setState((prev) => ({ ...prev, captacoes: prev.captacoes.map((c) => (c.id === id ? registro : c)) }));
+    notificarCaptacao(registro, 'editada');
     return registro;
   }, []);
 
   const removeCaptacao = useCallback(async (id) => {
-    const { error } = await supabase.from('captacoes').delete().eq('id', id);
+    const { data: removido, error } = await supabase.from('captacoes').delete().eq('id', id).select().single();
     if (error) throw new Error(error.message);
     setState((prev) => ({ ...prev, captacoes: prev.captacoes.filter((c) => c.id !== id) }));
+    if (removido) notificarCaptacao(rowParaCaptacao(removido), 'excluída');
   }, []);
 
   return { loading: state.loading, captacoes: state.captacoes, submitCaptacao, updateCaptacao, removeCaptacao };
