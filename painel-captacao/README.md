@@ -32,7 +32,10 @@ clicável, sem precisar programar.
    depois (empenho, licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma
    notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
-   direto no site (sem precisar entrar no Supabase).
+   direto no site (sem precisar entrar no Supabase). **Única aba com login** (dado de
+   organização interna): entra com e-mail/senha ou Google, e só edita quem já foi aprovado por
+   alguém que já tem acesso — aprovação é feita ali mesmo, numa sub-aba **Acessos** (ver
+   "Login e aprovação de acesso" abaixo).
 
 ## Como os dados funcionam
 
@@ -59,11 +62,12 @@ definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
   público pra leitura) — limite de ~4MB por arquivo (ver `src/components/FileField.jsx`).
 
-⚠️ **Sobre segurança**: o site não tem login — qualquer pessoa com o link consegue cadastrar
-captações e editar quartéis/militares pela aba Gerenciamento (é o mesmo modelo do formulário
-de Cadastro). Pra um painel interno pequeno costuma ser um risco aceitável; se um dia isso
-precisar de controle de quem pode editar o quê, dá pra adicionar login do Supabase (Auth) sem
-redesenhar o resto — me avise quando chegar nesse ponto.
+⚠️ **Sobre segurança**: a maior parte do site não tem login — qualquer pessoa com o link
+consegue cadastrar captações, stakeholders etc. (é dado que a equipe toda mexe no dia a dia).
+A aba **Gerenciamento** é diferente: exige **login do Supabase Auth** (e-mail/senha ou Google)
+**e** aprovação manual de alguém que já tem acesso (tabela `usuarios_aprovados` + RLS — ver
+`supabase/schema.sql`, seção 4.2, e `SETUP.md`, seção 7). Se um dia o resto do site também
+precisar desse controle, dá pra estender o mesmo esquema sem redesenhar nada — me avise.
 
 ## Deploy (GitHub Pages — mesma automação do painel-nacional)
 
@@ -117,6 +121,14 @@ npm run sync:parlamentares-go
 
 Isso regrava `public/data/parlamentares-go.json` só com os 20 parlamentares de Goiás (17
 deputados federais + 3 senadores).
+
+## Login e aprovação de acesso (aba Gerenciamento)
+
+Usa o **Supabase Auth** (já incluso no mesmo projeto, sem conta nova) — e-mail/senha e Google.
+Toda conta nova entra como "pendente" (via gatilho em `auth.users`, ver `schema.sql`); alguém
+que já tem acesso aprova ou revoga pela própria aba **Gerenciamento → Acessos**. Configuração
+completa (Google Cloud, Site URL/Redirect URLs no Supabase, e como virar o primeiro aprovado)
+em **SETUP.md**, seção 7.
 
 ## Stack
 

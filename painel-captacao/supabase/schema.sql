@@ -15,6 +15,7 @@
 --                                 ao mesmo tempo (cadastrado na aba Cadastro do site)
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site
 --   4.1. Tabela "captacao_eventos" — a linha do tempo (passos) de cada captação
+--   4.2. Tabela "usuarios_aprovados" + gatilho — login e aprovação de acesso (só Gerenciamento)
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
 --   7. Tempo real pra tabela de captações
@@ -131,6 +132,54 @@ create table if not exists captacao_eventos (
   criado_em timestamptz not null default now()
 );
 
+-- 4.2) LOGIN E APROVAÇÃO DE ACESSO (só pra aba Gerenciamento) -------------------
+-- Quartéis/militares são dado sensível de organização interna, então quem edita precisa
+-- entrar com login (e-mail/senha ou Google) E já ter sido aprovado por alguém que já tem
+-- acesso — o resto do site (Cadastro, Stakeholders, Parlamentares) continua aberto pra quem
+-- tiver o link, sem mudança nenhuma.
+--
+-- Toda conta nova (criada ao entrar pela primeira vez, por e-mail/senha ou Google) cai aqui
+-- com "aprovado = false" automaticamente (via o gatilho abaixo) — fica esperando alguém que já
+-- é aprovado liberar o acesso pela própria aba Gerenciamento → Acessos.
+create table if not exists usuarios_aprovados (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  email text not null default '',
+  aprovado boolean not null default false,
+  criado_em timestamptz not null default now()
+);
+
+-- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui,
+-- sempre começando como "aprovado = false".
+create or replace function public.lidar_com_novo_usuario()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.usuarios_aprovados (user_id, email, aprovado)
+  values (new.id, new.email, false)
+  on conflict (user_id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.lidar_com_novo_usuario();
+
+-- Função auxiliar (roda com privilégio de dono da tabela, ignorando RLS por dentro) pra
+-- checar se quem está logado agora já foi aprovado — evita loop de RLS "checando a própria
+-- tabela que tem RLS" e é reaproveitada nas políticas de quarteis/militares logo abaixo.
+create or replace function public.esta_aprovado()
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select coalesce((select aprovado from usuarios_aprovados where user_id = auth.uid()), false);
+$$;
+
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
 -- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público), e todas as
@@ -148,24 +197,42 @@ alter table militares enable row level security;
 alter table stakeholders enable row level security;
 alter table captacoes enable row level security;
 alter table captacao_eventos enable row level security;
+alter table usuarios_aprovados enable row level security;
 
+-- Leitura de quarteis/militares continua pública (o Cadastro e o Dashboard precisam ler sem
+-- login) — só criar/editar/apagar passa a exigir login aprovado, pela aba Gerenciamento.
 drop policy if exists "Leitura pública" on quarteis;
 create policy "Leitura pública" on quarteis for select using (true);
 drop policy if exists "Inserção pública" on quarteis;
-create policy "Inserção pública" on quarteis for insert with check (true);
+drop policy if exists "Inserção autenticada aprovada" on quarteis;
+create policy "Inserção autenticada aprovada" on quarteis for insert with check (public.esta_aprovado());
 drop policy if exists "Atualização pública" on quarteis;
-create policy "Atualização pública" on quarteis for update using (true) with check (true);
+drop policy if exists "Atualização autenticada aprovada" on quarteis;
+create policy "Atualização autenticada aprovada" on quarteis for update using (public.esta_aprovado()) with check (public.esta_aprovado());
 drop policy if exists "Remoção pública" on quarteis;
-create policy "Remoção pública" on quarteis for delete using (true);
+drop policy if exists "Remoção autenticada aprovada" on quarteis;
+create policy "Remoção autenticada aprovada" on quarteis for delete using (public.esta_aprovado());
 
 drop policy if exists "Leitura pública" on militares;
 create policy "Leitura pública" on militares for select using (true);
 drop policy if exists "Inserção pública" on militares;
-create policy "Inserção pública" on militares for insert with check (true);
+drop policy if exists "Inserção autenticada aprovada" on militares;
+create policy "Inserção autenticada aprovada" on militares for insert with check (public.esta_aprovado());
 drop policy if exists "Atualização pública" on militares;
-create policy "Atualização pública" on militares for update using (true) with check (true);
+drop policy if exists "Atualização autenticada aprovada" on militares;
+create policy "Atualização autenticada aprovada" on militares for update using (public.esta_aprovado()) with check (public.esta_aprovado());
 drop policy if exists "Remoção pública" on militares;
-create policy "Remoção pública" on militares for delete using (true);
+drop policy if exists "Remoção autenticada aprovada" on militares;
+create policy "Remoção autenticada aprovada" on militares for delete using (public.esta_aprovado());
+
+-- Qualquer pessoa logada vê a lista (nome/e-mail/status) — só quem já é aprovado consegue
+-- aprovar/revogar alguém (pela aba Gerenciamento → Acessos). O cadastro da própria linha
+-- acontece sozinho, pelo gatilho lá em cima — ninguém insere aqui direto.
+drop policy if exists "Leitura autenticada" on usuarios_aprovados;
+create policy "Leitura autenticada" on usuarios_aprovados for select using (auth.role() = 'authenticated');
+drop policy if exists "Aprovação só por quem já é aprovado" on usuarios_aprovados;
+create policy "Aprovação só por quem já é aprovado" on usuarios_aprovados for update
+  using (public.esta_aprovado()) with check (true);
 
 drop policy if exists "Leitura pública" on stakeholders;
 create policy "Leitura pública" on stakeholders for select using (true);

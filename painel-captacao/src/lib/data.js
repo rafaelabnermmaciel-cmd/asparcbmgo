@@ -325,6 +325,30 @@ export function useEventos() {
   return { loading: state.loading, eventos: state.eventos, addEvento, removeEvento };
 }
 
+// Lista de quem já pediu acesso (aprovado ou não) — usada na aba Gerenciamento → Acessos pra
+// aprovar/revogar. RLS só deixa quem já é aprovado editar (ver supabase/schema.sql); ler a
+// lista é liberado pra qualquer pessoa logada, mesmo sem aprovação ainda.
+export function useUsuariosAprovados() {
+  const [state, setState] = useState({ loading: true, usuarios: [] });
+
+  const recarregar = useCallback(async () => {
+    if (!supabaseConfigurado) { setState({ loading: false, usuarios: [] }); return; }
+    const { data, error } = await supabase.from('usuarios_aprovados').select('*').order('criado_em');
+    if (error) console.warn('[data] falha ao carregar usuarios_aprovados:', error.message);
+    setState({ loading: false, usuarios: data || [] });
+  }, []);
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const definirAprovacao = useCallback(async (userId, aprovado) => {
+    const { error } = await supabase.from('usuarios_aprovados').update({ aprovado }).eq('user_id', userId);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, usuarios: state.usuarios, definirAprovacao };
+}
+
 // Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
 // cadastro pela aba Gerenciamento — a pessoa pode editar antes de salvar.
 export function slugify(texto) {
