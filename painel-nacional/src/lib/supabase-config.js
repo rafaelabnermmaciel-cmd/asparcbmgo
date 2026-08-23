@@ -6,5 +6,5 @@
 // funciona). Quem protege os dados são as regras de segurança (RLS) definidas em
 // supabase/schema.sql, não o sigilo desta chave. Nunca cole aqui a "chave secreta"
 // (sb_secret_..., antiga "service_role") — essa sim nunca deve ir pro navegador.
-export const SUPABASE_URL = 'COLE_AQUI_A_URL_DO_PROJETO';
-export const SUPABASE_ANON_KEY = 'COLE_AQUI_A_CHAVE_PUBLICAVEL';
+export const SUPABASE_URL = 'https://uawoozkurvjahmnciduf.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_GRovL3kY7pgdxJA1N_wDhw_L2KOmLXI';
