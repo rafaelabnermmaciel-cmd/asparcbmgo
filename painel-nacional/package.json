@@ -16,6 +16,7 @@
     "fetch:all": "npm run fetch:parlamentares && npm run fetch:votacoes && npm run fetch:eleicoes -- --limit 10"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "framer-motion": "^13.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LuCalendarDays, LuCamera, LuPaperclip, LuFileText } from 'react-icons/lu';
+import { LuCalendarDays, LuCamera, LuPaperclip, LuFileText, LuLoaderCircle } from 'react-icons/lu';
 import { useStore, TIPOS_EVENTO, TIPOS_REUNIAO, STATUS_EVENTO } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
 import { useParlamentares } from '../lib/data.js';
+import { supabase } from '../lib/supabase.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import { inputClass, labelClass, btnPrimary, btnGhost, btnDanger } from './Gerenciamento.jsx';
 
@@ -45,54 +46,68 @@ function getBirthdayEvts(parlamentares) {
 
 const emptyEvento = { titulo: '', data: new Date().toISOString().slice(0, 10), hora: '', tipo: 'div', parlamentarNome: '', destinacaoId: null, projetoId: null, local: '', tipoReuniao: 'Reunião institucional', status: 'Prevista', pauta: '', resultado: '', responsavel: '', observacoes: '', anexos: [] };
 
-const TAMANHO_MAX_ANEXO = 2 * 1024 * 1024; // 2MB — anexo fica embutido no navegador (localStorage), sem servidor.
+const TAMANHO_MAX_ANEXO = 10 * 1024 * 1024; // 10MB — vai pro bucket "anexos" do Supabase, não mais embutido no navegador.
 
-function arquivoParaDataUri(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+async function enviarAnexo(file, tipo) {
+  const caminho = `${Date.now()}-${Math.random().toString(36).slice(2)}-${file.name}`;
+  const { error } = await supabase.storage.from('anexos').upload(caminho, file);
+  if (error) throw error;
+  const { data } = supabase.storage.from('anexos').getPublicUrl(caminho);
+  return { id: caminho, tipo, nome: file.name, url: data.publicUrl };
 }
 
 function AnexosField({ anexos, onChange }) {
+  const [enviando, setEnviando] = useState(false);
+
   async function handleFiles(e, tipo) {
     const files = [...e.target.files];
     e.target.value = '';
-    const novos = [];
-    for (const file of files) {
+    const aEnviar = files.filter((file) => {
       if (file.size > TAMANHO_MAX_ANEXO) {
-        alert(`"${file.name}" tem mais de 2MB — escolha um arquivo menor (o anexo fica salvo no navegador).`);
-        continue;
+        alert(`"${file.name}" tem mais de 10MB — escolha um arquivo menor.`);
+        return false;
       }
-      const dataUri = await arquivoParaDataUri(file);
-      novos.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, tipo, nome: file.name, dataUri });
+      return true;
+    });
+    if (aEnviar.length === 0) return;
+    setEnviando(true);
+    try {
+      const novos = await Promise.all(aEnviar.map((file) => enviarAnexo(file, tipo)));
+      onChange([...(anexos || []), ...novos]);
+    } catch (err) {
+      alert(`Falha ao enviar anexo: ${err.message}`);
+    } finally {
+      setEnviando(false);
     }
-    if (novos.length) onChange([...(anexos || []), ...novos]);
   }
-  function remover(id) {
+  async function remover(id) {
     onChange((anexos || []).filter((a) => a.id !== id));
+    await supabase.storage.from('anexos').remove([id]);
   }
   return (
     <div className="sm:col-span-2">
       <p className={labelClass}>Anexos (foto e documento)</p>
-      <div className="mt-1 flex flex-wrap gap-2">
+      <div className="mt-1 flex flex-wrap items-center gap-2">
         <label className={`${btnGhost} flex cursor-pointer items-center gap-1.5`}>
           <LuCamera className="h-3.5 w-3.5" /> Adicionar foto
-          <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFiles(e, 'foto')} />
+          <input type="file" accept="image/*" multiple className="hidden" disabled={enviando} onChange={(e) => handleFiles(e, 'foto')} />
         </label>
         <label className={`${btnGhost} flex cursor-pointer items-center gap-1.5`}>
           <LuPaperclip className="h-3.5 w-3.5" /> Adicionar documento
-          <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" multiple className="hidden" onChange={(e) => handleFiles(e, 'documento')} />
+          <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" multiple className="hidden" disabled={enviando} onChange={(e) => handleFiles(e, 'documento')} />
         </label>
+        {enviando && (
+          <span className="flex items-center gap-1 text-xs text-slate-400">
+            <LuLoaderCircle className="h-3.5 w-3.5 animate-spin" /> Enviando...
+          </span>
+        )}
       </div>
       {anexos?.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2">
           {anexos.map((a) => (
             <div key={a.id} className="relative flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-900">
               {a.tipo === 'foto' ? (
-                <img src={a.dataUri} alt={a.nome} className="h-6 w-6 rounded object-cover" />
+                <img src={a.url} alt={a.nome} className="h-6 w-6 rounded object-cover" />
               ) : (
                 <LuFileText className="h-3.5 w-3.5 text-slate-400" />
               )}

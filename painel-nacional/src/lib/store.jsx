@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { supabase, supabaseConfigurado } from './supabase.js';
 
-const STORE_KEY = 'painel-nacional-store-v2';
 const StoreContext = createContext(null);
 
 async function fetchJson(path, fallback) {
@@ -15,23 +15,6 @@ async function fetchJson(path, fallback) {
     console.warn(`[store] falha ao carregar ${path}:`, err.message);
     return fallback;
   }
-}
-
-function loadPersisted() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function persist(store) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(store));
-}
-
-function nextId(list) {
-  return list.reduce((max, x) => Math.max(max, x.id), 0) + 1;
 }
 
 export const ETAPAS_ORDEM = ['ind', 'cad', 'apv', 'emp', 'lic', 'con', 'entr'];
@@ -163,235 +146,392 @@ function nacionalToProjeto(p) {
   };
 }
 
+// ============================================================================
+// Mapeamento linha do banco (snake_case) <-> objeto do app (camelCase). Os componentes
+// continuam usando os mesmos nomes de campo de sempre — só esta camada sabe que agora os
+// dados vêm do Supabase.
+// ============================================================================
+
+function rowToDestinacao(r) {
+  return {
+    id: r.id,
+    parlamentarNome: r.parlamentar_nome,
+    ano: r.ano,
+    municipio: r.municipio,
+    objeto: r.objeto,
+    valorPrevisto: Number(r.valor_previsto) || 0,
+    valorConfirmado: Number(r.valor_confirmado) || 0,
+    status: r.status,
+    sei: r.sei,
+    responsavel: r.responsavel,
+    proximoPasso: r.proximo_passo,
+    riscos: r.riscos,
+    observacoes: r.observacoes,
+    etapas: statusToEtapas(r.status),
+  };
+}
+function destinacaoToRow(d) {
+  return {
+    parlamentar_nome: d.parlamentarNome ?? '',
+    ano: d.ano ?? new Date().getFullYear(),
+    municipio: d.municipio ?? '',
+    objeto: d.objeto ?? '',
+    valor_previsto: d.valorPrevisto ?? 0,
+    valor_confirmado: d.valorConfirmado ?? 0,
+    status: d.status ?? 'Em articulação',
+    sei: d.sei ?? '',
+    responsavel: d.responsavel ?? '',
+    proximo_passo: d.proximoPasso ?? '',
+    riscos: d.riscos ?? '',
+    observacoes: d.observacoes ?? '',
+  };
+}
+const DEST_FIELD_MAP = {
+  parlamentarNome: 'parlamentar_nome', ano: 'ano', municipio: 'municipio', objeto: 'objeto',
+  valorPrevisto: 'valor_previsto', valorConfirmado: 'valor_confirmado', status: 'status', sei: 'sei',
+  responsavel: 'responsavel', proximoPasso: 'proximo_passo', riscos: 'riscos', observacoes: 'observacoes',
+};
+
+function rowToProjeto(r) {
+  return {
+    id: r.id,
+    autor: r.autor || null,
+    relator: r.relator || null,
+    tipo: r.tipo,
+    numero: r.numero,
+    ementa: r.ementa,
+    status: r.status,
+    posicao: r.posicao,
+    prioridade: r.prioridade,
+    responsavel: r.responsavel,
+    proximoPasso: r.proximo_passo,
+    observacoes: r.observacoes,
+    casaAtual: r.casa_atual,
+    link: r.link,
+    ultimaMovimentacao: r.ultima_movimentacao,
+    origemNacional: r.origem_nacional,
+  };
+}
+function projetoToRow(p) {
+  return {
+    autor: p.autor || '',
+    relator: p.relator || '',
+    tipo: p.tipo ?? 'PL',
+    numero: p.numero ?? '',
+    ementa: p.ementa ?? '',
+    status: p.status ?? 'Protocolado',
+    posicao: p.posicao ?? 'em análise',
+    prioridade: p.prioridade ?? 'média',
+    responsavel: p.responsavel ?? '',
+    proximo_passo: p.proximoPasso ?? '',
+    observacoes: p.observacoes ?? '',
+    casa_atual: p.casaAtual ?? null,
+    link: p.link ?? null,
+    ultima_movimentacao: p.ultimaMovimentacao ?? null,
+    origem_nacional: !!p.origemNacional,
+  };
+}
+const PROJ_FIELD_MAP = {
+  autor: 'autor', relator: 'relator', tipo: 'tipo', numero: 'numero', ementa: 'ementa', status: 'status',
+  posicao: 'posicao', prioridade: 'prioridade', responsavel: 'responsavel', proximoPasso: 'proximo_passo',
+  observacoes: 'observacoes', casaAtual: 'casa_atual', link: 'link', ultimaMovimentacao: 'ultima_movimentacao',
+  origemNacional: 'origem_nacional',
+};
+
+function rowToEvento(r) {
+  return {
+    id: r.id,
+    titulo: r.titulo,
+    data: r.data,
+    hora: r.hora,
+    tipo: r.tipo,
+    parlamentarNome: r.parlamentar_nome,
+    destinacaoId: r.destinacao_id,
+    projetoId: r.projeto_id,
+    local: r.local,
+    tipoReuniao: r.tipo_reuniao,
+    status: r.status,
+    pauta: r.pauta,
+    resultado: r.resultado,
+    responsavel: r.responsavel,
+    observacoes: r.observacoes,
+    anexos: r.anexos || [],
+  };
+}
+function eventoToRow(e) {
+  return {
+    titulo: e.titulo ?? '',
+    data: e.data || null,
+    hora: e.hora ?? '',
+    tipo: e.tipo ?? 'div',
+    parlamentar_nome: e.parlamentarNome ?? '',
+    destinacao_id: e.destinacaoId ?? null,
+    projeto_id: e.projetoId ?? null,
+    local: e.local ?? '',
+    tipo_reuniao: e.tipoReuniao ?? 'Reunião institucional',
+    status: e.status ?? 'Prevista',
+    pauta: e.pauta ?? '',
+    resultado: e.resultado ?? '',
+    responsavel: e.responsavel ?? '',
+    observacoes: e.observacoes ?? '',
+    anexos: e.anexos ?? [],
+  };
+}
+const EVENTO_FIELD_MAP = {
+  titulo: 'titulo', data: 'data', hora: 'hora', tipo: 'tipo', parlamentarNome: 'parlamentar_nome',
+  destinacaoId: 'destinacao_id', projetoId: 'projeto_id', local: 'local', tipoReuniao: 'tipo_reuniao',
+  status: 'status', pauta: 'pauta', resultado: 'resultado', responsavel: 'responsavel',
+  observacoes: 'observacoes', anexos: 'anexos',
+};
+
+// Converte só as chaves presentes no patch (update parcial) — nunca usar o *ToRow de inserção
+// pra isso, porque ele preenche os campos ausentes com valor-padrão e sobrescreveria o resto
+// da linha no banco.
+function patchToRow(patch, fieldMap) {
+  const row = {};
+  for (const [k, v] of Object.entries(patch)) {
+    if (fieldMap[k]) row[fieldMap[k]] = v === undefined ? null : v;
+  }
+  return row;
+}
+
+const LOCALSTORAGE_LEGADO_KEY = 'painel-nacional-store-v2';
+
 export function StoreProvider({ children }) {
-  const [store, setStore] = useState(null);
+  const [destinacoes, setDestinacoes] = useState([]);
+  const [projetos, setProjetos] = useState([]);
+  const [eventos, setEventos] = useState([]);
+  const [parlamentarNotas, setParlamentarNotas] = useState({});
+  const [projetosFonte, setProjetosFonte] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Sem Supabase configurado, o store fica "carregando" pra sempre — as páginas que dependem
+    // dele já lidam com isso (`if (store.loading) return null`). Configure
+    // src/lib/supabase-config.js pra habilitar.
+    if (!supabaseConfigurado) return;
+
+    let cancelado = false;
     (async () => {
-      let persisted = loadPersisted();
-      // Migração: navegadores que já tinham o antigo "legislativoNacional" separado (bug
-      // corrigido — essa lista sempre foi, na prática, a mesma coisa que projetos de lei)
-      // ganham esses itens fundidos dentro de projetos, uma única vez.
-      if (persisted && persisted.legislativoNacional) {
-        const jaExistem = new Set((persisted.projetos || []).map((p) => `${p.tipo}-${p.numero}`));
-        const novos = persisted.legislativoNacional
-          .map(nacionalToProjeto)
-          .filter((p) => !jaExistem.has(`${p.tipo}-${p.numero}`));
-        const projetosBase = persisted.projetos || [];
-        const migrados = novos.map((p, i) => ({ ...p, id: nextId(projetosBase) + i }));
-        persisted = {
-          ...persisted,
-          projetos: [...projetosBase, ...migrados],
-          projetosFonte: persisted.legislativoFonte || persisted.projetosFonte || null,
-        };
-        delete persisted.legislativoNacional;
-        delete persisted.legislativoFonte;
-        persist(persisted);
-      }
-      // Migração: projetos já fundidos numa sessão anterior (com o antigo campo
-      // parlamentarNome) ganham autor/relator extraídos do relatório ASPAR, uma única vez.
-      if (persisted?.projetos?.some((p) => p.origemNacional && p.autor === undefined)) {
-        persisted = {
-          ...persisted,
-          projetos: persisted.projetos.map((p) => {
-            if (!p.origemNacional || p.autor !== undefined) return p;
-            const autorRelator = AUTOR_RELATOR_NACIONAL[`${p.tipo}-${p.numero}`] || {};
-            const { parlamentarNome, ...resto } = p;
-            return { ...resto, autor: autorRelator.autor || null, relator: autorRelator.relator || null };
-          }),
-        };
-        persist(persisted);
-      }
-      // Migração: "acordo verbal" era um campo booleano à parte (tirava o item do ano
-      // normal) — virou o primeiro status do fluxo, pra 2027 continuar navegável como
-      // qualquer outro ano. Quem já tinha o campo booleano marcado vira status.
-      if (persisted?.destinacoes?.some((d) => d.acordoVerbal !== undefined)) {
-        persisted = {
-          ...persisted,
-          destinacoes: persisted.destinacoes.map((d) => {
-            if (d.acordoVerbal === undefined) return d;
-            const { acordoVerbal, ...resto } = d;
-            return acordoVerbal ? { ...resto, status: 'Acordo Verbal' } : resto;
-          }),
-        };
-        persist(persisted);
-      }
-      // Sincronização leve dos projetos de origem nacional: o GitHub Actions atualiza
-      // acompanhamento-legislativo.json quando alguma proposição monitorada tem movimentação
-      // nova (ver scripts/fetch-tramitacoes.js). Sem este passo, um navegador que já visitou o
-      // app uma vez nunca mais veria essa atualização — o resto do estado vem só do
-      // localStorage. Só os campos "de fonte" (ultimaMovimentacao/casaAtual/link/situacao) são
-      // sobrescritos; qualquer edição manual do usuário (status, responsável, próximo passo
-      // etc.) fica intacta.
-      if (persisted) {
+      const [destResp, projResp, evtResp, notaResp] = await Promise.all([
+        supabase.from('destinacoes').select('*').order('id'),
+        supabase.from('projetos').select('*').order('id'),
+        supabase.from('eventos').select('*').order('id'),
+        supabase.from('parlamentar_notas').select('*'),
+      ]);
+      if (cancelado) return;
+
+      let destinacoesAtuais = (destResp.data || []).map(rowToDestinacao);
+      let projetosAtuais = (projResp.data || []).map(rowToProjeto);
+      let eventosAtuais = (evtResp.data || []).map(rowToEvento);
+      let notasAtuais = Object.fromEntries((notaResp.data || []).map((r) => [r.parlamentar_key, r.conteudo]));
+
+      // Migração única: quem já tinha dados no localStorage (versão anterior, antes do
+      // Supabase) tem esse conteúdo importado pro banco na primeira carga — só quando as 3
+      // tabelas principais ainda estão vazias, pra nunca duplicar em cargas seguintes.
+      if (destinacoesAtuais.length === 0 && projetosAtuais.length === 0 && eventosAtuais.length === 0) {
         try {
-          const legislativoRaw = await fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null);
-          if (legislativoRaw) {
-            const porChave = new Map((legislativoRaw.proposicoes || []).map((p) => [`${p.tipo}-${p.numero}`, p]));
-            let mudou = false;
-            const projetosAtualizados = (persisted.projetos || []).map((proj) => {
-              if (!proj.origemNacional) return proj;
-              const fresco = porChave.get(`${proj.tipo}-${proj.numero}`);
-              if (!fresco?.ultimaMovimentacao) return proj;
-              const igual = proj.ultimaMovimentacao?.data === fresco.ultimaMovimentacao.data && proj.ultimaMovimentacao?.descricao === fresco.ultimaMovimentacao.descricao;
-              if (igual) return proj;
-              mudou = true;
-              return { ...proj, ultimaMovimentacao: fresco.ultimaMovimentacao, casaAtual: fresco.casaAtual ?? proj.casaAtual, link: fresco.link ?? proj.link };
-            });
-            const fonteAtualizada = {
-              fonte: legislativoRaw.fonte,
-              observacao: legislativoRaw.observacao,
-              atualizacoesRecentes: legislativoRaw.atualizacoesRecentes,
-              ultimaVerificacaoEm: legislativoRaw.ultimaVerificacaoEm,
-            };
-            const fonteMudou =
-              JSON.stringify(fonteAtualizada.atualizacoesRecentes) !== JSON.stringify(persisted.projetosFonte?.atualizacoesRecentes) ||
-              fonteAtualizada.ultimaVerificacaoEm !== persisted.projetosFonte?.ultimaVerificacaoEm;
-            if (mudou || fonteMudou) {
-              persisted = { ...persisted, projetos: projetosAtualizados, projetosFonte: fonteAtualizada };
-              persist(persisted);
+          const raw = localStorage.getItem(LOCALSTORAGE_LEGADO_KEY);
+          const legado = raw ? JSON.parse(raw) : null;
+          if (legado && ((legado.destinacoes?.length || 0) + (legado.projetos?.length || 0) + (legado.eventos?.length || 0) > 0)) {
+            console.log('[store] importando dados locais (versão anterior, sem banco) pro Supabase — só acontece uma vez.');
+            if (legado.destinacoes?.length) {
+              const { data } = await supabase.from('destinacoes').insert(legado.destinacoes.map(destinacaoToRow)).select();
+              destinacoesAtuais = (data || []).map(rowToDestinacao);
+            }
+            if (legado.projetos?.length) {
+              const { data } = await supabase.from('projetos').insert(legado.projetos.map(projetoToRow)).select();
+              projetosAtuais = (data || []).map(rowToProjeto);
+            }
+            if (legado.eventos?.length) {
+              // destinacaoId/projetoId antigos não valem mais (IDs novos gerados pelo banco) —
+              // preserva o resto do evento, mas solta o vínculo pra não apontar pro item errado.
+              const { data } = await supabase
+                .from('eventos')
+                .insert(legado.eventos.map((e) => eventoToRow({ ...e, destinacaoId: null, projetoId: null })))
+                .select();
+              eventosAtuais = (data || []).map(rowToEvento);
+            }
+            if (legado.parlamentarNotas && Object.keys(legado.parlamentarNotas).length) {
+              const linhas = Object.entries(legado.parlamentarNotas).map(([parlamentar_key, conteudo]) => ({ parlamentar_key, conteudo }));
+              await supabase.from('parlamentar_notas').insert(linhas);
+              notasAtuais = legado.parlamentarNotas;
             }
           }
         } catch (err) {
-          console.warn('[store] falha ao sincronizar acompanhamento-legislativo.json:', err.message);
+          console.warn('[store] falha ao importar dados locais antigos:', err.message);
         }
       }
 
-      if (persisted) {
-        setStore(persisted);
-        return;
+      // Sincroniza os projetos de origem nacional (acompanhamento-legislativo.json, atualizado
+      // por GitHub Actions) pro banco — assim uma movimentação nova chega pra todo mundo (via
+      // tempo real), não só a quem recarregar depois de já ter uma cópia local. Roda em toda
+      // carga; upsert por (tipo, numero) evita duplicar quando mais de um navegador faz isso ao
+      // mesmo tempo. Só os campos "de fonte" são sobrescritos — qualquer edição manual (status,
+      // responsável, próximo passo etc.) que já esteja no banco fica intacta.
+      const legislativoRaw = await fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null);
+      if (legislativoRaw?.proposicoes?.length) {
+        const porChave = new Map(projetosAtuais.filter((p) => p.origemNacional).map((p) => [`${p.tipo}-${p.numero}`, p]));
+        const linhas = legislativoRaw.proposicoes.map((p) => {
+          const existente = porChave.get(`${p.tipo}-${p.numero}`);
+          const base = existente || nacionalToProjeto(p);
+          return projetoToRow({
+            ...base,
+            casaAtual: p.casaAtual ?? base.casaAtual,
+            link: p.link ?? base.link,
+            ultimaMovimentacao: p.ultimaMovimentacao ?? base.ultimaMovimentacao,
+            origemNacional: true,
+          });
+        });
+        const { data: upsertados, error } = await supabase.from('projetos').upsert(linhas, { onConflict: 'tipo,numero' }).select();
+        if (error) {
+          console.warn('[store] falha ao sincronizar projetos nacionais:', error.message);
+        } else if (upsertados) {
+          const porId = new Map(projetosAtuais.map((p) => [p.id, p]));
+          upsertados.map(rowToProjeto).forEach((p) => porId.set(p.id, p));
+          projetosAtuais = [...porId.values()];
+        }
+        setProjetosFonte({
+          fonte: legislativoRaw.fonte,
+          observacao: legislativoRaw.observacao,
+          atualizacoesRecentes: legislativoRaw.atualizacoesRecentes,
+          ultimaVerificacaoEm: legislativoRaw.ultimaVerificacaoEm,
+        });
       }
-      const [destinacoes, legislativoRaw] = await Promise.all([
-        fetchJson(`${import.meta.env.BASE_URL}data/destinacoes-seed.json`, []),
-        fetchJson(`${import.meta.env.BASE_URL}data/acompanhamento-legislativo.json`, null),
-      ]);
-      const projetosNacionais = (legislativoRaw?.proposicoes || []).map((p, i) => ({ ...nacionalToProjeto(p), id: i + 1 }));
-      const initial = {
-        destinacoes,
-        projetos: projetosNacionais,
-        eventos: [],
-        projetosFonte: legislativoRaw
-          ? {
-              fonte: legislativoRaw.fonte,
-              observacao: legislativoRaw.observacao,
-              atualizacoesRecentes: legislativoRaw.atualizacoesRecentes,
-              ultimaVerificacaoEm: legislativoRaw.ultimaVerificacaoEm,
-            }
-          : null,
-        parlamentarNotas: {},
-      };
-      persist(initial);
-      setStore(initial);
+
+      if (cancelado) return;
+      setDestinacoes(destinacoesAtuais);
+      setProjetos(projetosAtuais);
+      setEventos(eventosAtuais);
+      setParlamentarNotas(notasAtuais);
+      setLoading(false);
     })();
+
+    return () => {
+      cancelado = true;
+    };
   }, []);
 
-  function update(mutator) {
-    setStore((prev) => {
-      const next = mutator(structuredClone(prev));
-      persist(next);
-      return next;
-    });
-  }
+  // Tempo real: reflete no estado local qualquer inserção/edição/remoção feita por qualquer
+  // navegador (o próprio ou outro) — é o que faz uma pessoa ver aparecer, sem recarregar, o
+  // que outra acabou de cadastrar.
+  useEffect(() => {
+    if (!supabaseConfigurado) return;
+
+    function aplicarEm(setter, rowToObj) {
+      return (payload) => {
+        setter((atual) => {
+          if (payload.eventType === 'DELETE') return atual.filter((x) => x.id !== payload.old.id);
+          const obj = rowToObj(payload.new);
+          const i = atual.findIndex((x) => x.id === obj.id);
+          if (i < 0) return [...atual, obj];
+          const copia = [...atual];
+          copia[i] = obj;
+          return copia;
+        });
+      };
+    }
+
+    const canal = supabase
+      .channel('painel-nacional-store')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'destinacoes' }, aplicarEm(setDestinacoes, rowToDestinacao))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'projetos' }, aplicarEm(setProjetos, rowToProjeto))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'eventos' }, aplicarEm(setEventos, rowToEvento))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'parlamentar_notas' }, (payload) => {
+        setParlamentarNotas((atual) => {
+          if (payload.eventType === 'DELETE') {
+            const { [payload.old.parlamentar_key]: _omitida, ...resto } = atual;
+            return resto;
+          }
+          return { ...atual, [payload.new.parlamentar_key]: payload.new.conteudo };
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(canal);
+    };
+  }, []);
 
   const api = {
-    loading: store === null,
-    destinacoes: store?.destinacoes || [],
-    projetos: store?.projetos || [],
-    eventos: store?.eventos || [],
-    projetosFonte: store?.projetosFonte || null,
-    parlamentarNotas: store?.parlamentarNotas || {},
+    loading,
+    destinacoes,
+    projetos,
+    eventos,
+    projetosFonte,
+    parlamentarNotas,
 
-    addDestinacao(dest) {
-      update((s) => {
-        s.destinacoes.push({ ...dest, etapas: statusToEtapas(dest.status), id: nextId(s.destinacoes) });
-        return s;
-      });
+    async addDestinacao(dest) {
+      const { data, error } = await supabase.from('destinacoes').insert(destinacaoToRow(dest)).select().single();
+      if (error) return console.warn('[store] falha ao adicionar destinação:', error.message);
+      setDestinacoes((atual) => [...atual, rowToDestinacao(data)]);
     },
-    updateDestinacao(id, patch) {
-      update((s) => {
-        const i = s.destinacoes.findIndex((d) => d.id === id);
-        if (i >= 0) {
-          const merged = { ...s.destinacoes[i], ...patch };
-          // Se o status mudou via formulário, deriva as etapas correspondentes
-          if (patch.status && patch.status !== s.destinacoes[i].status) merged.etapas = statusToEtapas(patch.status);
-          s.destinacoes[i] = merged;
-        }
-        return s;
-      });
+    async updateDestinacao(id, patch) {
+      setDestinacoes((atual) =>
+        atual.map((d) => (d.id === id ? { ...d, ...patch, etapas: patch.status ? statusToEtapas(patch.status) : d.etapas } : d))
+      );
+      const { error } = await supabase.from('destinacoes').update(patchToRow(patch, DEST_FIELD_MAP)).eq('id', id);
+      if (error) console.warn('[store] falha ao atualizar destinação:', error.message);
     },
-    removeDestinacao(id) {
-      update((s) => {
-        s.destinacoes = s.destinacoes.filter((d) => d.id !== id);
-        return s;
-      });
+    async removeDestinacao(id) {
+      setDestinacoes((atual) => atual.filter((d) => d.id !== id));
+      const { error } = await supabase.from('destinacoes').delete().eq('id', id);
+      if (error) console.warn('[store] falha ao remover destinação:', error.message);
     },
     toggleDestinacaoEtapa(id, key) {
-      update((s) => {
-        const i = s.destinacoes.findIndex((d) => d.id === id);
-        if (i < 0) return s;
-        const d = { ...s.destinacoes[i], etapas: { ...s.destinacoes[i].etapas } };
-        const clickedIdx = ETAPAS_ORDEM.indexOf(key);
-        const marcar = !d.etapas[key];
-        ETAPAS_ORDEM.forEach((k, idx) => {
-          if (marcar && idx <= clickedIdx) d.etapas[k] = 1;
-          if (!marcar && idx >= clickedIdx) d.etapas[k] = 0;
-        });
-        d.status = etapasToStatus(d.etapas);
-        s.destinacoes[i] = d;
-        return s;
+      const atual = destinacoes.find((d) => d.id === id);
+      if (!atual) return;
+      const etapas = { ...atual.etapas };
+      const clickedIdx = ETAPAS_ORDEM.indexOf(key);
+      const marcar = !etapas[key];
+      ETAPAS_ORDEM.forEach((k, idx) => {
+        if (marcar && idx <= clickedIdx) etapas[k] = 1;
+        if (!marcar && idx >= clickedIdx) etapas[k] = 0;
       });
+      api.updateDestinacao(id, { status: etapasToStatus(etapas) });
     },
 
-    addProjeto(proj) {
-      update((s) => {
-        s.projetos.push({ ...proj, id: nextId(s.projetos) });
-        return s;
-      });
+    async addProjeto(proj) {
+      const { data, error } = await supabase.from('projetos').insert(projetoToRow(proj)).select().single();
+      if (error) return console.warn('[store] falha ao adicionar projeto:', error.message);
+      setProjetos((atual) => [...atual, rowToProjeto(data)]);
     },
-    updateProjeto(id, patch) {
-      update((s) => {
-        const i = s.projetos.findIndex((p) => p.id === id);
-        if (i >= 0) s.projetos[i] = { ...s.projetos[i], ...patch };
-        return s;
-      });
+    async updateProjeto(id, patch) {
+      setProjetos((atual) => atual.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+      const { error } = await supabase.from('projetos').update(patchToRow(patch, PROJ_FIELD_MAP)).eq('id', id);
+      if (error) console.warn('[store] falha ao atualizar projeto:', error.message);
     },
-    removeProjeto(id) {
-      update((s) => {
-        s.projetos = s.projetos.filter((p) => p.id !== id);
-        return s;
-      });
+    async removeProjeto(id) {
+      setProjetos((atual) => atual.filter((p) => p.id !== id));
+      const { error } = await supabase.from('projetos').delete().eq('id', id);
+      if (error) console.warn('[store] falha ao remover projeto:', error.message);
     },
 
-    addEvento(ev) {
-      update((s) => {
-        s.eventos = s.eventos || [];
-        s.eventos.push({ ...ev, id: nextId(s.eventos) });
-        return s;
-      });
+    async addEvento(ev) {
+      const { data, error } = await supabase.from('eventos').insert(eventoToRow(ev)).select().single();
+      if (error) return console.warn('[store] falha ao adicionar evento:', error.message);
+      setEventos((atual) => [...atual, rowToEvento(data)]);
     },
-    updateEvento(id, patch) {
-      update((s) => {
-        const i = (s.eventos || []).findIndex((x) => x.id === id);
-        if (i >= 0) s.eventos[i] = { ...s.eventos[i], ...patch };
-        return s;
-      });
+    async updateEvento(id, patch) {
+      setEventos((atual) => atual.map((x) => (x.id === id ? { ...x, ...patch } : x)));
+      const { error } = await supabase.from('eventos').update(patchToRow(patch, EVENTO_FIELD_MAP)).eq('id', id);
+      if (error) console.warn('[store] falha ao atualizar evento:', error.message);
     },
-    removeEvento(id) {
-      update((s) => {
-        s.eventos = (s.eventos || []).filter((x) => x.id !== id);
-        return s;
-      });
+    async removeEvento(id) {
+      setEventos((atual) => atual.filter((x) => x.id !== id));
+      const { error } = await supabase.from('eventos').delete().eq('id', id);
+      if (error) console.warn('[store] falha ao remover evento:', error.message);
     },
 
-    setParlamentarNota(key, nota) {
-      update((s) => {
-        s.parlamentarNotas[key] = { ...s.parlamentarNotas[key], ...nota };
-        return s;
-      });
+    async setParlamentarNota(key, nota) {
+      const conteudo = { ...(parlamentarNotas[key] || {}), ...nota };
+      setParlamentarNotas((atual) => ({ ...atual, [key]: conteudo }));
+      const { error } = await supabase.from('parlamentar_notas').upsert({ parlamentar_key: key, conteudo });
+      if (error) console.warn('[store] falha ao salvar nota do parlamentar:', error.message);
     },
 
     exportJson() {
-      return JSON.stringify(store, null, 2);
+      return JSON.stringify({ destinacoes, projetos, eventos, parlamentarNotas }, null, 2);
     },
   };
 

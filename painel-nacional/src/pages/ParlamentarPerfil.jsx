@@ -378,9 +378,9 @@ export default function ParlamentarPerfil() {
                   <div className="mt-2 flex flex-wrap gap-2">
                     {e.anexos.map((a) => (
                       a.tipo === 'foto' ? (
-                        <img key={a.id} src={a.dataUri} alt={a.nome} className="h-12 w-12 rounded-lg object-cover" />
+                        <img key={a.id} src={a.url} alt={a.nome} className="h-12 w-12 rounded-lg object-cover" />
                       ) : (
-                        <a key={a.id} href={a.dataUri} download={a.nome} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:text-slate-300">
+                        <a key={a.id} href={a.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] text-slate-600 hover:border-indigo-300 dark:border-slate-700 dark:text-slate-300">
                           <LuFileText className="h-3 w-3" /> {a.nome}
                         </a>
                       )
