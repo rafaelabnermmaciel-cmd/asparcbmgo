@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
-import { LuTriangleAlert } from 'react-icons/lu';
-import { useQuarteis, useMilitares, slugify } from '../lib/data.js';
+import { LuTriangleAlert, LuLogOut, LuCheck, LuX } from 'react-icons/lu';
+import { useQuarteis, useMilitares, useUsuariosAprovados, slugify } from '../lib/data.js';
+import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
+import { LoginGerenciamento, AguardandoAprovacao } from '../components/AcessoGerenciamento.jsx';
 
 const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -94,8 +96,10 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
 }
 
 export default function Gerenciamento() {
+  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, entrarComGoogle, sair } = useAuth();
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
+  const { usuarios, definirAprovacao } = useUsuariosAprovados();
 
   const [aba, setAba] = useState('quarteis');
   const [busca, setBusca] = useState('');
@@ -161,11 +165,35 @@ export default function Gerenciamento() {
     }
   }
 
+  async function alternarAprovacao(usuario, aprovar) {
+    if (aprovar === false && usuario.user_id === session?.user?.id) {
+      alert('Você não pode revogar o próprio acesso por aqui — peça pra outra pessoa aprovada fazer isso.');
+      return;
+    }
+    try {
+      await definirAprovacao(usuario.user_id, aprovar);
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  if (carregandoAuth) return null;
+  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} entrarComGoogle={entrarComGoogle} />;
+  if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
-      <ScrollReveal>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Gerenciamento</h1>
-        <p className="mt-1 text-sm text-slate-400">Quartéis e militares — adicione, edite ou remova a qualquer momento.</p>
+      <ScrollReveal className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Gerenciamento</h1>
+          <p className="mt-1 text-sm text-slate-400">Quartéis e militares — adicione, edite ou remova a qualquer momento.</p>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-400">
+          {session.user.email}
+          <button type="button" onClick={sair} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+            <LuLogOut className="h-3 w-3" /> Sair
+          </button>
+        </div>
       </ScrollReveal>
 
       <ScrollReveal delay={0.05} className="mt-5 flex flex-wrap items-center gap-2">
@@ -175,7 +203,12 @@ export default function Gerenciamento() {
         <button onClick={() => setAba('militares')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'militares' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
           Militares ({militares.length})
         </button>
-        <input className={`${inputClass} ml-auto max-w-xs`} placeholder="Buscar por nome..." value={busca} onChange={(e) => setBusca(e.target.value)} />
+        <button onClick={() => setAba('acessos')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'acessos' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
+          Acessos ({usuarios.filter((u) => !u.aprovado).length ? `${usuarios.filter((u) => !u.aprovado).length} pendente(s)` : usuarios.length})
+        </button>
+        {aba !== 'acessos' && (
+          <input className={`${inputClass} ml-auto max-w-xs`} placeholder="Buscar por nome..." value={busca} onChange={(e) => setBusca(e.target.value)} />
+        )}
       </ScrollReveal>
 
       {aba === 'quarteis' && (
@@ -237,6 +270,32 @@ export default function Gerenciamento() {
               </div>
             ))}
             {militaresFiltrados.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhum militar encontrado.</p>}
+          </div>
+        </Section>
+      )}
+
+      {aba === 'acessos' && (
+        <Section title="Acessos à Gerenciamento">
+          <p className="mt-1 text-xs text-slate-400">Quem entrou pelo menos uma vez (e-mail/senha ou Google) aparece aqui. Aprove pra liberar edição de quartéis/militares; revogue pra tirar o acesso de alguém.</p>
+          <div className="mt-3 flex flex-col gap-2">
+            {usuarios.map((u) => (
+              <div key={u.user_id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{u.email}{u.user_id === session.user.id && <span className="ml-1.5 text-xs font-normal text-slate-400">(você)</span>}</p>
+                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${u.aprovado ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
+                    {u.aprovado ? 'Aprovado' : 'Pendente'}
+                  </span>
+                </div>
+                <div className="flex shrink-0 gap-2">
+                  {u.aprovado ? (
+                    <button className={btnDanger} onClick={() => alternarAprovacao(u, false)}><LuX className="mr-1 inline h-3 w-3" />Revogar</button>
+                  ) : (
+                    <button className={btnPrimary} onClick={() => alternarAprovacao(u, true)}><LuCheck className="mr-1 inline h-3 w-3" />Aprovar</button>
+                  )}
+                </div>
+              </div>
+            ))}
+            {usuarios.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Ninguém entrou ainda.</p>}
           </div>
         </Section>
       )}
