@@ -34,13 +34,18 @@ export default function Sidebar() {
       <div className="mb-8 flex items-center gap-2.5 px-2">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0f1f3d]">
           <svg viewBox="0 0 100 100" className="h-6 w-6" aria-hidden="true">
-            <rect x="10" y="72" width="52" height="6" rx="2" fill="#e2e8f0" />
-            <rect x="16" y="44" width="7" height="28" fill="#e2e8f0" />
-            <rect x="49" y="44" width="7" height="28" fill="#e2e8f0" />
-            <path d="M18 44 A18 18 0 0 1 54 44 Z" fill="#e2e8f0" />
-            <circle cx="70" cy="74" r="20" fill="#b45309" stroke="#0f1f3d" strokeWidth="3" />
-            <circle cx="76" cy="64" r="20" fill="#f59e0b" stroke="#0f1f3d" strokeWidth="3" />
-            <text x="76" y="72" fontSize="22" fontWeight="700" fill="#0f1f3d" textAnchor="middle">$</text>
+            <ellipse cx="36" cy="70" rx="20" ry="7" fill="#7c3d0a" />
+            <rect x="16" y="63" width="40" height="7" fill="#92450c" />
+            <ellipse cx="36" cy="63" rx="20" ry="7" fill="#b45309" />
+            <rect x="16" y="56" width="40" height="7" fill="#92450c" />
+            <ellipse cx="36" cy="56" rx="20" ry="7" fill="#b45309" />
+            <rect x="16" y="49" width="40" height="7" fill="#a2540f" />
+            <ellipse cx="36" cy="49" rx="20" ry="7" fill="#d97a1a" />
+            <rect x="16" y="42" width="40" height="7" fill="#b8630f" />
+            <ellipse cx="36" cy="42" rx="20" ry="7" fill="#f59e0b" />
+            <circle cx="66" cy="60" r="24" fill="#f59e0b" stroke="#0f1f3d" strokeWidth="3" />
+            <circle cx="66" cy="60" r="18" fill="none" stroke="#b45309" strokeWidth="2" />
+            <text x="66" y="69" fontSize="26" fontWeight="700" fill="#7c3d0a" textAnchor="middle">$</text>
           </svg>
         </div>
         <div>

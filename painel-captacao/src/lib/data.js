@@ -4,8 +4,8 @@ import { notificarCaptacao } from './emailjs.js';
 
 // Deputados/senadores/votos de Goiás continuam vindo de JSON estático (são dados só de
 // leitura, filtrados do painel-nacional — ver scripts/gerar-parlamentares-go.js). Quartéis,
-// interlocutores e captações agora vivem no Supabase (banco de verdade, com tela de edição
-// pronta em Table Editor — ver SETUP.md), porque são dados que mudam com o uso do dia a dia.
+// militares, stakeholders e captações agora vivem no Supabase (banco de verdade, totalmente
+// editável pelo próprio site — ver SETUP.md), porque são dados que mudam com o uso do dia a dia.
 async function fetchJson(path, fallback) {
   try {
     const res = await fetch(path, { cache: 'no-cache' });
@@ -113,21 +113,41 @@ export function useMilitares() {
   return { loading: state.loading, militares: state.militares, addMilitar, updateMilitar, removeMilitar };
 }
 
-export function useInterlocutores() {
-  const [state, setState] = useState({ loading: true, interlocutores: {} });
-  useEffect(() => {
-    if (!supabaseConfigurado) { setState({ loading: false, interlocutores: {} }); return; }
-    let cancelled = false;
-    supabase.from('interlocutores').select('*').then(({ data, error }) => {
-      if (cancelled) return;
-      if (error) console.warn('[data] falha ao carregar interlocutores:', error.message);
-      const porChave = {};
-      (data || []).forEach((row) => { porChave[row.parlamentar_key] = row; });
-      setState({ loading: false, interlocutores: porChave });
-    });
-    return () => { cancelled = true; };
+// Stakeholders (contatos de captação de cada parlamentar) são totalmente editáveis pelo
+// próprio perfil do parlamentar no site — adicionar, editar, apagar — sem precisar entrar no
+// Supabase (RLS permite, ver supabase/schema.sql). Pode ter mais de um stakeholder por
+// parlamentar.
+export function useStakeholders() {
+  const [state, setState] = useState({ loading: true, stakeholders: [] });
+
+  const recarregar = useCallback(async () => {
+    if (!supabaseConfigurado) { setState({ loading: false, stakeholders: [] }); return; }
+    const { data, error } = await supabase.from('stakeholders').select('*').order('id');
+    if (error) console.warn('[data] falha ao carregar stakeholders:', error.message);
+    setState({ loading: false, stakeholders: data || [] });
   }, []);
-  return state;
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const addStakeholder = useCallback(async (s) => {
+    const { error } = await supabase.from('stakeholders').insert(s);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const updateStakeholder = useCallback(async (id, patch) => {
+    const { error } = await supabase.from('stakeholders').update(patch).eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const removeStakeholder = useCallback(async (id) => {
+    const { error } = await supabase.from('stakeholders').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, stakeholders: state.stakeholders, addStakeholder, updateStakeholder, removeStakeholder };
 }
 
 function rowParaCaptacao(row) {

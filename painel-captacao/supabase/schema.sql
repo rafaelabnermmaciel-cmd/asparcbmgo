@@ -11,7 +11,8 @@
 --   2. Tabela "militares"      — um militar por linha, exatamente como na Convocação
 --                                 106/2026: posto, RG, nome de guerra e OBM (também editável
 --                                 no site, aba Gerenciamento)
---   3. Tabela "interlocutores" — contato de captação de cada parlamentar
+--   3. Tabela "stakeholders"   — contatos de captação de cada parlamentar (editável no perfil
+--                                 do parlamentar, no site)
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
@@ -48,18 +49,33 @@ create table if not exists militares (
 alter table militares drop constraint if exists militares_quartel_id_fkey;
 alter table militares add constraint militares_quartel_id_fkey foreign key (quartel_id) references quarteis(id) on delete cascade;
 
--- 3) INTERLOCUTORES -----------------------------------------------------------
--- "parlamentar_key" é "camara:<id>" ou "senado:<id>" — o <id> é o número que aparece na URL
--- do perfil daquele parlamentar no site (ex.: .../parlamentares/camara/220565 → chave
--- "camara:220565"). Vá até o perfil do parlamentar no site pra pegar a chave certa.
-create table if not exists interlocutores (
-  parlamentar_key text primary key,
+-- 3) STAKEHOLDERS ---------------------------------------------------------------
+-- Contatos de captação de cada parlamentar (assessor, chefe de gabinete etc.) — pode ter mais
+-- de um por parlamentar. "parlamentar_key" é "camara:<id>" ou "senado:<id>" — o <id> é o
+-- número que aparece na URL do perfil daquele parlamentar no site (ex.:
+-- .../parlamentares/camara/220565 → chave "camara:220565"). Totalmente editável direto no
+-- perfil do parlamentar no site (adicionar, editar, apagar) — não precisa mexer no Supabase.
+create table if not exists stakeholders (
+  id bigint generated always as identity primary key,
+  parlamentar_key text not null default '',
   nome text not null default '',
   cargo text not null default '',
   telefone text not null default '',
   email text not null default '',
   observacoes text not null default ''
 );
+
+-- Migra os dados da antiga tabela "interlocutores" (um único contato por parlamentar) pra
+-- "stakeholders" (vários por parlamentar) e remove a antiga — só roda se ela ainda existir
+-- (rodar o script de novo depois disso não faz nada, já que "interlocutores" já não existe).
+do $$
+begin
+  if exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'interlocutores') then
+    insert into stakeholders (parlamentar_key, nome, cargo, telefone, email, observacoes)
+    select parlamentar_key, nome, cargo, telefone, email, observacoes from interlocutores;
+    drop table interlocutores;
+  end if;
+end $$;
 
 -- 4) CAPTAÇÕES ----------------------------------------------------------------
 create table if not exists captacoes (
@@ -83,18 +99,19 @@ create table if not exists captacoes (
 
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
--- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público); "quarteis",
--- "militares" e "captacoes" também aceitam criar/editar/apagar linha vindo do site (a aba
--- Gerenciamento, e o Cadastro/edição inline de captações). "interlocutores" continua só
--- leitura pelo site — edite pelo Table Editor do Supabase (login sempre ignora RLS).
+-- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público), e todas as
+-- 4 também aceitam criar/editar/apagar linha vindo do próprio site (aba Gerenciamento pra
+-- quartéis/militares, Cadastro/edição inline pra captações, e o perfil do parlamentar pra
+-- stakeholders) — nenhuma delas precisa do Table Editor do Supabase pra ser mantida no dia a
+-- dia.
 --
--- Aviso: como o site não tem login, esse acesso de escrita em quarteis/militares/captacoes
--- fica aberto pra qualquer pessoa que tenha o link do site — não só quem administra. Pra um
--- painel interno pequeno isso costuma ser um risco aceitável (é o mesmo modelo do formulário
--- de Cadastro), mas não é o ideal pra um sistema com muita gente de fora tendo acesso.
+-- Aviso: como o site não tem login, esse acesso de escrita fica aberto pra qualquer pessoa
+-- que tenha o link do site — não só quem administra. Pra um painel interno pequeno isso
+-- costuma ser um risco aceitável (é o mesmo modelo do formulário de Cadastro), mas não é o
+-- ideal pra um sistema com muita gente de fora tendo acesso.
 alter table quarteis enable row level security;
 alter table militares enable row level security;
-alter table interlocutores enable row level security;
+alter table stakeholders enable row level security;
 alter table captacoes enable row level security;
 
 drop policy if exists "Leitura pública" on quarteis;
@@ -115,8 +132,14 @@ create policy "Atualização pública" on militares for update using (true) with
 drop policy if exists "Remoção pública" on militares;
 create policy "Remoção pública" on militares for delete using (true);
 
-drop policy if exists "Leitura pública" on interlocutores;
-create policy "Leitura pública" on interlocutores for select using (true);
+drop policy if exists "Leitura pública" on stakeholders;
+create policy "Leitura pública" on stakeholders for select using (true);
+drop policy if exists "Inserção pública" on stakeholders;
+create policy "Inserção pública" on stakeholders for insert with check (true);
+drop policy if exists "Atualização pública" on stakeholders;
+create policy "Atualização pública" on stakeholders for update using (true) with check (true);
+drop policy if exists "Remoção pública" on stakeholders;
+create policy "Remoção pública" on stakeholders for delete using (true);
 
 drop policy if exists "Leitura pública" on captacoes;
 create policy "Leitura pública" on captacoes for select using (true);

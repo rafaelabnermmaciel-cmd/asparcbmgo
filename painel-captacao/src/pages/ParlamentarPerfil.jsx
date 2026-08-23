@@ -1,13 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuBanknote, LuUserRound, LuTriangleAlert } from 'react-icons/lu';
-import { useParlamentaresGO, useResultadosEleitorais, useInterlocutores, useCaptacoes, initials, STATUS_CAPTACAO } from '../lib/data.js';
+import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuPlus, LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, initials, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-
-function fmtR(v) {
-  return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
-}
+import { inputClass, labelClass, btnPrimary, btnGhost, btnDanger, fmtR, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
 
 function CopyButton({ value }) {
   const [copiado, setCopiado] = useState(false);
@@ -44,20 +41,109 @@ function formatGabinete(g) {
   return partes.length ? partes.join(' · ') : null;
 }
 
+const STAKEHOLDER_VAZIO = { nome: '', cargo: '', telefone: '', email: '', observacoes: '' };
+
+// Formulário de adicionar/editar um stakeholder — usado tanto pro "+ Adicionar" quanto pro
+// "Editar" de um já existente.
+function StakeholderForm({ inicial, onSalvar, onCancelar }) {
+  const [f, setF] = useState(inicial || STAKEHOLDER_VAZIO);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState(null);
+
+  async function salvar() {
+    setErro(null);
+    if (!f.nome.trim()) { setErro('Informe o nome.'); return; }
+    setSalvando(true);
+    try {
+      await onSalvar({ ...f, nome: f.nome.trim() });
+    } catch (err) {
+      setErro(err.message || 'Falha ao salvar. Tente novamente.');
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-3 rounded-xl border border-slate-100 p-3 sm:grid-cols-2 dark:border-slate-800">
+      <div>
+        <p className={labelClass}>Nome *</p>
+        <input className={inputClass} value={f.nome} onChange={(e) => setF((p) => ({ ...p, nome: e.target.value }))} placeholder="Nome do stakeholder" />
+      </div>
+      <div>
+        <p className={labelClass}>Cargo / função</p>
+        <input className={inputClass} value={f.cargo} onChange={(e) => setF((p) => ({ ...p, cargo: e.target.value }))} placeholder="Ex: assessor, chefe de gabinete..." />
+      </div>
+      <div>
+        <p className={labelClass}>Telefone</p>
+        <input className={inputClass} value={f.telefone} onChange={(e) => setF((p) => ({ ...p, telefone: e.target.value }))} />
+      </div>
+      <div>
+        <p className={labelClass}>E-mail</p>
+        <input className={inputClass} value={f.email} onChange={(e) => setF((p) => ({ ...p, email: e.target.value }))} />
+      </div>
+      <div className="sm:col-span-2">
+        <p className={labelClass}>Observações</p>
+        <textarea rows={2} className={inputClass} value={f.observacoes} onChange={(e) => setF((p) => ({ ...p, observacoes: e.target.value }))} />
+      </div>
+      {erro && <p className="text-xs text-red-600 sm:col-span-2">{erro}</p>}
+      <div className="flex gap-2 sm:col-span-2">
+        <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : 'Salvar'}</button>
+        <button type="button" className={btnGhost} onClick={onCancelar}>Cancelar</button>
+      </div>
+    </div>
+  );
+}
+
 export default function ParlamentarPerfil() {
   const { casa, id } = useParams();
   const { loading, parlamentares } = useParlamentaresGO();
   const { resultados } = useResultadosEleitorais();
-  const { interlocutores } = useInterlocutores();
-  const { captacoes } = useCaptacoes();
+  const { stakeholders, addStakeholder, updateStakeholder, removeStakeholder } = useStakeholders();
+  const { quarteis } = useQuarteis();
+  const { militares } = useMilitares();
+  const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
+
+  const [adicionandoStakeholder, setAdicionandoStakeholder] = useState(false);
+  const [editandoStakeholderId, setEditandoStakeholderId] = useState(null);
+  const [expandidaId, setExpandidaId] = useState(null);
+  const [editandoCaptacaoId, setEditandoCaptacaoId] = useState(null);
 
   const p = parlamentares.find((x) => x.casa === casa && String(x.id) === String(id));
-  const eleicao = resultados[`${casa}:${id}`] || null;
-  const interlocutor = interlocutores[`${casa}:${id}`] || null;
+  const parlamentarKey = `${casa}:${id}`;
+  const eleicao = resultados[parlamentarKey] || null;
+  const stakeholdersDoParlamentar = useMemo(
+    () => stakeholders.filter((s) => s.parlamentar_key === parlamentarKey),
+    [stakeholders, parlamentarKey]
+  );
+  const nomesParlamentares = useMemo(() => parlamentares.map((x) => x.nome).sort(), [parlamentares]);
   const captacoesDoParlamentar = useMemo(
     () => (p ? captacoes.filter((c) => c.parlamentarNome === p.nome).sort((a, b) => STATUS_CAPTACAO.indexOf(b.status) - STATUS_CAPTACAO.indexOf(a.status)) : []),
     [captacoes, p]
   );
+
+  async function salvarNovoStakeholder(dados) {
+    await addStakeholder({ ...dados, parlamentar_key: parlamentarKey });
+    setAdicionandoStakeholder(false);
+  }
+
+  async function excluirStakeholder(s) {
+    if (!confirm(`Excluir o stakeholder "${s.nome}"?`)) return;
+    try {
+      await removeStakeholder(s.id);
+    } catch (err) {
+      alert(err.message || 'Falha ao excluir. Tente novamente.');
+    }
+  }
+
+  async function excluirCaptacao(c) {
+    if (!confirm(`Excluir a captação "${c.objeto}" (${c.quartelNome})? Essa ação não pode ser desfeita.`)) return;
+    try {
+      await removeCaptacao(c.id);
+      setExpandidaId(null);
+    } catch (err) {
+      alert(err.message || 'Falha ao excluir. Tente novamente.');
+    }
+  }
 
   if (loading) return null;
 
@@ -108,23 +194,57 @@ export default function ParlamentarPerfil() {
       </ScrollReveal>
 
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-          <LuUserRound className="h-4 w-4 text-red-500" /> Interlocução para captação
-        </p>
-        {interlocutor ? (
-          <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-3">
-            <InfoRow label="Nome" value={interlocutor.nome} />
-            <InfoRow label="Cargo / função" value={interlocutor.cargo} />
-            <InfoRow label="Telefone" value={interlocutor.telefone} copyable />
-            <InfoRow label="E-mail" value={interlocutor.email} copyable />
-            {interlocutor.observacoes && <InfoRow label="Observações" value={interlocutor.observacoes} />}
-          </div>
-        ) : (
-          <div className="mt-3 flex items-start gap-2 text-xs text-slate-400">
-            <LuTriangleAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
-            <p>Ainda não há interlocutor cadastrado para este parlamentar (assessor/gabinete responsável por tratar de captação). Preencha em <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">public/data/interlocutores.json</code>, na chave <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">"{casa}:{id}"</code>.</p>
-          </div>
-        )}
+        <div className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <LuUserRound className="h-4 w-4 text-red-500" /> Stakeholders
+          </p>
+          {!adicionandoStakeholder && (
+            <button type="button" onClick={() => setAdicionandoStakeholder(true)} className="flex items-center gap-1 text-xs font-medium text-red-600 hover:underline">
+              <LuPlus className="h-3.5 w-3.5" /> Adicionar
+            </button>
+          )}
+        </div>
+
+        <div className="mt-4 flex flex-col gap-3">
+          {stakeholdersDoParlamentar.map((s) =>
+            editandoStakeholderId === s.id ? (
+              <StakeholderForm
+                key={s.id}
+                inicial={{ nome: s.nome, cargo: s.cargo, telefone: s.telefone, email: s.email, observacoes: s.observacoes }}
+                onCancelar={() => setEditandoStakeholderId(null)}
+                onSalvar={async (dados) => { await updateStakeholder(s.id, dados); setEditandoStakeholderId(null); }}
+              />
+            ) : (
+              <div key={s.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-3">
+                    <InfoRow label="Nome" value={s.nome} />
+                    <InfoRow label="Cargo / função" value={s.cargo} />
+                    <InfoRow label="Telefone" value={s.telefone} copyable />
+                    <InfoRow label="E-mail" value={s.email} copyable />
+                    {s.observacoes && <InfoRow label="Observações" value={s.observacoes} />}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button type="button" onClick={() => setEditandoStakeholderId(s.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                      <LuPencil className="h-3 w-3" /> Editar
+                    </button>
+                    <button type="button" onClick={() => excluirStakeholder(s)} className={`flex items-center gap-1 ${btnDanger}`}>
+                      <LuTrash2 className="h-3 w-3" /> Excluir
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+
+          {adicionandoStakeholder && (
+            <StakeholderForm onCancelar={() => setAdicionandoStakeholder(false)} onSalvar={salvarNovoStakeholder} />
+          )}
+
+          {stakeholdersDoParlamentar.length === 0 && !adicionandoStakeholder && (
+            <p className="text-xs text-slate-400">Ainda não há stakeholder cadastrado para este parlamentar. Clique em "Adicionar" pra registrar o assessor/gabinete responsável por tratar de captação.</p>
+          )}
+        </div>
       </ScrollReveal>
 
       <ScrollReveal delay={0.15} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -177,13 +297,58 @@ export default function ParlamentarPerfil() {
         </div>
         {captacoesDoParlamentar.length ? (
           <div className="mt-3 flex flex-col gap-2">
-            {captacoesDoParlamentar.map((c) => (
-              <div key={c.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
-                <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.quartelNome} <span className="font-normal text-slate-400">· {c.objeto}</span></p>
-                <p className="mt-0.5 text-xs text-slate-500">{c.valorPrevisto ? `${fmtR(c.valorPrevisto)} previsto` : 'sem valor definido ainda'}{c.numReunioes ? ` · ${c.numReunioes} reunião(ões)` : ''}</p>
-                <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
-              </div>
-            ))}
+            {captacoesDoParlamentar.map((c) => {
+              const aberta = expandidaId === c.id;
+              return (
+                <div key={c.id} className="rounded-xl border border-slate-100 dark:border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => { setExpandidaId(aberta ? null : c.id); setEditandoCaptacaoId(null); }}
+                    className="flex w-full items-start justify-between gap-2 p-3 text-left"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.quartelNome} <span className="font-normal text-slate-400">· {c.objeto}</span></p>
+                      <p className="mt-0.5 text-xs text-slate-500">{c.valorPrevisto ? `${fmtR(c.valorPrevisto)} previsto` : 'sem valor definido ainda'}{c.numReunioes ? ` · ${c.numReunioes} reunião(ões)` : ''}</p>
+                      <span className="mt-1 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                    </div>
+                    {aberta ? <LuChevronUp className="mt-1 h-4 w-4 shrink-0 text-slate-400" /> : <LuChevronDown className="mt-1 h-4 w-4 shrink-0 text-slate-400" />}
+                  </button>
+
+                  {aberta && (
+                    <div className="border-t border-slate-100 p-3 dark:border-slate-800">
+                      {editandoCaptacaoId === c.id ? (
+                        <EdicaoCaptacao
+                          captacao={c}
+                          quarteis={quarteis}
+                          militares={militares}
+                          nomesParlamentares={nomesParlamentares}
+                          onCancelar={() => setEditandoCaptacaoId(null)}
+                          onSalvar={async (payload) => { await updateCaptacao(c.id, payload); setEditandoCaptacaoId(null); }}
+                        />
+                      ) : (
+                        <>
+                          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                            <InfoRow label="Responsável" value={c.responsavel} />
+                            <InfoRow label="Stakeholder / contato-chave" value={c.stakeholder} />
+                            <InfoRow label="Valor previsto" value={c.valorPrevisto ? fmtR(c.valorPrevisto) : '—'} />
+                            <InfoRow label="Valor confirmado" value={c.valorConfirmado ? fmtR(c.valorConfirmado) : '—'} />
+                            {c.observacoes && <InfoRow label="Observações" value={c.observacoes} />}
+                          </div>
+                          <div className="mt-3 flex gap-2">
+                            <button type="button" onClick={() => setEditandoCaptacaoId(c.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                              <LuPencil className="h-3 w-3" /> Editar
+                            </button>
+                            <button type="button" onClick={() => excluirCaptacao(c)} className={`flex items-center gap-1 ${btnDanger}`}>
+                              <LuTrash2 className="h-3 w-3" /> Excluir
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p className="mt-2 text-xs text-slate-400">Nenhuma captação cadastrada com este parlamentar ainda.</p>
