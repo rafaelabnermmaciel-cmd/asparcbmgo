@@ -8,7 +8,7 @@ import {
   inputClass, btnPrimary, btnDanger, labelClass, fmtR,
   CamposCaptacao, EdicaoCaptacao, VAZIO_CAPTACAO, validarCaptacao, paraPayloadCaptacao,
 } from '../components/CaptacaoForm.jsx';
-import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
+import { AlertaParado, LinhaDoTempo, hoje } from '../components/CaptacaoTimeline.jsx';
 
 export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
@@ -19,6 +19,8 @@ export default function Cadastro() {
   const { eventos, addEvento, removeEvento } = useEventos();
 
   const [f, setF] = useState(VAZIO_CAPTACAO);
+  const [dataInicio, setDataInicio] = useState(hoje());
+  const [descricaoInicio, setDescricaoInicio] = useState('');
   const [anexos, setAnexos] = useState([]);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState(null);
@@ -50,9 +52,16 @@ export default function Cadastro() {
 
     setEnviando(true);
     try {
-      await submitCaptacao({ ...paraPayloadCaptacao(f, quarteis), anexos });
-      setSucesso('Captação cadastrada! Já está salva e visível pra todo mundo.');
+      const registro = await submitCaptacao({ ...paraPayloadCaptacao(f, quarteis), anexos });
+      try {
+        await addEvento({ captacao_id: registro.id, data: dataInicio, descricao: descricaoInicio.trim() || 'Primeiro contato' });
+        setSucesso('Captação cadastrada! Já está salva e visível pra todo mundo.');
+      } catch {
+        setSucesso('Captação cadastrada! (não deu pra registrar a data do primeiro contato na linha do tempo — adicione manualmente ali embaixo, em "Linha do tempo".)');
+      }
       setF(VAZIO_CAPTACAO);
+      setDataInicio(hoje());
+      setDescricaoInicio('');
       setAnexos([]);
     } catch (err) {
       setErro(err.message || 'Falha ao cadastrar. Tente novamente.');
@@ -78,6 +87,14 @@ export default function Cadastro() {
       <ScrollReveal delay={0.06} className="mt-5">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
           <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
+          <div>
+            <p className={labelClass}>Data do primeiro contato *</p>
+            <input type="date" className={inputClass} value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
+          </div>
+          <div>
+            <p className={labelClass}>O que aconteceu nesse primeiro contato</p>
+            <input className={inputClass} value={descricaoInicio} onChange={(e) => setDescricaoInicio(e.target.value)} placeholder="Ex: primeiro contato por telefone (opcional)" />
+          </div>
           <div className="sm:col-span-2">
             <p className={labelClass}>Documentos e fotos</p>
             <div className="mt-1">
