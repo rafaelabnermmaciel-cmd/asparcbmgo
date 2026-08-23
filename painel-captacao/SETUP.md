@@ -152,13 +152,14 @@ pública fora do seu próprio site.
 
 ---
 
-## 7. Login e aprovação de acesso (só a aba Gerenciamento)
+## 7. Login e acesso (só a aba Gerenciamento)
 
-Quartéis e militares são dado interno, então só quem tiver login **e** já tiver sido aprovado
-consegue editar essa aba — o resto do site (Cadastro, Stakeholders, Parlamentares) continua
-igual, sem login nenhum. Cada pessoa cria a própria conta (e-mail/senha, ou entrando com
-Google); depois disso, alguém que já tem acesso precisa aprovar ela — isso é feito direto no
-site, sem precisar voltar aqui no Supabase.
+Quartéis e militares são dado interno, então essa aba exige login — o resto do site (Cadastro,
+Stakeholders, Parlamentares) continua igual, sem login nenhum. Cada pessoa cria a própria conta
+(e-mail/senha, ou entrando com Google) e **já entra liberada na hora**, sem precisar de
+aprovação de ninguém — inclusive você, na primeira vez. Se um dia precisar tirar o acesso de
+alguém (ex: saiu da equipe), isso é feito direto no site, na aba Gerenciamento → Acessos, botão
+"Revogar" — sem precisar voltar aqui no Supabase.
 
 ### 7.1. Rodar o script atualizado
 
@@ -208,29 +209,22 @@ sempre, é seguro rodar de novo (não duplica nada).
 13. Ative o botão **Enable Sign in with Google**, cole o **Client ID** e o **Client Secret** que
     você copiou, e clique em **Save**.
 
-### 7.4. Virar o primeiro aprovado
+### 7.4. Criar sua conta (você vira o primeiro acesso, sem passo extra nenhum)
 
 1. No site publicado, abra a aba **Gerenciamento**.
 2. Clique em **Criar conta**, preencha e-mail e senha (ou clique em **Continuar com Google**) —
    use o e-mail que vai administrar o painel (ex: `asparcbmgo@gmail.com`).
 3. Se aparecer um aviso pedindo confirmação por e-mail, abra sua caixa de entrada e clique no
    link que o Supabase mandou antes de tentar entrar.
-4. Depois de entrar, o site vai mostrar "Aguardando aprovação" — isso é esperado, ninguém
-   aprovou você ainda (nem você mesmo consegue, por segurança).
-5. Volte no Supabase → **SQL Editor** → **New query**, cole isto (trocando o e-mail se usou
-   outro) e clique em **Run**:
-   ```sql
-   update usuarios_aprovados set aprovado = true where email = 'asparcbmgo@gmail.com';
-   ```
-6. Volte no site, atualize a página e entre de novo — agora a Gerenciamento libera
-   normalmente, com uma aba a mais: **Acessos**.
+4. Pronto — já libera direto, sem precisar rodar nada no Supabase nem esperar aprovação. A
+   Gerenciamento abre normalmente, com uma aba a mais: **Acessos**.
 
-### 7.5. Aprovando as próximas pessoas (sem precisar voltar aqui)
+### 7.5. As próximas pessoas (mesma coisa, sem você precisar fazer nada)
 
 Cada pessoa nova entra em Gerenciamento → cria a própria conta (ou entra com Google, se você
-adicionou o e-mail dela como "Test user" no passo 7.3, ou se já publicou o app) → cai como
-"Pendente". Você (ou qualquer outra pessoa já aprovada) abre **Gerenciamento → Acessos** e
-clica em **Aprovar**. Pra tirar o acesso de alguém depois, é o mesmo lugar, botão **Revogar**.
+adicionou o e-mail dela como "Test user" no passo 7.3, ou se já publicou o app) → já entra
+liberada, igual você. Se um dia precisar tirar o acesso de alguém, abra **Gerenciamento →
+Acessos** e clique em **Revogar** na linha da pessoa (dá pra **Reativar** depois, se precisar).
 
 ---
 

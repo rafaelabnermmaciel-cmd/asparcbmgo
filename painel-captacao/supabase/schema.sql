@@ -132,24 +132,25 @@ create table if not exists captacao_eventos (
   criado_em timestamptz not null default now()
 );
 
--- 4.2) LOGIN E APROVAÇÃO DE ACESSO (só pra aba Gerenciamento) -------------------
+-- 4.2) LOGIN E ACESSO (só pra aba Gerenciamento) --------------------------------
 -- Quartéis/militares são dado sensível de organização interna, então quem edita precisa
--- entrar com login (e-mail/senha ou Google) E já ter sido aprovado por alguém que já tem
--- acesso — o resto do site (Cadastro, Stakeholders, Parlamentares) continua aberto pra quem
--- tiver o link, sem mudança nenhuma.
+-- entrar com login (e-mail/senha ou Google) — o resto do site (Cadastro, Stakeholders,
+-- Parlamentares) continua aberto pra quem tiver o link, sem mudança nenhuma.
 --
--- Toda conta nova (criada ao entrar pela primeira vez, por e-mail/senha ou Google) cai aqui
--- com "aprovado = false" automaticamente (via o gatilho abaixo) — fica esperando alguém que já
--- é aprovado liberar o acesso pela própria aba Gerenciamento → Acessos.
+-- Toda conta nova (criada ao entrar pela primeira vez, por e-mail/senha ou Google) já entra
+-- liberada — "aprovado = true" — sem precisar de nenhuma aprovação manual, nem da primeira
+-- pessoa (o administrador) nem de quem vier depois. A coluna "aprovado" fica guardada mesmo
+-- assim porque serve de "chave-geral": quem já tem acesso pode revogar alguém pela aba
+-- Gerenciamento → Acessos (ex: alguém saiu da equipe) — só isso vira "aprovado = false".
 create table if not exists usuarios_aprovados (
   user_id uuid primary key references auth.users(id) on delete cascade,
   email text not null default '',
-  aprovado boolean not null default false,
+  aprovado boolean not null default true,
   criado_em timestamptz not null default now()
 );
 
 -- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui,
--- sempre começando como "aprovado = false".
+-- já entrando como "aprovado = true" (acesso liberado na hora, sem espera).
 create or replace function public.lidar_com_novo_usuario()
 returns trigger
 language plpgsql
@@ -157,7 +158,7 @@ security definer set search_path = public
 as $$
 begin
   insert into public.usuarios_aprovados (user_id, email, aprovado)
-  values (new.id, new.email, false)
+  values (new.id, new.email, true)
   on conflict (user_id) do nothing;
   return new;
 end;
@@ -168,9 +169,15 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.lidar_com_novo_usuario();
 
+-- Se alguém já tinha se cadastrado numa versão anterior deste script (quando começava
+-- "aprovado = false" e ficava esperando aprovação manual), libera o acesso de quem ainda
+-- estava pendente — ninguém deve continuar preso na tela de espera depois dessa atualização.
+update usuarios_aprovados set aprovado = true where aprovado = false;
+
 -- Função auxiliar (roda com privilégio de dono da tabela, ignorando RLS por dentro) pra
--- checar se quem está logado agora já foi aprovado — evita loop de RLS "checando a própria
--- tabela que tem RLS" e é reaproveitada nas políticas de quarteis/militares logo abaixo.
+-- checar se quem está logado agora ainda tem acesso liberado (não foi revogado) — evita loop
+-- de RLS "checando a própria tabela que tem RLS" e é reaproveitada nas políticas de
+-- quarteis/militares logo abaixo.
 create or replace function public.esta_aprovado()
 returns boolean
 language sql
@@ -225,9 +232,10 @@ drop policy if exists "Remoção pública" on militares;
 drop policy if exists "Remoção autenticada aprovada" on militares;
 create policy "Remoção autenticada aprovada" on militares for delete using (public.esta_aprovado());
 
--- Qualquer pessoa logada vê a lista (nome/e-mail/status) — só quem já é aprovado consegue
--- aprovar/revogar alguém (pela aba Gerenciamento → Acessos). O cadastro da própria linha
--- acontece sozinho, pelo gatilho lá em cima — ninguém insere aqui direto.
+-- Qualquer pessoa logada vê a lista (nome/e-mail/status) — só quem ainda tem acesso liberado
+-- consegue revogar (ou reativar) alguém (pela aba Gerenciamento → Acessos). O cadastro da
+-- própria linha acontece sozinho, pelo gatilho lá em cima, já liberado — ninguém insere aqui
+-- direto.
 drop policy if exists "Leitura autenticada" on usuarios_aprovados;
 create policy "Leitura autenticada" on usuarios_aprovados for select using (auth.role() = 'authenticated');
 drop policy if exists "Aprovação só por quem já é aprovado" on usuarios_aprovados;

@@ -3,8 +3,8 @@ import { LuLock, LuTriangleAlert, LuLogOut, LuMailCheck } from 'react-icons/lu';
 import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx';
 
 // Tela de login/criar conta — aparece quando ninguém está logado e a pessoa tenta abrir a aba
-// Gerenciamento. Depois de criar conta ou entrar com Google, ainda falta ser aprovado (ver
-// AguardandoAprovacao) — isso aqui só cuida de identificar quem é.
+// Gerenciamento. O acesso já libera na hora ao criar a conta (ver AcessoRevogado pro único
+// caso em que fica bloqueado: alguém com acesso revogado depois).
 export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarComGoogle }) {
   const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar'
   const [email, setEmail] = useState('');
@@ -23,7 +23,7 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarC
         await entrarComSenha(email, senha);
       } else {
         await criarContaComSenha(email, senha);
-        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar. Depois disso, é só aguardar alguém liberar seu acesso aqui na aba Gerenciamento.');
+        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar — depois disso o acesso já libera direto, sem precisar de mais nada.');
       }
     } catch (err) {
       setErro(err.message || 'Falha ao entrar. Tente novamente.');
@@ -80,16 +80,16 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarC
   );
 }
 
-// Aparece quando a pessoa já entrou (login/senha ou Google) mas ninguém aprovou o acesso dela
-// ainda — quem já é aprovado libera pela aba Gerenciamento → Acessos.
-export function AguardandoAprovacao({ email, sair }) {
+// Toda conta nova já entra liberada — isso só aparece se o acesso dessa conta foi revogado
+// depois (aba Gerenciamento → Acessos, botão "Revogar").
+export function AcessoRevogado({ email, sair }) {
   return (
     <div className="mx-auto max-w-sm px-4 py-16 text-center">
       <LuLock className="mx-auto h-8 w-8 text-amber-500" />
-      <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Aguardando aprovação</h1>
+      <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Acesso não liberado</h1>
       <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-        Sua conta (<span className="font-medium">{email}</span>) ainda não foi liberada pra editar a Gerenciamento.
-        Peça pra alguém que já tem acesso aprovar você pela aba Gerenciamento → Acessos.
+        A conta <span className="font-medium">{email}</span> não tem acesso à Gerenciamento no momento.
+        Peça pra alguém que já tenha acesso liberar de novo pela aba Gerenciamento → Acessos.
       </p>
       <button type="button" onClick={sair} className={`mt-4 inline-flex items-center gap-1.5 ${btnGhost}`}>
         <LuLogOut className="h-3.5 w-3.5" /> Sair
