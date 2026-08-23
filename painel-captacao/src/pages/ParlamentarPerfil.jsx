@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuPlus, LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, initials, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-import { inputClass, labelClass, btnPrimary, btnGhost, btnDanger, fmtR, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
+import { btnDanger, fmtR, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
+import { FormularioStakeholder } from '../components/StakeholderForm.jsx';
 
 function CopyButton({ value }) {
   const [copiado, setCopiado] = useState(false);
@@ -41,69 +42,15 @@ function formatGabinete(g) {
   return partes.length ? partes.join(' · ') : null;
 }
 
-const STAKEHOLDER_VAZIO = { nome: '', cargo: '', telefone: '', email: '', observacoes: '' };
-
-// Formulário de adicionar/editar um stakeholder — usado tanto pro "+ Adicionar" quanto pro
-// "Editar" de um já existente.
-function StakeholderForm({ inicial, onSalvar, onCancelar }) {
-  const [f, setF] = useState(inicial || STAKEHOLDER_VAZIO);
-  const [salvando, setSalvando] = useState(false);
-  const [erro, setErro] = useState(null);
-
-  async function salvar() {
-    setErro(null);
-    if (!f.nome.trim()) { setErro('Informe o nome.'); return; }
-    setSalvando(true);
-    try {
-      await onSalvar({ ...f, nome: f.nome.trim() });
-    } catch (err) {
-      setErro(err.message || 'Falha ao salvar. Tente novamente.');
-    } finally {
-      setSalvando(false);
-    }
-  }
-
-  return (
-    <div className="grid grid-cols-1 gap-3 rounded-xl border border-slate-100 p-3 sm:grid-cols-2 dark:border-slate-800">
-      <div>
-        <p className={labelClass}>Nome *</p>
-        <input className={inputClass} value={f.nome} onChange={(e) => setF((p) => ({ ...p, nome: e.target.value }))} placeholder="Nome do stakeholder" />
-      </div>
-      <div>
-        <p className={labelClass}>Cargo / função</p>
-        <input className={inputClass} value={f.cargo} onChange={(e) => setF((p) => ({ ...p, cargo: e.target.value }))} placeholder="Ex: assessor, chefe de gabinete..." />
-      </div>
-      <div>
-        <p className={labelClass}>Telefone</p>
-        <input className={inputClass} value={f.telefone} onChange={(e) => setF((p) => ({ ...p, telefone: e.target.value }))} />
-      </div>
-      <div>
-        <p className={labelClass}>E-mail</p>
-        <input className={inputClass} value={f.email} onChange={(e) => setF((p) => ({ ...p, email: e.target.value }))} />
-      </div>
-      <div className="sm:col-span-2">
-        <p className={labelClass}>Observações</p>
-        <textarea rows={2} className={inputClass} value={f.observacoes} onChange={(e) => setF((p) => ({ ...p, observacoes: e.target.value }))} />
-      </div>
-      {erro && <p className="text-xs text-red-600 sm:col-span-2">{erro}</p>}
-      <div className="flex gap-2 sm:col-span-2">
-        <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : 'Salvar'}</button>
-        <button type="button" className={btnGhost} onClick={onCancelar}>Cancelar</button>
-      </div>
-    </div>
-  );
-}
-
 export default function ParlamentarPerfil() {
   const { casa, id } = useParams();
   const { loading, parlamentares } = useParlamentaresGO();
   const { resultados } = useResultadosEleitorais();
-  const { stakeholders, addStakeholder, updateStakeholder, removeStakeholder } = useStakeholders();
+  const { stakeholders, updateStakeholder, removeStakeholder } = useStakeholders();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
   const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
 
-  const [adicionandoStakeholder, setAdicionandoStakeholder] = useState(false);
   const [editandoStakeholderId, setEditandoStakeholderId] = useState(null);
   const [expandidaId, setExpandidaId] = useState(null);
   const [editandoCaptacaoId, setEditandoCaptacaoId] = useState(null);
@@ -112,19 +59,13 @@ export default function ParlamentarPerfil() {
   const parlamentarKey = `${casa}:${id}`;
   const eleicao = resultados[parlamentarKey] || null;
   const stakeholdersDoParlamentar = useMemo(
-    () => stakeholders.filter((s) => s.parlamentar_key === parlamentarKey),
+    () => stakeholders.filter((s) => s.parlamentares_keys?.includes(parlamentarKey)),
     [stakeholders, parlamentarKey]
   );
-  const nomesParlamentares = useMemo(() => parlamentares.map((x) => x.nome).sort(), [parlamentares]);
   const captacoesDoParlamentar = useMemo(
     () => (p ? captacoes.filter((c) => c.parlamentarNome === p.nome).sort((a, b) => STATUS_CAPTACAO.indexOf(b.status) - STATUS_CAPTACAO.indexOf(a.status)) : []),
     [captacoes, p]
   );
-
-  async function salvarNovoStakeholder(dados) {
-    await addStakeholder({ ...dados, parlamentar_key: parlamentarKey });
-    setAdicionandoStakeholder(false);
-  }
 
   async function excluirStakeholder(s) {
     if (!confirm(`Excluir o stakeholder "${s.nome}"?`)) return;
@@ -198,22 +139,20 @@ export default function ParlamentarPerfil() {
           <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
             <LuUserRound className="h-4 w-4 text-red-500" /> Stakeholders
           </p>
-          {!adicionandoStakeholder && (
-            <button type="button" onClick={() => setAdicionandoStakeholder(true)} className="flex items-center gap-1 text-xs font-medium text-red-600 hover:underline">
-              <LuPlus className="h-3.5 w-3.5" /> Adicionar
-            </button>
-          )}
+          <Link to="/cadastro" className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
         </div>
 
         <div className="mt-4 flex flex-col gap-3">
           {stakeholdersDoParlamentar.map((s) =>
             editandoStakeholderId === s.id ? (
-              <StakeholderForm
-                key={s.id}
-                inicial={{ nome: s.nome, cargo: s.cargo, telefone: s.telefone, email: s.email, observacoes: s.observacoes }}
-                onCancelar={() => setEditandoStakeholderId(null)}
-                onSalvar={async (dados) => { await updateStakeholder(s.id, dados); setEditandoStakeholderId(null); }}
-              />
+              <div key={s.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <FormularioStakeholder
+                  parlamentares={parlamentares}
+                  inicial={{ nome: s.nome, cargo: s.cargo, telefone: s.telefone, projeto: s.projeto || '', observacoes: s.observacoes, parlamentaresKeys: s.parlamentares_keys || [] }}
+                  onCancelar={() => setEditandoStakeholderId(null)}
+                  onSalvar={async (payload) => { await updateStakeholder(s.id, payload); setEditandoStakeholderId(null); }}
+                />
+              </div>
             ) : (
               <div key={s.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
                 <div className="flex items-start justify-between gap-2">
@@ -221,7 +160,7 @@ export default function ParlamentarPerfil() {
                     <InfoRow label="Nome" value={s.nome} />
                     <InfoRow label="Cargo / função" value={s.cargo} />
                     <InfoRow label="Telefone" value={s.telefone} copyable />
-                    <InfoRow label="E-mail" value={s.email} copyable />
+                    {s.projeto && <InfoRow label="Projeto / atuação" value={s.projeto} />}
                     {s.observacoes && <InfoRow label="Observações" value={s.observacoes} />}
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
@@ -237,12 +176,8 @@ export default function ParlamentarPerfil() {
             )
           )}
 
-          {adicionandoStakeholder && (
-            <StakeholderForm onCancelar={() => setAdicionandoStakeholder(false)} onSalvar={salvarNovoStakeholder} />
-          )}
-
-          {stakeholdersDoParlamentar.length === 0 && !adicionandoStakeholder && (
-            <p className="text-xs text-slate-400">Ainda não há stakeholder cadastrado para este parlamentar. Clique em "Adicionar" pra registrar o assessor/gabinete responsável por tratar de captação.</p>
+          {stakeholdersDoParlamentar.length === 0 && (
+            <p className="text-xs text-slate-400">Ainda não há stakeholder vinculado a este parlamentar. Cadastre pela aba "Cadastrar captação" (seção Stakeholders) e marque este parlamentar na lista.</p>
           )}
         </div>
       </ScrollReveal>
@@ -321,7 +256,8 @@ export default function ParlamentarPerfil() {
                           captacao={c}
                           quarteis={quarteis}
                           militares={militares}
-                          nomesParlamentares={nomesParlamentares}
+                          parlamentares={parlamentares}
+                          stakeholders={stakeholders}
                           onCancelar={() => setEditandoCaptacaoId(null)}
                           onSalvar={async (payload) => { await updateCaptacao(c.id, payload); setEditandoCaptacaoId(null); }}
                         />
