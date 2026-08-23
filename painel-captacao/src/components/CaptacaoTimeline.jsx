@@ -3,7 +3,7 @@ import { LuClock, LuPlus, LuTrash2, LuTriangleAlert } from 'react-icons/lu';
 import { STATUS_TERMINAL } from '../lib/data.js';
 import { inputClass, labelClass, btnGhost } from './CaptacaoForm.jsx';
 
-function hoje() {
+export function hoje() {
   return new Date().toISOString().slice(0, 10);
 }
 

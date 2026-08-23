@@ -24,12 +24,13 @@ clicável, sem precisar programar.
    militares daquele quartel), parlamentar, stakeholder (sugere quem está vinculado ao
    parlamentar escolhido), objeto, valor previsto, nº de reuniões, estágio (Primeiro contato →
    Em articulação → Agenda marcada → um desfecho: Destinado, Adiado, Recusado ou Arquivado),
-   anexos (documentos/fotos). Cada captação tem uma **linha do tempo** (data + o que aconteceu
-   em cada passo) com um alerta automático se ela ficar 15+ dias (🟡 esfriando) ou 30+ dias
-   (🔴 parada) sem nenhum passo novo registrado — só enquanto ainda está em andamento. Este
-   painel só acompanha até a captação ser destinada — o que acontece depois (empenho,
-   licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por
-   e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
+   data do primeiro contato (vira automaticamente o primeiro passo da linha do tempo), anexos
+   (documentos/fotos). Cada captação tem uma **linha do tempo** (data + o que aconteceu em
+   cada passo, editável a qualquer momento) com um alerta automático se ela ficar 15+ dias
+   (🟡 esfriando) ou 30+ dias (🔴 parada) sem nenhum passo novo registrado — só enquanto ainda
+   está em andamento. Este painel só acompanha até a captação ser destinada — o que acontece
+   depois (empenho, licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma
+   notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase).
 

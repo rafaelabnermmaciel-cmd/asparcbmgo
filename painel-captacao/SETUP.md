@@ -176,9 +176,13 @@ Tudo isso é editável direto no site, sem precisar entrar no Supabase.
 
 ## Linha do tempo de cada captação (e o alerta de "esfriando")
 
-Dentro de qualquer captação (botão **"Linha do tempo"** no Cadastro, ou abrindo a captação no
-perfil do parlamentar) dá pra registrar cada passo — data + o que aconteceu (ex: "primeiro
-contato feito", "reunião marcada", "foram ao Congresso Nacional") — e ver todo o histórico em
+Já no formulário de **Cadastrar captação**, tem o campo **"Data do primeiro contato"**
+(vem preenchido com a data de hoje, mas dá pra mudar se o primeiro contato foi antes) — ao
+cadastrar, esse dia já entra como o primeiro passo da linha do tempo automaticamente.
+
+Depois disso, dentro de qualquer captação (botão **"Linha do tempo"** no Cadastro, ou abrindo a
+captação no perfil do parlamentar) dá pra registrar os próximos passos — data + o que
+aconteceu (ex: "reunião marcada", "foram ao Congresso Nacional") — e ver todo o histórico em
 ordem. Se uma captação que ainda está em andamento (não chegou em Destinado/Adiado/
 Recusado/Arquivado) fica **15 dias** sem nenhum passo novo, aparece um aviso amarelo
 "🟡 Esfriando"; com **30 dias** ou mais, vira um aviso vermelho "🔴 Parado há X dias" — pra
