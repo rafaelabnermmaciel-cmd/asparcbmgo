@@ -83,9 +83,9 @@ create table if not exists captacoes (
 
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
--- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público); "quarteis"
--- e "militares" também aceitam criar/editar/apagar linha vindo do site (a aba Gerenciamento),
--- e "captacoes" aceita criar linha (o formulário de Cadastro). "interlocutores" continua só
+-- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público); "quarteis",
+-- "militares" e "captacoes" também aceitam criar/editar/apagar linha vindo do site (a aba
+-- Gerenciamento, e o Cadastro/edição inline de captações). "interlocutores" continua só
 -- leitura pelo site — edite pelo Table Editor do Supabase (login sempre ignora RLS).
 --
 -- Aviso: como o site não tem login, esse acesso de escrita em quarteis/militares/captacoes
@@ -123,6 +123,10 @@ create policy "Leitura pública" on captacoes for select using (true);
 
 drop policy if exists "Cadastro público" on captacoes;
 create policy "Cadastro público" on captacoes for insert with check (true);
+drop policy if exists "Edição pública" on captacoes;
+create policy "Edição pública" on captacoes for update using (true) with check (true);
+drop policy if exists "Remoção pública" on captacoes;
+create policy "Remoção pública" on captacoes for delete using (true);
 
 -- 6) ARMAZENAMENTO DE ANEXOS (fotos/documentos do formulário) -----------------
 insert into storage.buckets (id, name, public)
