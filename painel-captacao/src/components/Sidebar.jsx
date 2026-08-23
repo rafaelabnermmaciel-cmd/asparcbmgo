@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LuHouse, LuLandmark, LuClipboardPlus, LuSettings, LuHandCoins } from 'react-icons/lu';
+import { LuHouse, LuLandmark, LuClipboardPlus, LuSettings } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 
 export const NAV = [
@@ -32,8 +32,16 @@ export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white/80 px-4 py-6 backdrop-blur lg:flex dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
       <div className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-600 text-white">
-          <LuHandCoins className="h-5 w-5" aria-hidden="true" />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0f1f3d]">
+          <svg viewBox="0 0 100 100" className="h-6 w-6" aria-hidden="true">
+            <rect x="10" y="72" width="52" height="6" rx="2" fill="#e2e8f0" />
+            <rect x="16" y="44" width="7" height="28" fill="#e2e8f0" />
+            <rect x="49" y="44" width="7" height="28" fill="#e2e8f0" />
+            <path d="M18 44 A18 18 0 0 1 54 44 Z" fill="#e2e8f0" />
+            <circle cx="70" cy="74" r="20" fill="#b45309" stroke="#0f1f3d" strokeWidth="3" />
+            <circle cx="76" cy="64" r="20" fill="#f59e0b" stroke="#0f1f3d" strokeWidth="3" />
+            <text x="76" y="72" fontSize="22" fontWeight="700" fill="#0f1f3d" textAnchor="middle">$</text>
+          </svg>
         </div>
         <div>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Captação CBM-GO</p>

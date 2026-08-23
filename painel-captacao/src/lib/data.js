@@ -179,6 +179,13 @@ export function useCaptacoes() {
         idsConhecidos.current.add(nova.id);
         setState((prev) => ({ ...prev, captacoes: [nova, ...prev.captacoes] }));
       })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'captacoes' }, (payload) => {
+        const atualizada = rowParaCaptacao(payload.new);
+        setState((prev) => ({ ...prev, captacoes: prev.captacoes.map((c) => (c.id === atualizada.id ? atualizada : c)) }));
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'captacoes' }, (payload) => {
+        setState((prev) => ({ ...prev, captacoes: prev.captacoes.filter((c) => c.id !== payload.old.id) }));
+      })
       .subscribe();
 
     return () => { cancelled = true; supabase.removeChannel(canal); };
@@ -230,7 +237,40 @@ export function useCaptacoes() {
     return registro;
   }, []);
 
-  return { loading: state.loading, captacoes: state.captacoes, submitCaptacao };
+  // Uma captação cadastrada não fica congelada — o estágio muda com o tempo (ex: "Primeiro
+  // contato" → "Em articulação" → "Destinado"), então precisa dar pra editar qualquer campo
+  // depois. `patch` usa as mesmas chaves em camelCase do resto do app.
+  const updateCaptacao = useCallback(async (id, patch) => {
+    const linha = {};
+    if ('quartelId' in patch) linha.quartel_id = patch.quartelId;
+    if ('quartelNome' in patch) linha.quartel_nome = patch.quartelNome;
+    if ('municipio' in patch) linha.municipio = patch.municipio;
+    if ('responsavel' in patch) linha.responsavel = patch.responsavel;
+    if ('stakeholder' in patch) linha.stakeholder = patch.stakeholder;
+    if ('parlamentarNome' in patch) linha.parlamentar_nome = patch.parlamentarNome;
+    if ('objeto' in patch) linha.objeto = patch.objeto;
+    if ('valorPrevisto' in patch) linha.valor_previsto = patch.valorPrevisto;
+    if ('valorConfirmado' in patch) linha.valor_confirmado = patch.valorConfirmado;
+    if ('numReunioes' in patch) linha.num_reunioes = patch.numReunioes;
+    if ('status' in patch) linha.status = patch.status;
+    if ('dataAgenda' in patch) linha.data_agenda = patch.dataAgenda || null;
+    if ('observacoes' in patch) linha.observacoes = patch.observacoes;
+
+    const { data: atualizado, error } = await supabase.from('captacoes').update(linha).eq('id', id).select().single();
+    if (error) throw new Error(error.message);
+
+    const registro = rowParaCaptacao(atualizado);
+    setState((prev) => ({ ...prev, captacoes: prev.captacoes.map((c) => (c.id === id ? registro : c)) }));
+    return registro;
+  }, []);
+
+  const removeCaptacao = useCallback(async (id) => {
+    const { error } = await supabase.from('captacoes').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    setState((prev) => ({ ...prev, captacoes: prev.captacoes.filter((c) => c.id !== id) }));
+  }, []);
+
+  return { loading: state.loading, captacoes: state.captacoes, submitCaptacao, updateCaptacao, removeCaptacao };
 }
 
 // Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
