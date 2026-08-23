@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LuHouse, LuLandmark, LuClipboardPlus, LuSettings } from 'react-icons/lu';
+import { LuHouse, LuLandmark, LuClipboardPlus, LuSettings, LuHandCoins } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 
 export const NAV = [
@@ -32,11 +32,8 @@ export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white/80 px-4 py-6 backdrop-blur lg:flex dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
       <div className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white">
-          <svg viewBox="0 0 100 100" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="7" aria-hidden="true">
-            <path d="M50 16 L74 30 V52 C74 68 63 78 50 84 C37 78 26 68 26 52 V30 Z" />
-            <path d="M50 38 L50 62 M39 50 L61 50" strokeLinecap="round" />
-          </svg>
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-600 text-white">
+          <LuHandCoins className="h-5 w-5" aria-hidden="true" />
         </div>
         <div>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Captação CBM-GO</p>

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase, supabaseConfigurado } from './supabase.js';
+import { notificarNovaCaptacao } from './emailjs.js';
 
 // Deputados/senadores/votos de Goiás continuam vindo de JSON estático (são dados só de
 // leitura, filtrados do painel-nacional — ver scripts/gerar-parlamentares-go.js). Quartéis,
@@ -225,6 +226,7 @@ export function useCaptacoes() {
     const registro = rowParaCaptacao(inserido);
     idsConhecidos.current.add(registro.id);
     setState((prev) => ({ ...prev, captacoes: [registro, ...prev.captacoes] }));
+    notificarNovaCaptacao(registro); // não bloqueia o cadastro — falha de e-mail nunca desfaz o que já foi salvo
     return registro;
   }, []);
 
@@ -255,18 +257,21 @@ export function initials(name) {
     .toUpperCase();
 }
 
+// Este painel acompanha só a articulação — do primeiro contato até a captação ser destinada
+// (ou não). O que acontece depois de destinada (empenho, licitação, contratação, entrega) é
+// execução orçamentária/administrativa, acompanhada no perfil de cada um no outro painel —
+// não é mais trabalho de quem está captando.
 export const STATUS_CAPTACAO = [
   'Primeiro contato',
   'Em articulação',
   'Agenda marcada',
-  'Indicado',
-  'Confirmado',
-  'Empenhado',
-  'Em licitação',
-  'Contratado',
-  'Entregue',
+  'Adiado',
+  'Recusado',
+  'Arquivado',
+  'Destinado',
 ];
 
-// Os 3 primeiros estágios são o "relacionamento" (ainda sem valor formalizado); a partir de
-// "Indicado" o registro já entrou no funil formal de recurso (mesmo vocabulário do painel-nacional).
-export const ESTAGIOS_ARTICULACAO = ['Primeiro contato', 'Em articulação', 'Agenda marcada'];
+// Os 3 primeiros são o funil "em andamento"; os 4 seguintes são desfechos (um deles,
+// "Destinado", é o desfecho de sucesso — a captação foi formalmente destinada àquele quartel).
+export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação', 'Agenda marcada'];
+export const STATUS_TERMINAL = ['Adiado', 'Recusado', 'Arquivado', 'Destinado'];

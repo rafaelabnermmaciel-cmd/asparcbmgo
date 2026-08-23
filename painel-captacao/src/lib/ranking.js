@@ -14,7 +14,7 @@ export function computeQuartelRanking(captacoes, quarteis) {
       qtdReunioes: 0,
       totalPrevisto: 0,
       totalConfirmado: 0,
-      qtdEntregue: 0,
+      qtdDestinadas: 0,
     });
   });
 
@@ -29,7 +29,7 @@ export function computeQuartelRanking(captacoes, quarteis) {
         qtdReunioes: 0,
         totalPrevisto: 0,
         totalConfirmado: 0,
-        qtdEntregue: 0,
+        qtdDestinadas: 0,
       });
     }
     const q = porQuartel.get(key);
@@ -37,7 +37,7 @@ export function computeQuartelRanking(captacoes, quarteis) {
     q.qtdReunioes += c.numReunioes || 0;
     q.totalPrevisto += c.valorPrevisto || 0;
     q.totalConfirmado += c.valorConfirmado || 0;
-    if (c.status === 'Entregue') q.qtdEntregue += 1;
+    if (c.status === 'Destinado') q.qtdDestinadas += 1;
   });
 
   return [...porQuartel.values()];
