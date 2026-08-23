@@ -11,8 +11,8 @@
 --   2. Tabela "militares"      — um militar por linha, exatamente como na Convocação
 --                                 106/2026: posto, RG, nome de guerra e OBM (também editável
 --                                 no site, aba Gerenciamento)
---   3. Tabela "stakeholders"   — contatos de captação de cada parlamentar (editável no perfil
---                                 do parlamentar, no site)
+--   3. Tabela "stakeholders"   — pessoas que tratam de captação com um ou mais parlamentares
+--                                 ao mesmo tempo (cadastrado na aba Cadastro do site)
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
@@ -50,32 +50,52 @@ alter table militares drop constraint if exists militares_quartel_id_fkey;
 alter table militares add constraint militares_quartel_id_fkey foreign key (quartel_id) references quarteis(id) on delete cascade;
 
 -- 3) STAKEHOLDERS ---------------------------------------------------------------
--- Contatos de captação de cada parlamentar (assessor, chefe de gabinete etc.) — pode ter mais
--- de um por parlamentar. "parlamentar_key" é "camara:<id>" ou "senado:<id>" — o <id> é o
--- número que aparece na URL do perfil daquele parlamentar no site (ex.:
--- .../parlamentares/camara/220565 → chave "camara:220565"). Totalmente editável direto no
--- perfil do parlamentar no site (adicionar, editar, apagar) — não precisa mexer no Supabase.
+-- Pessoa (ex: um prefeito, um assessor) que trata de algum projeto/captação junto a um ou
+-- MAIS DE UM parlamentar ao mesmo tempo — por isso "parlamentares_keys" é uma lista, não um
+-- valor só. Cada item da lista é "camara:<id>" ou "senado:<id>" (o <id> é o número que aparece
+-- na URL do perfil daquele parlamentar no site, ex.: .../parlamentares/camara/220565 →
+-- "camara:220565"). Cadastrado pela aba "Cadastrar captação" do site (seção Stakeholders);
+-- aparece pra escolher ali mesmo (formulário de captação) e no perfil de cada parlamentar
+-- vinculado — totalmente editável no site, não precisa mexer no Supabase.
 create table if not exists stakeholders (
   id bigint generated always as identity primary key,
-  parlamentar_key text not null default '',
   nome text not null default '',
   cargo text not null default '',
   telefone text not null default '',
-  email text not null default '',
-  observacoes text not null default ''
+  projeto text not null default '',
+  observacoes text not null default '',
+  parlamentares_keys text[] not null default '{}'
 );
 
--- Migra os dados da antiga tabela "interlocutores" (um único contato por parlamentar) pra
--- "stakeholders" (vários por parlamentar) e remove a antiga — só roda se ela ainda existir
--- (rodar o script de novo depois disso não faz nada, já que "interlocutores" já não existe).
+-- Migração de versões anteriores deste script ------------------------------------
+-- a) versão original: tabela "interlocutores" (1 contato por parlamentar, nunca virou
+-- "stakeholders") — só roda se ela ainda existir.
 do $$
 begin
   if exists (select 1 from information_schema.tables where table_schema = 'public' and table_name = 'interlocutores') then
-    insert into stakeholders (parlamentar_key, nome, cargo, telefone, email, observacoes)
-    select parlamentar_key, nome, cargo, telefone, email, observacoes from interlocutores;
+    insert into stakeholders (nome, cargo, telefone, observacoes, parlamentares_keys)
+    select nome, cargo, telefone, observacoes,
+           case when parlamentar_key is not null and parlamentar_key <> '' then array[parlamentar_key] else '{}'::text[] end
+    from interlocutores;
     drop table interlocutores;
   end if;
 end $$;
+
+-- b) versão intermediária: "stakeholders" já existia, mas com 1 parlamentar só por linha
+-- (coluna "parlamentar_key" em vez da lista "parlamentares_keys") — só roda se essa coluna
+-- antiga ainda existir.
+do $$
+begin
+  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'stakeholders' and column_name = 'parlamentar_key') then
+    alter table stakeholders add column if not exists parlamentares_keys text[] not null default '{}';
+    update stakeholders set parlamentares_keys = array[parlamentar_key]
+      where parlamentar_key is not null and parlamentar_key <> '' and (parlamentares_keys is null or parlamentares_keys = '{}');
+    alter table stakeholders drop column parlamentar_key;
+  end if;
+end $$;
+
+alter table stakeholders add column if not exists projeto text not null default '';
+alter table stakeholders drop column if exists email;
 
 -- 4) CAPTAÇÕES ----------------------------------------------------------------
 create table if not exists captacoes (

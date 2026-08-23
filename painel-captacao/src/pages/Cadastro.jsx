@@ -1,18 +1,20 @@
 import { useMemo, useState } from 'react';
-import { LuCircleCheck, LuTriangleAlert, LuFileText, LuImage, LuPencil, LuTrash2 } from 'react-icons/lu';
-import { useParlamentaresGO, useQuarteis, useMilitares, useCaptacoes } from '../lib/data.js';
+import { LuCircleCheck, LuTriangleAlert, LuFileText, LuImage, LuPencil, LuTrash2, LuUsers } from 'react-icons/lu';
+import { useParlamentaresGO, useQuarteis, useMilitares, useStakeholders, useCaptacoes } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import FileField from '../components/FileField.jsx';
 import {
-  inputClass, btnPrimary, btnDanger, labelClass, fmtR,
+  inputClass, btnPrimary, btnGhost, btnDanger, labelClass, fmtR,
   CamposCaptacao, EdicaoCaptacao, VAZIO_CAPTACAO, validarCaptacao, paraPayloadCaptacao,
 } from '../components/CaptacaoForm.jsx';
+import { FormularioStakeholder } from '../components/StakeholderForm.jsx';
 
 export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
+  const { stakeholders, addStakeholder, updateStakeholder, removeStakeholder } = useStakeholders();
   const { captacoes, submitCaptacao, updateCaptacao, removeCaptacao } = useCaptacoes();
 
   const [f, setF] = useState(VAZIO_CAPTACAO);
@@ -22,13 +24,34 @@ export default function Cadastro() {
   const [sucesso, setSucesso] = useState(null);
   const [filtroQuartel, setFiltroQuartel] = useState('');
   const [editandoId, setEditandoId] = useState(null);
-
-  const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
+  const [editandoStakeholder, setEditandoStakeholder] = useState(undefined); // undefined=fechado, null=novo, id=editando
 
   const cadastrosFiltrados = useMemo(
     () => (filtroQuartel ? captacoes.filter((c) => c.quartelId === filtroQuartel) : captacoes),
     [captacoes, filtroQuartel]
   );
+
+  function nomesParlamentaresDe(s) {
+    return (s.parlamentares_keys || [])
+      .map((key) => parlamentares.find((p) => `${p.casa}:${p.id}` === key)?.nome)
+      .filter(Boolean)
+      .join(', ');
+  }
+
+  async function salvarStakeholder(payload) {
+    if (editandoStakeholder === null) await addStakeholder(payload);
+    else await updateStakeholder(editandoStakeholder, payload);
+    setEditandoStakeholder(undefined);
+  }
+
+  async function excluirStakeholder(s) {
+    if (!confirm(`Excluir o stakeholder "${s.nome}"?`)) return;
+    try {
+      await removeStakeholder(s.id);
+    } catch (err) {
+      alert(err.message || 'Falha ao excluir. Tente novamente.');
+    }
+  }
 
   async function removerCaptacao(c) {
     if (!confirm(`Excluir a captação "${c.objeto}" (${c.quartelNome} · ${c.parlamentarNome})? Essa ação não pode ser desfeita.`)) return;
@@ -66,16 +89,67 @@ export default function Cadastro() {
         <p className="mt-1 text-sm text-slate-400">Registre o andamento de uma articulação com parlamentar — desde o primeiro contato até a captação ser destinada (o que acontece depois disso é acompanhado no outro painel).</p>
       </ScrollReveal>
 
+      <ScrollReveal delay={0.03} className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <LuUsers className="h-4 w-4 text-red-500" /> Stakeholders ({stakeholders.length})
+          </p>
+          {editandoStakeholder === undefined && (
+            <button type="button" className={btnGhost} onClick={() => setEditandoStakeholder(null)}>+ Novo stakeholder</button>
+          )}
+        </div>
+        <p className="mt-1 text-xs text-slate-400">Uma pessoa (ex: um prefeito) pode estar articulando com mais de um parlamentar ao mesmo tempo — cadastre aqui e vincule a todos que se aplicam. Depois de cadastrado, o stakeholder aparece pra escolher no formulário de captação (abaixo) e no perfil de cada parlamentar vinculado.</p>
+
+        {editandoStakeholder === null && (
+          <div className="mt-3">
+            <FormularioStakeholder parlamentares={parlamentares} textoBotao="Cadastrar" onCancelar={() => setEditandoStakeholder(undefined)} onSalvar={salvarStakeholder} />
+          </div>
+        )}
+
+        {stakeholders.length > 0 && (
+          <div className="mt-3 flex flex-col gap-2">
+            {stakeholders.map((s) =>
+              editandoStakeholder === s.id ? (
+                <div key={s.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                  <FormularioStakeholder
+                    parlamentares={parlamentares}
+                    inicial={{ nome: s.nome, cargo: s.cargo, telefone: s.telefone, projeto: s.projeto || '', observacoes: s.observacoes, parlamentaresKeys: s.parlamentares_keys || [] }}
+                    onCancelar={() => setEditandoStakeholder(undefined)}
+                    onSalvar={salvarStakeholder}
+                  />
+                </div>
+              ) : (
+                <div key={s.id} className="flex items-start justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{s.nome}{s.cargo ? <span className="font-normal text-slate-400"> · {s.cargo}</span> : ''}</p>
+                    <p className="mt-0.5 text-xs text-slate-500">Vinculado a: {nomesParlamentaresDe(s) || '—'}</p>
+                    {s.projeto && <p className="mt-0.5 text-xs text-slate-400">Projeto: {s.projeto}</p>}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button type="button" onClick={() => setEditandoStakeholder(s.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                      <LuPencil className="h-3 w-3" /> Editar
+                    </button>
+                    <button type="button" onClick={() => excluirStakeholder(s)} className={`flex items-center gap-1 ${btnDanger}`}>
+                      <LuTrash2 className="h-3 w-3" /> Excluir
+                    </button>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        )}
+      </ScrollReveal>
+
       {quarteis.length === 0 && (
-        <ScrollReveal delay={0.03} className="mt-4 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-300">
+        <ScrollReveal delay={0.05} className="mt-4 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-300">
           <LuTriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
           <p>Nenhum quartel cadastrado ainda no banco. Adicione (ou confira) a lista em Supabase → Table Editor → tabela "quarteis" — ver SETUP.md.</p>
         </ScrollReveal>
       )}
 
-      <ScrollReveal delay={0.06} className="mt-5">
+      <ScrollReveal delay={0.08} className="mt-5">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
-          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} nomesParlamentares={nomesParlamentares} />
+          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
           <div className="sm:col-span-2">
             <p className={labelClass}>Documentos e fotos</p>
             <div className="mt-1">
@@ -118,7 +192,8 @@ export default function Cadastro() {
                       captacao={c}
                       quarteis={quarteis}
                       militares={militares}
-                      nomesParlamentares={nomesParlamentares}
+                      parlamentares={parlamentares}
+                      stakeholders={stakeholders}
                       onCancelar={() => setEditandoId(null)}
                       onSalvar={async (payload) => { await updateCaptacao(c.id, payload); setEditandoId(null); }}
                     />

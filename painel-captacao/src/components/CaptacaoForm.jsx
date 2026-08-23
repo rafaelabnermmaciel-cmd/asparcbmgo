@@ -33,12 +33,25 @@ export const VAZIO_CAPTACAO = {
   observacoes: '',
 };
 
+function parlamentarKeyDe(p) {
+  return `${p.casa}:${p.id}`;
+}
+
 // Grade de campos compartilhada entre o formulário de novo cadastro (Cadastro.jsx) e a edição
 // inline de um já existente (aqui mesmo, e também no perfil do parlamentar) — só o que envolve
 // anexos/envio fica de fora daqui (cada chamador cuida disso).
-export function CamposCaptacao({ valores, onChange, quarteis, militares, nomesParlamentares }) {
+export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders }) {
+  const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
   const militaresDoQuartel = useMemo(() => militares.filter((m) => m.quartel_id === valores.quartelId), [militares, valores.quartelId]);
   const [responsavelManual, setResponsavelManual] = useState(() => !militaresDoQuartel.some((m) => nomeMilitar(m) === valores.responsavel));
+
+  const parlamentarSelecionado = useMemo(() => parlamentares.find((p) => p.nome === valores.parlamentarNome), [parlamentares, valores.parlamentarNome]);
+  const parlamentarKey = parlamentarSelecionado ? parlamentarKeyDe(parlamentarSelecionado) : null;
+  const stakeholdersDoParlamentar = useMemo(
+    () => (parlamentarKey ? stakeholders.filter((s) => s.parlamentares_keys?.includes(parlamentarKey)) : []),
+    [stakeholders, parlamentarKey]
+  );
+  const [stakeholderManual, setStakeholderManual] = useState(() => !stakeholdersDoParlamentar.some((s) => s.nome === valores.stakeholder));
 
   function selecionarQuartel(e) {
     const quartelId = e.target.value;
@@ -64,6 +77,32 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, nomesPa
     }
   }
 
+  function selecionarParlamentar(e) {
+    const nome = e.target.value;
+    const p = parlamentares.find((x) => x.nome === nome);
+    const key = p ? parlamentarKeyDe(p) : null;
+    const doParlamentar = key ? stakeholders.filter((s) => s.parlamentares_keys?.includes(key)) : [];
+    if (doParlamentar.length === 1) {
+      setStakeholderManual(false);
+      onChange('parlamentarNome', nome);
+      onChange('stakeholder', doParlamentar[0].nome);
+    } else {
+      setStakeholderManual(doParlamentar.length === 0);
+      onChange('parlamentarNome', nome);
+      onChange('stakeholder', '');
+    }
+  }
+
+  function selecionarStakeholder(e) {
+    const valor = e.target.value;
+    if (valor === '__outro__') {
+      setStakeholderManual(true);
+      onChange('stakeholder', '');
+    } else {
+      onChange('stakeholder', valor);
+    }
+  }
+
   return (
     <>
       <div>
@@ -77,7 +116,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, nomesPa
       </div>
       <div>
         <p className={labelClass}>Parlamentar *</p>
-        <select className={inputClass} value={valores.parlamentarNome} onChange={(e) => onChange('parlamentarNome', e.target.value)}>
+        <select className={inputClass} value={valores.parlamentarNome} onChange={selecionarParlamentar}>
           <option value="">Selecione...</option>
           {nomesParlamentares.map((n) => (
             <option key={n} value={n}>{n}</option>
@@ -107,7 +146,25 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, nomesPa
       </div>
       <div>
         <p className={labelClass}>Stakeholder / contato-chave</p>
-        <input className={inputClass} value={valores.stakeholder} onChange={(e) => onChange('stakeholder', e.target.value)} placeholder="Ex: assessor, chefe de gabinete..." />
+        {stakeholdersDoParlamentar.length > 0 && !stakeholderManual ? (
+          <select className={inputClass} value={valores.stakeholder} onChange={selecionarStakeholder}>
+            <option value="">Selecione...</option>
+            {stakeholdersDoParlamentar.map((s) => (
+              <option key={s.id} value={s.nome}>{s.nome}{s.cargo ? ` — ${s.cargo}` : ''}</option>
+            ))}
+            <option value="__outro__">Outro (digitar nome)</option>
+          </select>
+        ) : (
+          <div className="flex gap-2">
+            <input className={inputClass} value={valores.stakeholder} onChange={(e) => onChange('stakeholder', e.target.value)} placeholder="Ex: assessor, chefe de gabinete..." />
+            {stakeholdersDoParlamentar.length > 0 && (
+              <button type="button" onClick={() => setStakeholderManual(false)} className="shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                Escolher da lista
+              </button>
+            )}
+          </div>
+        )}
+        {!parlamentarKey && <p className="mt-1 text-[11px] text-slate-400">Selecione o parlamentar pra ver os stakeholders vinculados a ele.</p>}
       </div>
       <div className="sm:col-span-2">
         <p className={labelClass}>Objeto da captação *</p>
@@ -175,7 +232,7 @@ export function paraPayloadCaptacao(f, quarteis) {
 // Formulário de edição de uma captação já existente — aparece no lugar do card quando a
 // pessoa clica em "Editar" (tanto no Cadastro quanto no perfil do parlamentar). Não mexe em
 // anexos (só o cadastro inicial anexa arquivo).
-export function EdicaoCaptacao({ captacao, quarteis, militares, nomesParlamentares, onSalvar, onCancelar }) {
+export function EdicaoCaptacao({ captacao, quarteis, militares, parlamentares, stakeholders, onSalvar, onCancelar }) {
   const [f, setF] = useState({
     quartelId: captacao.quartelId,
     responsavel: captacao.responsavel,
@@ -208,7 +265,7 @@ export function EdicaoCaptacao({ captacao, quarteis, militares, nomesParlamentar
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} nomesParlamentares={nomesParlamentares} />
+      <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
       {erro && <p className="sm:col-span-2 flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5" /> {erro}</p>}
       <div className="flex gap-2 sm:col-span-2">
         <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : 'Salvar alterações'}</button>

@@ -14,15 +14,18 @@ clicável, sem precisar programar.
    (cadastros + reuniões), com níveis (bronze/prata/ouro/diamante) e atividade recente.
 2. **Parlamentares** (`/parlamentares`) — bancada de Goiás (17 deputados federais + 3
    senadores), com busca/filtro; cada perfil mostra contato, gabinete, votos recebidos na
-   eleição, os stakeholders de captação (editáveis ali mesmo — adicionar/editar/excluir) e as
-   captações vinculadas a ele (clique numa pra ver o detalhe e editar/excluir).
-3. **Cadastrar captação** (`/cadastro`) — formulário: quartel (o campo Responsável já lista os
-   militares daquele quartel), stakeholder, parlamentar, objeto, valor previsto, nº de
-   reuniões, estágio (Primeiro contato → Em articulação → Agenda marcada → um desfecho:
-   Destinado, Adiado, Recusado ou Arquivado), anexos (documentos/fotos). Este painel só
-   acompanha até a captação ser destinada — o que acontece depois (empenho, licitação,
-   entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por e-mail
-   sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
+   eleição, os stakeholders vinculados a ele (editáveis/excluíveis ali — cadastrar um novo é
+   só pela aba Cadastro) e as captações vinculadas a ele (clique numa pra ver o detalhe e
+   editar/excluir).
+3. **Cadastrar captação** (`/cadastro`) — duas seções: **Stakeholders** (cadastre uma pessoa —
+   ex: um prefeito — e marque um ou mais parlamentares com quem ela articula ao mesmo tempo) e
+   o formulário de **captação** em si: quartel (o campo Responsável já lista os militares
+   daquele quartel), parlamentar, stakeholder (sugere quem está vinculado ao parlamentar
+   escolhido), objeto, valor previsto, nº de reuniões, estágio (Primeiro contato → Em
+   articulação → Agenda marcada → um desfecho: Destinado, Adiado, Recusado ou Arquivado),
+   anexos (documentos/fotos). Este painel só acompanha até a captação ser destinada — o que
+   acontece depois (empenho, licitação, entrega) é acompanhado no painel-nacional. A cada
+   cadastro, uma notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 4. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase).
 
@@ -41,8 +44,10 @@ o sigilo da chave. Isso significa:
 - **Leitura**: todo mundo que abre o site vê os dados na hora (não depende de rebuild/deploy).
 - **Escrita**: as 4 tabelas aceitam criar/editar/remover direto do site — `captacoes` pelo
   formulário de Cadastro (e a edição/exclusão inline, tanto lá quanto no perfil do
-  parlamentar); `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` pelo
-  perfil de cada parlamentar. Nenhuma delas precisa do Table Editor do Supabase pro dia a dia.
+  parlamentar); `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` é
+  cadastrado pela aba **Cadastro** (vinculando um ou mais parlamentares) e editável/excluível
+  tanto ali quanto no perfil de cada parlamentar vinculado. Nenhuma delas precisa do Table
+  Editor do Supabase pro dia a dia.
 - **Tempo real**: quem estiver com o Dashboard ou o Cadastro aberto vê um cadastro novo (feito
   por qualquer pessoa) aparecer sozinho na tela, sem precisar recarregar a página.
 - **Anexos** (fotos/documentos do formulário) sobem pro Storage do Supabase (bucket `anexos`,
@@ -80,8 +85,8 @@ passo a passo em **SETUP.md**, seção 6.
   SENASP/MJ) e os 122 militares da Convocação nº 106/2026 (posto, RG, nome de guerra, OBM).
   Ajuste direto nas tabelas `quarteis`/`militares` pelo Table Editor do Supabase (SETUP.md,
   seção 4) — sem precisar rodar SQL de novo.
-- **Stakeholders por parlamentar** — tabela vazia até alguém preencher pelo perfil de cada
-  parlamentar no site (SETUP.md, última seção).
+- **Stakeholders** — tabela vazia até alguém cadastrar pela aba Cadastro (SETUP.md, última
+  seção).
 
 ## Rodando localmente
 

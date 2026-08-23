@@ -159,10 +159,17 @@ nenhum acesso**. Se um dia o site parar de carregar dados do nada, é provavelme
 volte no painel do Supabase (supabase.com → seu projeto) que vai aparecer um botão **Restore
 project**; clique nele e em ~1 minuto volta ao normal. Não perde nenhum dado, só "hiberna".
 
-## Onde entram os stakeholders de cada parlamentar
+## Onde entram os stakeholders
 
-Direto no perfil do parlamentar no site (aba **Parlamentares** → clique no nome → seção
-**Stakeholders**) — botão **+ Adicionar**, preencha nome, cargo, telefone, e-mail e
-observações do assessor/gabinete responsável por tratar de captação com aquele parlamentar, e
-salve. Dá pra cadastrar mais de um stakeholder por parlamentar, e editar ou apagar a qualquer
-momento pelos botões "Editar"/"Excluir" de cada um — não precisa entrar no Supabase pra isso.
+Aba **Cadastrar captação** → seção **Stakeholders**, no topo da página → botão **+ Novo
+stakeholder**. Preencha nome, cargo/função, telefone e qual projeto ele está tratando, e
+marque na lista **todos os parlamentares** com quem essa pessoa articula (pode marcar mais de
+um — ex: um prefeito conversando com 3 deputados ao mesmo tempo pelo mesmo projeto). Depois de
+cadastrado:
+
+- Ele aparece no **perfil de cada parlamentar marcado** (seção Stakeholders), com os botões
+  "Editar"/"Excluir" ali também.
+- Ele aparece pra **escolher no formulário de Cadastro de captação** — ao selecionar o
+  parlamentar daquela captação, o campo "Stakeholder" já sugere quem está vinculado a ele.
+
+Tudo isso é editável direto no site, sem precisar entrar no Supabase.
