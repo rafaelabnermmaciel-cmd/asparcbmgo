@@ -33,10 +33,10 @@ clicável, sem precisar programar.
    notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase). **Única aba com login** (dado de
-   organização interna): entra com e-mail/senha ou Google — o e-mail do administrador libera
-   sozinho, qualquer outro fica "Pendente" até o administrador aprovar (que recebe um e-mail
-   avisando) numa sub-aba **Acessos**, onde também dá pra revogar depois (ver "Login e
-   aprovação de acesso" abaixo).
+   organização interna): entra com e-mail/senha — o e-mail do administrador libera sozinho,
+   qualquer outro fica "Pendente" até o administrador aprovar (que recebe um e-mail avisando)
+   numa sub-aba **Acessos**, onde também dá pra revogar depois (ver "Login e aprovação de
+   acesso" abaixo).
 
 ## Como os dados funcionam
 
@@ -65,7 +65,7 @@ definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 
 ⚠️ **Sobre segurança**: a maior parte do site não tem login — qualquer pessoa com o link
 consegue cadastrar captações, stakeholders etc. (é dado que a equipe toda mexe no dia a dia).
-A aba **Gerenciamento** é diferente: exige **login do Supabase Auth** (e-mail/senha ou Google)
+A aba **Gerenciamento** é diferente: exige **login do Supabase Auth** (e-mail/senha)
 **e** aprovação do administrador — só o e-mail do administrador (fixado no gatilho de
 `auth.users`, ver `supabase/schema.sql`, seção 4.2) entra liberado sozinho; qualquer outra
 conta fica pendente até ser aprovada pela aba Gerenciamento → Acessos (o administrador recebe
@@ -127,12 +127,12 @@ deputados federais + 3 senadores).
 
 ## Login e aprovação de acesso (aba Gerenciamento)
 
-Usa o **Supabase Auth** (já incluso no mesmo projeto, sem conta nova) — e-mail/senha e Google.
+Usa o **Supabase Auth** (já incluso no mesmo projeto, sem conta nova) — e-mail/senha.
 O e-mail do administrador (fixado no gatilho em `auth.users`, ver `schema.sql`) entra liberado
 sozinho; qualquer outra conta nova cai "pendente" e dispara um e-mail (via EmailJS, template
 separado do de captações) avisando o administrador. Aprovação (ou revogação depois) é feita
-pela própria aba **Gerenciamento → Acessos**. Configuração completa (Google Cloud, Site
-URL/Redirect URLs no Supabase, template do e-mail de pedido de acesso) em **SETUP.md**, seção 7.
+pela própria aba **Gerenciamento → Acessos**. Configuração completa (Site URL/Redirect URLs no
+Supabase, template do e-mail de pedido de acesso) em **SETUP.md**, seção 7.
 
 ## Stack
 

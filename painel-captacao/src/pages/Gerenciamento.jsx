@@ -96,7 +96,7 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
 }
 
 export default function Gerenciamento() {
-  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, entrarComGoogle, sair } = useAuth();
+  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, sair } = useAuth();
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
   const { usuarios, definirAprovacao } = useUsuariosAprovados();
@@ -178,7 +178,7 @@ export default function Gerenciamento() {
   }
 
   if (carregandoAuth) return null;
-  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} entrarComGoogle={entrarComGoogle} />;
+  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} />;
   if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
 
   return (
@@ -276,7 +276,7 @@ export default function Gerenciamento() {
 
       {aba === 'acessos' && (
         <Section title="Acessos à Gerenciamento">
-          <p className="mt-1 text-xs text-slate-400">Quem cria conta (e-mail/senha ou Google) fica "Pendente" até você aprovar aqui — você recebe um e-mail avisando de cada pedido novo. Pra tirar o acesso de alguém depois, é o mesmo lugar, botão "Revogar".</p>
+          <p className="mt-1 text-xs text-slate-400">Quem cria conta (e-mail/senha) fica "Pendente" até você aprovar aqui — você recebe um e-mail avisando de cada pedido novo. Pra tirar o acesso de alguém depois, é o mesmo lugar, botão "Revogar".</p>
           <div className="mt-3 flex flex-col gap-2">
             {usuarios.map((u) => (
               <div key={u.user_id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">

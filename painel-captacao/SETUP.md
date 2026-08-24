@@ -158,13 +158,12 @@ Quartéis e militares são dado interno, então essa aba exige login **e** aprov
 resto do site (Cadastro, Stakeholders, Parlamentares) continua igual, sem login nenhum. Como
 fica na prática:
 
-- **Você** (o e-mail `asparcbmgo@gmail.com`, já fixado no script — me avise se quiser trocar)
-  cria a própria conta e **já entra liberado na hora**, sem passo extra nenhum.
-- **Qualquer outra pessoa** cria a própria conta (e-mail/senha, ou entrando com Google) e fica
-  **"Pendente"**, esperando você aprovar. Assim que alguém pede acesso, **você recebe um
-  e-mail avisando** (configurado no passo 7.6) — daí é só entrar em **Gerenciamento →
-  Acessos** e clicar em **Aprovar**. Pra tirar o acesso de alguém depois, mesmo lugar, botão
-  **Revogar**.
+- **Você** (o e-mail `rafaelabnermmaciel@gmail.com`, já fixado no script — me avise se quiser
+  trocar) cria a própria conta e **já entra liberado na hora**, sem passo extra nenhum.
+- **Qualquer outra pessoa** cria a própria conta (e-mail/senha) e fica **"Pendente"**,
+  esperando você aprovar. Assim que alguém pede acesso, **você recebe um e-mail avisando**
+  (configurado no passo 7.5) — daí é só entrar em **Gerenciamento → Acessos** e clicar em
+  **Aprovar**. Pra tirar o acesso de alguém depois, mesmo lugar, botão **Revogar**.
 
 ### 7.1. Rodar o script atualizado
 
@@ -182,58 +181,25 @@ sempre, é seguro rodar de novo (não duplica nada).
 3. Em **Redirect URLs**, clique em **Add URL** e cole a mesma URL de novo.
 4. Clique em **Save**.
 
-### 7.3. Ativar login com Google (opcional, mas você pediu)
-
-1. Abra **https://console.cloud.google.com** numa aba nova (pode usar a mesma conta Google que
-   administra o painel).
-2. No topo, clique no seletor de projeto → **New Project** → dê um nome (ex:
-   `painel-captacao-cbmgo`) → **Create**. Espere alguns segundos e selecione o projeto criado.
-3. Menu da esquerda (ícone ☰) → **APIs & Services** → **OAuth consent screen**.
-4. Escolha **External** → **Create**.
-5. Preencha **App name** (ex: `Painel de Captação CBM-GO`), **User support email** (seu
-   e-mail) e, mais embaixo, **Developer contact information** (seu e-mail de novo) → **Save
-   and Continue**.
-6. Na tela de **Scopes**, não precisa mexer em nada → **Save and Continue**.
-7. Na tela de **Test users**, clique em **Add Users** e adicione o e-mail de cada pessoa que
-   vai usar login do Google (enquanto o app não for "publicado", só esses e-mails conseguem
-   entrar com Google) → **Save and Continue** → **Back to Dashboard**.
-   - Se quiser liberar pra qualquer pessoa com conta Google (sem precisar cadastrar cada
-     e-mail aqui), volta nessa tela depois e clica em **Publish App** — pra este tipo de
-     permissão (só e-mail/perfil básico) o Google normalmente libera na hora, sem revisão.
-8. Menu da esquerda → **Credentials** → **Create Credentials** → **OAuth client ID**.
-9. **Application type**: **Web application**. Dê um nome (ex: `painel-captacao-web`).
-10. Em **Authorized redirect URIs**, clique em **Add URI** e cole exatamente:
-    ```
-    https://nppaeyxaxcraitpmwyqo.supabase.co/auth/v1/callback
-    ```
-    (repare que essa URL é do **Supabase**, não do site — é ele quem recebe a resposta do
-    Google primeiro).
-11. Clique em **Create**. Vai aparecer uma caixa com **Client ID** e **Client Secret** — copie
-    os dois (dá pra abrir de novo depois clicando no nome da credencial em Credentials).
-12. Volte no Supabase → **Authentication** → **Providers** → clique em **Google** na lista.
-13. Ative o botão **Enable Sign in with Google**, cole o **Client ID** e o **Client Secret** que
-    você copiou, e clique em **Save**.
-
-### 7.4. Criar sua conta de administrador (libera sozinha, sem passo extra)
+### 7.3. Criar sua conta de administrador (libera sozinha, sem passo extra)
 
 1. No site publicado, abra a aba **Gerenciamento**.
-2. Clique em **Criar conta**, preencha e-mail e senha (ou clique em **Continuar com Google**) —
-   use exatamente `asparcbmgo@gmail.com` (é o e-mail que o script reconhece como
-   administrador; se quiser usar outro, me avisa que eu troco no script).
+2. Clique em **Criar conta**, preencha e-mail e senha — use exatamente
+   `rafaelabnermmaciel@gmail.com` (é o e-mail que o script reconhece como administrador; se
+   quiser usar outro, me avisa que eu troco no script).
 3. Se aparecer um aviso pedindo confirmação por e-mail, abra sua caixa de entrada e clique no
    link que o Supabase mandou antes de tentar entrar.
 4. Pronto — como é o e-mail do administrador, já libera direto, sem esperar nada. A
    Gerenciamento abre normalmente, com uma aba a mais: **Acessos**.
 
-### 7.5. As próximas pessoas (elas pedem, você aprova)
+### 7.4. As próximas pessoas (elas pedem, você aprova)
 
-Cada pessoa nova entra em Gerenciamento → cria a própria conta (ou entra com Google, se você
-adicionou o e-mail dela como "Test user" no passo 7.3, ou se já publicou o app) → cai como
+Cada pessoa nova entra em Gerenciamento → cria a própria conta (e-mail e senha) → cai como
 **"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você abre **Gerenciamento →
 Acessos** e clica em **Aprovar** na linha da pessoa. Pra tirar o acesso de alguém depois, mesmo
 lugar, botão **Revogar** (dá pra **Aprovar** de novo se precisar).
 
-### 7.6. Configurar o aviso por e-mail de "alguém pediu acesso"
+### 7.5. Configurar o aviso por e-mail de "alguém pediu acesso"
 
 Usa o mesmo EmailJS da seção 6, só que com um **template novo** (variáveis diferentes das do
 e-mail de captação).

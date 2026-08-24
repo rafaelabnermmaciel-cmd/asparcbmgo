@@ -3,9 +3,9 @@ import { LuLock, LuTriangleAlert, LuLogOut, LuMailCheck } from 'react-icons/lu';
 import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx';
 
 // Tela de login/criar conta — aparece quando ninguém está logado e a pessoa tenta abrir a aba
-// Gerenciamento. Depois de criar conta ou entrar com Google, ainda falta o administrador
-// aprovar (ver AguardandoAprovacao) — isso aqui só cuida de identificar quem é.
-export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarComGoogle }) {
+// Gerenciamento. Depois de criar conta, ainda falta o administrador aprovar (ver
+// AguardandoAprovacao) — isso aqui só cuida de identificar quem é.
+export function LoginGerenciamento({ entrarComSenha, criarContaComSenha }) {
   const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar'
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -29,15 +29,6 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarC
       setErro(err.message || 'Falha ao entrar. Tente novamente.');
     } finally {
       setEnviando(false);
-    }
-  }
-
-  async function comGoogle() {
-    setErro(null);
-    try {
-      await entrarComGoogle();
-    } catch (err) {
-      setErro(err.message || 'Falha ao entrar com Google. Tente novamente.');
     }
   }
 
@@ -70,19 +61,14 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, entrarC
             {enviando ? 'Enviando...' : modo === 'entrar' ? 'Entrar' : 'Criar conta'}
           </button>
         </form>
-
-        <div className="mt-3 flex items-center gap-2 text-[11px] text-slate-400">
-          <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" /> ou <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
-        </div>
-        <button type="button" onClick={comGoogle} className={`mt-3 w-full ${btnGhost}`}>Continuar com Google</button>
       </div>
     </div>
   );
 }
 
-// Aparece quando a pessoa já entrou (login/senha ou Google) mas o administrador ainda não
-// aprovou o acesso dela — o administrador já recebeu um e-mail avisando do pedido, e aprova
-// pela aba Gerenciamento → Acessos (mesma tela serve pro caso de acesso revogado depois).
+// Aparece quando a pessoa já entrou (login/senha) mas o administrador ainda não aprovou o
+// acesso dela — o administrador já recebeu um e-mail avisando do pedido, e aprova pela aba
+// Gerenciamento → Acessos (mesma tela serve pro caso de acesso revogado depois).
 export function AguardandoAprovacao({ email, sair }) {
   return (
     <div className="mx-auto max-w-sm px-4 py-16 text-center">
