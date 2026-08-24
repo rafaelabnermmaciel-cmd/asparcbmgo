@@ -234,20 +234,23 @@ async function diagnosticarAgendaCongressoNacional() {
   const url = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
   try {
     const html = await getText(url, { retries: 1 });
-    // 1ª rodada só mostrou o <head> (puro boilerplate Liferay) — a agenda de verdade deve estar
-    // no <body>, provavelmente dentro do "atividade-portlet" (visto no CSS referenciado no head).
-    // Corta a partir do <body> desta vez, e procura também por padrões de link com parâmetro de
-    // data (?ano=&mes=&dia=), já que o título da página trouxe só o dia de hoje (24/08/2026) — pode
-    // ser uma agenda por dia único, não por semana, o que mudaria como este script precisa iterar.
-    const idxBody = html.search(/<body[\s>]/i);
-    const corpo = idxBody >= 0 ? html.slice(idxBody) : html;
+    // 2ª rodada mostrou 6000 chars a partir do <body>, mas isso é só o cabeçalho/menu de navegação
+    // do portal (Liferay) — o corpo inteiro tem 56KB, a agenda de verdade está mais adiante. A
+    // própria página aponta um link "Pular para o conteúdo" pra id="main-content", e o CSS do
+    // <head> referenciava "atividade-portlet" — usa esses dois como âncora em vez de um offset fixo,
+    // e loga uma janela maior (12000 chars) a partir do que aparecer primeiro.
+    const marcador = html.search(/id=["']main-content["']/i) >= 0
+      ? html.search(/id=["']main-content["']/i)
+      : html.search(/atividade-portlet/i);
+    const trecho = marcador >= 0 ? html.slice(marcador) : html;
     const linksComData = [...html.matchAll(/href=["']([^"']*(?:\bano=|\bmes=|\bdia=|\bdata=)[^"']*)["']/gi)]
       .map((m) => m[1])
       .slice(0, 10);
     console.warn(
-      `[agenda] diagnóstico congressonacional.leg.br — total ${html.length} chars, corpo (a partir de <body>) ${corpo.length} chars. ` +
-        `Links com parâmetro de data encontrados: ${linksComData.length ? linksComData.join(' | ') : 'nenhum'}. ` +
-        `Trecho do <body>: ${corpo.slice(0, 6000)}`
+      `[agenda] diagnóstico congressonacional.leg.br (2ª rodada) — total ${html.length} chars, ` +
+        `âncora encontrada em: ${marcador >= 0 ? marcador : 'nenhuma (mostrando do início)'}. ` +
+        `Links com parâmetro de data: ${linksComData.length ? linksComData.join(' | ') : 'nenhum'}. ` +
+        `Trecho a partir da âncora: ${trecho.slice(0, 12000)}`
     );
   } catch (err) {
     console.warn(`[agenda] diagnóstico de congressonacional.leg.br falhou: ${err.message}`);
