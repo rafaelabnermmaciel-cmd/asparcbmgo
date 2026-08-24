@@ -185,6 +185,7 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
     } catch (err) {
       console.warn(`[agenda] nenhum candidato de URL bateu, e o WADL também falhou: ${err.message}`);
     }
+    await diagnosticarAgendaCongressoNacional();
     throw new Error('nenhum dos candidatos de URL da agenda do Senado respondeu');
   }
   console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
@@ -218,6 +219,34 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
   } catch (err) {
     console.warn(`[agenda] resposta da agenda do Senado veio num formato inesperado, ignorando desta vez: ${err.message}`);
     return new Map();
+  }
+}
+
+// Sugestão do usuário: o site oficial congressonacional.leg.br tem uma página que já junta a
+// agenda da Câmara, do Senado e do Congresso Nacional num só lugar — pode ser mais confiável que
+// tentar adivinhar o endpoint certo do dadosabertos do Senado. Mas nunca vimos essa página de
+// verdade (o sandbox de desenvolvimento não tem acesso à internet geral), então este é só um
+// passo de DIAGNÓSTICO: baixa o HTML e loga pistas sobre a estrutura (se os dados já vêm prontos
+// no HTML — bom, dá pra fazer parsing direto — ou se é um app que busca os dados via JS depois de
+// carregar — nesse caso precisaria achar a URL da API que ele chama, não dá pra ler o HTML puro).
+// Não tenta montar a agenda a partir daqui ainda — só junta evidência real pra próxima correção.
+async function diagnosticarAgendaCongressoNacional() {
+  const url = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
+  try {
+    const html = await getText(url, { retries: 1 });
+    const scriptsComApi = [...html.matchAll(/["']([^"']*\/api\/[^"']*|[^"']*\.json[^"']*)["']/gi)]
+      .map((m) => m[1])
+      .filter((s) => !s.startsWith('data:'));
+    const temNextData = html.includes('__NEXT_DATA__');
+    const temReactRoot = /id=["'](root|app|__next)["']/i.test(html);
+    console.warn(
+      `[agenda] diagnóstico da página congressonacional.leg.br: ${html.length} chars. ` +
+        `__NEXT_DATA__ presente: ${temNextData}. Root de app JS (root/app/__next) presente: ${temReactRoot}. ` +
+        `Possíveis URLs de API/JSON encontradas no HTML (${scriptsComApi.length}): ${scriptsComApi.slice(0, 15).join(' | ') || 'nenhuma'}. ` +
+        `Primeiros 3000 chars do HTML: ${html.slice(0, 3000)}`
+    );
+  } catch (err) {
+    console.warn(`[agenda] diagnóstico de congressonacional.leg.br falhou: ${err.message}`);
   }
 }
 
