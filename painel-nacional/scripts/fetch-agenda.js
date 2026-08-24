@@ -191,7 +191,7 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
     } catch (err) {
       console.warn(`[agenda] nenhum candidato de URL bateu, e o WADL também falhou: ${err.message}`);
     }
-    await diagnosticarAgendaCongressoNacional();
+    await diagnosticarAgendaCongressoNacional(dataInicio, dataFim);
     throw new Error('nenhum dos candidatos de URL da agenda do Senado respondeu');
   }
   console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
@@ -236,28 +236,40 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
 // no HTML — bom, dá pra fazer parsing direto — ou se é um app que busca os dados via JS depois de
 // carregar — nesse caso precisaria achar a URL da API que ele chama, não dá pra ler o HTML puro).
 // Não tenta montar a agenda a partir daqui ainda — só junta evidência real pra próxima correção.
-async function diagnosticarAgendaCongressoNacional() {
+async function diagnosticarAgendaCongressoNacional(dataInicio, dataFim) {
   const url = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
   try {
     const html = await getText(url, { retries: 1 });
-    // 2ª rodada mostrou 6000 chars a partir do <body>, mas isso é só o cabeçalho/menu de navegação
-    // do portal (Liferay) — o corpo inteiro tem 56KB, a agenda de verdade está mais adiante. A
-    // própria página aponta um link "Pular para o conteúdo" pra id="main-content", e o CSS do
-    // <head> referenciava "atividade-portlet" — usa esses dois como âncora em vez de um offset fixo,
-    // e loga uma janela maior (12000 chars) a partir do que aparecer primeiro.
-    const marcador = html.search(/id=["']main-content["']/i) >= 0
-      ? html.search(/id=["']main-content["']/i)
-      : html.search(/atividade-portlet/i);
-    const trecho = marcador >= 0 ? html.slice(marcador) : html;
-    const linksComData = [...html.matchAll(/href=["']([^"']*(?:\bano=|\bmes=|\bdia=|\bdata=)[^"']*)["']/gi)]
-      .map((m) => m[1])
-      .slice(0, 10);
+    // 2ª rodada confirmou: a agenda vem pronta num calendário mensal em id="main-content", com um
+    // link por dia pro formato /-/agenda/YYYY-MM-DD e indicadores de quais casas (CN/SF/CD) têm
+    // sessão naquele dia (classes sessao--CN, sessao--SF, sessao--CD). Isso já resolve "em quais
+    // dias tem sessão" sem precisar do endpoint do Senado. Falta ver o DETALHE de um dia — hora,
+    // matérias — que deve estar na página de cada dia, não no calendário. Escolhe automaticamente
+    // um dia dentro da janela [dataInicio, dataFim] que o próprio calendário já confirmou ter
+    // sessão, e busca a página dele, pra ver esse formato.
+    const linksDeDia = [...html.matchAll(/href=["'](https:\/\/www\.congressonacional\.leg\.br\/sessoes\/agenda-do-congresso-senado-e-camara\/-\/agenda\/([\d-]+))["']/g)]
+      .map((m) => ({ url: m[1], dia: m[2] }));
     console.warn(
-      `[agenda] diagnóstico congressonacional.leg.br (2ª rodada) — total ${html.length} chars, ` +
-        `âncora encontrada em: ${marcador >= 0 ? marcador : 'nenhuma (mostrando do início)'}. ` +
-        `Links com parâmetro de data: ${linksComData.length ? linksComData.join(' | ') : 'nenhum'}. ` +
-        `Trecho a partir da âncora: ${trecho.slice(0, 12000)}`
+      `[agenda] diagnóstico congressonacional.leg.br (3ª rodada) — calendário: ${linksDeDia.length} links de dia encontrados, ` +
+        `exemplos: ${linksDeDia.slice(0, 3).map((l) => l.dia).join(' | ')}`
     );
+
+    const diaAlvo = linksDeDia.find((l) => l.dia >= dataInicio && l.dia <= dataFim);
+    if (diaAlvo) {
+      try {
+        const htmlDia = await getText(diaAlvo.url, { retries: 1 });
+        const marcadorDia = htmlDia.search(/id=["']main-content["']/i);
+        const corpoDia = marcadorDia >= 0 ? htmlDia.slice(marcadorDia) : htmlDia;
+        console.warn(
+          `[agenda] diagnóstico da página do dia ${diaAlvo.dia} (${diaAlvo.url}) — ` +
+            `total ${htmlDia.length} chars, âncora em ${marcadorDia}. Trecho: ${corpoDia.slice(0, 12000)}`
+        );
+      } catch (err) {
+        console.warn(`[agenda] diagnóstico da página do dia ${diaAlvo.dia} falhou: ${err.message}`);
+      }
+    } else {
+      console.warn(`[agenda] nenhum dia com sessão confirmada entre ${dataInicio} e ${dataFim} no calendário.`);
+    }
   } catch (err) {
     console.warn(`[agenda] diagnóstico de congressonacional.leg.br falhou: ${err.message}`);
   }
