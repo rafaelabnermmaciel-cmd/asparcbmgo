@@ -3,10 +3,22 @@
 // legis.senado.leg.br nem dadosabertos.tse.jus.br (confirmado por testes diretos) — este
 // arquivo nunca foi executado com rede real. Revise com atenção antes do primeiro uso.
 
+// Usa o fetch do próprio pacote "undici" (não o fetch global do Node) porque o dispatcher
+// customizado abaixo só é compatível com o fetch da MESMA versão do undici que o criou — passar
+// esse Agent pro fetch global do Node (que embute sua própria cópia interna, de outra versão)
+// quebra com "UND_ERR_INVALID_ARG: invalid onRequestStart method" (visto na prática ao testar).
+import { fetch, Agent } from 'undici';
+
 const DEFAULT_HEADERS = {
   'User-Agent': 'painel-nacional-parlamentar (uso institucional, contato: definir)',
   Accept: 'application/json',
 };
+
+// O fetch global do Node usa um Agent undici padrão com timeout de CONEXÃO (TCP, antes de
+// qualquer resposta) de só 10s — visto na prática: a Câmara às vezes demora mais que isso só pra
+// aceitar a conexão (erro real: UND_ERR_CONNECT_TIMEOUT, não uma resposta lenta). 20s dá mais
+// folga sem deixar o script travado indefinidamente numa conexão morta.
+const dispatcher = new Agent({ connect: { timeout: 20000 } });
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -26,7 +38,7 @@ async function getJson(url, opts = {}) {
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs) });
+      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs), dispatcher });
       if (res.status === 429) {
         const retryAfter = Number(res.headers.get('retry-after')) || baseDelayMs * 2 ** attempt / 1000;
         console.warn(`[http] 429 rate limited em ${url} — aguardando ${retryAfter}s`);
@@ -62,7 +74,7 @@ async function getText(url, opts = {}) {
   let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs) });
+      const res = await fetch(url, { headers: { ...DEFAULT_HEADERS, ...headers }, signal: AbortSignal.timeout(timeoutMs), dispatcher });
       if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText} em ${url}`);
       return await res.text();
     } catch (err) {
