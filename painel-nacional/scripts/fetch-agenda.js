@@ -82,7 +82,13 @@ function bateComPalavraChave(texto) {
 async function pautaDaSemana(monitorados, dataInicio, dataFim) {
   const idsMonitorados = new Set(monitorados.filter((p) => p.idCamara).map((p) => p.idCamara));
 
-  const eventosResp = await getJson(`${CAMARA_BASE}/eventos?dataInicio=${dataInicio}&dataFim=${dataFim}&itens=100&ordenarPor=dataHoraInicio`);
+  // retries: 2 (não o padrão de 4) — visto na prática: quando a Câmara está lenta, ela demora
+  // igualmente em TODAS as tentativas (nunca "só uma vez sim"), então retry a mais só multiplica
+  // o tempo perdido (chegou a 5+ minutos numa execução) sem melhorar a chance de sucesso.
+  const eventosResp = await getJson(
+    `${CAMARA_BASE}/eventos?dataInicio=${dataInicio}&dataFim=${dataFim}&itens=100&ordenarPor=dataHoraInicio`,
+    { retries: 2 }
+  );
   const eventos = eventosResp?.dados || [];
   // A primeira execução real veio com 0 eventos e sem nenhum log — sem isso, não dava pra saber
   // se a semana realmente não tem sessão nenhuma ou se a busca em si veio vazia/quebrada.
@@ -298,7 +304,8 @@ async function projetosNovosPorTema(monitorados, dataInicio) {
   const porTermo = await mapWithConcurrency(PALAVRAS_CHAVE, 4, async (termo) => {
     try {
       const resp = await getJson(
-        `${CAMARA_BASE}/proposicoes?keywords=${encodeURIComponent(termo)}&dataApresentacaoInicio=${dataInicio}&itens=20&ordem=DESC&ordenarPor=id`
+        `${CAMARA_BASE}/proposicoes?keywords=${encodeURIComponent(termo)}&dataApresentacaoInicio=${dataInicio}&itens=20&ordem=DESC&ordenarPor=id`,
+        { retries: 2 }
       );
       return resp?.dados || [];
     } catch (err) {
