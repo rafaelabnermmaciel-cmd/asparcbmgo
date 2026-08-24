@@ -258,11 +258,16 @@ async function diagnosticarAgendaCongressoNacional(dataInicio, dataFim) {
     if (diaAlvo) {
       try {
         const htmlDia = await getText(diaAlvo.url, { retries: 1 });
-        const marcadorDia = htmlDia.search(/id=["']main-content["']/i);
-        const corpoDia = marcadorDia >= 0 ? htmlDia.slice(marcadorDia) : htmlDia;
+        // 3ª rodada mostrou que os primeiros 12000 chars a partir de main-content são só o mesmo
+        // widget de calendário (repetido em toda página de dia) — o detalhe da sessão vem DEPOIS
+        // dele. Pula pro último trecho que ainda menciona o calendário (classe "sf-calendario") e
+        // loga o que vem a seguir, que deve ser o conteúdo específico do dia.
+        const ultimoCalendario = htmlDia.lastIndexOf('sf-calendario');
+        const corpoDia = ultimoCalendario >= 0 ? htmlDia.slice(ultimoCalendario) : htmlDia;
         console.warn(
           `[agenda] diagnóstico da página do dia ${diaAlvo.dia} (${diaAlvo.url}) — ` +
-            `total ${htmlDia.length} chars, âncora em ${marcadorDia}. Trecho: ${corpoDia.slice(0, 12000)}`
+            `total ${htmlDia.length} chars, fim do widget de calendário em ${ultimoCalendario}. ` +
+            `Trecho depois do calendário: ${corpoDia.slice(0, 15000)}`
         );
       } catch (err) {
         console.warn(`[agenda] diagnóstico da página do dia ${diaAlvo.dia} falhou: ${err.message}`);
