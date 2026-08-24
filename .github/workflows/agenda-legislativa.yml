@@ -8,7 +8,7 @@ name: Agenda legislativa semanal — Painel Parlamentar Nacional
 # alerta de mudança (esse é o workflow "Verificar tramitação de projetos").
 #
 # Dois horários fixos:
-#   - Domingo às 21h (Brasília) — panorama da semana que começa.
+#   - Domingo às 20h (Brasília) — panorama da semana que começa.
 #   - Todo dia às 8h (Brasília) — atualização diária, já que a pauta muda dia a dia.
 # Também disparável na hora pela aba Actions.
 #
@@ -18,8 +18,13 @@ name: Agenda legislativa semanal — Painel Parlamentar Nacional
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 0 * * 1'  # domingo 21h em Brasília (UTC-3) = segunda 00:00 UTC
-    - cron: '0 11 * * *' # todo dia 8h em Brasília = 11:00 UTC
+    # Minuto 7 (não minuto 0) de propósito: a documentação do GitHub Actions avisa que crons
+    # batendo exatamente na hora cheia (00, 15, 21, 23... :00 UTC) competem com todo o resto do
+    # mundo agendado pro mesmo instante e podem atrasar muito ou não disparar naquela rodada — foi
+    # o que aconteceu com a agenda de domingo (nunca chegou a rodar). Minutos "quebrados" evitam
+    # esse gargalo.
+    - cron: '7 23 * * 0' # domingo 20h em Brasília (UTC-3) = domingo 23h07 UTC
+    - cron: '7 11 * * *' # todo dia 8h em Brasília = 11h07 UTC
 
 permissions:
   contents: read

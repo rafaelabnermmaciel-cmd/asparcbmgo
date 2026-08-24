@@ -35,7 +35,8 @@ on:
         type: string
         default: '2022'
   schedule:
-    - cron: '0 9 * * 1' # toda segunda-feira, 09:00 UTC = 06:00 em Brasília — só deputados/senadores
+    # Minuto 7, não minuto 0: evita a congestão de crons batendo todos na hora cheia no GitHub Actions.
+    - cron: '7 9 * * 1' # toda segunda-feira, 09h07 UTC = 06h07 em Brasília — só deputados/senadores
 
 permissions:
   contents: write

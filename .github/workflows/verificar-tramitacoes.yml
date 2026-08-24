@@ -19,8 +19,10 @@ name: Verificar tramitação de projetos — Painel Parlamentar Nacional
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 15 * * *' # todo dia, 15:00 UTC = 12:00 em Brasília
-    - cron: '0 21 * * *' # todo dia, 21:00 UTC = 18:00 em Brasília
+    # Minuto 7, não minuto 0: cron batendo na hora cheia compete com o mundo todo agendado pro
+    # mesmo instante no GitHub Actions e pode atrasar bastante (ou não disparar naquela rodada).
+    - cron: '7 15 * * *' # todo dia, 15h07 UTC = 12h07 em Brasília
+    - cron: '7 21 * * *' # todo dia, 21h07 UTC = 18h07 em Brasília
 
 permissions:
   contents: write

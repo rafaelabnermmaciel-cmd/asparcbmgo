@@ -169,8 +169,7 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
     }
   }
   if (!urlCerta) {
-    console.warn('[agenda] nenhum dos candidatos de URL da agenda do Senado funcionou desta vez.');
-    return new Map();
+    throw new Error('nenhum dos candidatos de URL da agenda do Senado respondeu');
   }
   console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
   console.log(`[agenda] resposta bruta da agenda do Senado (formato ainda não confirmado): ${JSON.stringify(resp).slice(0, 2000)}`);
@@ -243,6 +242,7 @@ function formatarPauta(porDia) {
 // deixaria o script bem mais lento à toa.
 async function projetosNovosPorTema(monitorados, dataInicio) {
   const jaMonitorados = new Set(monitorados.map((p) => `${p.tipo}-${p.numero}`));
+  let falhas = 0;
   const porTermo = await mapWithConcurrency(PALAVRAS_CHAVE, 4, async (termo) => {
     try {
       const resp = await getJson(
@@ -251,9 +251,16 @@ async function projetosNovosPorTema(monitorados, dataInicio) {
       return resp?.dados || [];
     } catch (err) {
       console.warn(`[agenda] falha na busca por "${termo}": ${err.message}`);
+      falhas += 1;
       return [];
     }
   });
+  // Se TODAS as buscas falharam, a lista vazia resultante não significa "nada encontrado" — significa
+  // que a checagem nem rodou de verdade (ex.: Câmara fora do ar). Sinaliza como falha pra não passar
+  // uma lista vazia por resultado real (ver camaraFalhouNovos em main()).
+  if (falhas === PALAVRAS_CHAVE.length) {
+    throw new Error(`todas as ${falhas} buscas por palavra-chave falharam`);
+  }
 
   const candidatos = [];
   for (const dados of porTermo) {
@@ -278,17 +285,23 @@ async function main() {
   const fim = maisDias(inicio, 7);
   const inicioMenos7 = maisDias(inicio, -7);
 
+  let camaraFalhou = false;
+  let senadoFalhou = false;
+  let novosFalhou = false;
   const [porDiaCamara, porDiaSenado, novos] = await Promise.all([
     pautaDaSemana(monitorados, inicio, fim).catch((err) => {
       console.warn(`[agenda] falha ao checar pauta da Câmara: ${err.message}`);
+      camaraFalhou = true;
       return new Map();
     }),
     pautaSenadoDaSemana(monitorados, inicio, fim).catch((err) => {
       console.warn(`[agenda] falha ao checar pauta do Senado: ${err.message}`);
+      senadoFalhou = true;
       return new Map();
     }),
     projetosNovosPorTema(monitorados, inicioMenos7).catch((err) => {
       console.warn(`[agenda] falha ao buscar projetos novos: ${err.message}`);
+      novosFalhou = true;
       return [];
     }),
   ]);
@@ -296,10 +309,23 @@ async function main() {
 
   const linhasNovos = novos.length
     ? novos.map((c) => `• ${c.tipo} ${c.numero} — ${truncar(c.ementa, 180)}`).join('\n')
-    : 'Nenhum projeto novo encontrado com os termos monitorados na última semana.';
+    : novosFalhou
+      ? '(busca falhou, ver abaixo)'
+      : 'Nenhum projeto novo encontrado com os termos monitorados na última semana.';
+
+  // Uma checagem que falhou não pode virar "nada encontrado" na mensagem — quem lê precisa saber
+  // que o resultado pode estar incompleto, não que está tudo limpo.
+  const falhas = [];
+  if (camaraFalhou) falhas.push('Câmara (pauta da semana)');
+  if (senadoFalhou) falhas.push('Senado (pauta da semana)');
+  if (novosFalhou) falhas.push('Câmara (busca de projetos novos)');
+  const avisoFalha = falhas.length
+    ? `⚠️ Checagem incompleta — falhou ao consultar: ${falhas.join(', ')}. O que aparece abaixo pode estar faltando itens.`
+    : '';
 
   const mensagem = [
     `📅 Agenda legislativa (CBM-GO) — ${inicio} a ${fim}`,
+    ...(avisoFalha ? ['', avisoFalha] : []),
     '',
     formatarPauta(porDia),
     '',
