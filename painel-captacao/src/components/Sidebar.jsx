@@ -6,7 +6,7 @@ export const NAV = [
   { to: '/', label: 'Dashboard', icon: LuHouse, end: true },
   { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
   { to: '/stakeholders', label: 'Stakeholders', icon: LuUsers },
-  { to: '/cadastro', label: 'Cadastrar captação', icon: LuClipboardPlus },
+  { to: '/cadastro', label: 'Cadastrar captação', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
   { to: '/gerenciamento', label: 'Gerenciamento', icon: LuSettings },
 ];
 

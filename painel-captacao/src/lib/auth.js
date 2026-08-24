@@ -48,17 +48,9 @@ export function useAuth() {
     if (error) throw new Error(error.message);
   }, []);
 
-  const entrarComGoogle = useCallback(async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + window.location.pathname },
-    });
-    if (error) throw new Error(error.message);
-  }, []);
-
   const sair = useCallback(async () => {
     await supabase.auth.signOut();
   }, []);
 
-  return { ...state, entrarComSenha, criarContaComSenha, entrarComGoogle, sair };
+  return { ...state, entrarComSenha, criarContaComSenha, sair };
 }
