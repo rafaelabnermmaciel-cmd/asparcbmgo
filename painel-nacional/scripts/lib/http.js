@@ -46,12 +46,12 @@ async function getJson(url, opts = {}) {
       if (permanente) break;
       if (attempt < retries) {
         const delay = baseDelayMs * 2 ** attempt;
-        console.warn(`[http] falha (${err.message}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
+        console.warn(`[http] falha (${detalheErro(err)}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
         await sleep(delay);
       }
     }
   }
-  throw new Error(`[http] esgotadas tentativas em ${url}: ${lastErr?.message}`);
+  throw new Error(`[http] esgotadas tentativas em ${url}: ${detalheErro(lastErr)}`);
 }
 
 /**
@@ -74,12 +74,26 @@ async function getText(url, opts = {}) {
       if (permanente) break;
       if (attempt < retries) {
         const delay = baseDelayMs * 2 ** attempt;
-        console.warn(`[http] falha (${err.message}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
+        console.warn(`[http] falha (${detalheErro(err)}) em ${url} — tentativa ${attempt + 1}/${retries}, aguardando ${delay}ms`);
         await sleep(delay);
       }
     }
   }
-  throw new Error(`[http] esgotadas tentativas em ${url}: ${lastErr?.message}`);
+  throw new Error(`[http] esgotadas tentativas em ${url}: ${detalheErro(lastErr)}`);
+}
+
+// "fetch failed" (erro genérico do undici/Node) esconde o motivo real dentro de err.cause —
+// pode ser DNS (ENOTFOUND), conexão recusada (ECONNREFUSED), TLS, timeout etc. Sem isso logado,
+// uma falha de rede inteira (como a de todas as chamadas à Câmara numa mesma execução) vira só
+// "fetch failed" repetido, sem dar pra saber se é a API fora do ar, DNS, ou outra coisa.
+function detalheErro(err) {
+  if (!err) return 'erro desconhecido';
+  const causa = err.cause;
+  if (causa) {
+    const codigo = causa.code ? ` código=${causa.code}` : '';
+    return `${err.message} (causa: ${causa.message || causa}${codigo})`;
+  }
+  return err.message;
 }
 
 /**
