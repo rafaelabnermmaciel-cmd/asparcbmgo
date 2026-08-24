@@ -234,16 +234,20 @@ async function diagnosticarAgendaCongressoNacional() {
   const url = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
   try {
     const html = await getText(url, { retries: 1 });
-    const scriptsComApi = [...html.matchAll(/["']([^"']*\/api\/[^"']*|[^"']*\.json[^"']*)["']/gi)]
+    // 1ª rodada só mostrou o <head> (puro boilerplate Liferay) — a agenda de verdade deve estar
+    // no <body>, provavelmente dentro do "atividade-portlet" (visto no CSS referenciado no head).
+    // Corta a partir do <body> desta vez, e procura também por padrões de link com parâmetro de
+    // data (?ano=&mes=&dia=), já que o título da página trouxe só o dia de hoje (24/08/2026) — pode
+    // ser uma agenda por dia único, não por semana, o que mudaria como este script precisa iterar.
+    const idxBody = html.search(/<body[\s>]/i);
+    const corpo = idxBody >= 0 ? html.slice(idxBody) : html;
+    const linksComData = [...html.matchAll(/href=["']([^"']*(?:\bano=|\bmes=|\bdia=|\bdata=)[^"']*)["']/gi)]
       .map((m) => m[1])
-      .filter((s) => !s.startsWith('data:'));
-    const temNextData = html.includes('__NEXT_DATA__');
-    const temReactRoot = /id=["'](root|app|__next)["']/i.test(html);
+      .slice(0, 10);
     console.warn(
-      `[agenda] diagnóstico da página congressonacional.leg.br: ${html.length} chars. ` +
-        `__NEXT_DATA__ presente: ${temNextData}. Root de app JS (root/app/__next) presente: ${temReactRoot}. ` +
-        `Possíveis URLs de API/JSON encontradas no HTML (${scriptsComApi.length}): ${scriptsComApi.slice(0, 15).join(' | ') || 'nenhuma'}. ` +
-        `Primeiros 3000 chars do HTML: ${html.slice(0, 3000)}`
+      `[agenda] diagnóstico congressonacional.leg.br — total ${html.length} chars, corpo (a partir de <body>) ${corpo.length} chars. ` +
+        `Links com parâmetro de data encontrados: ${linksComData.length ? linksComData.join(' | ') : 'nenhum'}. ` +
+        `Trecho do <body>: ${corpo.slice(0, 6000)}`
     );
   } catch (err) {
     console.warn(`[agenda] diagnóstico de congressonacional.leg.br falhou: ${err.message}`);
