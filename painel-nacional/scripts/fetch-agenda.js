@@ -24,7 +24,7 @@
 //   CALLMEBOT_PHONE=... CALLMEBOT_APIKEY=... node scripts/fetch-agenda.js
 
 import { readFileSync } from 'node:fs';
-import { getJson, mapWithConcurrency } from './lib/http.js';
+import { getJson, getText, mapWithConcurrency } from './lib/http.js';
 import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
@@ -169,6 +169,22 @@ async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
     }
   }
   if (!urlCerta) {
+    // 3 chutes estruturais seguidos deram 404 — parar de chutar às cegas e, em vez disso, pedir
+    // pro próprio servidor listar os recursos que ele realmente tem. APIs feitas em Jersey/JAX-RS
+    // (padrão comum em API pública de governo brasileiro) costumam publicar um WADL nesse caminho,
+    // igual ao truque que já funcionou pra achar /materia/situacaoatual (ler o que a própria API
+    // aponta como certo, não adivinhar de novo).
+    try {
+      const wadl = await getText(`${SENADO_BASE}/application.wadl`, { retries: 1 });
+      const caminhosAgenda = [...wadl.matchAll(/path="([^"]*agenda[^"]*)"/gi)].map((m) => m[1]);
+      console.warn(
+        `[agenda] nenhum candidato de URL bateu — WADL da API do Senado baixado (${wadl.length} chars). ` +
+          `Caminhos com "agenda" encontrados: ${caminhosAgenda.length ? caminhosAgenda.join(', ') : 'nenhum'}. ` +
+          `Trecho do WADL: ${wadl.slice(0, 3000)}`
+      );
+    } catch (err) {
+      console.warn(`[agenda] nenhum candidato de URL bateu, e o WADL também falhou: ${err.message}`);
+    }
     throw new Error('nenhum dos candidatos de URL da agenda do Senado respondeu');
   }
   console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
