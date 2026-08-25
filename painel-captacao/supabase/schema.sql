@@ -61,6 +61,25 @@ alter table militares add constraint militares_quartel_id_fkey foreign key (quar
 -- de ser obrigatório (útil pra quem já rodou uma versão anterior deste script, que exigia).
 alter table militares alter column quartel_id drop not null;
 
+-- Normaliza o RG de quem ainda estiver no formato antigo, com ponto (ex: "02.294") — vira só
+-- os dígitos sem zero à esquerda ("2294"), igual ao formato do Almanaque. Sem isso, a mesma
+-- pessoa fica duplicada na tabela: uma linha com o nome de guerra curto da Convocação 106/2026
+-- (formato antigo de RG) e outra com o nome completo do Almanaque (formato novo) — e o
+-- "on conflict (rg)" do passo 8 não consegue enxergar que são a mesma pessoa.
+update militares set rg = ltrim(regexp_replace(rg, '\D', '', 'g'), '0')
+  where rg ~ '\D' or rg ~ '^0';
+
+-- Se isso fez duas linhas caírem no mesmo RG (a pessoa já existia nos dois formatos), mantém
+-- só uma — prioriza a que já estava vinculada a um quartel — e apaga a outra.
+delete from militares m using (
+  select rg, (array_agg(id order by (quartel_id is not null) desc, id))[1] as manter
+  from militares
+  where rg <> ''
+  group by rg
+  having count(*) > 1
+) dups
+where m.rg = dups.rg and m.id <> dups.manter;
+
 -- Cada militar (RG) só pode aparecer uma vez — permite rodar o "insert" da seção 8 de novo
 -- sem apagar a tabela toda (o "on conflict" abaixo atualiza posto/nome mas NUNCA mexe no
 -- quartel_id de quem já foi vinculado manualmente, então o vínculo feito por vocês na aba
