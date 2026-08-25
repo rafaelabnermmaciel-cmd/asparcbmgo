@@ -6,6 +6,56 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PL 1.146/2023",
+      "data": "2026-05-06",
+      "fato": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
+    },
+    {
+      "proposicao": "PL 5.967/2023",
+      "data": "2026-06-08",
+      "fato": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
+    },
+    {
+      "proposicao": "PL 1.451/2023",
+      "data": "2026-08-12",
+      "fato": "MATÉRIA COM A RELATORIA"
+    },
+    {
+      "proposicao": "PL 3.268/2020",
+      "data": "2025-04-01",
+      "fato": "PRONTA PARA A PAUTA NA COMISSÃO"
+    },
+    {
+      "proposicao": "PL 3.846/2025",
+      "data": "2025-11-06",
+      "fato": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
+    },
+    {
+      "proposicao": "PL 458/2024",
+      "data": "2026-08-24",
+      "fato": "REMETIDA À CÂMARA DOS DEPUTADOS"
+    },
+    {
+      "proposicao": "PL 2.557/2026",
+      "data": "2026-05-29",
+      "fato": "AGUARDANDO DESPACHO"
+    },
+    {
+      "proposicao": "PEC 18/2025",
+      "data": "2026-08-21",
+      "fato": "MATÉRIA COM A RELATORIA"
+    },
+    {
+      "proposicao": "PEC 44/2023",
+      "data": "2024-07-17",
+      "fato": "AGUARDANDO DESPACHO"
+    },
+    {
+      "proposicao": "PEC 10/2026",
+      "data": "2026-05-14",
+      "fato": "AGUARDANDO DESPACHO"
+    },
+    {
       "proposicao": "PL 317/2022",
       "data": "2026-08-12",
       "fato": "Aprovação da Redação Final — Aguardando Encaminhamento"
@@ -54,26 +104,6 @@
       "proposicao": "PL 241/2023",
       "data": "2026-08-13",
       "fato": "Pautada em Plenário nos dias 12 e 13/08; não apreciada por encerramento das sessões. Aguarda nova data."
-    },
-    {
-      "proposicao": "PL 458/2024",
-      "data": "2026-08-11",
-      "fato": "Aprovado na CAE do Senado (relator Sen. Hamilton Mourão). Aguardando prazo de recurso."
-    },
-    {
-      "proposicao": "PL 1451/2023",
-      "data": "2026-08-12",
-      "fato": "Relator designado na CAE do Senado: Senador Efraim Filho."
-    },
-    {
-      "proposicao": "PL 317/2022",
-      "data": "2026-08-12",
-      "fato": "Aprovada a Redação Final na CCJC da Câmara (relator Dep. Sargento Portugal). Tramitação na Câmara encerrada; segue ao Senado."
-    },
-    {
-      "proposicao": "PEC 18/2025",
-      "data": "2026-08-18",
-      "fato": "Enviada à CCJ do Senado em 14/08; CCJ ainda aguarda o recebimento formal para começar a análise."
     }
   ],
   "proposicoes": [
@@ -244,15 +274,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Proíbe instrumentos de adestramento que causem danos a animais, com risco às técnicas de treinamento de cães de busca e resgate dos CBMs.",
-      "situacao": "Aprovado anteriormente na CDH, com emendas. Na CCJ, o Sen. Jorge Seif havia sido designado relator (12/03/2026), mas a relatoria foi devolvida em 06/05/2026 por ele não pertencer mais aos quadros da comissão. Atualmente sem relator: \"Aguardando Designação do Relator\".",
+      "situacao": "AGUARDANDO DESIGNAÇÃO DO RELATOR",
       "ultimaMovimentacao": {
         "data": "2026-05-06",
-        "descricao": "Relatoria devolvida por o relator não pertencer mais à CCJ."
+        "descricao": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
       },
       "proximosPassos": "Decisão terminativa na CCJ assim que houver novo relator; se não houver recurso, não vai a Plenário.",
       "pontoAtencao": "Já houve reunião com o relator anterior, Nota Técnica via CONAI e visita técnica ao Batalhão de Busca e Salvamento do CBMDF. Acompanhar de perto a nova designação de relator.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/156228",
+      "idSenado": "156228"
     },
     {
       "id": 11,
@@ -261,15 +292,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Limita a 144 horas mensais a jornada de policiais e bombeiros militares, com banco de horas e pagamento em dobro em feriados.",
-      "situacao": "Aprovado no Plenário da Câmara e recebido no Senado. Despachado em 03/06/2026 para a CCJ, onde está desde 08/06/2026 aguardando designação de relator.",
+      "situacao": "AGUARDANDO DESIGNAÇÃO DO RELATOR",
       "ultimaMovimentacao": {
         "data": "2026-06-08",
-        "descricao": "Despachado à CCJ, aguardando designação de relator."
+        "descricao": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
       },
       "proximosPassos": "Após designação de relator na CCJ, segue à Comissão de Segurança Pública (CSP).",
       "pontoAtencao": "Exclusão dos CBMs do escopo já obtida na Câmara. Verificar, quando houver relator, se foi preservada no texto remetido ao Senado.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/173896",
+      "idSenado": "173896"
     },
     {
       "id": 12,
@@ -278,15 +310,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Restringe a contribuição previdenciária de militares inativos e pensionistas à parcela que exceder o teto do RGPS.",
-      "situacao": "Aprovado em caráter conclusivo na CCJC da Câmara em 17/03/2026; recebido no Senado e despachado à CAE e à CAS. Em 12/08/2026 foi designado relator na CAE: Senador Efraim Filho.",
+      "situacao": "MATÉRIA COM A RELATORIA",
       "ultimaMovimentacao": {
         "data": "2026-08-12",
-        "descricao": "Relator designado na CAE do Senado: Senador Efraim Filho."
+        "descricao": "MATÉRIA COM A RELATORIA"
       },
       "proximosPassos": "Aguarda apresentação do relatório pelo Sen. Efraim Filho na CAE; depois segue também à CAS.",
       "pontoAtencao": "Tema conexo ao PL 2.557/2026. Bom momento para buscar reunião com o gabinete do Sen. Efraim Filho antes do relatório.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/173436",
+      "idSenado": "173436"
     },
     {
       "id": 13,
@@ -295,15 +328,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Isenta do pagamento de tarifas aeroportuárias as aeronaves públicas federais, estaduais, municipais e distritais — corresponde, no Senado, ao PL 1.958/2023 da Câmara.",
-      "situacao": "Relator Sen. Weverton apresentou relatório reformulado favorável com 3 emendas próprias. Chegou a ser pautado na CAE em 01/04/2025, mas foi retirado de pauta. Sem registro de nova deliberação desde então.",
+      "situacao": "PRONTA PARA A PAUTA NA COMISSÃO",
       "ultimaMovimentacao": {
         "data": "2025-04-01",
-        "descricao": "Pautado na CAE e retirado de pauta."
+        "descricao": "PRONTA PARA A PAUTA NA COMISSÃO"
       },
       "proximosPassos": "Decisão terminativa: após a CAE, segue à Comissão de Constituição, Justiça e Cidadania (CI).",
       "pontoAtencao": "Parado há mais de um ano — articular reinclusão em pauta junto ao gabinete do Sen. Weverton, em conjunto com o PL 3.846/2025.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/142485",
+      "idSenado": "142485"
     },
     {
       "id": 14,
@@ -312,15 +346,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Isenta de taxas de pouso, decolagem e uso de infraestrutura aeroportuária as aeronaves civis de uso público em missões de segurança pública, saúde e defesa civil.",
-      "situacao": "Autuado no Senado, ainda sem distribuição a comissão nem relator designado.",
+      "situacao": "AGUARDANDO DESIGNAÇÃO DO RELATOR",
       "ultimaMovimentacao": {
-        "data": null,
-        "descricao": "Autuado no Senado."
+        "data": "2025-11-06",
+        "descricao": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
       },
       "proximosPassos": "Regime a definir no despacho da Mesa; prováveis CAE e CI, no mesmo padrão do PL 3.268/2020.",
       "pontoAtencao": "Janela oportuna para atuação antecipada, em tramitação conjunta com o PL 3.268/2020.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/169779",
+      "idSenado": "169779"
     },
     {
       "id": 15,
@@ -329,15 +364,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Concede prioridade aos profissionais de segurança pública (policiais, bombeiros militares, guardas municipais e agentes penitenciários) no recebimento da restituição do IRPF, logo após idosos e magistério. Autor: Sen. Jayme Campos (União-MT).",
-      "situacao": "Aprovado na CSP em 22/04/2025. Aprovado na CAE em 11/08/2026, com relatório favorável do Sen. Hamilton Mourão (acolhendo a Emenda nº 2-CSP como subemenda e rejeitando a Emenda nº 1-T). No prazo de recurso na CAE.",
+      "situacao": "REMETIDA À CÂMARA DOS DEPUTADOS",
       "ultimaMovimentacao": {
-        "data": "2026-08-11",
-        "descricao": "Aprovado na CAE do Senado (relator Sen. Hamilton Mourão)."
+        "data": "2026-08-24",
+        "descricao": "REMETIDA À CÂMARA DOS DEPUTADOS"
       },
       "proximosPassos": "Decisão terminativa nas comissões (CSP e CAE); se não houver recurso de 1/10 dos senadores, vai direto à Câmara, sem Plenário do Senado.",
       "pontoAtencao": "Tende a ter tramitação tranquila (sem custo orçamentário direto). Monitorar prazo de recurso e, depois, articular na Câmara para manter o texto sem alterações restritivas.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/162212",
+      "idSenado": "162212"
     },
     {
       "id": 16,
@@ -346,15 +382,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Isenta do Imposto de Renda os rendimentos de militares das Forças Armadas, policiais militares e bombeiros militares, sem distinção de patente.",
-      "situacao": "Originado da Sugestão Legislativa SUG 6/2026 (Parecer nº 66/2026 da CDH). Autor formal: Sen. Izalci Lucas. Prazo de emendas perante a Mesa encerrado em 28/05/2026 (1 emenda recebida, do próprio autor). Aguarda despacho de distribuição às comissões, sem movimento recente.",
+      "situacao": "AGUARDANDO DESPACHO",
       "ultimaMovimentacao": {
-        "data": "2026-05-28",
-        "descricao": "Encerrado o prazo de emendas perante a Mesa."
+        "data": "2026-05-29",
+        "descricao": "AGUARDANDO DESPACHO"
       },
       "proximosPassos": "Expectativa de tramitação pela CCJ e pela CAE.",
       "pontoAtencao": "Sem estimativa de impacto fiscal no texto — tende a enfrentar resistência na CAE. Tema conexo ao PL 1.451/2023.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/174272",
+      "idSenado": "174272"
     },
     {
       "id": 17,
@@ -381,15 +418,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "PEC da Segurança Pública (iniciativa do Poder Executivo). Altera os arts. 5º, 15, 22, 23, 24, 40, 49, 84, 103-B, 130-A e 144 da CF, cria os arts. 144-A e 144-B, e estabelece novas fontes de recursos para o FNSP e o Funpen (incluindo parte da arrecadação de apostas esportivas e do Fundo Social do pré-sal).",
-      "situacao": "Aprovada pela Câmara em dois turnos em março/2026 e recebida (autuada) no Senado. Em 14/08/2026 o Presidente Davi Alcolumbre encaminhou a PEC à CCJ como pauta prioritária; em 18/08/2026 o presidente da CCJ, Sen. Otto Alencar, afirma que a comissão ainda aguarda o recebimento formal do texto.",
+      "situacao": "MATÉRIA COM A RELATORIA",
       "ultimaMovimentacao": {
-        "data": "2026-08-18",
-        "descricao": "CCJ do Senado aguarda o recebimento formal do texto para iniciar a análise."
+        "data": "2026-08-21",
+        "descricao": "MATÉRIA COM A RELATORIA"
       },
       "proximosPassos": "Aguarda chegada formal à CCJ para exame de constitucionalidade, juridicidade e técnica legislativa; depois exige 2 turnos no Plenário (quórum de 49 votos). Expectativa de conclusão na CCJ antes do fim do período eleitoral.",
       "pontoAtencao": "Prioridade do Poder Executivo, com forte pressão política. Acompanhar de perto a designação de relator na CCJ assim que recebida formalmente.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/172997",
+      "idSenado": "172997"
     },
     {
       "id": 19,
@@ -398,15 +436,16 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Reserva 5% das emendas parlamentares para ações de prevenção e resposta a desastres.",
-      "situacao": "Recebida no Senado, na Secretaria de Expediente, aguardando despacho de distribuição e indicação de relatoria.",
+      "situacao": "AGUARDANDO DESPACHO",
       "ultimaMovimentacao": {
-        "data": null,
-        "descricao": "Recebida na Secretaria de Expediente do Senado."
+        "data": "2024-07-17",
+        "descricao": "AGUARDANDO DESPACHO"
       },
       "proximosPassos": "Exige aprovação em 2 turnos no Plenário do Senado (quórum de 49 votos) após parecer da CCJ.",
       "pontoAtencao": "Baixa priorização orçamentária no exercício atual, agravada pelo contexto eleitoral de 2026.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/164770",
+      "idSenado": "164770"
     },
     {
       "id": 20,
@@ -415,16 +454,17 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Institui piso salarial nacional para policiais militares e corpos de bombeiros militares. Origem: Sugestão Legislativa SUG 14/2020 (20.753 apoios populares), aprovada pela CDH em 15/04/2026 (relatoria do Sen. Styvenson Valentim) e convertida em PEC.",
-      "situacao": "\"Aguardando Despacho\" no Plenário do Senado desde a autuação em 14/05/2026; ainda não foi formalmente encaminhada à CCJ. Dado oficial mais recente: 07/07/2026.",
+      "situacao": "AGUARDANDO DESPACHO",
       "ultimaMovimentacao": {
-        "data": "2026-07-07",
-        "descricao": "Segue aguardando despacho no Plenário do Senado (sem movimento formal desde então)."
+        "data": "2026-05-14",
+        "descricao": "AGUARDANDO DESPACHO"
       },
       "proximosPassos": "Aguarda despacho para a CCJ (análise de admissibilidade); depois exige 2 turnos no Plenário (quórum de 49 votos) e tramitação completa na Câmara.",
       "pontoAtencao": "Parada na fase de despacho há mais de três meses. Há 35 senadores subscritores que podem ser mobilizados para articular o destravamento, seguindo o precedente da PEC 18/2025.",
       "encerrada": false,
-      "link": null
+      "link": "https://www25.senado.leg.br/web/atividade/materias/-/materia/174153",
+      "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-08-24T21:59:14.794Z"
+  "ultimaVerificacaoEm": "2026-08-25T15:52:38.813Z"
 }
