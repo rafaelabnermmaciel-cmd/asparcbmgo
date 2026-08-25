@@ -6,6 +6,24 @@ import { notificarCaptacao } from './emailjs.js';
 // leitura, filtrados do painel-nacional — ver scripts/gerar-parlamentares-go.js). Quartéis,
 // militares, stakeholders e captações agora vivem no Supabase (banco de verdade, totalmente
 // editável pelo próprio site — ver SETUP.md), porque são dados que mudam com o uso do dia a dia.
+// O Supabase (PostgREST) só devolve até um certo número de linhas por consulta (o padrão do
+// projeto pode ser bem menor que o total de dados, ex.: 100) — isso pegou os quase 3 mil
+// militares do Almanaque de surpresa, cortando a lista pela metade. Essa função busca "em
+// páginas" até não sobrar mais nada, então nenhuma lista (por maior que fique) volta cortada.
+async function fetchAllRows(table, orderCol) {
+  const PAGE = 1000;
+  let tudo = [];
+  let inicio = 0;
+  for (;;) {
+    const { data, error } = await supabase.from(table).select('*').order(orderCol).range(inicio, inicio + PAGE - 1);
+    if (error) throw error;
+    tudo = tudo.concat(data || []);
+    if (!data || data.length < PAGE) break;
+    inicio += PAGE;
+  }
+  return tudo;
+}
+
 async function fetchJson(path, fallback) {
   try {
     const res = await fetch(path, { cache: 'no-cache' });
@@ -48,9 +66,12 @@ export function useQuarteis() {
 
   const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, quarteis: [] }); return; }
-    const { data, error } = await supabase.from('quarteis').select('*').order('nome');
-    if (error) console.warn('[data] falha ao carregar quarteis:', error.message);
-    setState({ loading: false, quarteis: data || [] });
+    try {
+      setState({ loading: false, quarteis: await fetchAllRows('quarteis', 'nome') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar quarteis:', err.message);
+      setState({ loading: false, quarteis: [] });
+    }
   }, []);
 
   useEffect(() => { recarregar(); }, [recarregar]);
@@ -85,9 +106,12 @@ export function useMilitares() {
 
   const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, militares: [] }); return; }
-    const { data, error } = await supabase.from('militares').select('*').order('id');
-    if (error) console.warn('[data] falha ao carregar militares:', error.message);
-    setState({ loading: false, militares: data || [] });
+    try {
+      setState({ loading: false, militares: await fetchAllRows('militares', 'id') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar militares:', err.message);
+      setState({ loading: false, militares: [] });
+    }
   }, []);
 
   useEffect(() => { recarregar(); }, [recarregar]);
@@ -122,9 +146,12 @@ export function useStakeholders() {
 
   const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, stakeholders: [] }); return; }
-    const { data, error } = await supabase.from('stakeholders').select('*').order('id');
-    if (error) console.warn('[data] falha ao carregar stakeholders:', error.message);
-    setState({ loading: false, stakeholders: data || [] });
+    try {
+      setState({ loading: false, stakeholders: await fetchAllRows('stakeholders', 'id') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar stakeholders:', err.message);
+      setState({ loading: false, stakeholders: [] });
+    }
   }, []);
 
   useEffect(() => { recarregar(); }, [recarregar]);
@@ -197,12 +224,15 @@ export function useCaptacoes() {
     if (!supabaseConfigurado) { setState({ loading: false, captacoes: [] }); return; }
     let cancelled = false;
 
-    supabase.from('captacoes').select('*').order('criado_em', { ascending: false }).then(({ data, error }) => {
+    fetchAllRows('captacoes', 'criado_em').then((data) => {
       if (cancelled) return;
-      if (error) console.warn('[data] falha ao carregar captacoes:', error.message);
-      const captacoes = (data || []).map(rowParaCaptacao);
+      const captacoes = data.map(rowParaCaptacao).sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || ''));
       captacoes.forEach((c) => idsConhecidos.current.add(c.id));
       setState({ loading: false, captacoes });
+    }).catch((err) => {
+      if (cancelled) return;
+      console.warn('[data] falha ao carregar captacoes:', err.message);
+      setState({ loading: false, captacoes: [] });
     });
 
     const canal = supabase
@@ -305,9 +335,12 @@ export function useEventos() {
 
   const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, eventos: [] }); return; }
-    const { data, error } = await supabase.from('captacao_eventos').select('*').order('data');
-    if (error) console.warn('[data] falha ao carregar eventos:', error.message);
-    setState({ loading: false, eventos: data || [] });
+    try {
+      setState({ loading: false, eventos: await fetchAllRows('captacao_eventos', 'data') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar eventos:', err.message);
+      setState({ loading: false, eventos: [] });
+    }
   }, []);
 
   useEffect(() => { recarregar(); }, [recarregar]);
@@ -336,9 +369,12 @@ export function useUsuariosAprovados() {
 
   const recarregar = useCallback(async () => {
     if (!supabaseConfigurado) { setState({ loading: false, usuarios: [] }); return; }
-    const { data, error } = await supabase.from('usuarios_aprovados').select('*').order('criado_em');
-    if (error) console.warn('[data] falha ao carregar usuarios_aprovados:', error.message);
-    setState({ loading: false, usuarios: data || [] });
+    try {
+      setState({ loading: false, usuarios: await fetchAllRows('usuarios_aprovados', 'criado_em') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar usuarios_aprovados:', err.message);
+      setState({ loading: false, usuarios: [] });
+    }
   }, []);
 
   useEffect(() => { recarregar(); }, [recarregar]);
