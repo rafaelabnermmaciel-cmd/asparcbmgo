@@ -34,8 +34,12 @@ const PATH = 'public/data/acompanhamento-legislativo.json';
 // segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
 // só "polícia", que trariam ruído de assuntos sem relação (Forças Armadas federais etc.).
 // Polícia civil fica de fora — não é o foco do acompanhamento.
+//
+// "segurança pública" sozinha ficou de fora de propósito — a pedido do usuário: ela pega ruído
+// demais (qualquer projeto/moção só de referência à comissão de segurança pública, tipo "moção de
+// louvor à segurança pública", sem relação nenhuma com bombeiros). O que interessa de verdade já
+// está coberto pelos termos mais específicos abaixo.
 const PALAVRAS_CHAVE = [
-  'segurança pública',
   'bombeiro',
   'corpo de bombeiros',
   'bombeiro militar',
@@ -48,6 +52,9 @@ const PALAVRAS_CHAVE = [
   'calamidade',
   'emergência',
 ];
+// Tipos simbólicos/sem efeito legislativo (moção de louvor/pesar/congratulações etc.) — mesmo
+// batendo palavra-chave, não são "projetos" no sentido que o usuário quer acompanhar.
+const TIPOS_SIMBOLICOS = new Set(['MOC']);
 const MAX_ITENS_POR_SECAO = 10;
 
 function hojeISO() {
@@ -134,6 +141,7 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
     const relevantes = [];
     for (const item of itensPauta) {
       const prop = item.proposicao_ || item.proposicao || null;
+      if (prop?.siglaTipo && TIPOS_SIMBOLICOS.has(prop.siglaTipo)) continue; // moção etc. — não é projeto de lei
       const ementa = prop?.ementa || item.titulo || '';
       const relevante = (prop?.id && idsMonitorados.has(prop.id)) || bateComPalavraChave(ementa);
       if (!relevante) continue;
@@ -266,13 +274,18 @@ function formatarPauta(porDia) {
 // ainda fora do acompanhamento — vira sugestão pro usuário revisar e adicionar manualmente.
 // Busca os termos com concorrência limitada (não em série) — com 15 termos, um por vez
 // deixaria o script bem mais lento à toa.
+// Só os tipos que de fato criam/alteram lei — filtra na origem moção, requerimento, indicação
+// etc. (ex.: "moção de louvor à segurança pública" batia palavra-chave mas não é um projeto).
+const TIPOS_PROJETO = ['PL', 'PLP', 'PEC', 'MPV'];
+const FILTRO_TIPO = TIPOS_PROJETO.map((t) => `siglaTipo=${t}`).join('&');
+
 async function projetosNovosPorTema(monitorados, dataInicio) {
   const jaMonitorados = new Set(monitorados.map((p) => `${p.tipo}-${p.numero}`));
   let falhas = 0;
   const porTermo = await mapWithConcurrency(PALAVRAS_CHAVE, 4, async (termo) => {
     try {
       const resp = await getJson(
-        `${CAMARA_BASE}/proposicoes?keywords=${encodeURIComponent(termo)}&dataApresentacaoInicio=${dataInicio}&itens=20&ordem=DESC&ordenarPor=id`,
+        `${CAMARA_BASE}/proposicoes?keywords=${encodeURIComponent(termo)}&${FILTRO_TIPO}&dataApresentacaoInicio=${dataInicio}&itens=20&ordem=DESC&ordenarPor=id`,
         { retries: 2 }
       );
       return resp?.dados || [];
@@ -292,6 +305,7 @@ async function projetosNovosPorTema(monitorados, dataInicio) {
   const candidatos = [];
   for (const dados of porTermo) {
     for (const p of dados) {
+      if (!TIPOS_PROJETO.includes(p.siglaTipo)) continue; // segurança extra caso a API ignore o filtro da query
       const chave = `${p.siglaTipo}-${p.numero}/${p.ano}`;
       if (jaMonitorados.has(chave) || candidatos.some((c) => c.chave === chave)) continue;
       candidatos.push({ chave, tipo: p.siglaTipo, numero: `${p.numero}/${p.ano}`, ementa: (p.ementa || '').trim() });
