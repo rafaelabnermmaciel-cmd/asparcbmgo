@@ -359,7 +359,7 @@ async function main() {
     '',
     '🔎 Possíveis projetos novos (segurança pública / bombeiros / desastres / militares) — revisar e adicionar manualmente:',
     linhasNovos,
-  ].join('\n'),
+  ].join('\n');
 
   console.log(mensagem);
   await notificarWhatsApp(mensagem);
