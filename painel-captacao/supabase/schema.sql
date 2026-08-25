@@ -61,6 +61,11 @@ alter table militares add constraint militares_quartel_id_fkey foreign key (quar
 -- de ser obrigatório (útil pra quem já rodou uma versão anterior deste script, que exigia).
 alter table militares alter column quartel_id drop not null;
 
+-- Tira a trava de "RG não pode repetir" ANTES de mexer nos dados abaixo — numa segunda vez
+-- rodando este script, ela já está lá (de uma execução anterior) e travaria a normalização
+-- logo a seguir. Ela volta no fim deste bloco, já com os dados limpos.
+alter table militares drop constraint if exists militares_rg_key;
+
 -- Normaliza o RG de quem ainda estiver no formato antigo, com ponto (ex: "02.294") — vira só
 -- os dígitos sem zero à esquerda ("2294"), igual ao formato do Almanaque. Sem isso, a mesma
 -- pessoa fica duplicada na tabela: uma linha com o nome de guerra curto da Convocação 106/2026
@@ -84,7 +89,6 @@ where m.rg = dups.rg and m.id <> dups.manter;
 -- sem apagar a tabela toda (o "on conflict" abaixo atualiza posto/nome mas NUNCA mexe no
 -- quartel_id de quem já foi vinculado manualmente, então o vínculo feito por vocês na aba
 -- Acesso restrito nunca é perdido rodando este script de novo).
-alter table militares drop constraint if exists militares_rg_key;
 alter table militares add constraint militares_rg_key unique (rg);
 
 -- 3) STAKEHOLDERS ---------------------------------------------------------------
