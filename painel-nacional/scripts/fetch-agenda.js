@@ -12,12 +12,12 @@
 // sempre manda a mensagem, mesmo sem nada de novo — é um resumo periódico, não um alerta de
 // mudança (esse é o fetch-tramitacoes.js).
 //
-// ⚠️ A pauta do Senado (pautaSenadoDaSemana) usa um endpoint cujo formato de resposta nunca foi
-// confirmado com uma execução real — o mesmo aconteceu com a checagem de tramitação do Senado
-// (fetch-tramitacoes.js) e o "formato documentado" acabou nem batendo com a resposta de verdade.
-// Por isso ela sempre loga a resposta bruta, além de tentar um parsing best-effort: se o
-// palpite de formato estiver errado, a lista fica vazia por enquanto e o log é o que permite
-// corrigir de verdade na próxima rodada, sem chutar de novo às cegas.
+// A pauta do Senado (pautaSenadoDaSemana) via /dadosabertos/agenda nunca respondeu — 4 formatos
+// de URL testados, todos 404 (endpoint descontinuado de vez, não só mudou de formato). A fonte
+// real agora é a página pública congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-
+// camara (sugestão do usuário): ela tem um calendário mensal pronto no HTML com um link por dia
+// (/-/agenda/YYYY-MM-DD), e cada página de dia lista as sessões de verdade (hora, órgão, título,
+// descrição) num formato HTML confirmado com uma execução real — ver extrairSessoesDoDia.
 //
 // Uso:
 //   node scripts/fetch-agenda.js
@@ -28,7 +28,7 @@ import { getJson, getText, mapWithConcurrency } from './lib/http.js';
 import { notificarWhatsApp } from './lib/callmebot.js';
 
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
-const SENADO_BASE = 'https://legis.senado.leg.br/dadosabertos';
+const CONGRESSO_URL = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
 const PATH = 'public/data/acompanhamento-legislativo.json';
 // Cobre os eixos que o CBM-GO acompanha (bombeiros, polícia militar, militares estaduais,
 // segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
@@ -149,135 +149,77 @@ async function pautaDaSemana(monitorados, dataInicio, dataFim) {
   return porDia;
 }
 
-// Busca a agenda do Senado (plenário + comissões) pra mesma janela — ver a ressalva no topo do
-// arquivo: o formato de resposta é especulativo, então sempre loga a resposta bruta e nunca
-// deixa uma falha de parsing derrubar o script (só volta um Map vazio nesse caso).
-async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
-  const idsMonitorados = new Set(monitorados.filter((p) => p.idSenado).map((p) => p.idSenado));
-  // O primeiro palpite (/agenda/{dataInicio}/{dataFim}, formato de segmento) deu 404 — errado
-  // de vez, não só formato diferente. Tenta mais candidatos até um responder 200; loga qual
-  // funcionou (ou que nenhum funcionou) pra não precisar chutar de novo depois. Barato agora que
-  // getJson não fica reinsistindo em 404 (erro permanente).
-  const candidatos = [
-    `${SENADO_BASE}/agenda?dataInicio=${dataInicio}&dataFim=${dataFim}`,
-    `${SENADO_BASE}/plenario/agenda/${dataInicio}/${dataFim}`,
-    `${SENADO_BASE}/agenda/senado/${dataInicio}/${dataFim}`,
-  ];
-  let resp;
-  let urlCerta;
-  for (const url of candidatos) {
-    try {
-      resp = await getJson(url, { retries: 1 });
-      urlCerta = url;
-      break;
-    } catch (err) {
-      console.warn(`[agenda] agenda do Senado — ${url} falhou: ${err.message}`);
-    }
-  }
-  if (!urlCerta) {
-    // 3 chutes estruturais seguidos deram 404 — parar de chutar às cegas e, em vez disso, pedir
-    // pro próprio servidor listar os recursos que ele realmente tem. APIs feitas em Jersey/JAX-RS
-    // (padrão comum em API pública de governo brasileiro) costumam publicar um WADL nesse caminho,
-    // igual ao truque que já funcionou pra achar /materia/situacaoatual (ler o que a própria API
-    // aponta como certo, não adivinhar de novo).
-    try {
-      const wadl = await getText(`${SENADO_BASE}/application.wadl`, { retries: 1 });
-      const caminhosAgenda = [...wadl.matchAll(/path="([^"]*agenda[^"]*)"/gi)].map((m) => m[1]);
-      console.warn(
-        `[agenda] nenhum candidato de URL bateu — WADL da API do Senado baixado (${wadl.length} chars). ` +
-          `Caminhos com "agenda" encontrados: ${caminhosAgenda.length ? caminhosAgenda.join(', ') : 'nenhum'}. ` +
-          `Trecho do WADL: ${wadl.slice(0, 3000)}`
-      );
-    } catch (err) {
-      console.warn(`[agenda] nenhum candidato de URL bateu, e o WADL também falhou: ${err.message}`);
-    }
-    await diagnosticarAgendaCongressoNacional(dataInicio, dataFim);
-    throw new Error('nenhum dos candidatos de URL da agenda do Senado respondeu');
-  }
-  console.log(`[agenda] agenda do Senado respondeu em: ${urlCerta}`);
-  console.log(`[agenda] resposta bruta da agenda do Senado (formato ainda não confirmado): ${JSON.stringify(resp).slice(0, 2000)}`);
-
-  try {
-    const reunioes = resp?.AgendaReunioes?.Reunioes?.Reuniao || resp?.Reunioes?.Reuniao || resp?.agenda?.reunioes || [];
-    const lista = Array.isArray(reunioes) ? reunioes : [reunioes].filter(Boolean);
-
-    const porDia = new Map();
-    for (const r of lista) {
-      const dataReuniao = r?.Data || r?.data || '';
-      const dia = dataReuniao.slice(0, 10);
-      if (!dia) continue;
-      const orgao = r?.NomeOrgao || r?.Colegiado || r?.nomeOrgao || 'Senado Federal';
-      const itensBrutos = r?.Materias?.Materia || r?.Itens?.Item || [];
-      const itens = (Array.isArray(itensBrutos) ? itensBrutos : [itensBrutos].filter(Boolean))
-        .map((m) => {
-          const ementa = m?.Ementa || m?.ementa || '';
-          const relevante = (m?.Codigo && idsMonitorados.has(m.Codigo)) || bateComPalavraChave(ementa);
-          if (!relevante) return null;
-          const rotulo = m?.Sigla && m?.Numero ? `${m.Sigla} ${m.Numero}${m.Ano ? `/${m.Ano}` : ''}` : 'Item da pauta';
-          return { rotulo, ementa: truncar(ementa, 220) };
-        })
-        .filter(Boolean);
-      if (itens.length === 0) continue;
-      if (!porDia.has(dia)) porDia.set(dia, []);
-      porDia.get(dia).push({ hora: r?.Hora || r?.hora || '', orgao, itens });
-    }
-    return porDia;
-  } catch (err) {
-    console.warn(`[agenda] resposta da agenda do Senado veio num formato inesperado, ignorando desta vez: ${err.message}`);
-    return new Map();
-  }
+function textoSemTags(html) {
+  return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-// Sugestão do usuário: o site oficial congressonacional.leg.br tem uma página que já junta a
-// agenda da Câmara, do Senado e do Congresso Nacional num só lugar — pode ser mais confiável que
-// tentar adivinhar o endpoint certo do dadosabertos do Senado. Mas nunca vimos essa página de
-// verdade (o sandbox de desenvolvimento não tem acesso à internet geral), então este é só um
-// passo de DIAGNÓSTICO: baixa o HTML e loga pistas sobre a estrutura (se os dados já vêm prontos
-// no HTML — bom, dá pra fazer parsing direto — ou se é um app que busca os dados via JS depois de
-// carregar — nesse caso precisaria achar a URL da API que ele chama, não dá pra ler o HTML puro).
-// Não tenta montar a agenda a partir daqui ainda — só junta evidência real pra próxima correção.
-async function diagnosticarAgendaCongressoNacional(dataInicio, dataFim) {
-  const url = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
-  try {
-    const html = await getText(url, { retries: 1 });
-    // 2ª rodada confirmou: a agenda vem pronta num calendário mensal em id="main-content", com um
-    // link por dia pro formato /-/agenda/YYYY-MM-DD e indicadores de quais casas (CN/SF/CD) têm
-    // sessão naquele dia (classes sessao--CN, sessao--SF, sessao--CD). Isso já resolve "em quais
-    // dias tem sessão" sem precisar do endpoint do Senado. Falta ver o DETALHE de um dia — hora,
-    // matérias — que deve estar na página de cada dia, não no calendário. Escolhe automaticamente
-    // um dia dentro da janela [dataInicio, dataFim] que o próprio calendário já confirmou ter
-    // sessão, e busca a página dele, pra ver esse formato.
-    const linksDeDia = [...html.matchAll(/href=["'](https:\/\/www\.congressonacional\.leg\.br\/sessoes\/agenda-do-congresso-senado-e-camara\/-\/agenda\/([\d-]+))["']/g)]
-      .map((m) => ({ url: m[1], dia: m[2] }));
-    console.warn(
-      `[agenda] diagnóstico congressonacional.leg.br (3ª rodada) — calendário: ${linksDeDia.length} links de dia encontrados, ` +
-        `exemplos: ${linksDeDia.slice(0, 3).map((l) => l.dia).join(' | ')}`
-    );
+// Cada linha de sessão vem como <div class="cn-agenda-casas-tabela-linha" data-casa="SF|CD|CN">
+// com hora, órgão, título (link em negrito), descrição (blockquote) e status — formato confirmado
+// com uma execução real (24/08). split() com grupo de captura intercala os "data-casa" capturados
+// entre os trechos de HTML, então partes[i] é a casa e partes[i+1] é o conteúdo daquela linha (e
+// do que vem depois, mas as regexes abaixo pegam sempre a primeira ocorrência de cada campo,
+// que é a da própria linha).
+function extrairSessoesDoDia(html) {
+  const marcador = html.search(/id=["']main-content["']/i);
+  const corpo = marcador >= 0 ? html.slice(marcador) : html;
+  // A página de cada dia repete o widget de calendário mensal inteiro antes do conteúdo do dia —
+  // pula pro último trecho que ainda menciona "sf-calendario" (fim do widget).
+  const fimCalendario = corpo.lastIndexOf('sf-calendario');
+  const corpoDia = fimCalendario >= 0 ? corpo.slice(fimCalendario) : corpo;
 
-    const diaAlvo = linksDeDia.find((l) => l.dia >= dataInicio && l.dia <= dataFim);
-    if (diaAlvo) {
-      try {
-        const htmlDia = await getText(diaAlvo.url, { retries: 1 });
-        // 3ª rodada mostrou que os primeiros 12000 chars a partir de main-content são só o mesmo
-        // widget de calendário (repetido em toda página de dia) — o detalhe da sessão vem DEPOIS
-        // dele. Pula pro último trecho que ainda menciona o calendário (classe "sf-calendario") e
-        // loga o que vem a seguir, que deve ser o conteúdo específico do dia.
-        const ultimoCalendario = htmlDia.lastIndexOf('sf-calendario');
-        const corpoDia = ultimoCalendario >= 0 ? htmlDia.slice(ultimoCalendario) : htmlDia;
-        console.warn(
-          `[agenda] diagnóstico da página do dia ${diaAlvo.dia} (${diaAlvo.url}) — ` +
-            `total ${htmlDia.length} chars, fim do widget de calendário em ${ultimoCalendario}. ` +
-            `Trecho depois do calendário: ${corpoDia.slice(0, 15000)}`
-        );
-      } catch (err) {
-        console.warn(`[agenda] diagnóstico da página do dia ${diaAlvo.dia} falhou: ${err.message}`);
-      }
-    } else {
-      console.warn(`[agenda] nenhum dia com sessão confirmada entre ${dataInicio} e ${dataFim} no calendário.`);
-    }
-  } catch (err) {
-    console.warn(`[agenda] diagnóstico de congressonacional.leg.br falhou: ${err.message}`);
+  const partes = corpoDia.split(/<div class="cn-agenda-casas-tabela-linha" data-casa="([^"]+)">/);
+  const linhas = [];
+  for (let i = 1; i < partes.length; i += 2) {
+    const casa = partes[i];
+    const chunk = partes[i + 1] || '';
+    const horaMatch = chunk.match(/cn-agenda-casas-hora[^"]*"[^>]*>\s*<span>([\s\S]*?)<\/span>/);
+    const hora = horaMatch ? textoSemTags(horaMatch[1]).replace(/\s+/g, '') : '';
+    const orgaoMatch = chunk.match(/cn-agenda-casas-orgao[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+    const orgao = orgaoMatch ? textoSemTags(orgaoMatch[1]) : '';
+    const tituloMatch = chunk.match(/<a[^>]*>\s*<strong>([^<]+)<\/strong>\s*<\/a>/);
+    const titulo = tituloMatch ? tituloMatch[1].trim() : '';
+    const descMatch = chunk.match(/<blockquote class="cn-agenda-casas-descricao">([^<]*)<\/blockquote>/);
+    const descricao = descMatch ? descMatch[1].trim() : '';
+    if (!titulo) continue;
+    linhas.push({ casa, hora, orgao, titulo, descricao });
   }
+  return linhas;
+}
+
+// Fonte: página pública congressonacional.leg.br (sugestão do usuário) — ver ressalva no topo do
+// arquivo. Cobre Senado Federal (SF) e Congresso Nacional (CN, sessão conjunta); ignora Câmara
+// (CD) aqui porque pautaDaSemana() já cobre a Câmara via API própria, e listar dos dois lugares
+// duplicaria os mesmos itens na mensagem.
+async function pautaSenadoDaSemana(monitorados, dataInicio, dataFim) {
+  const html = await getText(CONGRESSO_URL, { retries: 1 });
+  const linksDeDia = [...html.matchAll(/href=["'](https:\/\/www\.congressonacional\.leg\.br\/sessoes\/agenda-do-congresso-senado-e-camara\/-\/agenda\/([\d-]+))["']/g)]
+    .map((m) => ({ url: m[1], dia: m[2] }))
+    .filter((l, idx, arr) => arr.findIndex((x) => x.dia === l.dia) === idx);
+  const diasNaJanela = linksDeDia.filter((l) => l.dia >= dataInicio && l.dia <= dataFim);
+  if (diasNaJanela.length === 0) {
+    throw new Error(`calendário do Congresso não trouxe nenhum dia entre ${dataInicio} e ${dataFim} — página pode ter mudado`);
+  }
+
+  const porDia = new Map();
+  for (const { url, dia } of diasNaJanela) {
+    try {
+      const htmlDia = await getText(url, { retries: 1 });
+      const sessoes = extrairSessoesDoDia(htmlDia).filter((s) => s.casa === 'SF' || s.casa === 'CN');
+      const relevantes = sessoes.filter((s) => bateComPalavraChave(`${s.titulo} ${s.descricao}`));
+      if (relevantes.length === 0) continue;
+      porDia.set(
+        dia,
+        relevantes.map((s) => ({
+          hora: s.hora,
+          orgao: s.casa === 'CN' ? `Congresso Nacional — ${s.orgao || s.titulo}` : `Senado Federal — ${s.orgao || s.titulo}`,
+          itens: [{ rotulo: s.titulo, ementa: truncar(s.descricao, 220) }],
+        }))
+      );
+    } catch (err) {
+      console.warn(`[agenda] falha ao ler a página do dia ${dia} (congressonacional.leg.br): ${err.message}`);
+    }
+  }
+  return porDia;
 }
 
 function mesclarPorDia(...mapas) {
