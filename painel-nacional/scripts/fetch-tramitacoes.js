@@ -31,6 +31,11 @@ function parseNumeroAno(numero) {
   return { num: num.replace(/\./g, ''), ano };
 }
 
+function fmtDataBR(dataISO) {
+  const [ano, mes, dia] = String(dataISO).split('-');
+  return ano && mes && dia ? `${dia}/${mes}/${ano}` : dataISO;
+}
+
 async function statusCamara(tipo, numero) {
   const { num, ano } = parseNumeroAno(numero);
   const busca = await getJson(`${CAMARA_BASE}/proposicoes?siglaTipo=${encodeURIComponent(tipo)}&numero=${num}&ano=${ano}`);
@@ -161,7 +166,11 @@ async function main() {
       ...novidades.map((n) => ({ proposicao: `${n.tipo} ${n.numero}`, data: n.data, fato: n.descricao })),
       ...(data.atualizacoesRecentes || []),
     ].slice(0, 20);
-    const resumo = novidades.map((n) => `• ${n.tipo} ${n.numero}: ${n.descricao}`).join('\n');
+    // Sem a data, a mensagem parece dizer que todo mundo listado se moveu HOJE — mas "novidade"
+    // aqui só significa "mudou desde a última leitura salva", que na primeira vez que uma
+    // proposição é encontrada (ex.: as 10 do Senado que só passaram a ser localizadas depois do
+    // bug do Situacoes.Situacao ser corrigido) pode ser um status de semanas atrás, não de hoje.
+    const resumo = novidades.map((n) => `• ${n.tipo} ${n.numero} (${fmtDataBR(n.data)}): ${n.descricao}`).join('\n');
     await notificarWhatsApp(`📋 Movimentação em projetos monitorados (CBM-GO):\n\n${resumo}`);
     console.log(`[fetch-tramitacoes] ${novidades.length} movimentação(ões) nova(s) detectada(s) em ${PATH}.`);
   } else {
