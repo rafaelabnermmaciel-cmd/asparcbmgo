@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { NAV } from './Sidebar.jsx';
 
-function ItemNav({ to, label, icon: Icon, end }) {
+function ItemNav({ to, label, mobileLabel, icon: Icon, end }) {
   return (
     <NavLink
       to={to}
@@ -13,7 +13,7 @@ function ItemNav({ to, label, icon: Icon, end }) {
       }
     >
       <Icon className="h-5 w-5" />
-      {label}
+      {mobileLabel || label}
     </NavLink>
   );
 }
