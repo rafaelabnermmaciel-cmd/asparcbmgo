@@ -98,10 +98,13 @@ passo a passo em **SETUP.md**, seção 6.
 
 ## Pendências de dados
 
-- **Quartéis e militares** — o `supabase/schema.sql` já semeia as 61 unidades (60 do CBMGO +
-  SENASP/MJ) e os 122 militares da Convocação nº 106/2026 (posto, RG, nome de guerra, OBM).
-  Ajuste direto nas tabelas `quarteis`/`militares` pelo Table Editor do Supabase (SETUP.md,
-  seção 4) — sem precisar rodar SQL de novo.
+- **Quartéis e militares** — o `supabase/schema.sql` já semeia as 129 unidades do CBMGO
+  (página oficial de contatos, atualizada 12/08/2026) e os militares dos Almanaques de
+  Oficiais e Praças (10/08/2026). Quem já tem quartel vinculado (por já constar como
+  comandante na página oficial, ou por já estar na Convocação nº 106/2026) mantém o vínculo;
+  o resto fica em aberto pra vincular manualmente. Ajuste direto nas tabelas
+  `quarteis`/`militares` pelo Table Editor do Supabase, ou pela aba Acesso restrito do site —
+  sem precisar rodar SQL de novo.
 - **Stakeholders** — tabela vazia até alguém cadastrar pela aba Stakeholders (SETUP.md, última
   seção).
 
