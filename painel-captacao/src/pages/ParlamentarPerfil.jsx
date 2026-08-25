@@ -4,7 +4,7 @@ import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp
 import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-import { btnDanger, fmtR, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
+import { btnDanger, fmtR, statusBadgeClass, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
 import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 import { FormularioStakeholder } from '../components/StakeholderForm.jsx';
 
@@ -245,9 +245,9 @@ export default function ParlamentarPerfil() {
                   >
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.quartelNome} <span className="font-normal text-slate-400">· {c.objeto}</span></p>
-                      <p className="mt-0.5 text-xs text-slate-500">{c.valorPrevisto ? `${fmtR(c.valorPrevisto)} previsto` : 'sem valor definido ainda'}{c.numReunioes ? ` · ${c.numReunioes} reunião(ões)` : ''}</p>
+                      <p className="mt-0.5 text-xs text-slate-500">{c.valorPrevisto ? `${fmtR(c.valorPrevisto)} previsto` : 'sem valor definido ainda'}</p>
                       <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                        <span className="inline-block rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                        <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${statusBadgeClass(c.status)}`}>{c.status}</span>
                         <AlertaParado captacao={c} eventos={eventos} />
                       </div>
                     </div>
@@ -272,8 +272,7 @@ export default function ParlamentarPerfil() {
                             <InfoRow label="Responsável" value={c.responsavel} />
                             <InfoRow label="Stakeholder / contato-chave" value={c.stakeholder} />
                             <InfoRow label="Valor previsto" value={c.valorPrevisto ? fmtR(c.valorPrevisto) : '—'} />
-                            <InfoRow label="Valor confirmado" value={c.valorConfirmado ? fmtR(c.valorConfirmado) : '—'} />
-                            {c.observacoes && <InfoRow label="Observações" value={c.observacoes} />}
+                            {c.observacoes && <InfoRow label="Descrição" value={c.observacoes} />}
                           </div>
                           <div className="mt-3 flex gap-2">
                             <button type="button" onClick={() => setEditandoCaptacaoId(c.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
@@ -283,7 +282,7 @@ export default function ParlamentarPerfil() {
                               <LuTrash2 className="h-3 w-3" /> Excluir
                             </button>
                           </div>
-                          <LinhaDoTempo captacaoId={c.id} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} />
+                          <LinhaDoTempo captacao={c} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} onMudarStatus={(status) => updateCaptacao(c.id, { status })} />
                         </>
                       )}
                     </div>

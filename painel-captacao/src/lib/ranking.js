@@ -1,43 +1,45 @@
-// Gamificação: agrega os cadastros de captação por quartel. Cada quartel cadastrado em
-// quarteis.json entra com zero mesmo sem nenhum cadastro ainda (pra aparecer no ranking geral
-// e servir de convite/incentivo), e quartéis que só existem nos cadastros (ainda não cadastrados
-// oficialmente na lista) também aparecem, pra nada ficar escondido.
-export function computeQuartelRanking(captacoes, quarteis) {
+// Gamificação: agrega os cadastros de captação (e seus andamentos) por quartel. Cada quartel
+// cadastrado em quarteis.json entra com zero mesmo sem nenhum cadastro ainda (pra aparecer no
+// ranking geral e servir de convite/incentivo), e quartéis que só existem nos cadastros (ainda
+// não cadastrados oficialmente na lista) também aparecem, pra nada ficar escondido.
+export function computeQuartelRanking(captacoes, quarteis, eventos = []) {
   const porQuartel = new Map();
+  const quartelPorCaptacao = new Map();
 
-  quarteis.forEach((q) => {
-    porQuartel.set(q.id, {
-      quartelId: q.id,
-      nome: q.nome,
-      municipio: q.municipio,
-      qtdArticulacoes: 0,
-      qtdReunioes: 0,
-      totalPrevisto: 0,
-      totalConfirmado: 0,
-      qtdDestinadas: 0,
-    });
-  });
-
-  captacoes.forEach((c) => {
-    const key = c.quartelId || 'sem-quartel';
+  function garantir(key, nome, municipio) {
     if (!porQuartel.has(key)) {
       porQuartel.set(key, {
         quartelId: key,
-        nome: c.quartelNome || 'Não identificado',
-        municipio: c.municipio || '',
+        nome,
+        municipio,
         qtdArticulacoes: 0,
         qtdReunioes: 0,
         totalPrevisto: 0,
-        totalConfirmado: 0,
-        qtdDestinadas: 0,
+        totalIndicado: 0,
+        qtdIndicadas: 0,
       });
     }
-    const q = porQuartel.get(key);
+    return porQuartel.get(key);
+  }
+
+  quarteis.forEach((q) => garantir(q.id, q.nome, q.municipio));
+
+  captacoes.forEach((c) => {
+    const key = c.quartelId || 'sem-quartel';
+    quartelPorCaptacao.set(c.id, key);
+    const q = garantir(key, c.quartelNome || 'Não identificado', c.municipio || '');
     q.qtdArticulacoes += 1;
-    q.qtdReunioes += c.numReunioes || 0;
     q.totalPrevisto += c.valorPrevisto || 0;
-    q.totalConfirmado += c.valorConfirmado || 0;
-    if (c.status === 'Destinado') q.qtdDestinadas += 1;
+    if (c.status === 'Indicado') {
+      q.totalIndicado += c.valorPrevisto || 0;
+      q.qtdIndicadas += 1;
+    }
+  });
+
+  // Reuniões = andamentos lançados na linha do tempo de cada captação (ver CaptacaoTimeline.jsx).
+  eventos.forEach((e) => {
+    const key = quartelPorCaptacao.get(e.captacao_id);
+    if (key && porQuartel.has(key)) porQuartel.get(key).qtdReunioes += 1;
   });
 
   return [...porQuartel.values()];

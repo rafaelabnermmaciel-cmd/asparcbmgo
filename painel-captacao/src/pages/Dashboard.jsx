@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck } from 'react-icons/lu';
-import { useCaptacoes, useQuarteis } from '../lib/data.js';
+import { useCaptacoes, useQuarteis, useEventos } from '../lib/data.js';
 import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao, nivelQuartel } from '../lib/ranking.js';
 import { useTheme } from '../lib/theme.jsx';
 import { CATEGORICO } from '../lib/palette.js';
+import { statusBadgeClass } from '../components/CaptacaoForm.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import StatCard from '../components/StatCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -76,14 +77,15 @@ function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle }) {
 export default function Dashboard() {
   const { loading, captacoes } = useCaptacoes();
   const { loading: loadingQuarteis, quarteis } = useQuarteis();
+  const { eventos } = useEventos();
   const { theme } = useTheme();
 
-  const ranking = useMemo(() => computeQuartelRanking(captacoes, quarteis), [captacoes, quarteis]);
+  const ranking = useMemo(() => computeQuartelRanking(captacoes, quarteis, eventos), [captacoes, quarteis, eventos]);
   const porCaptacao = useMemo(() => rankPorCaptacao(ranking).filter((q) => q.totalPrevisto > 0), [ranking]);
   const porArticulacao = useMemo(() => rankPorArticulacao(ranking).filter((q) => q.qtdArticulacoes > 0), [ranking]);
 
   const totalPrevisto = ranking.reduce((s, q) => s + q.totalPrevisto, 0);
-  const totalConfirmado = ranking.reduce((s, q) => s + q.totalConfirmado, 0);
+  const totalIndicado = ranking.reduce((s, q) => s + q.totalIndicado, 0);
   const totalArticulacoes = captacoes.length;
   const totalReunioes = ranking.reduce((s, q) => s + q.qtdReunioes, 0);
 
@@ -109,7 +111,7 @@ export default function Dashboard() {
           <p className="mt-1 text-sm text-slate-400">Ranking gamificado dos quartéis do CBMGO na captação de recursos junto ao Congresso Nacional.</p>
         </div>
         <Link to="/cadastro" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-red-700">
-          + Cadastrar captação
+          + Cadastrar primeiro contato
         </Link>
       </ScrollReveal>
 
@@ -122,7 +124,7 @@ export default function Dashboard() {
 
       <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label="Total captado (previsto)" value={fmtRCompact(totalPrevisto)} sub={fmtR(totalPrevisto)} icon={<LuBanknote />} accent="red" />
-        <StatCard label="Total confirmado" value={fmtRCompact(totalConfirmado)} icon={<LuTrophy />} accent="amber" />
+        <StatCard label="Total indicado" value={fmtRCompact(totalIndicado)} icon={<LuTrophy />} accent="amber" />
         <StatCard label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
         <StatCard label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="emerald" />
       </ScrollReveal>
@@ -198,7 +200,7 @@ export default function Dashboard() {
                   </p>
                   <p className="truncate text-xs text-slate-500">{c.objeto}{c.valorPrevisto ? ` · ${fmtRCompact(c.valorPrevisto)}` : ''}</p>
                 </div>
-                <span className="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium ${statusBadgeClass(c.status)}`}>{c.status}</span>
               </div>
             ))}
           </div>

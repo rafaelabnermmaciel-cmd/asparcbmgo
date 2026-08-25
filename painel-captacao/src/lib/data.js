@@ -41,7 +41,7 @@ export function useResultadosEleitorais() {
   return state;
 }
 
-// Quartéis são totalmente editáveis pelo próprio site (aba Gerenciamento) — adicionar,
+// Quartéis são totalmente editáveis pelo próprio site (aba Acesso restrito) — adicionar,
 // renomear, apagar — sem precisar entrar no Supabase (RLS permite, ver supabase/schema.sql).
 export function useQuarteis() {
   const [state, setState] = useState({ loading: true, quarteis: [] });
@@ -76,10 +76,10 @@ export function useQuarteis() {
   return { loading: state.loading, quarteis: state.quarteis, addQuartel, updateQuartel, removeQuartel };
 }
 
-// Um militar por linha, exatamente como na Convocação 106/2026 (ver supabase/schema.sql):
-// posto, RG, nome de guerra e o quartel (quartel_id). Usado no Cadastro pra sugerir quem já
-// está designado pra articulação institucional naquele quartel, e editável pela aba
-// Gerenciamento (apagar um quartel também apaga os militares dele — on delete cascade).
+// Um militar por linha — posto, RG, nome e o quartel (quartel_id), que pode estar vazio pra
+// quem ainda não foi vinculado manualmente (ver supabase/schema.sql). Usado como pool de
+// "responsável" no Cadastrar primeiro contato, e editável pela aba Acesso restrito (apagar um
+// quartel também apaga o vínculo dos militares dele — on delete cascade).
 export function useMilitares() {
   const [state, setState] = useState({ loading: true, militares: [] });
 
@@ -162,13 +162,27 @@ function rowParaCaptacao(row) {
     parlamentarNome: row.parlamentar_nome,
     objeto: row.objeto,
     valorPrevisto: Number(row.valor_previsto) || 0,
-    valorConfirmado: Number(row.valor_confirmado) || 0,
-    numReunioes: row.num_reunioes || 0,
     status: row.status,
-    dataAgenda: row.data_agenda || '',
     observacoes: row.observacoes || '',
     anexos: row.anexos || [],
   };
+}
+
+// Sobe cada anexo (ainda em base64/dataUrl, gerado pelo FileField) pro Storage e devolve a
+// versão final (com "url" pública) — usado tanto no cadastro da captação quanto no lançamento
+// de um andamento na linha do tempo, os dois únicos lugares que anexam arquivo.
+async function uploadAnexos(lista) {
+  const gravados = [];
+  for (const anexo of lista || []) {
+    if (anexo.url && !anexo.dataUrl) { gravados.push(anexo); continue; } // já veio salvo (edição)
+    const blob = await (await fetch(anexo.dataUrl)).blob();
+    const caminho = `${crypto.randomUUID()}/${anexo.nome}`;
+    const { error: erroUpload } = await supabase.storage.from('anexos').upload(caminho, blob, { contentType: anexo.tipo });
+    if (erroUpload) throw new Error(`Falha ao enviar anexo "${anexo.nome}": ${erroUpload.message}`);
+    const { data: pub } = supabase.storage.from('anexos').getPublicUrl(caminho);
+    gravados.push({ nome: anexo.nome, tipo: anexo.tipo, tamanho: anexo.tamanho || null, url: pub.publicUrl });
+  }
+  return gravados;
 }
 
 // Cadastro de captação: lê e grava direto no Supabase (a "anon key" no navegador só pode o
@@ -216,17 +230,10 @@ export function useCaptacoes() {
 
     // 1) Sobe cada anexo pro Storage antes de gravar a linha — assim a linha só existe se os
     // anexos deram certo (nada fica "meio cadastrado").
-    const anexosGravados = [];
-    for (const anexo of payload.anexos || []) {
-      const blob = await (await fetch(anexo.dataUrl)).blob();
-      const caminho = `${crypto.randomUUID()}/${anexo.nome}`;
-      const { error: erroUpload } = await supabase.storage.from('anexos').upload(caminho, blob, { contentType: anexo.tipo });
-      if (erroUpload) throw new Error(`Falha ao enviar anexo "${anexo.nome}": ${erroUpload.message}`);
-      const { data: pub } = supabase.storage.from('anexos').getPublicUrl(caminho);
-      anexosGravados.push({ nome: anexo.nome, tipo: anexo.tipo, tamanho: anexo.tamanho || null, url: pub.publicUrl });
-    }
+    const anexosGravados = await uploadAnexos(payload.anexos);
 
-    // 2) Grava a linha do cadastro.
+    // 2) Grava a linha do cadastro — toda captação nasce "Primeiro contato" (sem estágio pra
+    // escolher no formulário; o status só muda depois, pela aba de andamentos).
     const { data: inserido, error } = await supabase
       .from('captacoes')
       .insert({
@@ -238,10 +245,7 @@ export function useCaptacoes() {
         parlamentar_nome: payload.parlamentarNome,
         objeto: payload.objeto,
         valor_previsto: payload.valorPrevisto || 0,
-        valor_confirmado: payload.valorConfirmado || 0,
-        num_reunioes: payload.numReunioes || 0,
-        status: payload.status,
-        data_agenda: payload.dataAgenda || null,
+        status: 'Primeiro contato',
         observacoes: payload.observacoes || '',
         anexos: anexosGravados,
       })
@@ -258,7 +262,7 @@ export function useCaptacoes() {
   }, []);
 
   // Uma captação cadastrada não fica congelada — o estágio muda com o tempo (ex: "Primeiro
-  // contato" → "Em articulação" → "Destinado"), então precisa dar pra editar qualquer campo
+  // contato" → "Em articulação" → "Indicado"), então precisa dar pra editar qualquer campo
   // depois. `patch` usa as mesmas chaves em camelCase do resto do app.
   const updateCaptacao = useCallback(async (id, patch) => {
     const linha = {};
@@ -270,10 +274,7 @@ export function useCaptacoes() {
     if ('parlamentarNome' in patch) linha.parlamentar_nome = patch.parlamentarNome;
     if ('objeto' in patch) linha.objeto = patch.objeto;
     if ('valorPrevisto' in patch) linha.valor_previsto = patch.valorPrevisto;
-    if ('valorConfirmado' in patch) linha.valor_confirmado = patch.valorConfirmado;
-    if ('numReunioes' in patch) linha.num_reunioes = patch.numReunioes;
     if ('status' in patch) linha.status = patch.status;
-    if ('dataAgenda' in patch) linha.data_agenda = patch.dataAgenda || null;
     if ('observacoes' in patch) linha.observacoes = patch.observacoes;
 
     const { data: atualizado, error } = await supabase.from('captacoes').update(linha).eq('id', id).select().single();
@@ -295,9 +296,10 @@ export function useCaptacoes() {
   return { loading: state.loading, captacoes: state.captacoes, submitCaptacao, updateCaptacao, removeCaptacao };
 }
 
-// Linha do tempo de cada captação (um "passo" por linha: data + o que aconteceu). Carrega
-// tudo de uma vez (como quarteis/militares/stakeholders) e cada tela filtra pelo captacao_id
-// que precisa — totalmente editável no site.
+// Andamentos (linha do tempo) de cada captação — data, descrição, quem esteve presente e
+// anexos (foto/documento). Carrega tudo de uma vez (como quarteis/militares/stakeholders) e
+// cada tela filtra pelo captacao_id que precisa — totalmente editável no site. Lançar o
+// primeiro andamento é o que tira a captação de "Primeiro contato" (ver CaptacaoTimeline.jsx).
 export function useEventos() {
   const [state, setState] = useState({ loading: true, eventos: [] });
 
@@ -311,7 +313,8 @@ export function useEventos() {
   useEffect(() => { recarregar(); }, [recarregar]);
 
   const addEvento = useCallback(async (e) => {
-    const { error } = await supabase.from('captacao_eventos').insert(e);
+    const anexos = await uploadAnexos(e.anexos);
+    const { error } = await supabase.from('captacao_eventos').insert({ ...e, anexos });
     if (error) throw new Error(error.message);
     await recarregar();
   }, [recarregar]);
@@ -325,7 +328,7 @@ export function useEventos() {
   return { loading: state.loading, eventos: state.eventos, addEvento, removeEvento };
 }
 
-// Lista de quem já pediu acesso (aprovado ou não) — usada na aba Gerenciamento → Acessos pra
+// Lista de quem já pediu acesso (aprovado ou não) — usada na aba Acesso restrito → Acessos pra
 // aprovar/revogar. RLS só deixa quem já é aprovado editar (ver supabase/schema.sql); ler a
 // lista é liberado pra qualquer pessoa logada, mesmo sem aprovação ainda.
 export function useUsuariosAprovados() {
@@ -350,7 +353,7 @@ export function useUsuariosAprovados() {
 }
 
 // Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
-// cadastro pela aba Gerenciamento — a pessoa pode editar antes de salvar.
+// cadastro pela aba Acesso restrito — a pessoa pode editar antes de salvar.
 export function slugify(texto) {
   return (texto || '')
     .normalize('NFD')
@@ -373,21 +376,16 @@ export function initials(name) {
     .toUpperCase();
 }
 
-// Este painel acompanha só a articulação — do primeiro contato até a captação ser destinada
-// (ou não). O que acontece depois de destinada (empenho, licitação, contratação, entrega) é
-// execução orçamentária/administrativa, acompanhada no perfil de cada um no outro painel —
-// não é mais trabalho de quem está captando.
-export const STATUS_CAPTACAO = [
-  'Primeiro contato',
-  'Em articulação',
-  'Agenda marcada',
-  'Adiado',
-  'Recusado',
-  'Arquivado',
-  'Destinado',
-];
+// Este painel acompanha só a articulação — do primeiro contato até um desfecho. Toda captação
+// nasce "Primeiro contato" (sem estágio pra escolher no cadastro); vira "Em articulação"
+// sozinha assim que o primeiro andamento é lançado na linha do tempo, e só sai daí quando o
+// militar responsável marca o desfecho ("Indicado" ou "Arquivado") ali mesmo, na aba de
+// andamentos — ver CaptacaoTimeline.jsx. O que acontece depois de "Indicado" (empenho,
+// licitação, contratação, entrega) é execução orçamentária/administrativa, acompanhada no
+// perfil de cada um no outro painel — não é mais trabalho de quem está captando.
+export const STATUS_CAPTACAO = ['Primeiro contato', 'Em articulação', 'Indicado', 'Arquivado'];
 
-// Os 3 primeiros são o funil "em andamento"; os 4 seguintes são desfechos (um deles,
-// "Destinado", é o desfecho de sucesso — a captação foi formalmente destinada àquele quartel).
-export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação', 'Agenda marcada'];
-export const STATUS_TERMINAL = ['Adiado', 'Recusado', 'Arquivado', 'Destinado'];
+// Os 2 primeiros são o funil "em andamento"; os 2 últimos são os desfechos ("Indicado" é o
+// desfecho de sucesso — a captação foi indicada/destinada àquele quartel).
+export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação'];
+export const STATUS_TERMINAL = ['Indicado', 'Arquivado'];

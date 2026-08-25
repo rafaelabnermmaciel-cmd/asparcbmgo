@@ -2,10 +2,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase, supabaseConfigurado } from './supabase.js';
 import { notificarPedidoAcesso } from './emailjs.js';
 
-// Login só é usado pela aba Gerenciamento (dado sensível de organização interna) — o resto do
+// Login só é usado pela aba Acesso restrito (dado sensível de organização interna) — o resto do
 // site continua aberto pra quem tiver o link, sem mudança nenhuma. `aprovado` só fica true
 // pro e-mail do administrador (liberado sozinho, ver o gatilho em supabase/schema.sql) ou
-// depois que o administrador libera alguém pela própria aba Gerenciamento → Acessos.
+// depois que o administrador libera alguém pela própria aba Acesso restrito → Acessos.
 export function useAuth() {
   const [state, setState] = useState({ loading: true, session: null, aprovado: false });
 

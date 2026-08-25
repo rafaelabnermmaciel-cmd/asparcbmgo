@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { initials } from '../lib/data.js';
 
-export default function ParlamentarCard({ p, tracked }) {
+export default function ParlamentarCard({ p, emAndamento = 0 }) {
   return (
     <Link
       to={`/parlamentares/${p.casa}/${p.id}`}
@@ -19,9 +19,9 @@ export default function ParlamentarCard({ p, tracked }) {
           <p className="truncate text-sm font-semibold text-slate-900 group-hover:text-red-600 dark:text-white dark:group-hover:text-red-400">
             {p.nome}
           </p>
-          {tracked && (
+          {emAndamento > 0 && (
             <span className="shrink-0 rounded-full bg-red-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
-              em articulação
+              em articulação · {emAndamento}
             </span>
           )}
         </div>

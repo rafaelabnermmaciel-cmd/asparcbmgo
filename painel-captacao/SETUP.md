@@ -124,10 +124,8 @@ do Supabase: uma chave pública, sem custo pra uso pequeno). Free tier: até 200
    Stakeholder: {{stakeholder}}
    Objeto: {{objeto}}
    Valor previsto: {{valor_previsto}}
-   Valor confirmado: {{valor_confirmado}}
-   Nº de reuniões: {{num_reunioes}}
    Estágio: {{status}}
-   Observações: {{observacoes}}
+   Descrição: {{observacoes}}
    ```
 5. Clique em **Save**.
 6. **Copie o "Template ID"** (aparece no topo da tela, algo como `template_xyz789`).
@@ -152,7 +150,7 @@ pública fora do seu próprio site.
 
 ---
 
-## 7. Login e aprovação de acesso (só a aba Gerenciamento)
+## 7. Login e aprovação de acesso (só a aba Acesso restrito)
 
 Quartéis e militares são dado interno, então essa aba exige login **e** aprovação sua — o
 resto do site (Cadastro, Stakeholders, Parlamentares) continua igual, sem login nenhum. Como
@@ -162,7 +160,7 @@ fica na prática:
   trocar) cria a própria conta e **já entra liberado na hora**, sem passo extra nenhum.
 - **Qualquer outra pessoa** cria a própria conta (e-mail/senha) e fica **"Pendente"**,
   esperando você aprovar. Assim que alguém pede acesso, **você recebe um e-mail avisando**
-  (configurado no passo 7.5) — daí é só entrar em **Gerenciamento → Acessos** e clicar em
+  (configurado no passo 7.5) — daí é só entrar em **Acesso restrito → Acessos** e clicar em
   **Aprovar**. Pra tirar o acesso de alguém depois, mesmo lugar, botão **Revogar**.
 
 ### 7.1. Rodar o script atualizado
@@ -183,19 +181,19 @@ sempre, é seguro rodar de novo (não duplica nada).
 
 ### 7.3. Criar sua conta de administrador (libera sozinha, sem passo extra)
 
-1. No site publicado, abra a aba **Gerenciamento**.
+1. No site publicado, abra a aba **Acesso restrito**.
 2. Clique em **Criar conta**, preencha e-mail e senha — use exatamente
    `rafaelabnermmaciel@gmail.com` (é o e-mail que o script reconhece como administrador; se
    quiser usar outro, me avisa que eu troco no script).
 3. Se aparecer um aviso pedindo confirmação por e-mail, abra sua caixa de entrada e clique no
    link que o Supabase mandou antes de tentar entrar.
 4. Pronto — como é o e-mail do administrador, já libera direto, sem esperar nada. A
-   Gerenciamento abre normalmente, com uma aba a mais: **Acessos**.
+   Acesso restrito abre normalmente, com uma aba a mais: **Acessos**.
 
 ### 7.4. As próximas pessoas (elas pedem, você aprova)
 
-Cada pessoa nova entra em Gerenciamento → cria a própria conta (e-mail e senha) → cai como
-**"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você abre **Gerenciamento →
+Cada pessoa nova entra em Acesso restrito → cria a própria conta (e-mail e senha) → cai como
+**"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você abre **Acesso restrito →
 Acessos** e clica em **Aprovar** na linha da pessoa. Pra tirar o acesso de alguém depois, mesmo
 lugar, botão **Revogar** (dá pra **Aprovar** de novo se precisar).
 
@@ -207,16 +205,16 @@ e-mail de captação).
 1. Acesse **https://www.emailjs.com** e faça login na mesma conta da seção 6.
 2. Menu da esquerda → **Email Templates** → **Create New Template**.
 3. Em **To Email**, coloque `{{to_email}}`.
-4. Em **Subject**, coloque: `Pedido de acesso à Gerenciamento`.
+4. Em **Subject**, coloque: `Pedido de acesso ao Acesso restrito`.
 5. No corpo do e-mail (**Content**), cole:
    ```
-   O e-mail {{email_solicitante}} pediu acesso pra editar a aba Gerenciamento do
+   O e-mail {{email_solicitante}} pediu acesso pra editar o Acesso restrito do
    Painel de Captação (CBM-GO).
 
    Pra aprovar ou recusar, entre em:
    https://rafaelabnermmaciel-cmd.github.io/asparcbmgo/painel-captacao-app/#/gerenciamento
 
-   E vá em Gerenciamento → Acessos.
+   E vá em Acesso restrito → Acessos.
    ```
 6. Clique em **Save**.
 7. **Copie o "Template ID"** (aparece no topo da tela) e me manda aqui no chat:
@@ -237,29 +235,36 @@ project**; clique nele e em ~1 minuto volta ao normal. Não perde nenhum dado, s
 
 ## Onde entram os stakeholders
 
-Aba própria **Stakeholders** (menu lateral, entre Parlamentares e Cadastrar captação) → botão
-**+ Novo stakeholder**. Preencha nome, cargo/função, telefone e qual projeto ele está tratando,
-e marque na lista **todos os parlamentares** com quem essa pessoa articula (pode marcar mais de
-um — ex: um prefeito conversando com 3 deputados ao mesmo tempo pelo mesmo projeto). Depois de
-cadastrado:
+Aba própria **Stakeholders** (menu lateral, entre Parlamentares e Cadastrar primeiro contato) →
+botão **+ Novo stakeholder**. Preencha nome, cargo/função, telefone e qual projeto ele está
+tratando, e marque na lista **todos os parlamentares** com quem essa pessoa articula (pode
+marcar mais de um — ex: um prefeito conversando com 3 deputados ao mesmo tempo pelo mesmo
+projeto). Depois de cadastrado:
 
 - Ele aparece no **perfil de cada parlamentar marcado** (seção Stakeholders), com os botões
   "Editar"/"Excluir" ali também.
-- Ele aparece pra **escolher no formulário de Cadastro de captação** — ao selecionar o
-  parlamentar daquela captação, o campo "Stakeholder" já sugere quem está vinculado a ele.
+- Ele aparece pra **escolher no formulário de Cadastrar primeiro contato** — ao selecionar o
+  parlamentar daquela captação, o campo "Stakeholder" (obrigatório) já sugere quem está
+  vinculado a ele.
 
 Tudo isso é editável direto no site, sem precisar entrar no Supabase.
 
-## Linha do tempo de cada captação (e o alerta de "esfriando")
+## Linha do tempo de cada captação (andamentos e o alerta de "esfriando")
 
-Já no formulário de **Cadastrar captação**, tem o campo **"Data do primeiro contato"**
+Toda captação nasce como **"Primeiro contato"** — não tem estágio pra escolher no formulário.
+Já no formulário de **Cadastrar primeiro contato**, tem o campo **"Data do primeiro contato"**
 (vem preenchido com a data de hoje, mas dá pra mudar se o primeiro contato foi antes) — ao
 cadastrar, esse dia já entra como o primeiro passo da linha do tempo automaticamente.
 
 Depois disso, dentro de qualquer captação (botão **"Linha do tempo"** no Cadastro, ou abrindo a
-captação no perfil do parlamentar) dá pra registrar os próximos passos — data + o que
-aconteceu (ex: "reunião marcada", "foram ao Congresso Nacional") — e ver todo o histórico em
-ordem. Se uma captação que ainda está em andamento (não chegou em Destinado/Adiado/
-Recusado/Arquivado) fica **15 dias** sem nenhum passo novo, aparece um aviso amarelo
+captação no perfil do parlamentar) tem a seção **"Adicionar andamento"** — data, descrição,
+quem esteve presente e foto/documento — pra registrar os próximos passos (ex: "reunião
+marcada", "foram ao Congresso Nacional"). Lançar o primeiro andamento já deixa a captação **"Em
+articulação"** sozinha; ela só sai daí quando o militar responsável marca o desfecho — botões
+**"Marcar como Indicado"** ou **"Marcar como Arquivado"**, logo abaixo do formulário de
+andamento — não existe outro lugar pra mudar isso.
+
+Se uma captação ainda em andamento (Primeiro contato/Em articulação — não chegou em
+Indicado/Arquivado) fica **15 dias** sem nenhum andamento novo, aparece um aviso amarelo
 "🟡 Esfriando"; com **30 dias** ou mais, vira um aviso vermelho "🔴 Parado há X dias" — pra
 não deixar nenhuma articulação esfriar sem perceber.

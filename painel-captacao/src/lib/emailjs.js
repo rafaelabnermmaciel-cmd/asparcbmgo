@@ -35,8 +35,6 @@ export async function notificarCaptacao(registro, acao) {
           stakeholder: registro.stakeholder || '—',
           objeto: registro.objeto,
           valor_previsto: fmtR(registro.valorPrevisto),
-          valor_confirmado: fmtR(registro.valorConfirmado),
-          num_reunioes: registro.numReunioes || 0,
           status: registro.status,
           observacoes: registro.observacoes || '—',
         },
@@ -48,8 +46,8 @@ export async function notificarCaptacao(registro, acao) {
   }
 }
 
-// Avisa o administrador quando alguém pede acesso à aba Gerenciamento pela primeira vez (fica
-// esperando aprovação em Gerenciamento → Acessos). Usa um template separado do de captações
+// Avisa o administrador quando alguém pede acesso ao Acesso restrito pela primeira vez (fica
+// esperando aprovação em Acesso restrito → Acessos). Usa um template separado do de captações
 // (variáveis diferentes) — ver EMAILJS_TEMPLATE_ID_ACESSO em emailjs-config.js. Também nunca
 // lança erro: falha de e-mail não pode travar o login de ninguém.
 export async function notificarPedidoAcesso(emailSolicitante) {
