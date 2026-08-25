@@ -45,17 +45,21 @@ No fim, os dois únicos valores que você precisa me mandar de volta (aqui no ch
 
 ### Conferir se deu certo
 
-- Menu da esquerda → **Table Editor**: devem aparecer 5 tabelas — `quarteis` (61 linhas: as 60
-  unidades do CBMGO + SENASP/MJ), `militares` (122 linhas — um militar por linha), `stakeholders`
-  (vazia), `captacoes` (vazia) e `captacao_eventos` (vazia — a linha do tempo de cada captação).
+- Menu da esquerda → **Table Editor**: devem aparecer 5 tabelas — `quarteis` (129 linhas: todas
+  as unidades do CBMGO, da página oficial de contatos), `militares` (quase 3 mil linhas — todo
+  o Almanaque de Oficiais e Praças), `stakeholders` (vazia), `captacoes` (vazia) e
+  `captacao_eventos` (vazia — os andamentos/linha do tempo de cada captação).
 - Menu da esquerda → **Storage**: deve aparecer um bucket chamado `anexos`.
 
 ## 4. Editar quartéis e militares (direto na tela, sem código)
 
-O script já cadastra as 61 unidades e os 122 militares da Convocação nº 106/2026 (posto, RG,
-nome de guerra e a unidade de cada um — exatamente como no documento). No Cadastro, ao
-escolher o quartel, o campo "Responsável" vira uma lista com os militares daquela unidade
-(inclui a opção "Outro" pra digitar um nome que não esteja na lista).
+O script já cadastra as 129 unidades do CBMGO (posto, endereço etc. da página oficial de
+contatos) e todos os militares dos Almanaques de Oficiais e Praças (posto, RG e nome). Quem já
+tinha quartel vinculado (comandante de alguma unidade na página oficial, ou já vinculado pela
+Convocação nº 106/2026) mantém o vínculo; o resto fica sem quartel até alguém vincular
+manualmente. No Cadastro, ao escolher o quartel, o campo "Responsável" vira uma lista com os
+militares já vinculados àquela unidade (inclui a opção "Outro" pra digitar um nome que não
+esteja na lista, ou pra achar alguém do Almanaque que ainda não foi vinculado).
 
 **Tabela `quarteis`** (a unidade em si):
 1. Menu da esquerda → **Table Editor** → clique na tabela **quarteis**.
