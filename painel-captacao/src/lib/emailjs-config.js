@@ -7,8 +7,8 @@ export const EMAILJS_SERVICE_ID = 'service_slylwwe';
 export const EMAILJS_TEMPLATE_ID = 'COLE_AQUI_O_TEMPLATE_ID';
 export const EMAILJS_PUBLIC_KEY = 'JPPAC4UPgx14PRSZ7';
 
-// Template separado (mesmo Service ID e Public Key acima) pro aviso de "alguém pediu acesso à
-// Gerenciamento" — ver SETUP.md, seção 7.6.
+// Template separado (mesmo Service ID e Public Key acima) pro aviso de "alguém pediu acesso ao
+// Acesso restrito" — ver SETUP.md, seção 7.5.
 export const EMAILJS_TEMPLATE_ID_ACESSO = 'template_v8rhhei';
 
 // Pra onde a notificação é enviada a cada novo cadastro. Se um dia precisar trocar, é só

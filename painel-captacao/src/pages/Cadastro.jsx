@@ -5,7 +5,7 @@ import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import FileField from '../components/FileField.jsx';
 import {
-  inputClass, btnPrimary, btnDanger, labelClass, fmtR,
+  inputClass, btnPrimary, btnDanger, labelClass, fmtR, statusBadgeClass,
   CamposCaptacao, EdicaoCaptacao, VAZIO_CAPTACAO, validarCaptacao, paraPayloadCaptacao,
 } from '../components/CaptacaoForm.jsx';
 import { AlertaParado, LinhaDoTempo, hoje } from '../components/CaptacaoTimeline.jsx';
@@ -73,8 +73,8 @@ export default function Cadastro() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Cadastrar captação</h1>
-        <p className="mt-1 text-sm text-slate-400">Registre o andamento de uma articulação com parlamentar — desde o primeiro contato até a captação ser destinada (o que acontece depois disso é acompanhado no outro painel).</p>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Cadastrar primeiro contato</h1>
+        <p className="mt-1 text-sm text-slate-400">Registre o primeiro contato de uma articulação com parlamentar — os próximos passos entram como andamento na linha do tempo, ali embaixo, até o militar responsável marcar o desfecho.</p>
       </ScrollReveal>
 
       {quarteis.length === 0 && (
@@ -111,7 +111,7 @@ export default function Cadastro() {
 
           <div className="sm:col-span-2">
             <button type="submit" disabled={enviando} className={btnPrimary}>
-              {enviando ? 'Enviando...' : 'Cadastrar captação'}
+              {enviando ? 'Enviando...' : 'Cadastrar primeiro contato'}
             </button>
           </div>
         </form>
@@ -147,12 +147,12 @@ export default function Cadastro() {
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{c.quartelNome} <span className="font-normal text-slate-400">· {c.parlamentarNome}</span></p>
-                          <p className="mt-0.5 text-xs text-slate-500">{c.objeto}{c.valorPrevisto ? ` · ${fmtR(c.valorPrevisto)} previsto` : ''}{c.valorConfirmado ? ` · ${fmtR(c.valorConfirmado)} confirmado` : ''} · {c.numReunioes || 0} reunião(ões)</p>
+                          <p className="mt-0.5 text-xs text-slate-500">{c.objeto}{c.valorPrevisto ? ` · ${fmtR(c.valorPrevisto)} previsto` : ''}</p>
                           <p className="mt-0.5 text-xs text-slate-400">Responsável: {c.responsavel}{c.stakeholder ? ` · Stakeholder: ${c.stakeholder}` : ''}</p>
                         </div>
                         <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
                           <AlertaParado captacao={c} eventos={eventos} />
-                          <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{c.status}</span>
+                          <span className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${statusBadgeClass(c.status)}`}>{c.status}</span>
                           <button type="button" onClick={() => setTimelineAbertaId(timelineAbertaId === c.id ? null : c.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
                             <LuClock className="h-3 w-3" /> Linha do tempo
                           </button>
@@ -175,7 +175,7 @@ export default function Cadastro() {
                         </div>
                       )}
                       {timelineAbertaId === c.id && (
-                        <LinhaDoTempo captacaoId={c.id} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} />
+                        <LinhaDoTempo captacao={c} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} onMudarStatus={(status) => updateCaptacao(c.id, { status })} />
                       )}
                     </>
                   )}

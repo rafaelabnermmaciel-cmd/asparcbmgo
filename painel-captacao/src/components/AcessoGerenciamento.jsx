@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { LuLock, LuTriangleAlert, LuLogOut, LuMailCheck } from 'react-icons/lu';
 import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx';
 
-// Tela de login/criar conta — aparece quando ninguém está logado e a pessoa tenta abrir a aba
-// Gerenciamento. Depois de criar conta, ainda falta o administrador aprovar (ver
+// Tela de login/criar conta — aparece quando ninguém está logado e a pessoa tenta abrir o
+// Acesso restrito. Depois de criar conta, ainda falta o administrador aprovar (ver
 // AguardandoAprovacao) — isso aqui só cuida de identificar quem é.
 export function LoginGerenciamento({ entrarComSenha, criarContaComSenha }) {
   const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar'
@@ -37,7 +37,7 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha }) {
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center gap-2">
           <LuLock className="h-5 w-5 text-red-500" />
-          <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Acesso à Gerenciamento</h1>
+          <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Acesso restrito</h1>
         </div>
         <p className="mt-1 text-xs text-slate-400">Quartéis e militares são dado interno — entre com login pra editar. O resto do site continua aberto normalmente.</p>
 
@@ -68,14 +68,14 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha }) {
 
 // Aparece quando a pessoa já entrou (login/senha) mas o administrador ainda não aprovou o
 // acesso dela — o administrador já recebeu um e-mail avisando do pedido, e aprova pela aba
-// Gerenciamento → Acessos (mesma tela serve pro caso de acesso revogado depois).
+// Acesso restrito → Acessos (mesma tela serve pro caso de acesso revogado depois).
 export function AguardandoAprovacao({ email, sair }) {
   return (
     <div className="mx-auto max-w-sm px-4 py-16 text-center">
       <LuLock className="mx-auto h-8 w-8 text-amber-500" />
       <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Aguardando aprovação</h1>
       <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-        A conta <span className="font-medium">{email}</span> ainda não foi liberada pra editar a Gerenciamento.
+        A conta <span className="font-medium">{email}</span> ainda não foi liberada pra editar o Acesso restrito.
         O administrador já foi avisado por e-mail — assim que aprovar, é só entrar de novo.
       </p>
       <button type="button" onClick={sair} className={`mt-4 inline-flex items-center gap-1.5 ${btnGhost}`}>

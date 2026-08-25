@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { LuTriangleAlert } from 'react-icons/lu';
-import { STATUS_CAPTACAO } from '../lib/data.js';
 
 export const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -15,6 +14,14 @@ export function fmtR(v) {
   return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
 }
 
+// Cor do badge de status: verde pro desfecho de sucesso, cinza pro arquivado, âmbar pro que
+// ainda está em andamento (Primeiro contato / Em articulação).
+export function statusBadgeClass(status) {
+  if (status === 'Indicado') return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300';
+  if (status === 'Arquivado') return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400';
+  return 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300';
+}
+
 function nomeMilitar(m) {
   return `${m.posto} ${m.nome}`.trim();
 }
@@ -26,11 +33,7 @@ export const VAZIO_CAPTACAO = {
   parlamentarNome: '',
   objeto: '',
   valorPrevisto: '',
-  valorConfirmado: '',
-  numReunioes: 0,
-  status: STATUS_CAPTACAO[0],
-  dataAgenda: '',
-  observacoes: '',
+  observacoes: '', // "Descrição" no formulário (nome do campo mantido por compatibilidade)
 };
 
 function parlamentarKeyDe(p) {
@@ -145,7 +148,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
         )}
       </div>
       <div>
-        <p className={labelClass}>Stakeholder / contato-chave</p>
+        <p className={labelClass}>Stakeholder / contato-chave *</p>
         {stakeholdersDoParlamentar.length > 0 && !stakeholderManual ? (
           <select className={inputClass} value={valores.stakeholder} onChange={selecionarStakeholder}>
             <option value="">Selecione...</option>
@@ -174,29 +177,9 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
         <p className={labelClass}>Valor previsto (R$)</p>
         <input type="number" min="0" step="0.01" className={inputClass} value={valores.valorPrevisto} onChange={(e) => onChange('valorPrevisto', e.target.value)} placeholder="0" />
       </div>
-      <div>
-        <p className={labelClass}>Valor confirmado (R$)</p>
-        <input type="number" min="0" step="0.01" className={inputClass} value={valores.valorConfirmado} onChange={(e) => onChange('valorConfirmado', e.target.value)} placeholder="0" />
-      </div>
-      <div>
-        <p className={labelClass}>Quantas reuniões já teve</p>
-        <input type="number" min="0" className={inputClass} value={valores.numReunioes} onChange={(e) => onChange('numReunioes', e.target.value)} />
-      </div>
-      <div>
-        <p className={labelClass}>Estágio *</p>
-        <select className={inputClass} value={valores.status} onChange={(e) => onChange('status', e.target.value)}>
-          {STATUS_CAPTACAO.map((s) => <option key={s}>{s}</option>)}
-        </select>
-      </div>
-      {valores.status === 'Agenda marcada' && (
-        <div>
-          <p className={labelClass}>Data da agenda</p>
-          <input type="date" className={inputClass} value={valores.dataAgenda} onChange={(e) => onChange('dataAgenda', e.target.value)} />
-        </div>
-      )}
       <div className="sm:col-span-2">
-        <p className={labelClass}>Observações</p>
-        <textarea rows={3} className={inputClass} value={valores.observacoes} onChange={(e) => onChange('observacoes', e.target.value)} />
+        <p className={labelClass}>Descrição *</p>
+        <textarea rows={3} className={inputClass} value={valores.observacoes} onChange={(e) => onChange('observacoes', e.target.value)} placeholder="Descreva a captação: contexto, o que já foi conversado, etc." />
       </div>
     </>
   );
@@ -206,7 +189,9 @@ export function validarCaptacao(f) {
   if (!f.quartelId) return 'Selecione o quartel.';
   if (!f.responsavel.trim()) return 'Informe o responsável pela articulação.';
   if (!f.parlamentarNome) return 'Selecione o parlamentar.';
+  if (!f.stakeholder.trim()) return 'Informe o stakeholder / contato-chave.';
   if (!f.objeto.trim()) return 'Descreva o objeto da captação.';
+  if (!f.observacoes.trim()) return 'Preencha a descrição.';
   return null;
 }
 
@@ -221,10 +206,6 @@ export function paraPayloadCaptacao(f, quarteis) {
     parlamentarNome: f.parlamentarNome,
     objeto: f.objeto.trim(),
     valorPrevisto: f.valorPrevisto ? parseFloat(f.valorPrevisto) : 0,
-    valorConfirmado: f.valorConfirmado ? parseFloat(f.valorConfirmado) : 0,
-    numReunioes: parseInt(f.numReunioes, 10) || 0,
-    status: f.status,
-    dataAgenda: f.status === 'Agenda marcada' ? f.dataAgenda : '',
     observacoes: f.observacoes.trim(),
   };
 }
@@ -240,10 +221,6 @@ export function EdicaoCaptacao({ captacao, quarteis, militares, parlamentares, s
     parlamentarNome: captacao.parlamentarNome,
     objeto: captacao.objeto,
     valorPrevisto: captacao.valorPrevisto || '',
-    valorConfirmado: captacao.valorConfirmado || '',
-    numReunioes: captacao.numReunioes || 0,
-    status: captacao.status,
-    dataAgenda: captacao.dataAgenda || '',
     observacoes: captacao.observacoes || '',
   });
   const [salvando, setSalvando] = useState(false);

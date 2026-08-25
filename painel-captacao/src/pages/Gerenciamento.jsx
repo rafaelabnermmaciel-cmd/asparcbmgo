@@ -80,9 +80,9 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
         <input className={inputClass} value={f.nome} onChange={set('nome')} placeholder="Nome (ou nome de guerra)" />
       </div>
       <div>
-        <p className={labelClass}>Quartel *</p>
+        <p className={labelClass}>Quartel</p>
         <select className={inputClass} value={f.quartel_id} onChange={set('quartel_id')}>
-          <option value="">Selecione...</option>
+          <option value="">Sem quartel vinculado (vincular depois)</option>
           {quarteis.map((q) => <option key={q.id} value={q.id}>{q.nome} — {q.municipio}</option>)}
         </select>
       </div>
@@ -117,7 +117,7 @@ export default function Gerenciamento() {
     () => militares.filter((m) => !filtroQuartel || m.quartel_id === filtroQuartel).filter((m) => !busca || m.nome.toLowerCase().includes(busca.toLowerCase())),
     [militares, filtroQuartel, busca]
   );
-  const nomeQuartel = (id) => quarteis.find((q) => q.id === id)?.nome || id;
+  const nomeQuartel = (id) => (id ? quarteis.find((q) => q.id === id)?.nome || id : 'Sem quartel vinculado');
 
   async function salvarQuartel(f) {
     setErro(null);
@@ -145,9 +145,9 @@ export default function Gerenciamento() {
 
   async function salvarMilitar(f) {
     setErro(null);
-    if (!f.posto.trim() || !f.nome.trim() || !f.quartel_id) { setErro('Preencha posto, nome e quartel.'); return; }
+    if (!f.posto.trim() || !f.nome.trim()) { setErro('Preencha posto e nome.'); return; }
     try {
-      const payload = { posto: f.posto.trim(), rg: f.rg.trim(), nome: f.nome.trim(), quartel_id: f.quartel_id };
+      const payload = { posto: f.posto.trim(), rg: f.rg.trim(), nome: f.nome.trim(), quartel_id: f.quartel_id || null };
       if (editandoMilitar === null) await addMilitar(payload);
       else await updateMilitar(editandoMilitar, payload);
       setEditandoMilitar(undefined);
@@ -185,7 +185,7 @@ export default function Gerenciamento() {
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Gerenciamento</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Acesso restrito</h1>
           <p className="mt-1 text-sm text-slate-400">Quartéis e militares — adicione, edite ou remova a qualquer momento.</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">
@@ -250,8 +250,13 @@ export default function Gerenciamento() {
             </select>
           </div>
           {editandoMilitar === null && <MilitarForm initial={MILITAR_VAZIO} quarteis={quarteis} erro={erro} onCancel={() => setEditandoMilitar(undefined)} onSave={salvarMilitar} />}
+          {!busca && !filtroQuartel ? (
+            <p className="py-6 text-center text-sm text-slate-400">
+              São {militares.length} militares no Almanaque — digite um nome ou escolha um quartel acima pra ver a lista.
+            </p>
+          ) : (
           <div className="mt-3 flex flex-col gap-2">
-            {militaresFiltrados.map((m) => (
+            {militaresFiltrados.slice(0, 200).map((m) => (
               <div key={m.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
                 {editandoMilitar === m.id ? (
                   <MilitarForm initial={m} quarteis={quarteis} erro={erro} onCancel={() => setEditandoMilitar(undefined)} onSave={salvarMilitar} />
@@ -270,12 +275,16 @@ export default function Gerenciamento() {
               </div>
             ))}
             {militaresFiltrados.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhum militar encontrado.</p>}
+            {militaresFiltrados.length > 200 && (
+              <p className="py-2 text-center text-xs text-slate-400">Mostrando 200 de {militaresFiltrados.length} — refine a busca pra ver outros.</p>
+            )}
           </div>
+          )}
         </Section>
       )}
 
       {aba === 'acessos' && (
-        <Section title="Acessos à Gerenciamento">
+        <Section title="Acessos">
           <p className="mt-1 text-xs text-slate-400">Quem cria conta (e-mail/senha) fica "Pendente" até você aprovar aqui — você recebe um e-mail avisando de cada pedido novo. Pra tirar o acesso de alguém depois, é o mesmo lugar, botão "Revogar".</p>
           <div className="mt-3 flex flex-col gap-2">
             {usuarios.map((u) => (

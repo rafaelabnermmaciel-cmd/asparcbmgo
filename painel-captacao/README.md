@@ -19,19 +19,23 @@ clicável, sem precisar programar.
    a linha do tempo, e editar/excluir).
 3. **Stakeholders** (`/stakeholders`) — cadastre uma pessoa (ex: um prefeito) e marque um ou
    mais parlamentares com quem ela articula ao mesmo tempo. Depois de cadastrado, aparece pra
-   escolher no formulário de Cadastro de captação e no perfil de cada parlamentar vinculado.
-4. **Cadastrar captação** (`/cadastro`) — formulário: quartel (o campo Responsável já lista os
-   militares daquele quartel), parlamentar, stakeholder (sugere quem está vinculado ao
-   parlamentar escolhido), objeto, valor previsto, nº de reuniões, estágio (Primeiro contato →
-   Em articulação → Agenda marcada → um desfecho: Destinado, Adiado, Recusado ou Arquivado),
-   data do primeiro contato (vira automaticamente o primeiro passo da linha do tempo), anexos
-   (documentos/fotos). Cada captação tem uma **linha do tempo** (data + o que aconteceu em
-   cada passo, editável a qualquer momento) com um alerta automático se ela ficar 15+ dias
-   (🟡 esfriando) ou 30+ dias (🔴 parada) sem nenhum passo novo registrado — só enquanto ainda
-   está em andamento. Este painel só acompanha até a captação ser destinada — o que acontece
-   depois (empenho, licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma
-   notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
-5. **Gerenciamento** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
+   escolher no formulário de Cadastrar primeiro contato e no perfil de cada parlamentar
+   vinculado.
+4. **Cadastrar primeiro contato** (`/cadastro`) — formulário: quartel (o campo Responsável já
+   lista os militares vinculados àquele quartel — pool vindo do Almanaque completo de Oficiais
+   e Praças do CBMGO), parlamentar, stakeholder (obrigatório — sugere quem está vinculado ao
+   parlamentar escolhido), objeto, valor previsto, descrição (obrigatória), data do primeiro
+   contato (vira automaticamente o primeiro passo da linha do tempo), anexos (documentos/fotos).
+   Toda captação nasce **"Primeiro contato"** — não tem estágio pra escolher aqui. Dentro de
+   cada captação, a seção **"Adicionar andamento"** registra os próximos passos (data,
+   descrição, quem esteve presente, foto/documento) — lançar o primeiro andamento já deixa a
+   captação **"Em articulação"** sozinha, até o militar responsável marcar o desfecho ali mesmo:
+   **Indicado** ou **Arquivado**. Um alerta automático aparece se uma captação ainda em
+   andamento ficar 15+ dias (🟡 esfriando) ou 30+ dias (🔴 parada) sem nenhum andamento novo.
+   Este painel só acompanha até a captação ser indicada — o que acontece depois (empenho,
+   licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por
+   e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
+5. **Acesso restrito** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase). **Única aba com login** (dado de
    organização interna): entra com e-mail/senha — o e-mail do administrador libera sozinho,
    qualquer outro fica "Pendente" até o administrador aprovar (que recebe um e-mail avisando)
@@ -54,7 +58,7 @@ definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 - **Escrita**: as 5 tabelas aceitam criar/editar/remover direto do site — `captacoes` pelo
   formulário de Cadastro (e a edição/exclusão inline, tanto lá quanto no perfil do
   parlamentar); `captacao_eventos` (a linha do tempo) pelo botão "Linha do tempo" de cada
-  captação; `quarteis` e `militares` pela aba **Gerenciamento**; `stakeholders` pela aba
+  captação; `quarteis` e `militares` pela aba **Acesso restrito**; `stakeholders` pela aba
   **Stakeholders** (vinculando um ou mais parlamentares), editável/excluível tanto ali quanto
   no perfil de cada parlamentar vinculado. Nenhuma delas precisa do Table Editor do Supabase
   pro dia a dia.
@@ -65,10 +69,10 @@ definidas em `supabase/schema.sql`, não o sigilo da chave. Isso significa:
 
 ⚠️ **Sobre segurança**: a maior parte do site não tem login — qualquer pessoa com o link
 consegue cadastrar captações, stakeholders etc. (é dado que a equipe toda mexe no dia a dia).
-A aba **Gerenciamento** é diferente: exige **login do Supabase Auth** (e-mail/senha)
+A aba **Acesso restrito** é diferente: exige **login do Supabase Auth** (e-mail/senha)
 **e** aprovação do administrador — só o e-mail do administrador (fixado no gatilho de
 `auth.users`, ver `supabase/schema.sql`, seção 4.2) entra liberado sozinho; qualquer outra
-conta fica pendente até ser aprovada pela aba Gerenciamento → Acessos (o administrador recebe
+conta fica pendente até ser aprovada pela aba Acesso restrito → Acessos (o administrador recebe
 um e-mail avisando de cada pedido). Se um dia o resto do site também precisar desse controle,
 dá pra estender o mesmo esquema sem redesenhar nada — me avise.
 
@@ -125,13 +129,13 @@ npm run sync:parlamentares-go
 Isso regrava `public/data/parlamentares-go.json` só com os 20 parlamentares de Goiás (17
 deputados federais + 3 senadores).
 
-## Login e aprovação de acesso (aba Gerenciamento)
+## Login e aprovação de acesso (aba Acesso restrito)
 
 Usa o **Supabase Auth** (já incluso no mesmo projeto, sem conta nova) — e-mail/senha.
 O e-mail do administrador (fixado no gatilho em `auth.users`, ver `schema.sql`) entra liberado
 sozinho; qualquer outra conta nova cai "pendente" e dispara um e-mail (via EmailJS, template
 separado do de captações) avisando o administrador. Aprovação (ou revogação depois) é feita
-pela própria aba **Gerenciamento → Acessos**. Configuração completa (Site URL/Redirect URLs no
+pela própria aba **Acesso restrito → Acessos**. Configuração completa (Site URL/Redirect URLs no
 Supabase, template do e-mail de pedido de acesso) em **SETUP.md**, seção 7.
 
 ## Stack
