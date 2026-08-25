@@ -359,6 +359,9 @@ end $$;
 -- militares dos Almanaques de Oficiais e Praças do CBMGO (10/08/2026), não só quem já tinha
 -- quartel vinculado. Ajuste/adicione/apague direto pela aba Acesso restrito ou pelo Table
 -- Editor a qualquer momento.
+--
+-- Duas unidades (LIGABOM e AP) não têm endereço na página oficial, só telefone — o município
+-- fica em branco pra elas (nada foi "adivinhado"); preencha pela aba Acesso restrito se souber.
 insert into quarteis (id, nome, municipio, tipo) values
   ('gcg', 'GCG', 'Goiânia', 'Órgãos de Direção Geral'),
   ('gscg', 'GSCG', 'Goiânia', 'Órgãos de Direção Geral'),
@@ -366,7 +369,7 @@ insert into quarteis (id, nome, municipio, tipo) values
   ('gab', 'GAB', 'Goiânia', 'Órgãos de Direção Geral'),
   ('ajo', 'AJO', 'Goiânia', 'Órgãos de Direção Geral'),
   ('sg', 'SG', 'Goiânia', 'Órgãos de Direção Geral'),
-  ('ligabom', 'LIGABOM', 'Goiânia', 'Órgãos de Direção Geral'),
+  ('ligabom', 'LIGABOM', '', 'Órgãos de Direção Geral'),
   ('acg', 'ACG', 'Goiânia', 'Órgãos de Direção Geral'),
   ('oa-cbmgo', 'OA/CBMGO', 'Goiânia', 'Órgãos de Direção Geral'),
   ('omd', 'OMD', 'Goiânia', 'Órgãos de Direção Geral'),
@@ -383,7 +386,7 @@ insert into quarteis (id, nome, municipio, tipo) values
   ('ceman', 'CEMAN', 'Goiânia', 'Órgãos de Apoio'),
   ('asf', 'ASF', 'Goiânia', 'Órgãos de Apoio'),
   ('aspab', 'ASPAB', 'Goiânia', 'Órgãos de Apoio'),
-  ('ap', 'AP', 'Goiânia', 'Órgãos de Apoio'),
+  ('ap', 'AP', '', 'Órgãos de Apoio'),
   ('asbm-al', 'ASBM/AL', 'Goiânia', 'Assistências'),
   ('asbm-eb', 'ASBM/EB', 'Goiânia', 'Assistências'),
   ('asbm-cm', 'ASBM/CM', 'Goiânia', 'Assistências'),

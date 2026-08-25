@@ -260,8 +260,8 @@ Já no formulário de **Cadastrar primeiro contato**, tem o campo **"Data do pri
 (vem preenchido com a data de hoje, mas dá pra mudar se o primeiro contato foi antes) — ao
 cadastrar, esse dia já entra como o primeiro passo da linha do tempo automaticamente.
 
-Depois disso, dentro de qualquer captação (botão **"Linha do tempo"** no Cadastro, ou abrindo a
-captação no perfil do parlamentar) tem a seção **"Adicionar andamento"** — data, descrição,
+Depois disso, dentro de qualquer captação (botão **"Linha do tempo"** na aba **Adicionar
+andamento**, ou abrindo a captação no perfil do parlamentar) tem a seção pra registrar — data, descrição,
 quem esteve presente e foto/documento — pra registrar os próximos passos (ex: "reunião
 marcada", "foram ao Congresso Nacional"). Lançar o primeiro andamento já deixa a captação **"Em
 articulação"** sozinha; ela só sai daí quando o militar responsável marca o desfecho — botões

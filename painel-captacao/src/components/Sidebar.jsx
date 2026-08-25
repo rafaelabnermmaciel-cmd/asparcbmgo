@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuSettings } from 'react-icons/lu';
+import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuClock, LuSettings } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 
 export const NAV = [
@@ -7,6 +7,7 @@ export const NAV = [
   { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
   { to: '/stakeholders', label: 'Stakeholders', icon: LuUsers },
   { to: '/cadastro', label: 'Cadastrar primeiro contato', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
+  { to: '/andamentos', label: 'Adicionar andamento', mobileLabel: 'Andamento', icon: LuClock },
   { to: '/gerenciamento', label: 'Acesso restrito', icon: LuSettings },
 ];
 
