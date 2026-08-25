@@ -76,13 +76,18 @@ async function statusSenado(tipo, numero) {
   // /materia/situacaoatual/{codigo}. Formato de resposta desse endpoint ainda não confirmado —
   // loga sempre até confirmar.
   const situacao = await getJson(`${SENADO_BASE}/materia/situacaoatual/${codigo}`);
-  console.log(`[senado] ${tipo} ${numero}: resposta de /materia/situacaoatual/${codigo}: ${JSON.stringify(situacao).slice(0, 3000)}`);
+  // Confirmado em produção (24/08): o wrapper "SituacaoAtualMateria" e o caminho até Autuacao
+  // estavam certos, mas o campo de status dentro de cada Autuacao é "Situacoes.Situacao" (plural
+  // + array), não "Situacao" (singular) como o código assumia antes — por isso 10/11 proposições
+  // batiam a estrutura inteira e ainda assim caíam no "formato inesperado".
   const materiaSitu = situacao?.SituacaoAtualMateria?.Materias?.Materia;
   const itemSitu = Array.isArray(materiaSitu) ? materiaSitu[0] : materiaSitu;
   const situAtual = itemSitu?.SituacaoAtual?.Autuacoes?.Autuacao;
-  const situ = Array.isArray(situAtual) ? situAtual[0]?.Situacao : situAtual?.Situacao;
+  const autuacao = Array.isArray(situAtual) ? situAtual[0] : situAtual;
+  const situacoesLista = autuacao?.Situacoes?.Situacao;
+  const situ = Array.isArray(situacoesLista) ? situacoesLista[0] : situacoesLista;
   if (!situ?.DataSituacao) {
-    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} — /materia/situacaoatual não bateu com o formato esperado, ver log acima.`);
+    console.warn(`[senado] ${tipo} ${numero}: matéria ${codigo} — /materia/situacaoatual não bateu com o formato esperado, resposta: ${JSON.stringify(situacao).slice(0, 3000)}`);
     return null;
   }
   return {
