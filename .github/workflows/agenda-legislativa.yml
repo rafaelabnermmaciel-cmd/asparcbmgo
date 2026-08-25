@@ -1,8 +1,9 @@
 name: Agenda legislativa semanal — Painel Parlamentar Nacional
 
 # Manda um resumo por WhatsApp (via fetch-agenda.js): quais dos projetos monitorados estão
-# pautados pra sessão/comissão nos próximos 7 dias, e quais projetos NOVOS relacionados a
-# segurança pública/bombeiros/desastres/militares foram apresentados na última semana (pra
+# pautados pra sessão/comissão NESTA semana (domingo a sábado — janela fixa, não rolante: as
+# execuções diárias não empurram o fim pra semana seguinte), e quais projetos NOVOS relacionados
+# a segurança pública/bombeiros/desastres/militares foram apresentados nos últimos 7 dias (pra
 # revisar e adicionar manualmente ao acompanhamento — este workflow nunca adiciona nada
 # sozinho). Sempre manda a mensagem, mesmo sem nada de novo — é um resumo periódico, não um
 # alerta de mudança (esse é o workflow "Verificar tramitação de projetos").
