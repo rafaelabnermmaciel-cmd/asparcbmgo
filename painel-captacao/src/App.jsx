@@ -10,6 +10,7 @@ const Parlamentares = lazy(() => import('./pages/Parlamentares.jsx'));
 const ParlamentarPerfil = lazy(() => import('./pages/ParlamentarPerfil.jsx'));
 const Stakeholders = lazy(() => import('./pages/Stakeholders.jsx'));
 const Cadastro = lazy(() => import('./pages/Cadastro.jsx'));
+const Andamentos = lazy(() => import('./pages/Andamentos.jsx'));
 const Gerenciamento = lazy(() => import('./pages/Gerenciamento.jsx'));
 
 function AvisoNaoConfigurado() {
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
             <Route path="/stakeholders" element={<Stakeholders />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/andamentos" element={<Andamentos />} />
             <Route path="/gerenciamento" element={<Gerenciamento />} />
           </Routes>
         </Suspense>

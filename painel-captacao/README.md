@@ -8,7 +8,7 @@ captação) e um formulário de cadastro de articulações.
 **Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
 clicável, sem precisar programar.
 
-## Estrutura das 5 seções
+## Estrutura das 6 seções
 
 1. **Dashboard** (`/`) — pódio e ranking dos quartéis que mais captam (R$) e mais articulam
    (cadastros + reuniões), com níveis (bronze/prata/ouro/diamante) e atividade recente.
@@ -26,16 +26,18 @@ clicável, sem precisar programar.
    e Praças do CBMGO), parlamentar, stakeholder (obrigatório — sugere quem está vinculado ao
    parlamentar escolhido), objeto, valor previsto, descrição (obrigatória), data do primeiro
    contato (vira automaticamente o primeiro passo da linha do tempo), anexos (documentos/fotos).
-   Toda captação nasce **"Primeiro contato"** — não tem estágio pra escolher aqui. Dentro de
-   cada captação, a seção **"Adicionar andamento"** registra os próximos passos (data,
-   descrição, quem esteve presente, foto/documento) — lançar o primeiro andamento já deixa a
-   captação **"Em articulação"** sozinha, até o militar responsável marcar o desfecho ali mesmo:
+   Toda captação nasce **"Primeiro contato"** — não tem estágio pra escolher aqui; os próximos
+   passos entram pela aba **Adicionar andamento**.
+5. **Adicionar andamento** (`/andamentos`) — lista de captações já cadastradas, filtrável por
+   quartel; abrir a "Linha do tempo" de uma delas registra os próximos passos (data, descrição,
+   quem esteve presente, foto/documento) — lançar o primeiro andamento já deixa a captação
+   **"Em articulação"** sozinha, até o militar responsável marcar o desfecho ali mesmo:
    **Indicado** ou **Arquivado**. Um alerta automático aparece se uma captação ainda em
    andamento ficar 15+ dias (🟡 esfriando) ou 30+ dias (🔴 parada) sem nenhum andamento novo.
    Este painel só acompanha até a captação ser indicada — o que acontece depois (empenho,
-   licitação, entrega) é acompanhado no painel-nacional. A cada cadastro, uma notificação por
-   e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
-5. **Acesso restrito** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
+   licitação, entrega) é acompanhado no painel-nacional. A cada cadastro/edição/exclusão, uma
+   notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
+6. **Acesso restrito** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares
    direto no site (sem precisar entrar no Supabase). **Única aba com login** (dado de
    organização interna): entra com e-mail/senha — o e-mail do administrador libera sozinho,
    qualquer outro fica "Pendente" até o administrador aprovar (que recebe um e-mail avisando)
