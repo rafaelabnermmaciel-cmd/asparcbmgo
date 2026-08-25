@@ -28,18 +28,11 @@ export default function Cadastro() {
   const [filtroQuartel, setFiltroQuartel] = useState('');
   const [editandoId, setEditandoId] = useState(null);
   const [timelineAbertaId, setTimelineAbertaId] = useState(null);
-  const [andamentoCaptacaoId, setAndamentoCaptacaoId] = useState('');
 
   const cadastrosFiltrados = useMemo(
     () => (filtroQuartel ? captacoes.filter((c) => c.quartelId === filtroQuartel) : captacoes),
     [captacoes, filtroQuartel]
   );
-
-  const captacoesOrdenadas = useMemo(
-    () => captacoes.slice().sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || '')),
-    [captacoes]
-  );
-  const andamentoCaptacao = captacoes.find((c) => String(c.id) === String(andamentoCaptacaoId));
 
   async function removerCaptacao(c) {
     if (!confirm(`Excluir a captação "${c.objeto}" (${c.quartelNome} · ${c.parlamentarNome})? Essa ação não pode ser desfeita.`)) return;
@@ -78,10 +71,10 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
+    <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Cadastrar primeiro contato</h1>
-        <p className="mt-1 text-sm text-slate-400">Registre o primeiro contato de uma articulação com parlamentar à esquerda — os próximos passos entram como andamento à direita, até o militar responsável marcar o desfecho.</p>
+        <p className="mt-1 text-sm text-slate-400">Registre o primeiro contato de uma articulação com parlamentar — os próximos passos entram como andamento ali embaixo, até o militar responsável marcar o desfecho.</p>
       </ScrollReveal>
 
       {quarteis.length === 0 && (
@@ -91,9 +84,8 @@ export default function Cadastro() {
         </ScrollReveal>
       )}
 
-      <ScrollReveal delay={0.06} className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+      <ScrollReveal delay={0.06} className="mt-5">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
-          <p className="sm:col-span-2 text-sm font-semibold text-slate-900 dark:text-white">Cadastrar primeiro contato</p>
           <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
           <div>
             <p className={labelClass}>Data do primeiro contato *</p>
@@ -123,38 +115,18 @@ export default function Cadastro() {
             </button>
           </div>
         </form>
-
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900 dark:text-white">
-            <LuClock className="h-4 w-4 text-red-500" /> Adicionar andamento
-          </p>
-          <p className="mt-1 text-xs text-slate-400">Escolha uma captação já cadastrada pra registrar um novo andamento (reunião, visita, atualização) ou marcar o desfecho — Indicado ou Arquivado.</p>
-          <div className="mt-3">
-            <p className={labelClass}>Captação</p>
-            <select className={inputClass} value={andamentoCaptacaoId} onChange={(e) => setAndamentoCaptacaoId(e.target.value)}>
-              <option value="">Selecione...</option>
-              {captacoesOrdenadas.map((c) => (
-                <option key={c.id} value={c.id}>{c.quartelNome} · {c.parlamentarNome} · {c.objeto} ({c.status})</option>
-              ))}
-            </select>
-          </div>
-          {andamentoCaptacao ? (
-            <LinhaDoTempo
-              captacao={andamentoCaptacao}
-              eventos={eventos}
-              addEvento={addEvento}
-              removeEvento={removeEvento}
-              onMudarStatus={(status) => updateCaptacao(andamentoCaptacao.id, { status })}
-            />
-          ) : (
-            <p className="mt-4 text-xs text-slate-400">{captacoesOrdenadas.length ? 'Selecione uma captação acima.' : 'Nenhuma captação cadastrada ainda.'}</p>
-          )}
-        </div>
       </ScrollReveal>
 
       <ScrollReveal delay={0.1} className="mt-8">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Captações já cadastradas ({cadastrosFiltrados.length})</p>
+        <div className="mb-1 flex items-center gap-1.5">
+          <LuClock className="h-4 w-4 text-red-500" />
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Adicionar andamento</p>
+        </div>
+        <p className="text-xs text-slate-400">
+          Tudo aqui fica "Em articulação" até o militar responsável marcar o desfecho — Indicado ou Arquivado — dentro da linha do tempo de cada captação. Filtre por quartel pra achar mais rápido.
+        </p>
+        <div className="mt-3 mb-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Captações cadastradas ({cadastrosFiltrados.length})</p>
           <select className={`${inputClass} w-auto`} value={filtroQuartel} onChange={(e) => setFiltroQuartel(e.target.value)}>
             <option value="">Todos os quartéis</option>
             {quarteis.map((q) => <option key={q.id} value={q.id}>{q.nome}</option>)}
