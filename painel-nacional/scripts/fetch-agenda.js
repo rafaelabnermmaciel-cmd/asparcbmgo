@@ -58,6 +58,15 @@ function maisDias(base, dias) {
   d.setUTCDate(d.getUTCDate() + dias);
   return d.toISOString().slice(0, 10);
 }
+// Domingo da semana que contém diaISO — janela fixa domingo–sábado, não "hoje + 7 dias corridos".
+// Rodando todo dia às 8h, uma janela rolante (hoje+7) ia empurrando o fim pra dentro da semana
+// seguinte a cada dia que passava (ex: rodando numa terça, já incluía o domingo seguinte) —
+// confirmado pelo usuário recebendo pauta do dia 1º/set numa semana que ia até 29/ago. Com a
+// semana fixa, o domingo à noite (quando a janela "vira") já cai no próximo domingo por si só.
+function inicioDaSemanaISO(diaISO) {
+  const d = new Date(`${diaISO}T00:00:00Z`);
+  return maisDias(diaISO, -d.getUTCDay());
+}
 function fmtHora(iso) {
   const hora = (iso || '').split('T')[1];
   return hora ? hora.slice(0, 5) : '';
@@ -299,9 +308,10 @@ function truncar(texto, max) {
 async function main() {
   const data = JSON.parse(readFileSync(PATH, 'utf-8'));
   const monitorados = (data.proposicoes || []).filter((p) => !p.encerrada);
-  const inicio = hojeISO();
-  const fim = maisDias(inicio, 7);
-  const inicioMenos7 = maisDias(inicio, -7);
+  const hoje = hojeISO();
+  const inicio = inicioDaSemanaISO(hoje);
+  const fim = maisDias(inicio, 6);
+  const inicioMenos7 = maisDias(hoje, -7);
 
   let camaraFalhou = false;
   let senadoFalhou = false;
@@ -349,7 +359,7 @@ async function main() {
     '',
     '🔎 Possíveis projetos novos (segurança pública / bombeiros / desastres / militares) — revisar e adicionar manualmente:',
     linhasNovos,
-  ].join('\n');
+  ].join('\n'),
 
   console.log(mensagem);
   await notificarWhatsApp(mensagem);
