@@ -244,7 +244,7 @@ function mesclarPorDia(...mapas) {
 
 function formatarPauta(porDia) {
   if (porDia.size === 0) {
-    return 'Nenhuma sessão com item de interesse do CBM-GO na Câmara ou no Senado nos próximos 7 dias.';
+    return 'Nenhuma sessão com item de interesse do CBM-GO na Câmara ou no Senado nesta semana.';
   }
   const dias = [...porDia.keys()].sort();
   return dias
