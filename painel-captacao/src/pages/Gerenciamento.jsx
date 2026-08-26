@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { LuTriangleAlert, LuLogOut, LuCheck, LuX } from 'react-icons/lu';
-import { useQuarteis, useMilitares, useUsuariosAprovados, slugify } from '../lib/data.js';
+import { LuTriangleAlert, LuLogOut, LuCheck, LuX, LuKeyRound } from 'react-icons/lu';
+import { useQuarteis, useMilitares, useUsuariosAprovados, useSolicitacoesSenha, slugify } from '../lib/data.js';
 import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import { LoginGerenciamento, AguardandoAprovacao, RedefinirSenha } from '../components/AcessoGerenciamento.jsx';
@@ -100,6 +100,7 @@ export default function Gerenciamento() {
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
   const { usuarios, definirAprovacao } = useUsuariosAprovados();
+  const { solicitacoes: solicitacoesSenha, pedirRedefinicaoSenha, atenderSolicitacao } = useSolicitacoesSenha();
 
   const [aba, setAba] = useState('quarteis');
   const [busca, setBusca] = useState('');
@@ -177,9 +178,17 @@ export default function Gerenciamento() {
     }
   }
 
+  async function aprovarRedefinicaoSenha(s) {
+    try {
+      await atenderSolicitacao(s.id, s.email, enviarRecuperacaoSenha);
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   if (carregandoAuth) return null;
   if (recuperacao) return <RedefinirSenha atualizarSenha={atualizarSenha} sair={sair} />;
-  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} enviarRecuperacaoSenha={enviarRecuperacaoSenha} />;
+  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} pedirRedefinicaoSenha={pedirRedefinicaoSenha} />;
   if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
 
   return (
@@ -306,6 +315,30 @@ export default function Gerenciamento() {
               </div>
             ))}
             {usuarios.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Ninguém entrou ainda.</p>}
+          </div>
+        </Section>
+      )}
+
+      {aba === 'acessos' && (
+        <Section title="Pedidos de redefinição de senha">
+          <p className="mt-1 text-xs text-slate-400">
+            Militar que esqueceu a senha pede aqui — clique em "Aprovar e enviar link" pra mandar o e-mail de redefinição pra ele. Só funciona se a pessoa já tiver conta criada; se nunca criou, oriente ela a usar "Criar conta" em vez disso.
+          </p>
+          <div className="mt-3 flex flex-col gap-2">
+            {solicitacoesSenha.map((s) => (
+              <div key={s.id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{s.email}</p>
+                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${s.atendido ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
+                    {s.atendido ? `Link enviado em ${new Date(s.atendido_em).toLocaleString('pt-BR')}` : 'Aguardando aprovação'}
+                  </span>
+                </div>
+                <button className={btnPrimary} onClick={() => aprovarRedefinicaoSenha(s)}>
+                  <LuKeyRound className="mr-1 inline h-3 w-3" />{s.atendido ? 'Reenviar link' : 'Aprovar e enviar link'}
+                </button>
+              </div>
+            ))}
+            {solicitacoesSenha.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhum pedido de redefinição de senha.</p>}
           </div>
         </Section>
       )}

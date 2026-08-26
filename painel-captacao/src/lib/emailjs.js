@@ -74,3 +74,32 @@ export async function notificarPedidoAcesso(emailSolicitante) {
     console.warn('[emailjs] falha ao enviar notificação de acesso:', err.message);
   }
 }
+
+// Avisa o administrador quando alguém pede pra redefinir a senha esquecida (fica aguardando
+// aprovação em Acesso restrito → Acessos → "Pedidos de redefinição de senha"). Reaproveita o
+// mesmo template do pedido de acesso (mesmas variáveis) — marca o e-mail pra não confundir
+// com pedido de conta nova.
+export async function notificarPedidoSenha(email) {
+  if (!emailjsAcessoConfigurado) {
+    console.warn('[emailjs] template de pedido de acesso não configurado ainda — pulando notificação de redefinição de senha.');
+    return;
+  }
+  try {
+    const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        service_id: EMAILJS_SERVICE_ID,
+        template_id: EMAILJS_TEMPLATE_ID_ACESSO,
+        user_id: EMAILJS_PUBLIC_KEY,
+        template_params: {
+          to_email: EMAIL_NOTIFICACAO_PARA,
+          email_solicitante: `[esqueceu a senha] ${email}`,
+        },
+      }),
+    });
+    if (!res.ok) console.warn('[emailjs] falha ao enviar notificação de redefinição de senha:', res.status, await res.text().catch(() => ''));
+  } catch (err) {
+    console.warn('[emailjs] falha ao enviar notificação de redefinição de senha:', err.message);
+  }
+}

@@ -4,9 +4,10 @@ import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx
 
 // Tela de login/criar conta/recuperar senha — aparece quando ninguém está logado e a pessoa
 // tenta abrir o Acesso restrito. Depois de criar conta, ainda falta o administrador aprovar
-// (ver AguardandoAprovacao) — isso aqui só cuida de identificar quem é (ou de mandar o e-mail
-// de recuperação, se a pessoa esqueceu a senha).
-export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, enviarRecuperacaoSenha }) {
+// (ver AguardandoAprovacao) — e o "Esqueci minha senha" também: só REGISTRA o pedido aqui, o
+// e-mail de verdade só sai depois que o administrador aprovar em Acesso restrito → Acessos
+// (ver Gerenciamento.jsx e a tabela solicitacoes_senha em supabase/schema.sql).
+export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRedefinicaoSenha }) {
   const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar' | 'recuperar'
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -32,8 +33,8 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, enviarR
         await criarContaComSenha(email, senha);
         setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar. O administrador já recebeu um e-mail avisando do seu pedido — depois de aprovado, é só entrar de novo.');
       } else {
-        await enviarRecuperacaoSenha(email);
-        setAvisoConta(`Mandamos um link pra ${email} — clique nele pra escolher uma senha nova.`);
+        await pedirRedefinicaoSenha(email);
+        setAvisoConta('Pedido enviado! Assim que o administrador aprovar, você recebe um link por e-mail pra escolher a senha nova.');
       }
     } catch (err) {
       setErro(err.message || 'Falha ao entrar. Tente novamente.');
@@ -72,7 +73,7 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, enviarR
           {erro && <p className="flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5 shrink-0" /> {erro}</p>}
           {avisoConta && <p className="flex items-center gap-1.5 text-xs text-emerald-600"><LuMailCheck className="h-3.5 w-3.5 shrink-0" /> {avisoConta}</p>}
           <button type="submit" disabled={enviando} className={btnPrimary}>
-            {enviando ? 'Enviando...' : modo === 'entrar' ? 'Entrar' : modo === 'criar' ? 'Criar conta' : 'Mandar link de recuperação'}
+            {enviando ? 'Enviando...' : modo === 'entrar' ? 'Entrar' : modo === 'criar' ? 'Criar conta' : 'Pedir redefinição de senha'}
           </button>
         </form>
 

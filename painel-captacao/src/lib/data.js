@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase, supabaseConfigurado } from './supabase.js';
-import { notificarCaptacao } from './emailjs.js';
+import { notificarCaptacao, notificarPedidoSenha } from './emailjs.js';
 
 // Deputados/senadores/votos de Goiás continuam vindo de JSON estático (são dados só de
 // leitura, filtrados do painel-nacional — ver scripts/gerar-parlamentares-go.js). Quartéis,
@@ -386,6 +386,44 @@ export function useUsuariosAprovados() {
   }, [recarregar]);
 
   return { loading: state.loading, usuarios: state.usuarios, definirAprovacao };
+}
+
+// Pedidos de redefinição de senha: quem esqueceu a senha "pede" aqui (funciona sem estar
+// logado — só cria a linha), e um administrador aprovado é quem manda o link de verdade,
+// clicando em "Aprovar e enviar link" na aba Acesso restrito → Acessos.
+export function useSolicitacoesSenha() {
+  const [state, setState] = useState({ loading: true, solicitacoes: [] });
+
+  const recarregar = useCallback(async () => {
+    if (!supabaseConfigurado) { setState({ loading: false, solicitacoes: [] }); return; }
+    try {
+      const linhas = await fetchAllRows('solicitacoes_senha', 'criado_em');
+      setState({ loading: false, solicitacoes: linhas.slice().reverse() });
+    } catch (err) {
+      console.warn('[data] falha ao carregar solicitacoes_senha:', err.message);
+      setState({ loading: false, solicitacoes: [] });
+    }
+  }, []);
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const pedirRedefinicaoSenha = useCallback(async (emailBruto) => {
+    const email = emailBruto.trim().toLowerCase();
+    const { error } = await supabase.from('solicitacoes_senha').insert({ email });
+    if (error) throw new Error(error.message);
+    notificarPedidoSenha(email);
+  }, []);
+
+  // `enviarLink` é a função enviarRecuperacaoSenha de lib/auth.js — quem manda o e-mail de
+  // verdade (chama a API do Supabase Auth); aqui só marca o pedido como atendido depois.
+  const atenderSolicitacao = useCallback(async (id, email, enviarLink) => {
+    await enviarLink(email);
+    const { error } = await supabase.from('solicitacoes_senha').update({ atendido: true, atendido_em: new Date().toISOString() }).eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, solicitacoes: state.solicitacoes, pedirRedefinicaoSenha, atenderSolicitacao };
 }
 
 // Sugere um id curto (sem espaço/acento) a partir do nome do quartel, pra facilitar o
