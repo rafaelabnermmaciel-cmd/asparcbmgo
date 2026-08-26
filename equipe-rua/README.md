@@ -5,27 +5,33 @@ App de organização da equipe de rua da campanha: cadastro de pessoas, localida
 paredão, eventos nas RAs), com contador de contratados vs. quem está na rua no dia, resumo do
 dia por tipo de atividade e por RA, e alerta de RA sem visita há muito tempo.
 
-HTML/CSS/JS puro (sem build, sem framework) + **Firebase Firestore** como banco de dados, com
+HTML/CSS/JS puro (sem build, sem framework) + **Supabase** (Postgres) como banco de dados, com
 sincronização em tempo real entre todos os aparelhos da equipe. Reaproveita a paleta e a
 estrutura de navegação (sidebar + barra inferior no celular, tema claro/escuro) dos outros
-painéis deste repositório.
+painéis deste repositório — inclusive o mesmo Supabase usado no `painel-captacao`.
 
 **Primeira vez configurando?** Vá direto pro **[SETUP.md](./SETUP.md)** — passo a passo
-clicável para criar o projeto no Firebase, sem precisar programar.
+clicável para criar o projeto no Supabase, sem precisar programar.
 
 ## Estrutura
 
 - `index.html` — layout (sidebar, barra mobile, contador do topo, modais).
 - `css/styles.css` — pequenos ajustes além do Tailwind (via CDN).
-- `js/firebase-config.js` — **edite este arquivo** com os dados do seu projeto Firebase.
-- `js/firestore.js` — conexão com o Firestore: CRUD das 3 coleções, listeners em tempo real
-  (`onSnapshot`) e a função de pré-carga do cronograma.
+- `supabase/schema.sql` — script único que cria as 3 tabelas, as permissões (RLS) e o tempo
+  real no seu projeto Supabase (cole no SQL Editor, ver SETUP.md).
+- `js/supabase-config.js` — **edite este arquivo** com a URL e a chave do seu projeto Supabase.
+- `js/db.js` — conexão com o Supabase: CRUD das 3 tabelas, listeners em tempo real
+  (`postgres_changes`) e a função de pré-carga do cronograma. Converte entre os nomes de campo
+  em camelCase usados pelo app e as colunas em snake_case do banco.
 - `js/seed-data.js` — dados do Plano de Ação (localidades e agenda de 31/08 a 24/09/2026) e
   referências fixas (capacidade de panfletagem, janela do mini trio, prazo final de visitas).
 - `js/app.js` — toda a interface: navegação entre páginas, renderização das telas, filtros e
   formulários.
 
-## Coleções no Firestore
+## Tabelas no Supabase
+
+Colunas em snake_case no banco (ver `supabase/schema.sql`); `js/db.js` converte pra camelCase
+antes de entregar pro resto do app — por isso as listas abaixo já usam os nomes camelCase.
 
 **`pessoas`**
 `nome`, `contato`, `funcao`, `status` (`ativo` | `inativo`).
