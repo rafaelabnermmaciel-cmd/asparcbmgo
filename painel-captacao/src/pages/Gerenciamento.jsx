@@ -3,7 +3,7 @@ import { LuTriangleAlert, LuLogOut, LuCheck, LuX, LuKeyRound } from 'react-icons
 import { useQuarteis, useMilitares, useUsuariosAprovados, useSolicitacoesSenha, slugify } from '../lib/data.js';
 import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
-import { LoginGerenciamento, AguardandoAprovacao, RedefinirSenha } from '../components/AcessoGerenciamento.jsx';
+import { LoginGerenciamento, AguardandoAprovacao } from '../components/AcessoGerenciamento.jsx';
 
 const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -96,7 +96,7 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
 }
 
 export default function Gerenciamento() {
-  const { loading: carregandoAuth, session, aprovado, recuperacao, entrarComSenha, criarContaComSenha, enviarRecuperacaoSenha, atualizarSenha, sair } = useAuth();
+  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, sair } = useAuth();
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
   const { usuarios, definirAprovacao } = useUsuariosAprovados();
@@ -180,14 +180,16 @@ export default function Gerenciamento() {
 
   async function aprovarRedefinicaoSenha(s) {
     try {
-      await atenderSolicitacao(s.id, s.email, enviarRecuperacaoSenha);
+      const jaTinhaConta = await atenderSolicitacao(s.id);
+      if (!jaTinhaConta) {
+        alert(`"${s.email}" ainda não tem conta criada aqui — peça pra essa pessoa usar "Criar conta" em vez de "Esqueci minha senha".`);
+      }
     } catch (err) {
       alert(err.message);
     }
   }
 
   if (carregandoAuth) return null;
-  if (recuperacao) return <RedefinirSenha atualizarSenha={atualizarSenha} sair={sair} />;
   if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} pedirRedefinicaoSenha={pedirRedefinicaoSenha} />;
   if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
 
@@ -322,7 +324,7 @@ export default function Gerenciamento() {
       {aba === 'acessos' && (
         <Section title="Pedidos de redefinição de senha">
           <p className="mt-1 text-xs text-slate-400">
-            Militar que esqueceu a senha pede aqui — clique em "Aprovar e enviar link" pra mandar o e-mail de redefinição pra ele. Só funciona se a pessoa já tiver conta criada; se nunca criou, oriente ela a usar "Criar conta" em vez disso.
+            Militar que esqueceu a senha já digita a senha nova e pede aqui — clique em "Autorizar" pra ela passar a valer na hora, sem nenhum e-mail. Só funciona se a pessoa já tiver conta criada; se nunca criou, oriente ela a usar "Criar conta" em vez disso (nesse caso o botão avisa que não deu certo).
           </p>
           <div className="mt-3 flex flex-col gap-2">
             {solicitacoesSenha.map((s) => (
@@ -330,12 +332,14 @@ export default function Gerenciamento() {
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{s.email}</p>
                   <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${s.atendido ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
-                    {s.atendido ? `Link enviado em ${new Date(s.atendido_em).toLocaleString('pt-BR')}` : 'Aguardando aprovação'}
+                    {s.atendido ? `Autorizado em ${new Date(s.atendido_em).toLocaleString('pt-BR')}` : 'Aguardando autorização'}
                   </span>
                 </div>
-                <button className={btnPrimary} onClick={() => aprovarRedefinicaoSenha(s)}>
-                  <LuKeyRound className="mr-1 inline h-3 w-3" />{s.atendido ? 'Reenviar link' : 'Aprovar e enviar link'}
-                </button>
+                {!s.atendido && (
+                  <button className={btnPrimary} onClick={() => aprovarRedefinicaoSenha(s)}>
+                    <LuKeyRound className="mr-1 inline h-3 w-3" />Autorizar
+                  </button>
+                )}
               </div>
             ))}
             {solicitacoesSenha.length === 0 && <p className="py-4 text-center text-sm text-slate-400">Nenhum pedido de redefinição de senha.</p>}

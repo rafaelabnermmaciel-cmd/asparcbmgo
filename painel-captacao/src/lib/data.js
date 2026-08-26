@@ -388,9 +388,11 @@ export function useUsuariosAprovados() {
   return { loading: state.loading, usuarios: state.usuarios, definirAprovacao };
 }
 
-// Pedidos de redefinição de senha: quem esqueceu a senha "pede" aqui (funciona sem estar
-// logado — só cria a linha), e um administrador aprovado é quem manda o link de verdade,
-// clicando em "Aprovar e enviar link" na aba Acesso restrito → Acessos.
+// Pedidos de redefinição de senha: quem esqueceu a senha já digita a senha nova aqui (funciona
+// sem estar logado — a senha vira um hash guardado só até a aprovação, nunca texto puro), e um
+// administrador aprovado é quem autoriza — na hora, sem nenhum e-mail — clicando em "Autorizar"
+// na aba Acesso restrito → Acessos. Ver as funções pedir_redefinicao_senha/
+// autorizar_redefinicao_senha em supabase/schema.sql.
 export function useSolicitacoesSenha() {
   const [state, setState] = useState({ loading: true, solicitacoes: [] });
 
@@ -407,20 +409,20 @@ export function useSolicitacoesSenha() {
 
   useEffect(() => { recarregar(); }, [recarregar]);
 
-  const pedirRedefinicaoSenha = useCallback(async (emailBruto) => {
+  const pedirRedefinicaoSenha = useCallback(async (emailBruto, senha) => {
     const email = emailBruto.trim().toLowerCase();
-    const { error } = await supabase.from('solicitacoes_senha').insert({ email });
+    const { error } = await supabase.rpc('pedir_redefinicao_senha', { p_email: email, p_senha: senha });
     if (error) throw new Error(error.message);
     notificarPedidoSenha(email);
   }, []);
 
-  // `enviarLink` é a função enviarRecuperacaoSenha de lib/auth.js — quem manda o e-mail de
-  // verdade (chama a API do Supabase Auth); aqui só marca o pedido como atendido depois.
-  const atenderSolicitacao = useCallback(async (id, email, enviarLink) => {
-    await enviarLink(email);
-    const { error } = await supabase.from('solicitacoes_senha').update({ atendido: true, atendido_em: new Date().toISOString() }).eq('id', id);
+  // Retorna true se já existia conta pra esse e-mail (senha trocada na hora) ou false se
+  // ninguém com esse e-mail tem conta ainda (a pessoa precisa usar "Criar conta" primeiro).
+  const atenderSolicitacao = useCallback(async (id) => {
+    const { data, error } = await supabase.rpc('autorizar_redefinicao_senha', { p_id: id });
     if (error) throw new Error(error.message);
     await recarregar();
+    return data;
   }, [recarregar]);
 
   return { loading: state.loading, solicitacoes: state.solicitacoes, pedirRedefinicaoSenha, atenderSolicitacao };

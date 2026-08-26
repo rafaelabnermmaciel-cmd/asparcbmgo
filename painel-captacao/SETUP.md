@@ -230,16 +230,17 @@ e-mail de captação).
 
 ### 7.6. Militar esqueceu a senha
 
-Na tela de login, tem um link **"Esqueci minha senha"** — a pessoa digita só o e-mail e
-clica. Isso **não manda o e-mail na hora**: só registra um pedido, e você recebe o mesmo aviso
-por e-mail da seção 7.5 (com uma marca "[esqueceu a senha]" na frente do e-mail, pra não
-confundir com pedido de conta nova). Você abre **Acesso restrito → Acessos** e vê a lista em
-"Pedidos de redefinição de senha" — clique em **Aprovar e enviar link** na linha da pessoa, e
-**só aí** o Supabase manda o e-mail de verdade com o link pra ela escolher a senha nova.
+Na tela de login, tem um link **"Esqueci minha senha"** — a pessoa digita o e-mail **e a senha
+nova que quer usar** e clica. Isso **não manda e-mail nenhum**: só registra o pedido (a senha
+fica guardada como hash, nunca em texto puro), e você recebe o mesmo aviso por e-mail da seção
+7.5 (com uma marca "[esqueceu a senha]" na frente do e-mail, pra não confundir com pedido de
+conta nova). Você abre **Acesso restrito → Acessos** e vê a lista em "Pedidos de redefinição de
+senha" — clique em **Autorizar** na linha da pessoa, e a senha nova **já passa a valer na
+hora**, sem nenhum e-mail ou link no meio.
 
-Se a pessoa nunca tiver criado conta (aba "Criar conta"), aprovar aqui não faz nada — o
-Supabase não avisa se o e-mail existe ou não, por segurança. Nesse caso, oriente ela a usar
-"Criar conta" em vez de "Esqueci minha senha".
+Se a pessoa nunca tiver criado conta (aba "Criar conta"), o botão **Autorizar** avisa que não
+deu certo — nesse caso, oriente ela a usar "Criar conta" em vez de "Esqueci minha senha"; o
+pedido continua na lista, e dá pra clicar em Autorizar de novo depois que ela criar a conta.
 
 ---
 
