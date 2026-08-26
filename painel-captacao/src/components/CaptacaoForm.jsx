@@ -26,6 +26,23 @@ function nomeMilitar(m) {
   return `${m.posto} ${m.nome}`.trim();
 }
 
+// Ordem de antiguidade do CBMGO, do mais graduado pro menos graduado — os postos batem
+// exatamente com os usados no Almanaque (ver supabase/schema.sql). Quem não está nessa lista
+// (não deveria acontecer) fica no fim.
+const ORDEM_POSTOS = [
+  'Cel', 'TC', 'Maj', 'Cap', '1º Ten', '2º Ten', 'Cad 3º Ano',
+  'ST', '1º Sgt', '2º Sgt', '3º Sgt', 'Cb', 'Sd 1ª Classe', 'Sd 2ª Classe',
+];
+
+function compararPorAntiguidade(a, b) {
+  const ia = ORDEM_POSTOS.indexOf(a.posto);
+  const ib = ORDEM_POSTOS.indexOf(b.posto);
+  const posA = ia === -1 ? ORDEM_POSTOS.length : ia;
+  const posB = ib === -1 ? ORDEM_POSTOS.length : ib;
+  if (posA !== posB) return posA - posB;
+  return a.nome.localeCompare(b.nome);
+}
+
 export const VAZIO_CAPTACAO = {
   quartelId: '',
   responsavel: '',
@@ -46,8 +63,9 @@ function parlamentarKeyDe(p) {
 export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders }) {
   const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
   // Responsável pode ser qualquer militar da plataforma — não só do quartel selecionado, já que
-  // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro.
-  const todosMilitares = useMemo(() => militares.slice().sort((a, b) => nomeMilitar(a).localeCompare(nomeMilitar(b))), [militares]);
+  // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro. Ordenado por
+  // antiguidade (Coronel primeiro, e assim por diante).
+  const todosMilitares = useMemo(() => militares.slice().sort(compararPorAntiguidade), [militares]);
   const [responsavelManual, setResponsavelManual] = useState(() => !todosMilitares.some((m) => nomeMilitar(m) === valores.responsavel));
 
   const parlamentarSelecionado = useMemo(() => parlamentares.find((p) => p.nome === valores.parlamentarNome), [parlamentares, valores.parlamentarNome]);
