@@ -3,7 +3,7 @@ import { LuTriangleAlert, LuLogOut, LuCheck, LuX } from 'react-icons/lu';
 import { useQuarteis, useMilitares, useUsuariosAprovados, slugify } from '../lib/data.js';
 import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
-import { LoginGerenciamento, AguardandoAprovacao } from '../components/AcessoGerenciamento.jsx';
+import { LoginGerenciamento, AguardandoAprovacao, RedefinirSenha } from '../components/AcessoGerenciamento.jsx';
 
 const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -96,7 +96,7 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
 }
 
 export default function Gerenciamento() {
-  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, sair } = useAuth();
+  const { loading: carregandoAuth, session, aprovado, recuperacao, entrarComSenha, criarContaComSenha, enviarRecuperacaoSenha, atualizarSenha, sair } = useAuth();
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
   const { usuarios, definirAprovacao } = useUsuariosAprovados();
@@ -178,7 +178,8 @@ export default function Gerenciamento() {
   }
 
   if (carregandoAuth) return null;
-  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} />;
+  if (recuperacao) return <RedefinirSenha atualizarSenha={atualizarSenha} sair={sair} />;
+  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} enviarRecuperacaoSenha={enviarRecuperacaoSenha} />;
   if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
 
   return (
