@@ -7,19 +7,19 @@ import { notificarPedidoAcesso } from './emailjs.js';
 // pro e-mail do administrador (liberado sozinho, ver o gatilho em supabase/schema.sql) ou
 // depois que o administrador libera alguém pela própria aba Acesso restrito → Acessos.
 export function useAuth() {
-  const [state, setState] = useState({ loading: true, session: null, aprovado: false });
+  const [state, setState] = useState({ loading: true, session: null, aprovado: false, recuperacao: false });
 
-  const carregarAprovacao = useCallback(async (session) => {
-    if (!session) { setState({ loading: false, session: null, aprovado: false }); return; }
+  const carregarAprovacao = useCallback(async (session, recuperacao = false) => {
+    if (!session) { setState({ loading: false, session: null, aprovado: false, recuperacao: false }); return; }
     const { data, error } = await supabase.from('usuarios_aprovados').select('aprovado').eq('user_id', session.user.id).maybeSingle();
     if (error) console.warn('[auth] falha ao checar aprovação:', error.message);
     const aprovado = !!data?.aprovado;
-    setState({ loading: false, session, aprovado });
+    setState({ loading: false, session, aprovado, recuperacao });
 
     // Avisa o administrador por e-mail — só uma vez por pessoa pendente neste navegador,
     // pra não mandar o mesmo aviso de novo a cada vez que a pessoa recarrega a página
     // esperando ser aprovada.
-    if (!aprovado) {
+    if (!aprovado && !recuperacao) {
       const chave = `painel-captacao:acesso-notificado:${session.user.id}`;
       if (!localStorage.getItem(chave)) {
         localStorage.setItem(chave, '1');
@@ -29,11 +29,14 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    if (!supabaseConfigurado) { setState({ loading: false, session: null, aprovado: false }); return; }
+    if (!supabaseConfigurado) { setState({ loading: false, session: null, aprovado: false, recuperacao: false }); return; }
     let cancelled = false;
     supabase.auth.getSession().then(({ data }) => { if (!cancelled) carregarAprovacao(data.session); });
-    const { data: assinatura } = supabase.auth.onAuthStateChange((_evento, session) => {
-      carregarAprovacao(session);
+    // O Supabase manda o evento "PASSWORD_RECOVERY" quando a pessoa clica no link de
+    // redefinição de senha (recebido por e-mail) — nesse caso mostramos a tela de "escolher
+    // nova senha" (ver RedefinirSenha em AcessoGerenciamento.jsx) em vez do login normal.
+    const { data: assinatura } = supabase.auth.onAuthStateChange((evento, session) => {
+      carregarAprovacao(session, evento === 'PASSWORD_RECOVERY');
     });
     return () => { cancelled = true; assinatura.subscription.unsubscribe(); };
   }, [carregarAprovacao]);
@@ -52,5 +55,22 @@ export function useAuth() {
     await supabase.auth.signOut();
   }, []);
 
-  return { ...state, entrarComSenha, criarContaComSenha, sair };
+  // Manda o e-mail de "esqueci minha senha" — o link volta pro próprio site (mesma URL
+  // configurada em Authentication → URL Configuration → Site URL no Supabase) e dispara o
+  // evento "PASSWORD_RECOVERY" acima, que mostra a tela de trocar a senha.
+  const enviarRecuperacaoSenha = useCallback(async (email) => {
+    const volta = `${window.location.origin}${import.meta.env.BASE_URL}`;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: volta });
+    if (error) throw new Error(error.message);
+  }, []);
+
+  // Só funciona durante a sessão temporária de recuperação (depois de clicar no link do
+  // e-mail) — troca a senha e volta pro fluxo normal (login já entra com a senha nova).
+  const atualizarSenha = useCallback(async (novaSenha) => {
+    const { error } = await supabase.auth.updateUser({ password: novaSenha });
+    if (error) throw new Error(error.message);
+    setState((prev) => ({ ...prev, recuperacao: false }));
+  }, []);
+
+  return { ...state, entrarComSenha, criarContaComSenha, sair, enviarRecuperacaoSenha, atualizarSenha };
 }
