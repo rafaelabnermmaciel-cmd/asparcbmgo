@@ -45,8 +45,10 @@ function parlamentarKeyDe(p) {
 // anexos/envio fica de fora daqui (cada chamador cuida disso).
 export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders }) {
   const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
-  const militaresDoQuartel = useMemo(() => militares.filter((m) => m.quartel_id === valores.quartelId), [militares, valores.quartelId]);
-  const [responsavelManual, setResponsavelManual] = useState(() => !militaresDoQuartel.some((m) => nomeMilitar(m) === valores.responsavel));
+  // Responsável pode ser qualquer militar da plataforma — não só do quartel selecionado, já que
+  // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro.
+  const todosMilitares = useMemo(() => militares.slice().sort((a, b) => nomeMilitar(a).localeCompare(nomeMilitar(b))), [militares]);
+  const [responsavelManual, setResponsavelManual] = useState(() => !todosMilitares.some((m) => nomeMilitar(m) === valores.responsavel));
 
   const parlamentarSelecionado = useMemo(() => parlamentares.find((p) => p.nome === valores.parlamentarNome), [parlamentares, valores.parlamentarNome]);
   const parlamentarKey = parlamentarSelecionado ? parlamentarKeyDe(parlamentarSelecionado) : null;
@@ -57,17 +59,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
   const [stakeholderManual, setStakeholderManual] = useState(() => !stakeholdersDoParlamentar.some((s) => s.nome === valores.stakeholder));
 
   function selecionarQuartel(e) {
-    const quartelId = e.target.value;
-    const doQuartel = militares.filter((m) => m.quartel_id === quartelId);
-    if (doQuartel.length === 1) {
-      setResponsavelManual(false);
-      onChange('quartelId', quartelId);
-      onChange('responsavel', nomeMilitar(doQuartel[0]));
-    } else {
-      setResponsavelManual(doQuartel.length === 0);
-      onChange('quartelId', quartelId);
-      onChange('responsavel', '');
-    }
+    onChange('quartelId', e.target.value);
   }
 
   function selecionarResponsavel(e) {
@@ -128,18 +120,18 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
       </div>
       <div>
         <p className={labelClass}>Responsável pela articulação *</p>
-        {militaresDoQuartel.length > 0 && !responsavelManual ? (
+        {todosMilitares.length > 0 && !responsavelManual ? (
           <select className={inputClass} value={valores.responsavel} onChange={selecionarResponsavel}>
             <option value="">Selecione...</option>
-            {militaresDoQuartel.map((m) => (
+            {todosMilitares.map((m) => (
               <option key={m.id} value={nomeMilitar(m)}>{nomeMilitar(m)}</option>
             ))}
             <option value="__outro__">Outro (digitar nome)</option>
           </select>
         ) : (
           <div className="flex gap-2">
-            <input className={inputClass} value={valores.responsavel} onChange={(e) => onChange('responsavel', e.target.value)} placeholder="Quem do quartel está conduzindo" />
-            {militaresDoQuartel.length > 0 && (
+            <input className={inputClass} value={valores.responsavel} onChange={(e) => onChange('responsavel', e.target.value)} placeholder="Quem está conduzindo a articulação" />
+            {todosMilitares.length > 0 && (
               <button type="button" onClick={() => setResponsavelManual(false)} className="shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
                 Escolher da lista
               </button>
