@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { LuTriangleAlert } from 'react-icons/lu';
 
 export const inputClass =
@@ -57,6 +57,53 @@ function parlamentarKeyDe(p) {
   return `${p.casa}:${p.id}`;
 }
 
+// Campo de texto com busca simples: ao clicar aparecem todos os nomes, ao digitar a lista
+// filtra, e dá pra digitar um nome que não esteja nela (ex: alguém fora do Almanaque).
+function ComboboxTexto({ valor, onChange, opcoes, placeholder }) {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    function aoClicarFora(e) {
+      if (containerRef.current && !containerRef.current.contains(e.target)) setAberto(false);
+    }
+    document.addEventListener('mousedown', aoClicarFora);
+    return () => document.removeEventListener('mousedown', aoClicarFora);
+  }, []);
+
+  const filtradas = useMemo(() => {
+    const termo = valor.trim().toLowerCase();
+    return termo ? opcoes.filter((o) => o.toLowerCase().includes(termo)) : opcoes;
+  }, [valor, opcoes]);
+
+  return (
+    <div className="relative" ref={containerRef}>
+      <input
+        className={inputClass}
+        value={valor}
+        onChange={(e) => { onChange(e.target.value); setAberto(true); }}
+        onFocus={() => setAberto(true)}
+        placeholder={placeholder}
+        autoComplete="off"
+      />
+      {aberto && filtradas.length > 0 && (
+        <div className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
+          {filtradas.map((nome, i) => (
+            <button
+              key={`${nome}-${i}`}
+              type="button"
+              onClick={() => { onChange(nome); setAberto(false); }}
+              className="block w-full truncate px-3 py-1.5 text-left text-sm text-slate-700 hover:bg-red-50 dark:text-slate-200 dark:hover:bg-red-500/10"
+            >
+              {nome}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Grade de campos compartilhada entre o formulário de novo cadastro (Cadastro.jsx) e a edição
 // inline de um já existente (aqui mesmo, e também no perfil do parlamentar) — só o que envolve
 // anexos/envio fica de fora daqui (cada chamador cuida disso).
@@ -65,8 +112,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
   // Responsável pode ser qualquer militar da plataforma — não só do quartel selecionado, já que
   // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro. Ordenado por
   // antiguidade (Coronel primeiro, e assim por diante).
-  const todosMilitares = useMemo(() => militares.slice().sort(compararPorAntiguidade), [militares]);
-  const [responsavelManual, setResponsavelManual] = useState(() => !todosMilitares.some((m) => nomeMilitar(m) === valores.responsavel));
+  const nomesMilitares = useMemo(() => militares.slice().sort(compararPorAntiguidade).map(nomeMilitar), [militares]);
 
   const parlamentarSelecionado = useMemo(() => parlamentares.find((p) => p.nome === valores.parlamentarNome), [parlamentares, valores.parlamentarNome]);
   const parlamentarKey = parlamentarSelecionado ? parlamentarKeyDe(parlamentarSelecionado) : null;
@@ -78,16 +124,6 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
 
   function selecionarQuartel(e) {
     onChange('quartelId', e.target.value);
-  }
-
-  function selecionarResponsavel(e) {
-    const valor = e.target.value;
-    if (valor === '__outro__') {
-      setResponsavelManual(true);
-      onChange('responsavel', '');
-    } else {
-      onChange('responsavel', valor);
-    }
   }
 
   function selecionarParlamentar(e) {
@@ -138,24 +174,12 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
       </div>
       <div>
         <p className={labelClass}>Responsável pela articulação *</p>
-        {todosMilitares.length > 0 && !responsavelManual ? (
-          <select className={inputClass} value={valores.responsavel} onChange={selecionarResponsavel}>
-            <option value="">Selecione...</option>
-            {todosMilitares.map((m) => (
-              <option key={m.id} value={nomeMilitar(m)}>{nomeMilitar(m)}</option>
-            ))}
-            <option value="__outro__">Outro (digitar nome)</option>
-          </select>
-        ) : (
-          <div className="flex gap-2">
-            <input className={inputClass} value={valores.responsavel} onChange={(e) => onChange('responsavel', e.target.value)} placeholder="Quem está conduzindo a articulação" />
-            {todosMilitares.length > 0 && (
-              <button type="button" onClick={() => setResponsavelManual(false)} className="shrink-0 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
-                Escolher da lista
-              </button>
-            )}
-          </div>
-        )}
+        <ComboboxTexto
+          valor={valores.responsavel}
+          onChange={(v) => onChange('responsavel', v)}
+          opcoes={nomesMilitares}
+          placeholder="Clique pra ver todos ou digite pra buscar..."
+        />
       </div>
       <div>
         <p className={labelClass}>Stakeholder / contato-chave *</p>
