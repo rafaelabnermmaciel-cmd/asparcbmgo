@@ -18,6 +18,8 @@
 --                                 como "Primeiro contato")
 --   4.1. Tabela "captacao_eventos" — os andamentos (linha do tempo) de cada captação
 --   4.2. Tabela "usuarios_aprovados" + gatilho — login e aprovação de acesso (só Acesso restrito)
+--   4.3. Tabela "solicitacoes_senha" — pedido de redefinição de senha, aprovado por quem já
+--        tem acesso (pra quem esqueceu a senha, sem precisar já estar logado pra pedir)
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
 --   7. Tempo real pra tabela de captações
@@ -244,6 +246,21 @@ as $$
   select coalesce((select aprovado from usuarios_aprovados where user_id = auth.uid()), false);
 $$;
 
+-- 4.3) PEDIDO DE REDEFINIÇÃO DE SENHA ---------------------------------------------
+-- Militar esqueceu a senha: clica em "Esqueci minha senha" na tela de login (sem precisar
+-- estar logado) e só REGISTRA o pedido aqui. O e-mail de verdade (o link que deixa escolher
+-- senha nova) só é mandado depois que um administrador aprovado clica em "Aprovar e enviar
+-- link" na aba Acesso restrito → Acessos — se a pessoa nunca tiver criado conta, aprovar aqui
+-- não faz nada (o Supabase não avisa se o e-mail existe ou não, por segurança), e nesse caso
+-- ela precisa usar "Criar conta" em vez de "Esqueci minha senha".
+create table if not exists solicitacoes_senha (
+  id bigint generated always as identity primary key,
+  email text not null,
+  criado_em timestamptz not null default now(),
+  atendido boolean not null default false,
+  atendido_em timestamptz
+);
+
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
 -- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público), e todas as
@@ -262,6 +279,7 @@ alter table stakeholders enable row level security;
 alter table captacoes enable row level security;
 alter table captacao_eventos enable row level security;
 alter table usuarios_aprovados enable row level security;
+alter table solicitacoes_senha enable row level security;
 
 -- Leitura de quarteis/militares continua pública (o Cadastro e o Dashboard precisam ler sem
 -- login) — só criar/editar/apagar passa a exigir login aprovado, pela aba Acesso restrito.
@@ -298,6 +316,17 @@ create policy "Leitura autenticada" on usuarios_aprovados for select using (auth
 drop policy if exists "Aprovação só por quem já é aprovado" on usuarios_aprovados;
 create policy "Aprovação só por quem já é aprovado" on usuarios_aprovados for update
   using (public.esta_aprovado()) with check (true);
+
+-- Qualquer pessoa pode registrar um pedido de redefinição de senha (nem precisa estar
+-- logada — é exatamente o caso de quem esqueceu a senha). Só quem já tem acesso aprovado
+-- enxerga a lista de pedidos e pode marcar como atendido (aba Acesso restrito → Acessos).
+drop policy if exists "Qualquer um pode pedir redefinição de senha" on solicitacoes_senha;
+create policy "Qualquer um pode pedir redefinição de senha" on solicitacoes_senha for insert with check (true);
+drop policy if exists "Aprovados veem pedidos de redefinição de senha" on solicitacoes_senha;
+create policy "Aprovados veem pedidos de redefinição de senha" on solicitacoes_senha for select using (public.esta_aprovado());
+drop policy if exists "Aprovados atendem pedidos de redefinição de senha" on solicitacoes_senha;
+create policy "Aprovados atendem pedidos de redefinição de senha" on solicitacoes_senha for update
+  using (public.esta_aprovado()) with check (public.esta_aprovado());
 
 drop policy if exists "Leitura pública" on stakeholders;
 create policy "Leitura pública" on stakeholders for select using (true);
