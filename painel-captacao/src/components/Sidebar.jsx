@@ -5,9 +5,9 @@ import ThemeToggle from './ThemeToggle.jsx';
 export const NAV = [
   { to: '/', label: 'Dashboard', icon: LuHouse, end: true },
   { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
-  { to: '/andamentos', label: 'Adicionar andamento', mobileLabel: 'Andamento', icon: LuClock },
-  { to: '/cadastro', label: 'Cadastrar primeiro contato', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
   { to: '/stakeholders', label: 'Stakeholders', icon: LuUsers },
+  { to: '/cadastro', label: 'Cadastrar primeiro contato', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
+  { to: '/andamentos', label: 'Adicionar andamento', mobileLabel: 'Andamento', icon: LuClock },
   { to: '/gerenciamento', label: 'Acesso restrito', icon: LuSettings },
 ];
 
