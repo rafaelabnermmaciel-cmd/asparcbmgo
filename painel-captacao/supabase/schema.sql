@@ -18,8 +18,9 @@
 --                                 como "Primeiro contato")
 --   4.1. Tabela "captacao_eventos" — os andamentos (linha do tempo) de cada captação
 --   4.2. Tabela "usuarios_aprovados" + gatilho — login e aprovação de acesso (só Acesso restrito)
---   4.3. Tabela "solicitacoes_senha" — pedido de redefinição de senha, aprovado por quem já
---        tem acesso (pra quem esqueceu a senha, sem precisar já estar logado pra pedir)
+--   4.3. Tabela "solicitacoes_senha" + funções — pedido de redefinição de senha (a pessoa já
+--        digita a senha nova, sem precisar estar logada) autorizado por quem já tem acesso —
+--        na hora, sem nenhum e-mail, e sem exigir conta prévia no Supabase
 --   5. Regras de segurança (RLS) de cada tabela
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
 --   7. Tempo real pra tabela de captações
@@ -248,18 +249,76 @@ $$;
 
 -- 4.3) PEDIDO DE REDEFINIÇÃO DE SENHA ---------------------------------------------
 -- Militar esqueceu a senha: clica em "Esqueci minha senha" na tela de login (sem precisar
--- estar logado) e só REGISTRA o pedido aqui. O e-mail de verdade (o link que deixa escolher
--- senha nova) só é mandado depois que um administrador aprovado clica em "Aprovar e enviar
--- link" na aba Acesso restrito → Acessos — se a pessoa nunca tiver criado conta, aprovar aqui
--- não faz nada (o Supabase não avisa se o e-mail existe ou não, por segurança), e nesse caso
--- ela precisa usar "Criar conta" em vez de "Esqueci minha senha".
+-- estar logado) e já digita ali a senha nova que quer usar — fica guardada só como hash
+-- (nunca em texto puro) até um administrador aprovado clicar em "Autorizar" na aba Acesso
+-- restrito → Acessos. Nesse momento a senha já passa a valer na hora — sem nenhum e-mail, sem
+-- link, e sem depender de a pessoa já ter criado conta antes (só que se ela realmente nunca
+-- tiver criado conta, "Autorizar" avisa que não deu certo, e ela precisa usar "Criar conta").
+create extension if not exists pgcrypto;
+
 create table if not exists solicitacoes_senha (
   id bigint generated always as identity primary key,
   email text not null,
+  senha_hash text,
   criado_em timestamptz not null default now(),
   atendido boolean not null default false,
   atendido_em timestamptz
 );
+alter table solicitacoes_senha add column if not exists senha_hash text;
+
+-- Roda com o papel de quem executou este script (dono das tabelas) — é o que permite escrever
+-- em auth.users (tabela interna do Supabase Auth, sem acesso público) sem precisar de nenhuma
+-- chave "service_role" no site (que seria um risco de segurança sério se ficasse exposta no
+-- navegador). "security invoker" (padrão) já basta aqui, porque quem chama (mesmo sem login)
+-- só precisa poder inserir em solicitacoes_senha, e isso já é liberado pela política de RLS.
+create or replace function public.pedir_redefinicao_senha(p_email text, p_senha text)
+returns void
+language sql
+set search_path = public, extensions
+as $$
+  insert into solicitacoes_senha (email, senha_hash)
+  values (lower(trim(p_email)), crypt(p_senha, gen_salt('bf')));
+$$;
+grant execute on function public.pedir_redefinicao_senha(text, text) to anon, authenticated;
+
+-- Chamada só pelo botão "Autorizar" (Acesso restrito → Acessos, já exige aprovado). Troca a
+-- senha direto na tabela auth.users do Supabase (technique padrão pra reset manual de senha —
+-- o mesmo formato de hash bcrypt que o Supabase Auth já usa) e devolve true se já existia conta
+-- pra esse e-mail, ou false se ninguém com esse e-mail tem conta ainda.
+create or replace function public.autorizar_redefinicao_senha(p_id bigint)
+returns boolean
+language plpgsql
+security definer set search_path = public, extensions, auth
+as $$
+declare
+  v_email text;
+  v_hash text;
+  v_linhas int;
+begin
+  if not public.esta_aprovado() then
+    raise exception 'Só quem já tem acesso aprovado pode autorizar redefinição de senha.';
+  end if;
+
+  select email, senha_hash into v_email, v_hash from solicitacoes_senha where id = p_id;
+  if v_email is null then
+    raise exception 'Pedido não encontrado.';
+  end if;
+  if v_hash is null then
+    return true; -- já tinha sido autorizado antes (o hash já foi apagado depois de aplicado)
+  end if;
+
+  update auth.users set encrypted_password = v_hash, updated_at = now()
+  where lower(email) = lower(v_email);
+  get diagnostics v_linhas = row_count;
+
+  if v_linhas > 0 then
+    update solicitacoes_senha set atendido = true, atendido_em = now(), senha_hash = null where id = p_id;
+  end if;
+
+  return v_linhas > 0;
+end;
+$$;
+grant execute on function public.autorizar_redefinicao_senha(bigint) to authenticated;
 
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
