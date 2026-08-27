@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuClock, LuSettings } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
+import brasaoCbmgo from '../assets/brasao-cbmgo.png';
 
 export const NAV = [
   { to: '/', label: 'Dashboard', icon: LuHouse, end: true },
@@ -34,24 +35,11 @@ export default function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white/80 px-4 py-6 backdrop-blur lg:flex dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
       <div className="mb-8 flex items-center gap-2.5 px-2">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0f1f3d]">
-          <svg viewBox="0 0 100 100" className="h-6 w-6" aria-hidden="true">
-            <ellipse cx="36" cy="70" rx="20" ry="7" fill="#7c3d0a" />
-            <rect x="16" y="63" width="40" height="7" fill="#92450c" />
-            <ellipse cx="36" cy="63" rx="20" ry="7" fill="#b45309" />
-            <rect x="16" y="56" width="40" height="7" fill="#92450c" />
-            <ellipse cx="36" cy="56" rx="20" ry="7" fill="#b45309" />
-            <rect x="16" y="49" width="40" height="7" fill="#a2540f" />
-            <ellipse cx="36" cy="49" rx="20" ry="7" fill="#d97a1a" />
-            <rect x="16" y="42" width="40" height="7" fill="#b8630f" />
-            <ellipse cx="36" cy="42" rx="20" ry="7" fill="#f59e0b" />
-            <circle cx="66" cy="60" r="24" fill="#f59e0b" stroke="#0f1f3d" strokeWidth="3" />
-            <circle cx="66" cy="60" r="18" fill="none" stroke="#b45309" strokeWidth="2" />
-            <text x="66" y="69" fontSize="26" fontWeight="700" fill="#7c3d0a" textAnchor="middle">$</text>
-          </svg>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0f1f3d]">
+          <img src={brasaoCbmgo} alt="Brasão do CBM-GO" className="h-9 w-9 object-contain" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Captação CBM-GO</p>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Captação Federal - CBMGO</p>
           <p className="text-[11px] text-slate-400">Quartéis · Goiás</p>
         </div>
       </div>
