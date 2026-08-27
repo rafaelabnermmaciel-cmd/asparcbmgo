@@ -19,7 +19,6 @@ export default function Cadastro() {
 
   const [f, setF] = useState(VAZIO_CAPTACAO);
   const [dataInicio, setDataInicio] = useState(hoje());
-  const [descricaoInicio, setDescricaoInicio] = useState('');
   const [anexos, setAnexos] = useState([]);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState(null);
@@ -36,14 +35,13 @@ export default function Cadastro() {
     try {
       const registro = await submitCaptacao({ ...paraPayloadCaptacao(f, quarteis), anexos });
       try {
-        await addEvento({ captacao_id: registro.id, data: dataInicio, descricao: descricaoInicio.trim() || 'Primeiro contato' });
+        await addEvento({ captacao_id: registro.id, data: dataInicio, descricao: 'Primeiro contato' });
         setSucesso('Captação cadastrada! Já está salva e visível pra todo mundo — os próximos passos entram em "Adicionar andamento".');
       } catch {
         setSucesso('Captação cadastrada! (não deu pra registrar a data do primeiro contato na linha do tempo — adicione manualmente em "Adicionar andamento".)');
       }
       setF(VAZIO_CAPTACAO);
       setDataInicio(hoje());
-      setDescricaoInicio('');
       setAnexos([]);
     } catch (err) {
       setErro(err.message || 'Falha ao cadastrar. Tente novamente.');
@@ -72,10 +70,6 @@ export default function Cadastro() {
           <div>
             <p className={labelClass}>Data do primeiro contato *</p>
             <input type="date" className={inputClass} value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
-          </div>
-          <div>
-            <p className={labelClass}>O que aconteceu nesse primeiro contato</p>
-            <input className={inputClass} value={descricaoInicio} onChange={(e) => setDescricaoInicio(e.target.value)} placeholder="Ex: primeiro contato por telefone (opcional)" />
           </div>
           <div className="sm:col-span-2">
             <p className={labelClass}>Documentos e fotos</p>
