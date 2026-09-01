@@ -6,6 +6,11 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PL 241/2023",
+      "data": "2026-08-31",
+      "fato": "Encerramentos — Aguardando Deliberação"
+    },
+    {
       "proposicao": "PEC 18/2025",
       "data": "2026-08-31",
       "fato": "INCLUÍDA NA PAUTA DA REUNIÃO"
@@ -99,11 +104,6 @@
       "proposicao": "PL 1.958/2023",
       "data": "2026-04-14",
       "fato": "Apresentação de Proposição — Aguardando Parecer"
-    },
-    {
-      "proposicao": "PL 5.788/2023",
-      "data": "2025-09-04",
-      "fato": "Notificacao para Publicação Intermediária — Tramitando em Conjunto"
     }
   ],
   "proposicoes": [
@@ -151,7 +151,7 @@
       "assunto": "Permite a averbação de até 10 anos (hoje limitado a 5) de tempo de serviço público ou privado anterior ao ingresso na corporação, para aposentadoria integral de policiais e bombeiros militares estaduais. Não se aplica às Forças Armadas.",
       "situacao": "Encerramentos — Aguardando Deliberação",
       "ultimaMovimentacao": {
-        "data": "2026-08-13",
+        "data": "2026-08-31",
         "descricao": "Encerramentos — Aguardando Deliberação"
       },
       "proximosPassos": "Em regime de urgência, pode ser pautada e votada em qualquer sessão sem passar pelas comissões. Se aprovada, segue ao Senado.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-08-31T21:18:18.034Z"
+  "ultimaVerificacaoEm": "2026-09-01T15:25:16.935Z"
 }
