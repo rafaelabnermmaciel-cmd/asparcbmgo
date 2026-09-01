@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram } from 'react-icons/lu';
 import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -116,11 +116,18 @@ export default function ParlamentarPerfil() {
           <p className="mt-1 text-sm text-slate-400">
             {p.cargo} · {p.partido || '—'} · {p.casa === 'senado' ? 'Senado Federal' : 'Câmara dos Deputados'} (Brasília/DF)
           </p>
-          {(p.urlCamara || p.urlSenado) && (
-            <a href={p.urlCamara || p.urlSenado} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
-              Perfil oficial ↗
-            </a>
-          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {(p.urlCamara || p.urlSenado) && (
+              <a href={p.urlCamara || p.urlSenado} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
+                Perfil oficial ↗
+              </a>
+            )}
+            {p.instagram && (
+              <a href={p.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
+                <LuInstagram className="h-3.5 w-3.5" /> Instagram ↗
+              </a>
+            )}
+          </div>
         </div>
       </ScrollReveal>
 
