@@ -54,17 +54,3 @@ export function rankPorCaptacao(lista) {
 export function rankPorArticulacao(lista) {
   return [...lista].sort((a, b) => (b.qtdArticulacoes * 2 + b.qtdReunioes) - (a.qtdArticulacoes * 2 + a.qtdReunioes));
 }
-
-// Faixas de reconhecimento por valor captado (previsto) — limiares arbitrários, ajuste
-// livremente conforme a realidade dos valores movimentados pelo CBMGO.
-const NIVEIS = [
-  { min: 2_000_000, nome: 'Diamante', emoji: '💎' },
-  { min: 800_000, nome: 'Ouro', emoji: '🥇' },
-  { min: 300_000, nome: 'Prata', emoji: '🥈' },
-  { min: 1, nome: 'Bronze', emoji: '🥉' },
-  { min: 0, nome: 'Sem captação ainda', emoji: '—' },
-];
-
-export function nivelQuartel(totalPrevisto) {
-  return NIVEIS.find((n) => totalPrevisto >= n.min) || NIVEIS[NIVEIS.length - 1];
-}

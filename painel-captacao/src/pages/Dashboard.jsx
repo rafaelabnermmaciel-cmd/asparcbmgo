@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck } from 'react-icons/lu';
 import { useCaptacoes, useQuarteis, useEventos } from '../lib/data.js';
-import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao, nivelQuartel } from '../lib/ranking.js';
+import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao } from '../lib/ranking.js';
 import { useTheme } from '../lib/theme.jsx';
 import { CATEGORICO } from '../lib/palette.js';
 import { statusBadgeClass } from '../components/CaptacaoForm.jsx';
@@ -136,13 +136,9 @@ export default function Dashboard() {
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {podio.map((q, i) => {
-              const nivel = nivelQuartel(q.totalPrevisto);
               return (
                 <div key={q.quartelId} className={`rounded-2xl border p-5 shadow-sm ${i === 0 ? 'border-amber-300 bg-amber-50/60 dark:border-amber-700 dark:bg-amber-500/10' : 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900'}`}>
-                  <div className="flex items-center justify-between">
-                    <span className="text-3xl">{PODIO_MEDALHA[i]}</span>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">{nivel.emoji} {nivel.nome}</span>
-                  </div>
+                  <span className="text-3xl">{PODIO_MEDALHA[i]}</span>
                   <p className="mt-3 truncate text-sm font-semibold text-slate-900 dark:text-white">{q.nome}</p>
                   <p className="truncate text-xs text-slate-400">{q.municipio}</p>
                   <p className="mt-2 text-xl font-bold text-red-600 dark:text-red-400">{fmtRCompact(q.totalPrevisto)}</p>
