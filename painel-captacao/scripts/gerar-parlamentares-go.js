@@ -22,10 +22,32 @@ function lerJson(nome, fallback) {
 const deputados = lerJson('deputados.json', []);
 const senadores = lerJson('senadores.json', []);
 
+// Perfil oficial do Instagram de cada parlamentar. A Câmara já devolve isso pra maioria dos
+// deputados dentro de "redeSocial" (ver extrairInstagram abaixo) — essa lista só cobre quem
+// não tem Instagram no dado aberto da Câmara/Senado (conferido manualmente, um por um, direto
+// no Instagram de cada parlamentar em 01/09/2026). Se um dia a Câmara passar a devolver o
+// Instagram desses também, o valor automático (redeSocial) tem prioridade sobre esse aqui.
+const INSTAGRAM_MANUAL = {
+  204419: 'https://www.instagram.com/glaustindafokus/', // Glaustin da Fokus
+  220567: 'https://www.instagram.com/depjeferson10/', // Jeferson Rodrigues
+  220566: 'https://www.instagram.com/ledaborgesm/', // Lêda Borges
+  74371: 'https://www.instagram.com/rubensotoni/', // Rubens Otoni
+  5895: 'https://www.instagram.com/senadorkajuru/', // Jorge Kajuru
+  5899: 'https://www.instagram.com/vanderlancardosooficial/', // Vanderlan Cardoso
+  5070: 'https://www.instagram.com/wildermorais/', // Wilder Morais
+};
+
+function extrairInstagram(p) {
+  const doDado = (p.redeSocial || []).find((u) => /instagram\.com/i.test(u));
+  return doDado || INSTAGRAM_MANUAL[p.id] || null;
+}
+
 const parlamentares = [
   ...deputados.filter((d) => d.uf === 'GO').map((d) => ({ ...d, cargo: 'Deputado Federal' })),
   ...senadores.filter((s) => s.uf === 'GO').map((s) => ({ ...s, cargo: 'Senador' })),
-].sort((a, b) => a.nome.localeCompare(b.nome));
+]
+  .map((p) => ({ ...p, instagram: extrairInstagram(p) }))
+  .sort((a, b) => a.nome.localeCompare(b.nome));
 
 writeFileSync(destino, JSON.stringify(parlamentares, null, 2) + '\n');
 console.log(`[gerar-parlamentares-go] ${parlamentares.length} parlamentares de GO gravados em ${destino}`);
