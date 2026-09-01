@@ -7,13 +7,13 @@ function ItemNav({ to, label, mobileLabel, icon: Icon, end }) {
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex flex-1 flex-col items-center gap-0.5 py-2.5 text-[11px] font-medium transition ${
+        `flex min-w-0 flex-1 flex-col items-center gap-0.5 px-0.5 py-2.5 text-center text-[10px] font-medium leading-tight transition ${
           isActive ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-500'
         }`
       }
     >
-      <Icon className="h-5 w-5" />
-      {mobileLabel || label}
+      <Icon className="h-5 w-5 shrink-0" />
+      <span className="w-full break-words [hyphens:auto] [overflow-wrap:anywhere]">{mobileLabel || label}</span>
     </NavLink>
   );
 }
