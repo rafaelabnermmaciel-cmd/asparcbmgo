@@ -45,8 +45,8 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
   }
 
   return (
-    <div className="mx-auto max-w-sm px-4 py-16">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8 lg:min-h-screen">
+      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center gap-2">
           <LuLock className="h-5 w-5 text-red-500" />
           <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Acesso restrito</h1>
@@ -100,10 +100,10 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
 // Acesso restrito → Acessos (mesma tela serve pro caso de acesso revogado depois).
 export function AguardandoAprovacao({ email, sair }) {
   return (
-    <div className="mx-auto max-w-sm px-4 py-16 text-center">
+    <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-8 text-center lg:min-h-screen">
       <LuLock className="mx-auto h-8 w-8 text-amber-500" />
       <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Aguardando aprovação</h1>
-      <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mt-2 max-w-sm text-sm text-slate-500 dark:text-slate-400">
         A conta <span className="font-medium">{email}</span> ainda não foi liberada pra editar o Acesso restrito.
         O administrador já foi avisado por e-mail — assim que aprovar, é só entrar de novo.
       </p>
