@@ -6,6 +6,11 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PL 1.451/2023",
+      "data": "2026-09-02",
+      "fato": "PRONTA PARA A PAUTA NA COMISSÃO"
+    },
+    {
       "proposicao": "PL 241/2023",
       "data": "2026-09-01",
       "fato": "Desapensação — Aguardando Autógrafos na Mesa"
@@ -99,11 +104,6 @@
       "proposicao": "PL 1.274/2024",
       "data": "2026-05-18",
       "fato": "Parecer do(a) Relator(a) — Pronta para Pauta"
-    },
-    {
-      "proposicao": "PL 2.995/2025",
-      "data": "2026-03-27",
-      "fato": "Publicação de Proposição — Aguardando Designação de Relator(a)"
     }
   ],
   "proposicoes": [
@@ -310,10 +310,10 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "Restringe a contribuição previdenciária de militares inativos e pensionistas à parcela que exceder o teto do RGPS.",
-      "situacao": "MATÉRIA COM A RELATORIA",
+      "situacao": "PRONTA PARA A PAUTA NA COMISSÃO",
       "ultimaMovimentacao": {
-        "data": "2026-08-12",
-        "descricao": "MATÉRIA COM A RELATORIA"
+        "data": "2026-09-02",
+        "descricao": "PRONTA PARA A PAUTA NA COMISSÃO"
       },
       "proximosPassos": "Aguarda apresentação do relatório pelo Sen. Efraim Filho na CAE; depois segue também à CAS.",
       "pontoAtencao": "Tema conexo ao PL 2.557/2026. Bom momento para buscar reunião com o gabinete do Sen. Efraim Filho antes do relatório.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-09-03T15:26:41.425Z"
+  "ultimaVerificacaoEm": "2026-09-03T21:19:11.150Z"
 }
