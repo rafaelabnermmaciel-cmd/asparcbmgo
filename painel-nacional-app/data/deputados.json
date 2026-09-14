@@ -6226,6 +6226,30 @@
     "urlCamara": "https://www.camara.leg.br/deputados/204539"
   },
   {
+    "id": 178884,
+    "casa": "camara",
+    "nome": "Hildo Rocha",
+    "nomeCivil": "HILDO AUGUSTO DA ROCHA NETO",
+    "partido": "MDB",
+    "uf": "MA",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Suplente",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/178884.jpg",
+    "email": "dep.hildorocha@camara.leg.br",
+    "telefone": null,
+    "gabinete": {
+      "predio": null,
+      "sala": null,
+      "andar": null
+    },
+    "dataNascimento": "1960-04-22",
+    "municipioNascimento": "São Luís",
+    "ufNascimento": "MA",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/178884"
+  },
+  {
     "id": 141450,
     "casa": "camara",
     "nome": "Hugo Leal",
@@ -9118,7 +9142,7 @@
     "id": 178858,
     "casa": "camara",
     "nome": "Mário Negromonte Jr.",
-    "nomeCivil": "MARIO S. M. NEGROMONTE JR.",
+    "nomeCivil": "MARIO SILVIO MENDES NEGROMONTE JÚNIOR",
     "partido": "PSB",
     "uf": "BA",
     "situacao": "Exercício",
@@ -9712,11 +9736,11 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/220617.jpg",
     "email": "dep.murillogouvea@camara.leg.br",
-    "telefone": "3215-5631",
+    "telefone": "3215-5496",
     "gabinete": {
-      "predio": "4",
-      "sala": "631",
-      "andar": "6"
+      "predio": "3",
+      "sala": "496",
+      "andar": null
     },
     "dataNascimento": "1986-09-22",
     "municipioNascimento": "Itaperuna",
@@ -10296,7 +10320,7 @@
       "sala": "241",
       "andar": "2"
     },
-    "dataNascimento": "1956-02-24",
+    "dataNascimento": "1956-02-25",
     "municipioNascimento": "Porecatu",
     "ufNascimento": "PR",
     "sexo": "M",
@@ -10601,7 +10625,7 @@
       "sala": "684",
       "andar": null
     },
-    "dataNascimento": "1961-05-09",
+    "dataNascimento": "1961-05-06",
     "municipioNascimento": "Águas da Prata",
     "ufNascimento": "SP",
     "sexo": "M",
@@ -11967,34 +11991,6 @@
       "https://www.instagram.com/rosangelareis.mg"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/220620"
-  },
-  {
-    "id": 73806,
-    "casa": "camara",
-    "nome": "Roseana Sarney",
-    "nomeCivil": "Roseana Sarney Murad",
-    "partido": "MDB",
-    "uf": "MA",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/73806.jpg",
-    "email": "dep.roseanasarney@camara.leg.br",
-    "telefone": "3215-5734",
-    "gabinete": {
-      "predio": "4",
-      "sala": "734",
-      "andar": "7"
-    },
-    "dataNascimento": "1953-06-01",
-    "municipioNascimento": "São Luís",
-    "ufNascimento": "MA",
-    "sexo": "F",
-    "redeSocial": [
-      "https://twitter.com/roseanasarneym",
-      "https://www.facebook.com/roseanasarney",
-      "https://www.instagram.com/roseanasarney"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/73806"
   },
   {
     "id": 74371,
