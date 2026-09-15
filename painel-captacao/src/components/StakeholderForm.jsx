@@ -86,7 +86,7 @@ export function CamposStakeholder({ valores, onChange, parlamentares }) {
 }
 
 // Formulário de cadastro/edição de stakeholder — mesma grade usada tanto pra criar (aba
-// Cadastro) quanto pra editar (aba Cadastro ou perfil do parlamentar).
+// Cadastro) quanto pra editar (perfil do parlamentar).
 export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCancelar, textoBotao = 'Salvar' }) {
   const [f, setF] = useState(inicial || STAKEHOLDER_VAZIO);
   const [salvando, setSalvando] = useState(false);
@@ -114,6 +114,46 @@ export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCanc
         <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : textoBotao}</button>
         <button type="button" className={btnGhost} onClick={onCancelar}>Cancelar</button>
       </div>
+    </div>
+  );
+}
+
+// Cadastro rápido de stakeholder embutido em outro formulário (Cadastrar primeiro contato e
+// Adicionar andamento) — assim não precisa sair pra aba Stakeholders (que é só de consulta)
+// pra registrar alguém novo. Já vincula automaticamente o parlamentar em contexto, se houver.
+export function CriarStakeholderInline({ parlamentares, addStakeholder, parlamentarKeyPadrao, onCriado, label = '+ Novo stakeholder' }) {
+  const [aberto, setAberto] = useState(false);
+  const [sucesso, setSucesso] = useState(false);
+
+  async function salvar(payload) {
+    const criado = await addStakeholder(payload);
+    setAberto(false);
+    setSucesso(true);
+    onCriado?.(criado);
+    setTimeout(() => setSucesso(false), 4000);
+  }
+
+  if (sucesso) {
+    return <p className="mt-1.5 text-xs font-medium text-emerald-600">✓ Stakeholder cadastrado!</p>;
+  }
+
+  if (!aberto) {
+    return (
+      <button type="button" onClick={() => setAberto(true)} className="mt-1.5 text-xs font-medium text-red-600 hover:text-red-700">
+        {label}
+      </button>
+    );
+  }
+
+  return (
+    <div className="mt-2 rounded-lg border border-slate-200 p-3 dark:border-slate-800 dark:bg-slate-900/40">
+      <FormularioStakeholder
+        parlamentares={parlamentares || []}
+        inicial={{ ...STAKEHOLDER_VAZIO, parlamentaresKeys: parlamentarKeyPadrao ? [parlamentarKeyPadrao] : [] }}
+        textoBotao="Cadastrar"
+        onCancelar={() => setAberto(false)}
+        onSalvar={salvar}
+      />
     </div>
   );
 }

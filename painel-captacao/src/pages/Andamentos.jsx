@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { LuFileText, LuImage, LuTrash2, LuClock } from 'react-icons/lu';
-import { useQuarteis, useCaptacoes, useEventos } from '../lib/data.js';
+import { useQuarteis, useCaptacoes, useEventos, useParlamentaresGO, useStakeholders } from '../lib/data.js';
 import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -16,6 +16,8 @@ export default function Andamentos() {
   const { quarteis } = useQuarteis();
   const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
   const { eventos, addEvento, removeEvento } = useEventos();
+  const { parlamentares } = useParlamentaresGO();
+  const { addStakeholder } = useStakeholders();
 
   const [filtroQuartel, setFiltroQuartel] = useState('');
   const [timelineAbertaId, setTimelineAbertaId] = useState(null);
@@ -90,7 +92,7 @@ export default function Andamentos() {
                     </div>
                   )}
                   {timelineAbertaId === c.id && (
-                    <LinhaDoTempo captacao={c} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} onMudarStatus={(status) => updateCaptacao(c.id, { status })} />
+                    <LinhaDoTempo captacao={c} eventos={eventos} addEvento={addEvento} removeEvento={removeEvento} onMudarStatus={(status) => updateCaptacao(c.id, { status })} parlamentares={parlamentares} addStakeholder={addStakeholder} />
                   )}
                 </div>
               ))}

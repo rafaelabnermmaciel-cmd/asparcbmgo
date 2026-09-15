@@ -157,9 +157,10 @@ export function useStakeholders() {
   useEffect(() => { recarregar(); }, [recarregar]);
 
   const addStakeholder = useCallback(async (s) => {
-    const { error } = await supabase.from('stakeholders').insert(s);
+    const { data, error } = await supabase.from('stakeholders').insert(s).select().single();
     if (error) throw new Error(error.message);
     await recarregar();
+    return data;
   }, [recarregar]);
 
   const updateStakeholder = useCallback(async (id, patch) => {

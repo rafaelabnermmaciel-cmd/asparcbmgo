@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { LuTriangleAlert } from 'react-icons/lu';
+import { CriarStakeholderInline } from './StakeholderForm.jsx';
 
 export const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -107,7 +108,7 @@ function ComboboxTexto({ valor, onChange, opcoes, placeholder }) {
 // Grade de campos compartilhada entre o formulário de novo cadastro (Cadastro.jsx) e a edição
 // inline de um já existente (aqui mesmo, e também no perfil do parlamentar) — só o que envolve
 // anexos/envio fica de fora daqui (cada chamador cuida disso).
-export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders }) {
+export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders, addStakeholder }) {
   const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
   // Responsável pode ser qualquer militar da plataforma — não só do quartel selecionado, já que
   // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro. Ordenado por
@@ -202,6 +203,14 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
           </div>
         )}
         {!parlamentarKey && <p className="mt-1 text-[11px] text-slate-400">Selecione o parlamentar pra ver os stakeholders vinculados a ele.</p>}
+        {addStakeholder && parlamentarKey && (
+          <CriarStakeholderInline
+            parlamentares={parlamentares}
+            addStakeholder={addStakeholder}
+            parlamentarKeyPadrao={parlamentarKey}
+            onCriado={(criado) => { setStakeholderManual(false); onChange('stakeholder', criado.nome); }}
+          />
+        )}
       </div>
       <div className="sm:col-span-2">
         <p className={labelClass}>Objeto da captação *</p>
