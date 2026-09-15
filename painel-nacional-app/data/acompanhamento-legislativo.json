@@ -6,6 +6,11 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PL 241/2023",
+      "data": "2026-09-01",
+      "fato": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa"
+    },
+    {
       "proposicao": "PL 1.451/2023",
       "data": "2026-09-02",
       "fato": "PRONTA PARA A PAUTA NA COMISSÃO"
@@ -99,11 +104,6 @@
       "proposicao": "PL 4.804/2025",
       "data": "2026-06-12",
       "fato": "Saída de Relator(a) da Comissão - Com Parecer Apresentado — Aguardando Designação de Relator(a)"
-    },
-    {
-      "proposicao": "PL 1.274/2024",
-      "data": "2026-05-18",
-      "fato": "Parecer do(a) Relator(a) — Pronta para Pauta"
     }
   ],
   "proposicoes": [
@@ -149,10 +149,10 @@
       "parlamentar": null,
       "casaAtual": "Câmara dos Deputados",
       "assunto": "Permite a averbação de até 10 anos (hoje limitado a 5) de tempo de serviço público ou privado anterior ao ingresso na corporação, para aposentadoria integral de policiais e bombeiros militares estaduais. Não se aplica às Forças Armadas.",
-      "situacao": "Desapensação — Aguardando Autógrafos na Mesa",
+      "situacao": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa",
       "ultimaMovimentacao": {
         "data": "2026-09-01",
-        "descricao": "Desapensação — Aguardando Autógrafos na Mesa"
+        "descricao": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa"
       },
       "proximosPassos": "Em regime de urgência, pode ser pautada e votada em qualquer sessão sem passar pelas comissões. Se aprovada, segue ao Senado.",
       "pontoAtencao": "Monitorar a Ordem do Dia diariamente — pode ser votada a qualquer momento. Articulação mantida com o Dep. Sargento Portugal.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-09-14T21:28:59.226Z"
+  "ultimaVerificacaoEm": "2026-09-15T15:17:10.853Z"
 }
