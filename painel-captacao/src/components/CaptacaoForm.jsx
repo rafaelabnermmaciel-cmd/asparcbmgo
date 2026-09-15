@@ -18,7 +18,7 @@ export function fmtR(v) {
 // Cor do badge de status: verde pro desfecho de sucesso, cinza pro arquivado, âmbar pro que
 // ainda está em andamento (Primeiro contato / Em articulação).
 export function statusBadgeClass(status) {
-  if (status === 'Indicado') return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300';
+  if (status === 'Entregue') return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300';
   if (status === 'Arquivado') return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400';
   return 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300';
 }

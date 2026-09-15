@@ -32,9 +32,9 @@ clicável, sem precisar programar.
    quartel; abrir a "Linha do tempo" de uma delas registra os próximos passos (data, descrição,
    quem esteve presente, foto/documento) — lançar o primeiro andamento já deixa a captação
    **"Em articulação"** sozinha, até o militar responsável marcar o desfecho ali mesmo:
-   **Indicado** ou **Arquivado**. Um alerta automático aparece se uma captação ainda em
+   **Entregue** ou **Arquivado**. Um alerta automático aparece se uma captação ainda em
    andamento ficar 15+ dias (🟡 esfriando) ou 30+ dias (🔴 parada) sem nenhum andamento novo.
-   Este painel só acompanha até a captação ser indicada — o que acontece depois (empenho,
+   Este painel só acompanha até a captação ser entregue — o que acontece depois (empenho,
    licitação, entrega) é acompanhado no painel-nacional. A cada cadastro/edição/exclusão, uma
    notificação por e-mail sai pra `asparcbmgo@gmail.com` (ver EmailJS abaixo).
 6. **Acesso restrito** (`/gerenciamento`) — adicionar, editar e remover quartéis e militares

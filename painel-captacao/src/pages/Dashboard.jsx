@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck } from 'react-icons/lu';
@@ -22,6 +22,10 @@ function fmtRCompact(v) {
 }
 
 const PODIO_MEDALHA = ['🥇', '🥈', '🥉'];
+
+function anoDe(dataIso) {
+  return dataIso ? dataIso.slice(0, 4) : null;
+}
 
 function ChartCard({ title, sub, icon: Icon, children }) {
   return (
@@ -80,20 +84,40 @@ export default function Dashboard() {
   const { eventos } = useEventos();
   const { theme } = useTheme();
 
-  const ranking = useMemo(() => computeQuartelRanking(captacoes, quarteis, eventos), [captacoes, quarteis, eventos]);
+  const [anoSelecionado, setAnoSelecionado] = useState('todos');
+
+  // Anos pra filtrar sempre incluem o atual + os 2 seguintes (pra já dar pra escolher um ano
+  // futuro mesmo sem nenhuma captação lançada nele ainda), mais qualquer ano que já tenha
+  // captação cadastrada (ex: anos anteriores).
+  const anosDisponiveis = useMemo(() => {
+    const anoAtual = new Date().getFullYear();
+    const anos = new Set([anoAtual, anoAtual + 1, anoAtual + 2]);
+    captacoes.forEach((c) => {
+      const ano = anoDe(c.criadoEm);
+      if (ano) anos.add(Number(ano));
+    });
+    return [...anos].sort((a, b) => a - b);
+  }, [captacoes]);
+
+  const captacoesDoAno = useMemo(
+    () => (anoSelecionado === 'todos' ? captacoes : captacoes.filter((c) => anoDe(c.criadoEm) === anoSelecionado)),
+    [captacoes, anoSelecionado]
+  );
+
+  const ranking = useMemo(() => computeQuartelRanking(captacoesDoAno, quarteis, eventos), [captacoesDoAno, quarteis, eventos]);
   const porCaptacao = useMemo(() => rankPorCaptacao(ranking).filter((q) => q.totalPrevisto > 0), [ranking]);
   const porArticulacao = useMemo(() => rankPorArticulacao(ranking).filter((q) => q.qtdArticulacoes > 0), [ranking]);
 
   const totalPrevisto = ranking.reduce((s, q) => s + q.totalPrevisto, 0);
-  const totalIndicado = ranking.reduce((s, q) => s + q.totalIndicado, 0);
-  const totalArticulacoes = captacoes.length;
+  const totalEntregue = ranking.reduce((s, q) => s + q.totalEntregue, 0);
+  const totalArticulacoes = captacoesDoAno.length;
   const totalReunioes = ranking.reduce((s, q) => s + q.qtdReunioes, 0);
 
   const podio = porCaptacao.slice(0, 3);
 
   const recentes = useMemo(
-    () => [...captacoes].sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || '')).slice(0, 8),
-    [captacoes]
+    () => [...captacoesDoAno].sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || '')).slice(0, 8),
+    [captacoesDoAno]
   );
 
   const corAzul = CATEGORICO[0][theme];
@@ -115,6 +139,18 @@ export default function Dashboard() {
         </Link>
       </ScrollReveal>
 
+      <ScrollReveal delay={0.02} className="mt-4 flex flex-wrap items-center gap-2">
+        <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Ano</span>
+        <button type="button" onClick={() => setAnoSelecionado('todos')} className={`rounded-full px-3 py-1 text-xs font-medium ${anoSelecionado === 'todos' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
+          Todos
+        </button>
+        {anosDisponiveis.map((ano) => (
+          <button key={ano} type="button" onClick={() => setAnoSelecionado(String(ano))} className={`rounded-full px-3 py-1 text-xs font-medium ${anoSelecionado === String(ano) ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
+            {ano}
+          </button>
+        ))}
+      </ScrollReveal>
+
       {quarteis.length === 0 && (
         <ScrollReveal delay={0.03} className="mt-4 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-500/10 dark:text-amber-300">
           <LuTriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
@@ -124,7 +160,7 @@ export default function Dashboard() {
 
       <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label="Total captado (previsto)" value={fmtRCompact(totalPrevisto)} sub={fmtR(totalPrevisto)} icon={<LuBanknote />} accent="red" />
-        <StatCard label="Total indicado" value={fmtRCompact(totalIndicado)} icon={<LuTrophy />} accent="amber" />
+        <StatCard label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="amber" />
         <StatCard label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
         <StatCard label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="emerald" />
       </ScrollReveal>

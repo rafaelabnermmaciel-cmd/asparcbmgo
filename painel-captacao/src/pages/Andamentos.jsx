@@ -9,7 +9,7 @@ import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 
 // Aba própria pra registrar o dia a dia de cada captação já cadastrada — reuniões, visitas,
 // atualizações — sem precisar passar pelo formulário de "Cadastrar primeiro contato". Tudo
-// aqui fica "Em articulação" até o militar responsável marcar o desfecho (Indicado ou
+// aqui fica "Em articulação" até o militar responsável marcar o desfecho (Entregue ou
 // Arquivado) dentro da própria linha do tempo de cada captação.
 export default function Andamentos() {
   const { aprovado } = useAuth();
@@ -41,7 +41,7 @@ export default function Andamentos() {
       <ScrollReveal>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Adicionar andamento</h1>
         <p className="mt-1 text-sm text-slate-400">
-          Tudo fica "Em articulação" até o militar responsável marcar o desfecho — Indicado ou Arquivado — dentro da linha do tempo de cada captação. Filtre por quartel pra achar mais rápido.
+          Tudo fica "Em articulação" até o militar responsável marcar o desfecho — Entregue ou Arquivado — dentro da linha do tempo de cada captação. Filtre por quartel pra achar mais rápido.
         </p>
       </ScrollReveal>
 
