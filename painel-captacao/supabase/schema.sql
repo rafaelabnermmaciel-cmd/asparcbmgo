@@ -161,11 +161,13 @@ create table if not exists captacoes (
 
 -- Toda captação nova é só "Primeiro contato" (sem estágio pra escolher no cadastro) — vira
 -- "Em articulação" sozinha assim que o primeiro andamento é lançado, e só sai daí quando o
--- militar marca "Indicado" ou "Arquivado" pela aba de andamentos (ver 4.1). Os antigos estágios
+-- militar marca "Entregue" ou "Arquivado" pela aba de andamentos (ver 4.1). Os antigos estágios
 -- intermediários (Agenda marcada/Adiado/Recusado/Destinado) somem — quem já estava
 -- num deles vira "Em articulação" pra continuar em aberto, sem perder o histórico de eventos.
+-- "Indicado" foi renomeado pra "Entregue" (linguagem mais direta pro desfecho de sucesso).
+update captacoes set status = 'Entregue' where status = 'Indicado';
 update captacoes set status = 'Em articulação'
-  where status not in ('Primeiro contato', 'Em articulação', 'Indicado', 'Arquivado');
+  where status not in ('Primeiro contato', 'Em articulação', 'Entregue', 'Arquivado');
 alter table captacoes drop column if exists valor_confirmado;
 alter table captacoes drop column if exists num_reunioes;
 alter table captacoes drop column if exists data_agenda;

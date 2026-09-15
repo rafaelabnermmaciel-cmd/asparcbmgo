@@ -21,7 +21,7 @@ function ultimaData(captacao, eventosDaCaptacao) {
 
 // Badge de alerta quando uma captação em andamento fica muito tempo sem nenhum andamento novo
 // registrado na linha do tempo — só faz sentido pra quem ainda não chegou num desfecho
-// (Indicado/Arquivado não "esfriam").
+// (Entregue/Arquivado não "esfriam").
 export function AlertaParado({ captacao, eventos }) {
   if (STATUS_TERMINAL.includes(captacao.status)) return null;
   const doCaptacao = eventos.filter((e) => e.captacao_id === captacao.id);
@@ -56,7 +56,7 @@ function AnexosEvento({ anexos }) {
 // presente, foto/documento) + formulário "Adicionar andamento" pra registrar um novo. Toda
 // captação nasce "Primeiro contato"; o primeiro andamento lançado aqui já deixa ela "Em
 // articulação" sozinha, e continua assim até o militar responsável marcar um desfecho
-// ("Indicado" ou "Arquivado") logo abaixo — não existe outro lugar pra mudar o status.
+// ("Entregue" ou "Arquivado") logo abaixo — não existe outro lugar pra mudar o status.
 export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMudarStatus, parlamentares, addStakeholder }) {
   const doCaptacao = useMemo(
     () => eventos.filter((e) => e.captacao_id === captacao.id).slice().sort((a, b) => a.data.localeCompare(b.data)),
@@ -185,8 +185,8 @@ export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMud
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" disabled={mudandoStatus} onClick={() => marcarDesfecho('Indicado')} className="flex items-center gap-1 rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 dark:border-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-950/30">
-              <LuCheck className="h-3.5 w-3.5" /> Marcar como Indicado
+            <button type="button" disabled={mudandoStatus} onClick={() => marcarDesfecho('Entregue')} className="flex items-center gap-1 rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 dark:border-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-950/30">
+              <LuCheck className="h-3.5 w-3.5" /> Marcar como Entregue
             </button>
             <button type="button" disabled={mudandoStatus} onClick={() => marcarDesfecho('Arquivado')} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition hover:border-red-300 hover:text-red-600 disabled:opacity-50 dark:border-slate-700 dark:text-slate-400">
               <LuArchive className="h-3.5 w-3.5" /> Marcar como Arquivado

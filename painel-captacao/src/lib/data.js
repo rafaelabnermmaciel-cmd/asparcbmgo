@@ -293,7 +293,7 @@ export function useCaptacoes() {
   }, []);
 
   // Uma captação cadastrada não fica congelada — o estágio muda com o tempo (ex: "Primeiro
-  // contato" → "Em articulação" → "Indicado"), então precisa dar pra editar qualquer campo
+  // contato" → "Em articulação" → "Entregue"), então precisa dar pra editar qualquer campo
   // depois. `patch` usa as mesmas chaves em camelCase do resto do app.
   const updateCaptacao = useCallback(async (id, patch) => {
     const linha = {};
@@ -456,13 +456,11 @@ export function initials(name) {
 // Este painel acompanha só a articulação — do primeiro contato até um desfecho. Toda captação
 // nasce "Primeiro contato" (sem estágio pra escolher no cadastro); vira "Em articulação"
 // sozinha assim que o primeiro andamento é lançado na linha do tempo, e só sai daí quando o
-// militar responsável marca o desfecho ("Indicado" ou "Arquivado") ali mesmo, na aba de
-// andamentos — ver CaptacaoTimeline.jsx. O que acontece depois de "Indicado" (empenho,
-// licitação, contratação, entrega) é execução orçamentária/administrativa, acompanhada no
-// perfil de cada um no outro painel — não é mais trabalho de quem está captando.
-export const STATUS_CAPTACAO = ['Primeiro contato', 'Em articulação', 'Indicado', 'Arquivado'];
+// militar responsável marca o desfecho ("Entregue" ou "Arquivado") ali mesmo, na aba de
+// andamentos — ver CaptacaoTimeline.jsx.
+export const STATUS_CAPTACAO = ['Primeiro contato', 'Em articulação', 'Entregue', 'Arquivado'];
 
-// Os 2 primeiros são o funil "em andamento"; os 2 últimos são os desfechos ("Indicado" é o
-// desfecho de sucesso — a captação foi indicada/destinada àquele quartel).
+// Os 2 primeiros são o funil "em andamento"; os 2 últimos são os desfechos ("Entregue" é o
+// desfecho de sucesso — a captação foi entregue àquele quartel).
 export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação'];
-export const STATUS_TERMINAL = ['Indicado', 'Arquivado'];
+export const STATUS_TERMINAL = ['Entregue', 'Arquivado'];

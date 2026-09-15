@@ -15,8 +15,8 @@ export function computeQuartelRanking(captacoes, quarteis, eventos = []) {
         qtdArticulacoes: 0,
         qtdReunioes: 0,
         totalPrevisto: 0,
-        totalIndicado: 0,
-        qtdIndicadas: 0,
+        totalEntregue: 0,
+        qtdEntregues: 0,
       });
     }
     return porQuartel.get(key);
@@ -30,9 +30,9 @@ export function computeQuartelRanking(captacoes, quarteis, eventos = []) {
     const q = garantir(key, c.quartelNome || 'Não identificado', c.municipio || '');
     q.qtdArticulacoes += 1;
     q.totalPrevisto += c.valorPrevisto || 0;
-    if (c.status === 'Indicado') {
-      q.totalIndicado += c.valorPrevisto || 0;
-      q.qtdIndicadas += 1;
+    if (c.status === 'Entregue') {
+      q.totalEntregue += c.valorPrevisto || 0;
+      q.qtdEntregues += 1;
     }
   });
 

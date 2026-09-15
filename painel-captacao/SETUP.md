@@ -279,10 +279,10 @@ andamento**, ou abrindo a captação no perfil do parlamentar) tem a seção pra
 quem esteve presente e foto/documento — pra registrar os próximos passos (ex: "reunião
 marcada", "foram ao Congresso Nacional"). Lançar o primeiro andamento já deixa a captação **"Em
 articulação"** sozinha; ela só sai daí quando o militar responsável marca o desfecho — botões
-**"Marcar como Indicado"** ou **"Marcar como Arquivado"**, logo abaixo do formulário de
+**"Marcar como Entregue"** ou **"Marcar como Arquivado"**, logo abaixo do formulário de
 andamento — não existe outro lugar pra mudar isso.
 
 Se uma captação ainda em andamento (Primeiro contato/Em articulação — não chegou em
-Indicado/Arquivado) fica **15 dias** sem nenhum andamento novo, aparece um aviso amarelo
+Entregue/Arquivado) fica **15 dias** sem nenhum andamento novo, aparece um aviso amarelo
 "🟡 Esfriando"; com **30 dias** ou mais, vira um aviso vermelho "🔴 Parado há X dias" — pra
 não deixar nenhuma articulação esfriar sem perceber.
