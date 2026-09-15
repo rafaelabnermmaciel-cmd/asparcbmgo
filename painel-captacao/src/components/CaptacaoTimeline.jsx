@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { LuClock, LuPlus, LuTrash2, LuTriangleAlert, LuFileText, LuImage, LuCheck, LuArchive } from 'react-icons/lu';
 import { STATUS_TERMINAL } from '../lib/data.js';
 import { inputClass, labelClass, btnGhost } from './CaptacaoForm.jsx';
+import { CriarStakeholderInline } from './StakeholderForm.jsx';
 import FileField from './FileField.jsx';
 
 export function hoje() {
@@ -56,11 +57,15 @@ function AnexosEvento({ anexos }) {
 // captação nasce "Primeiro contato"; o primeiro andamento lançado aqui já deixa ela "Em
 // articulação" sozinha, e continua assim até o militar responsável marcar um desfecho
 // ("Indicado" ou "Arquivado") logo abaixo — não existe outro lugar pra mudar o status.
-export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMudarStatus }) {
+export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMudarStatus, parlamentares, addStakeholder }) {
   const doCaptacao = useMemo(
     () => eventos.filter((e) => e.captacao_id === captacao.id).slice().sort((a, b) => a.data.localeCompare(b.data)),
     [eventos, captacao.id]
   );
+  const parlamentarKey = useMemo(() => {
+    const p = parlamentares?.find((x) => x.nome === captacao.parlamentarNome);
+    return p ? `${p.casa}:${p.id}` : null;
+  }, [parlamentares, captacao.parlamentarNome]);
   const [novo, setNovo] = useState(ANDAMENTO_VAZIO);
   const [anexos, setAnexos] = useState([]);
   const [salvando, setSalvando] = useState(false);
@@ -166,6 +171,12 @@ export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMud
                   <FileField anexos={anexos} onChange={setAnexos} />
                 </div>
               </div>
+              {addStakeholder && (
+                <div className="sm:col-span-2">
+                  <p className={labelClass}>Conheceu um novo stakeholder nesse andamento?</p>
+                  <CriarStakeholderInline parlamentares={parlamentares} addStakeholder={addStakeholder} parlamentarKeyPadrao={parlamentarKey} />
+                </div>
+              )}
             </div>
             <button type="button" disabled={salvando} onClick={registrar} className={`mt-3 flex items-center gap-1 ${btnGhost}`}>
               <LuPlus className="h-3.5 w-3.5" /> {salvando ? 'Registrando...' : 'Registrar andamento'}

@@ -13,7 +13,7 @@ export default function Cadastro() {
   const { parlamentares } = useParlamentaresGO();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
-  const { stakeholders } = useStakeholders();
+  const { stakeholders, addStakeholder } = useStakeholders();
   const { submitCaptacao } = useCaptacoes();
   const { addEvento } = useEventos();
 
@@ -66,7 +66,7 @@ export default function Cadastro() {
 
       <ScrollReveal delay={0.06} className="mt-5">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
-          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
+          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} addStakeholder={addStakeholder} />
           <div>
             <p className={labelClass}>Data do primeiro contato *</p>
             <input type="date" className={inputClass} value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />
