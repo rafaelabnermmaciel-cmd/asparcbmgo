@@ -41,9 +41,10 @@ jobs:
           i=0
           while read -r fname; do
             i=$((i+1))
-            curl -sS -A "$UA" -o "/tmp/js/$fname" -w "HTTP %{http_code} $fname\n" "https://resultados.tse.jus.br/oficial/app/$fname" || true
+            curl -sS --max-time 8 -A "$UA" -o "/tmp/js/$fname" "https://resultados.tse.jus.br/oficial/app/$fname" || echo "falhou: $fname"
           done < /tmp/chunk_ids.txt
-          ls -la /tmp/js | head -50
+          echo "total de arquivos baixados:"
+          ls /tmp/js | wc -l
           du -sh /tmp/js
 
       - name: Procurar UF/config/endpoint em todos os chunks baixados
