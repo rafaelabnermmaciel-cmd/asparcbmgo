@@ -52,7 +52,7 @@ function EndLabel(valueFmt) {
   );
 }
 
-function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle }) {
+function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle, allowDecimals = true }) {
   return (
     <div style={{ height: Math.max(140, data.length * 34 + 20) }} className="mt-4">
       <ResponsiveContainer width="100%" height="100%">
@@ -64,7 +64,7 @@ function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle }) {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" horizontal={false} className="stroke-slate-100 dark:stroke-slate-800" />
-          <XAxis type="number" domain={[0, (max) => Math.ceil((max || 1) * 1.2)]} tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-400" tickFormatter={valueFmt} />
+          <XAxis type="number" allowDecimals={allowDecimals} domain={[0, (max) => Math.ceil((max || 1) * 1.2)]} tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-400" tickFormatter={valueFmt} />
           <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 12 }} stroke="currentColor" className="text-slate-500" />
           <Tooltip cursor={{ fill: 'rgba(220,38,38,0.06)' }} formatter={(v) => valueFmt(v)} contentStyle={tooltipStyle} />
           <Bar dataKey="value" radius={[0, 8, 8, 0]} maxBarSize={20} fill={`url(#${gradId})`} background={{ fill: trackColor, radius: [0, 8, 8, 0] }}>
@@ -186,6 +186,7 @@ export default function Dashboard() {
               trackColor={trackColor}
               gradId="gradArticulacao"
               tooltipStyle={tooltipStyle}
+              allowDecimals={false}
             />
           ) : (
             <p className="mt-6 text-center text-xs text-slate-400">Nenhuma articulação cadastrada ainda.</p>
