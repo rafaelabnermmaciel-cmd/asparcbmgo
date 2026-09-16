@@ -1,35 +1,5 @@
 [
   {
-    "id": 121948,
-    "casa": "camara",
-    "nome": "Adriano do Baldy",
-    "nomeCivil": "ADRIANO ANTÔNIO AVELAR",
-    "partido": "PP",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/121948.jpg",
-    "email": "dep.adrianodobaldy@camara.leg.br",
-    "telefone": "3215-5419",
-    "gabinete": {
-      "predio": "4",
-      "sala": "419",
-      "andar": "4"
-    },
-    "dataNascimento": "1969-09-06",
-    "municipioNascimento": "Goiás",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/adrianodobaldy",
-      "https://www.facebook.com/AdrianoDoBaldyOficial",
-      "https://www.instagram.com/adrianodobaldyoficial"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/121948",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/adrianodobaldyoficial"
-  },
-  {
     "id": "808",
     "casa": "alego",
     "cargo": "Deputado Estadual",
@@ -47,8 +17,7 @@
       "https://www.facebook.com/alessandromoreiira.go",
       "https://www.instagram.com/alessandromoreira.go"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/808",
-    "instagram": "https://www.instagram.com/alessandromoreira.go"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/808"
   },
   {
     "id": "137",
@@ -70,8 +39,7 @@
       "https://twitter.com/AmauriRibeiroGO",
       "https://www.youtube.com/channel/UCQV3sJ88k0vMfjI_NB7l0-Q"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/137",
-    "instagram": "https://www.instagram.com/deputadoamauriribeiro/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/137"
   },
   {
     "id": "138",
@@ -92,8 +60,7 @@
       "https://www.instagram.com/amiltonfilhooficial",
       "https://twitter.com/amiltonfilho"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/138",
-    "instagram": "https://www.instagram.com/amiltonfilhooficial"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/138"
   },
   {
     "id": "809",
@@ -114,8 +81,7 @@
       "https://www.instagram.com/andersonteodorooficial/",
       "https://twitter.com/andersoteodoro?s=11"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/809",
-    "instagram": "https://www.instagram.com/andersonteodorooficial/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/809"
   },
   {
     "id": "810",
@@ -135,8 +101,7 @@
       "https://www.facebook.com/euandredopremium",
       "https://www.instagram.com/andredopremium/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/810",
-    "instagram": "https://www.instagram.com/andredopremium/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/810"
   },
   {
     "id": "139",
@@ -157,8 +122,7 @@
       "https://www.instagram.com/antoniogomide/?hl=pt-br",
       "https://twitter.com/antoniogomidept"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/139",
-    "instagram": "https://www.instagram.com/antoniogomide/?hl=pt-br"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/139"
   },
   {
     "id": "811",
@@ -178,8 +142,7 @@
       "https://www.facebook.com/bia.d.lima",
       "https://www.instagram.com/biadelimaoficial"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/811",
-    "instagram": "https://www.instagram.com/biadelimaoficial"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/811"
   },
   {
     "id": "51",
@@ -200,8 +163,7 @@
       "https://www.instagram.com/brunopeixotooficial/",
       "https://twitter.com/brunopeixoto15"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/51",
-    "instagram": "https://www.instagram.com/brunopeixotooficial/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/51"
   },
   {
     "id": "140",
@@ -222,37 +184,7 @@
       "https://twitter.com/cairosalim",
       "https://www.youtube.com/@cairosalim2197"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/140",
-    "instagram": "https://www.instagram.com/cairosalim/"
-  },
-  {
-    "id": 178876,
-    "casa": "camara",
-    "nome": "Célio Silveira",
-    "nomeCivil": "CELIO ANTONIO DA SILVEIRA",
-    "partido": "MDB",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/178876.jpg",
-    "email": "dep.celiosilveira@camara.leg.br",
-    "telefone": "3215-5511",
-    "gabinete": {
-      "predio": "4",
-      "sala": "511",
-      "andar": "5"
-    },
-    "dataNascimento": "1959-09-19",
-    "municipioNascimento": "Luziânia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.facebook.com/celiosilveiradeputado",
-      "https://www.instagram.com/celiosilveiradeputado"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/178876",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/celiosilveiradeputado"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/140"
   },
   {
     "id": "117",
@@ -272,8 +204,7 @@
       "https://www.facebook.com/charles.bento.9803",
       "https://www.instagram.com/deputadocharlesbento/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/117",
-    "instagram": "https://www.instagram.com/deputadocharlesbento/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/117"
   },
   {
     "id": "812",
@@ -293,8 +224,7 @@
       "https://www.facebook.com/clecioalves.go",
       "https://www.instagram.com/clecioalvesgo/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/812",
-    "instagram": "https://www.instagram.com/clecioalvesgo/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/812"
   },
   {
     "id": "142",
@@ -315,8 +245,7 @@
       "https://www.instagram.com/coroneladailton/",
       "https://twitter.com/coroneladailton"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/142",
-    "instagram": "https://www.instagram.com/coroneladailton/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/142"
   },
   {
     "id": "813",
@@ -336,8 +265,7 @@
       "https://www.facebook.com/cristiano.galindo.14",
       "https://instagram.com/cristiano.galindo?igshid=YmMyMTA2M2Y="
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/813",
-    "instagram": "https://instagram.com/cristiano.galindo?igshid=YmMyMTA2M2Y="
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/813"
   },
   {
     "id": "6",
@@ -357,67 +285,7 @@
       "https://www.facebook.com/cristovaovaztormin",
       "https://www.instagram.com/cristovao.tormin/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/6",
-    "instagram": "https://www.instagram.com/cristovao.tormin/"
-  },
-  {
-    "id": 220571,
-    "casa": "camara",
-    "nome": "Daniel Agrobom",
-    "nomeCivil": "DANIEL VIEIRA RAMOS",
-    "partido": "PSD",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220571.jpg",
-    "email": "dep.danielagrobom@camara.leg.br",
-    "telefone": "3215-5491",
-    "gabinete": {
-      "predio": "3",
-      "sala": "491",
-      "andar": null
-    },
-    "dataNascimento": "1968-07-02",
-    "municipioNascimento": "Uberlândia",
-    "ufNascimento": "MG",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.instagram.com/daniel.agrobom"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220571",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/daniel.agrobom"
-  },
-  {
-    "id": 220565,
-    "casa": "camara",
-    "nome": "Delegada Adriana Accorsi",
-    "nomeCivil": "ADRIANA SAUTHIER ACCORSI",
-    "partido": "PT",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220565.jpg",
-    "email": "dep.delegadaadrianaaccorsi@camara.leg.br",
-    "telefone": "3215-5740",
-    "gabinete": {
-      "predio": "4",
-      "sala": "740",
-      "andar": "7"
-    },
-    "dataNascimento": "1973-03-17",
-    "municipioNascimento": "Itapuranga",
-    "ufNascimento": "GO",
-    "sexo": "F",
-    "redeSocial": [
-      "https://twitter.com/Adriana_Accorsi",
-      "https://www.facebook.com/delegadaadrianaaccorsi",
-      "https://www.instagram.com/adriana_accorsi/",
-      "https://www.youtube.com/channel/UCka3DO1hTh69qpZm27yjlmg"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220565",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/adriana_accorsi/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/6"
   },
   {
     "id": "143",
@@ -439,89 +307,7 @@
       "https://twitter.com/delegadoeduardo",
       "https://www.youtube.com/channel/UCPCoqOd9Mg5ufF3CLmVSQ8Q"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/143",
-    "instagram": "https://www.instagram.com/delegadoeduardoprado"
-  },
-  {
-    "id": "815",
-    "casa": "alego",
-    "cargo": "Deputado Estadual",
-    "nome": "Dr. George Morais",
-    "partido": "MDB",
-    "partidoNome": "MOVIMENTO DEMOCRÁTICO BRASILEIRO",
-    "uf": "GO",
-    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/QJPruSslmuHajMwulir4rw==?t=1789580722",
-    "email": "george.morais@al.go.leg.br",
-    "telefone": "(62) 3221-2466",
-    "gabinete": {
-      "numero": "411"
-    },
-    "redeSocial": [
-      "https://www.facebook.com/drgeorgemorais12",
-      "https://www.instagram.com/drgeorgemorais/"
-    ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/815",
-    "instagram": "https://www.instagram.com/drgeorgemorais/"
-  },
-  {
-    "id": 220570,
-    "casa": "camara",
-    "nome": "Dr. Ismael Alexandrino",
-    "nomeCivil": "ISMAEL ALEXANDRINO JUNIOR",
-    "partido": "PSD",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220570.jpg",
-    "email": "dep.dr.ismaelalexandrino@camara.leg.br",
-    "telefone": "3215-5854",
-    "gabinete": {
-      "predio": "4",
-      "sala": "854",
-      "andar": "8"
-    },
-    "dataNascimento": "1983-07-26",
-    "municipioNascimento": "São Luís de Montes Belos",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/IsmAlexandrino",
-      "https://www.facebook.com/IsmaelAlexandrino",
-      "https://www.instagram.com/ismael.alexandrino"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220570",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/ismael.alexandrino"
-  },
-  {
-    "id": 204412,
-    "casa": "camara",
-    "nome": "Dr. Zacharias Calil",
-    "nomeCivil": "ZACARIAS CALIL HAMU",
-    "partido": "MDB",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204412.jpg",
-    "email": "dep.dr.zachariascalil@camara.leg.br",
-    "telefone": "3215-5616",
-    "gabinete": {
-      "predio": "4",
-      "sala": "616",
-      "andar": "6"
-    },
-    "dataNascimento": "1953-11-05",
-    "municipioNascimento": "Goiânia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/zachariascalil",
-      "https://www.facebook.com/drzachariascalil",
-      "https://www.instagram.com/drzachariascalil"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/204412",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/drzachariascalil"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/143"
   },
   {
     "id": "825",
@@ -541,8 +327,27 @@
       "https://www.facebook.com/zeli.fritsche.val?locale=pt_BR",
       "https://www.instagram.com/deputadadrazeli/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/825",
-    "instagram": "https://www.instagram.com/deputadadrazeli/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/825"
+  },
+  {
+    "id": "815",
+    "casa": "alego",
+    "cargo": "Deputado Estadual",
+    "nome": "Dr. George Morais",
+    "partido": "MDB",
+    "partidoNome": "MOVIMENTO DEMOCRÁTICO BRASILEIRO",
+    "uf": "GO",
+    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/QJPruSslmuHajMwulir4rw==?t=1789580722",
+    "email": "george.morais@al.go.leg.br",
+    "telefone": "(62) 3221-2466",
+    "gabinete": {
+      "numero": "411"
+    },
+    "redeSocial": [
+      "https://www.facebook.com/drgeorgemorais12",
+      "https://www.instagram.com/drgeorgemorais/"
+    ],
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/815"
   },
   {
     "id": "831",
@@ -560,37 +365,7 @@
       "https://www.facebook.com/elieljuniorgoias?mibextid=wwXIfr&amp;rdid=ejsm05Dsp6wJOnXZ&amp;share_url=https%253A%252F%252Fwww.facebook.com%252Fshare%252F1D9MdGriBG%252F%253Fmibextid%253DwwXIfr#",
       "https://www.instagram.com/elieljunior.go"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/831",
-    "instagram": "https://www.instagram.com/elieljunior.go"
-  },
-  {
-    "id": 160598,
-    "casa": "camara",
-    "nome": "Flávia Morais",
-    "nomeCivil": "FLÁVIA CARREIRO ALBUQUERQUE MORAIS",
-    "partido": "MDB",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/160598.jpg",
-    "email": "dep.flaviamorais@camara.leg.br",
-    "telefone": "3215-5738",
-    "gabinete": {
-      "predio": "4",
-      "sala": "738",
-      "andar": "7"
-    },
-    "dataNascimento": "1969-04-26",
-    "municipioNascimento": "Belo Horizonte",
-    "ufNascimento": "MG",
-    "sexo": "F",
-    "redeSocial": [
-      "https://www.facebook.com/FláviaMorais",
-      "https://www.instagram.com/flaviamorais1212"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/160598",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/flaviamorais1212"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/831"
   },
   {
     "id": "832",
@@ -605,34 +380,7 @@
     "telefone": null,
     "gabinete": null,
     "redeSocial": [],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/832",
-    "instagram": null
-  },
-  {
-    "id": 204419,
-    "casa": "camara",
-    "nome": "Glaustin da Fokus",
-    "nomeCivil": "GLAUSKSTON BATISTA RIOS",
-    "partido": "PODE",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204419.jpg",
-    "email": "dep.glaustindafokus@camara.leg.br",
-    "telefone": "3215-5295",
-    "gabinete": {
-      "predio": "3",
-      "sala": "295",
-      "andar": null
-    },
-    "dataNascimento": "1973-12-22",
-    "municipioNascimento": "Goiânia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/204419",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/glaustindafokus/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/832"
   },
   {
     "id": "817",
@@ -654,39 +402,7 @@
       "https://twitter.com/gugu_nader?s=11",
       "https://youtube.com/@GuguNader"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/817",
-    "instagram": "https://instagram.com/gugu_nader?igshid=Y2I2MzMwZWM3ZA=="
-  },
-  {
-    "id": 220568,
-    "casa": "camara",
-    "nome": "Gustavo Gayer",
-    "nomeCivil": "GUSTAVO GAYER MACHADO DE ARAUJO",
-    "partido": "PL",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220568.jpg",
-    "email": "dep.gustavogayer@camara.leg.br",
-    "telefone": "3215-5737",
-    "gabinete": {
-      "predio": "4",
-      "sala": "737",
-      "andar": "7"
-    },
-    "dataNascimento": "1981-04-13",
-    "municipioNascimento": "Goiânia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/GayerGus",
-      "https://www.facebook.com/gustavogayer",
-      "https://www.instagram.com/gusgayer",
-      "https://youtube.com/GustavoGayer"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220568",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/gusgayer"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/817"
   },
   {
     "id": "122",
@@ -708,8 +424,7 @@
       "https://twitter.com/DeputadoGustavo",
       "https://www.youtube.com/channel/UCl7pnXNQ7rlP3izqEPwVBuQ"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/122",
-    "instagram": "https://www.instagram.com/gustavosebba/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/122"
   },
   {
     "id": "134",
@@ -729,8 +444,7 @@
       "https://www.facebook.com/cantorhenriquecesar?locale=pt_BR",
       "https://www.instagram.com/prhenriquecesar/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/134",
-    "instagram": "https://www.instagram.com/prhenriquecesar/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/134"
   },
   {
     "id": "406",
@@ -751,8 +465,7 @@
       "https://www.instagram.com/issy.quinan/",
       "https://mobile.twitter.com/quinanissy"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/406",
-    "instagram": "https://www.instagram.com/issy.quinan/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/406"
   },
   {
     "id": "818",
@@ -772,55 +485,7 @@
       "https://www.facebook.com/search/top?q=jamil%20calife&amp;locale=pt_BR",
       "https://www.instagram.com/califejamil/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/818",
-    "instagram": "https://www.instagram.com/califejamil/"
-  },
-  {
-    "id": 220567,
-    "casa": "camara",
-    "nome": "Jeferson Rodrigues",
-    "nomeCivil": "JEFERSON RODRIGUES LEMOS",
-    "partido": "PSDB",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220567.jpg",
-    "email": "dep.jefersonrodrigues@camara.leg.br",
-    "telefone": "3215-5725",
-    "gabinete": {
-      "predio": "4",
-      "sala": "725",
-      "andar": "7"
-    },
-    "dataNascimento": "1975-05-01",
-    "municipioNascimento": "Goiânia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/220567",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/depjeferson10/"
-  },
-  {
-    "id": "5895",
-    "casa": "senado",
-    "nome": "Jorge Kajuru",
-    "nomeCompleto": "Jorge Kajuru Reis da Costa Nasser",
-    "partido": "PSB",
-    "uf": "GO",
-    "situacao": null,
-    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5895.jpg",
-    "email": "sen.jorgekajuru@senado.leg.br",
-    "telefone": "3303-2844",
-    "gabinete": null,
-    "dataNascimento": "1961-01-20",
-    "municipioNascimento": "Cajuru",
-    "ufNascimento": null,
-    "sexo": null,
-    "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5895",
-    "cargo": "Senador",
-    "instagram": "https://www.instagram.com/senadorkajuru/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/818"
   },
   {
     "id": "814",
@@ -841,38 +506,7 @@
       "https://www.instagram.com/dr.jmachado/",
       "https://twitter.com/Drjmachado"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/814",
-    "instagram": "https://www.instagram.com/dr.jmachado/"
-  },
-  {
-    "id": 204391,
-    "casa": "camara",
-    "nome": "José Nelto",
-    "nomeCivil": "JOSÉ NELTO LAGARES DAS MERCEZ",
-    "partido": "UNIÃO",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204391.jpg",
-    "email": "dep.josenelto@camara.leg.br",
-    "telefone": "3215-5703",
-    "gabinete": {
-      "predio": "4",
-      "sala": "703",
-      "andar": "7"
-    },
-    "dataNascimento": "1960-09-19",
-    "municipioNascimento": "Tiros",
-    "ufNascimento": "MG",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/depjosenelto",
-      "https://www.facebook.com/joseneltopodemos",
-      "https://www.instagram.com/joseneltooficial"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/204391",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/joseneltooficial"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/814"
   },
   {
     "id": "145",
@@ -894,8 +528,7 @@
       "https://twitter.com/JulioPina28",
       "https://www.youtube.com/channel/UCAaNFAOx3l4q5xC9vGWk8Zw/featured"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/145",
-    "instagram": "https://www.instagram.com/juliopinaoficial/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/145"
   },
   {
     "id": "63",
@@ -916,34 +549,7 @@
       "https://www.instagram.com/karloscabral/",
       "http://twitter.com/#!/KarlosCabral"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/63",
-    "instagram": "https://www.instagram.com/karloscabral/"
-  },
-  {
-    "id": 220566,
-    "casa": "camara",
-    "nome": "Lêda Borges",
-    "nomeCivil": "Lêda Borges de Moura",
-    "partido": "REPUBLICANOS",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220566.jpg",
-    "email": "dep.ledaborges@camara.leg.br",
-    "telefone": "3215-5742",
-    "gabinete": {
-      "predio": "4",
-      "sala": "742",
-      "andar": "7"
-    },
-    "dataNascimento": "1961-11-02",
-    "municipioNascimento": "Conquista",
-    "ufNascimento": "MG",
-    "sexo": "F",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/220566",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/ledaborgesm/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/63"
   },
   {
     "id": "64",
@@ -964,8 +570,7 @@
       "https://www.instagram.com/lincolntejota/",
       "https://twitter.com/lincoln_tejota"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/64",
-    "instagram": "https://www.instagram.com/lincolntejota/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/64"
   },
   {
     "id": "819",
@@ -985,8 +590,7 @@
       "https://www.facebook.com/deputadolineuolimpio",
       "https://www.instagram.com/lineuolimpio_/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/819",
-    "instagram": "https://www.instagram.com/lineuolimpio_/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/819"
   },
   {
     "id": "125",
@@ -1007,8 +611,7 @@
       "https://www.instagram.com/lucascalilgo/",
       "https://twitter.com/LucasCalilGo"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/125",
-    "instagram": "https://www.instagram.com/lucascalilgo/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/125"
   },
   {
     "id": "820",
@@ -1028,38 +631,7 @@
       "https://www.facebook.com/LucasDoValeRV",
       "https://www.instagram.com/lucasdovalego/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/820",
-    "instagram": "https://www.instagram.com/lucasdovalego/"
-  },
-  {
-    "id": 166402,
-    "casa": "camara",
-    "nome": "Magda Mofatto",
-    "nomeCivil": "MAGDA MOFATTO HON",
-    "partido": "PL",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/166402.jpg",
-    "email": "dep.magdamofatto@camara.leg.br",
-    "telefone": "3215-5934",
-    "gabinete": {
-      "predio": "4",
-      "sala": "934",
-      "andar": "9"
-    },
-    "dataNascimento": "1948-10-26",
-    "municipioNascimento": "Limeira",
-    "ufNascimento": "SP",
-    "sexo": "F",
-    "redeSocial": [
-      "https://twitter.com/MofattoMagda",
-      "https://www.facebook.com/MagdaMofatto.Goias",
-      "https://www.instagram.com/magdamofatto.goias"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/166402",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/magdamofatto.goias"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/820"
   },
   {
     "id": "62",
@@ -1080,38 +652,7 @@
       "https://www.instagram.com/depmajoraraujo/",
       "http://twitter.com/#!/DepMajorAraujo"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/62",
-    "instagram": "https://www.instagram.com/depmajoraraujo/"
-  },
-  {
-    "id": 220572,
-    "casa": "camara",
-    "nome": "Marussa Boldrin",
-    "nomeCivil": "MARUSSA CASSIA FAVARO BOLDRIN",
-    "partido": "REPUBLICANOS",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220572.jpg",
-    "email": "dep.marussaboldrin@camara.leg.br",
-    "telefone": "3215-5875",
-    "gabinete": {
-      "predio": "3",
-      "sala": "875",
-      "andar": null
-    },
-    "dataNascimento": "1990-06-25",
-    "municipioNascimento": "Rio Verde",
-    "ufNascimento": "GO",
-    "sexo": "F",
-    "redeSocial": [
-      "https://twitter.com/marussago",
-      "https://www.facebook.com/marussaboldrin.go",
-      "https://www.instagram.com/marussa.boldrin"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220572",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/marussa.boldrin"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/62"
   },
   {
     "id": "40",
@@ -1133,8 +674,7 @@
       "https://twitter.com/maurorubempt",
       "https://www.youtube.com/channel/UC6wA34K9YDUv8J2dKCm1HDg"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/40",
-    "instagram": "https://www.instagram.com/maurorubempt/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/40"
   },
   {
     "id": "28",
@@ -1154,38 +694,7 @@
       "https://www.facebook.com/paulocezar.martins.33",
       "https://www.instagram.com/deputadopaulocezarmartins/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/28",
-    "instagram": "https://www.instagram.com/deputadopaulocezarmartins/"
-  },
-  {
-    "id": 204390,
-    "casa": "camara",
-    "nome": "Professor Alcides",
-    "nomeCivil": "ALCIDES RIBEIRO FILHO",
-    "partido": "PSDB",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204390.jpg",
-    "email": "dep.professoralcides@camara.leg.br",
-    "telefone": "3215-5441",
-    "gabinete": {
-      "predio": "4",
-      "sala": "441",
-      "andar": "4"
-    },
-    "dataNascimento": "1953-10-25",
-    "municipioNascimento": "Remanso",
-    "ufNascimento": "BA",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.facebook.com/ProfessorAlcidesoficial",
-      "https://www.instagram.com/professoralcidesoficial",
-      "https://youtube.com/DeputadoProfessorAlcides"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/204390",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/professoralcidesoficial"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/28"
   },
   {
     "id": "821",
@@ -1205,8 +714,7 @@
       "https://www.facebook.com/profile.php?id=100069705450232&amp;locale=pt_BR",
       "https://www.instagram.com/ricardoquirino10/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/821",
-    "instagram": "https://www.instagram.com/ricardoquirino10/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/821"
   },
   {
     "id": "822",
@@ -1227,8 +735,7 @@
       "https://www.instagram.com/rosangelarezendego/",
       "https://twitter.com/RosaRezendeGO"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/822",
-    "instagram": "https://www.instagram.com/rosangelarezendego/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/822"
   },
   {
     "id": "148",
@@ -1249,64 +756,7 @@
       "https://www.instagram.com/rubensmarquesvieira/",
       "https://twitter.com/_rubensmarques"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/148",
-    "instagram": "https://www.instagram.com/rubensmarquesvieira/"
-  },
-  {
-    "id": 74371,
-    "casa": "camara",
-    "nome": "Rubens Otoni",
-    "nomeCivil": "RUBENS OTONI GOMIDE",
-    "partido": "PT",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74371.jpg",
-    "email": "dep.rubensotoni@camara.leg.br",
-    "telefone": "3215-5501",
-    "gabinete": {
-      "predio": "4",
-      "sala": "501",
-      "andar": "5"
-    },
-    "dataNascimento": "1956-02-06",
-    "municipioNascimento": "Goianésia",
-    "ufNascimento": "GO",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/74371",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/rubensotoni/"
-  },
-  {
-    "id": 220569,
-    "casa": "camara",
-    "nome": "Silvye Alves",
-    "nomeCivil": "SILVYE ALVES DA SILVA",
-    "partido": "UNIÃO",
-    "uf": "GO",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220569.jpg",
-    "email": "dep.silvyealves@camara.leg.br",
-    "telefone": "3215-5850",
-    "gabinete": {
-      "predio": "4",
-      "sala": "850",
-      "andar": "8"
-    },
-    "dataNascimento": "1980-11-08",
-    "municipioNascimento": "Goiânia",
-    "ufNascimento": "GO",
-    "sexo": "F",
-    "redeSocial": [
-      "https://twitter.com/silvyealves",
-      "https://www.facebook.com/SilvyeeAlves",
-      "https://www.instagram.com/silvyealves"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220569",
-    "cargo": "Deputado Federal",
-    "instagram": "https://www.instagram.com/silvyealves"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/148"
   },
   {
     "id": "68",
@@ -1327,29 +777,7 @@
       "https://www.instagram.com/deputadotallesbarreto/",
       "https://twitter.com/talles_barreto"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/68",
-    "instagram": "https://www.instagram.com/deputadotallesbarreto/"
-  },
-  {
-    "id": "5899",
-    "casa": "senado",
-    "nome": "Vanderlan Cardoso",
-    "nomeCompleto": "Vanderlan Vieira Cardoso",
-    "partido": "PSD",
-    "uf": "GO",
-    "situacao": null,
-    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5899.jpg",
-    "email": "sen.vanderlancardoso@senado.leg.br",
-    "telefone": "3303-2092",
-    "gabinete": null,
-    "dataNascimento": "1962-11-15",
-    "municipioNascimento": "Iporá",
-    "ufNascimento": null,
-    "sexo": null,
-    "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5899",
-    "cargo": "Senador",
-    "instagram": "https://www.instagram.com/vanderlancardosooficial/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/68"
   },
   {
     "id": "823",
@@ -1370,8 +798,7 @@
       "https://www.instagram.com/vetermartins/",
       "https://twitter.com/vetermartins"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/823",
-    "instagram": "https://www.instagram.com/vetermartins/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/823"
   },
   {
     "id": "131",
@@ -1392,8 +819,7 @@
       "https://www.instagram.com/depvirmondes/",
       "https://twitter.com/virmondes"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/131",
-    "instagram": "https://www.instagram.com/depvirmondes/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/131"
   },
   {
     "id": "824",
@@ -1413,8 +839,7 @@
       "https://www.facebook.com/viviannaves",
       "https://www.instagram.com/vivianalbernaznaves/"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/824",
-    "instagram": "https://www.instagram.com/vivianalbernaznaves/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/824"
   },
   {
     "id": "152",
@@ -1435,8 +860,7 @@
       "https://www.instagram.com/depwagnerneto/",
       "https://twitter.com/depwagnerneto"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/152",
-    "instagram": "https://www.instagram.com/depwagnerneto/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/152"
   },
   {
     "id": "153",
@@ -1457,28 +881,6 @@
       "https://www.instagram.com/wilde.cambao/",
       "https://twitter.com/wildecambao"
     ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/153",
-    "instagram": "https://www.instagram.com/wilde.cambao/"
-  },
-  {
-    "id": "5070",
-    "casa": "senado",
-    "nome": "Wilder Morais",
-    "nomeCompleto": "Wilder Pedro de Morais",
-    "partido": "PL",
-    "uf": "GO",
-    "situacao": null,
-    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5070.jpg",
-    "email": "sen.wildermorais@senado.leg.br",
-    "telefone": "3303-6440",
-    "gabinete": null,
-    "dataNascimento": "1968-06-29",
-    "municipioNascimento": null,
-    "ufNascimento": null,
-    "sexo": null,
-    "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5070",
-    "cargo": "Senador",
-    "instagram": "https://www.instagram.com/wildermorais/"
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/153"
   }
 ]
