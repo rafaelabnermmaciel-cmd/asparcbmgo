@@ -1,0 +1,36 @@
+name: _Sondagem temporária ALEGO (apagar depois)
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Testar candidatos de API/página da ALEGO
+        run: |
+          set +e
+          urls=(
+            "https://portal.al.go.leg.br/deputados"
+            "https://portal.al.go.leg.br/api/deputados"
+            "https://app.al.go.leg.br/api/parlamentares/parlamentar/"
+            "https://app.al.go.leg.br/api/parlamentares/parlamentar/?format=json"
+            "https://sapl.al.go.leg.br/api/parlamentares/parlamentar/"
+            "https://transparencia.al.go.leg.br/"
+            "https://transparencia.al.go.leg.br/api/"
+            "https://al.go.leg.br/"
+          )
+          for u in "${urls[@]}"; do
+            echo "=================================================="
+            echo "URL: $u"
+            code=$(curl -s -o /tmp/body.txt -w "%{http_code}" -L --max-time 15 -A "Mozilla/5.0" "$u")
+            echo "HTTP: $code"
+            echo "Content-Type / primeiros 500 bytes:"
+            head -c 500 /tmp/body.txt
+            echo ""
+            echo ""
+          done
