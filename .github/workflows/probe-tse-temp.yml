@@ -40,19 +40,21 @@ jobs:
               print("CABECALHO COM SENAD:", repr(m.group(1)), "| pos:", m.start())
           PYEOF
 
-      - name: Dump da seção Resultados inteira (pra eu ver a estrutura real)
+      - name: Dump da seção "Senado Federal" (nível top-level desta vez)
         run: |
           python3 - <<'PYEOF'
           import json, re
           d = json.load(open('/tmp/wiki2018.json', encoding='utf-8'))
           text = d.get('parse', {}).get('wikitext', {}).get('*', '')
-          m = re.search(r'^==\s*Resultados\s*==$', text, re.MULTILINE)
+          m = re.search(r'^==+\s*Senado Federal\s*==+$', text, re.MULTILINE)
           if not m:
-              print("NAO ACHOU == Resultados ==")
+              print("NAO ACHOU Senado Federal")
           else:
+              print("cabecalho encontrado:", repr(m.group(0)))
               start = m.end()
               resto = text[start:]
-              fim = resto.search = re.search(r'^={2}(?!=)', resto, re.MULTILINE)
+              fim = re.search(r'^==(?!=)', resto, re.MULTILINE)
               fimpos = fim.start() if fim else len(resto)
               print(resto[:fimpos][:6000])
           PYEOF
+
