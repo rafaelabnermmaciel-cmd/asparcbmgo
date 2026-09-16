@@ -8,49 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Baixar ele-c.json completo e achar o pleito/eleição de 2022 em Goiás
+      - name: Testar acesso ao cdn.tse.jus.br (CDN separado do dadosabertos)
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          curl -sS -A "$UA" -o /tmp/ele-c.json "https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
-          wc -c /tmp/ele-c.json
-          python3 - <<'PYEOF'
-          import json
-          d = json.load(open('/tmp/ele-c.json', encoding='utf-8'))
-          print("ciclo atual (c):", d.get('c'))
-          print("total de pleitos:", len(d.get('pl', [])))
-          for pleito in d.get('pl', []):
-              for eleicao in pleito.get('e', []):
-                  nome = eleicao.get('nm', '')
-                  if '2022' in nome or '2022' in pleito.get('dt', ''):
-                      print(f"PLEITO cd={pleito['cd']} dt={pleito.get('dt')} | ELEICAO cd={eleicao['cd']} nm={nome!r} tp={eleicao.get('tp')}")
-                      for abr in eleicao.get('abr', []):
-                          if abr.get('cd') in ('go', 'br'):
-                              cargos = [(c.get('cd'), c.get('ds')) for c in abr.get('cp', [])]
-                              print(f"    abrangencia={abr.get('cd')} cargos={cargos}")
-          PYEOF
-
-      - name: Dump bruto pra eu conferir tudo que não bateu no filtro acima
-        run: |
-          python3 - <<'PYEOF'
-          import json
-          d = json.load(open('/tmp/ele-c.json', encoding='utf-8'))
-          for pleito in d.get('pl', []):
-              print(f"PLEITO cd={pleito['cd']} dt={pleito.get('dt')} nomes_eleicoes={[e.get('nm') for e in pleito.get('e', [])]}")
-          PYEOF
-
-      - name: Tentar achar catálogo de 2022 (eleições gerais) por outros caminhos
-        run: |
-          set +e
-          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          for url in \
-            "https://resultados.tse.jus.br/oficial/ele2022/comum/config/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/ger2022/comum/config/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/2022/comum/config/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/comum/config/ele-c-2022.json" \
-            "https://resultados.tse.jus.br/oficial/comum/config/pleitos.json"; do
-            code=$(curl -sS -o /tmp/r.json -w "%{http_code}" -A "$UA" "$url")
-            echo "--- $url -> HTTP $code (tamanho $(wc -c < /tmp/r.json)) ---"
-            if [ "$code" = "200" ]; then head -c 300 /tmp/r.json; echo ""; fi
-          done
-          exit 0
+          echo "=== HEAD votacao_candidato_munzona_2022.zip ==="
+          curl -sS -I -A "$UA" "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip"
+          echo "=== HEAD consulta_cand_2022.zip ==="
+          curl -sS -I -A "$UA" "https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip"
