@@ -8,60 +8,55 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Buscar pacote CKAN
+      - name: Explorar resultados.tse.jus.br (site de divulgação em tempo real)
         run: |
           set -x
-          curl -sS -D /tmp/pkg.headers -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=votacao+candidato+munzona+2022&rows=5" -o /tmp/pkg.json
-          echo "=== headers ==="
-          cat /tmp/pkg.headers
-          echo "=== tamanho ==="
-          wc -c /tmp/pkg.json
-          echo "=== primeiros 2000 bytes ==="
-          head -c 2000 /tmp/pkg.json
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          echo "=== index ==="
+          curl -sS -A "$UA" -o /tmp/index.html -w "HTTP %{http_code}\n" "https://resultados.tse.jus.br/oficial/"
+          wc -c /tmp/index.html
+          head -c 3000 /tmp/index.html
           echo ""
-          jq '.result.results | length' /tmp/pkg.json
-          jq -r '.result.results[] | "---\nname: \(.name)\ntitle: \(.title)\nnum_resources: \(.resources | length)"' /tmp/pkg.json
+          echo "=== procurando bundles JS referenciados ==="
+          grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/index.html | sort -u | head -30
 
-      - name: Listar recursos do primeiro pacote
-        run: |
-          jq -r '.result.results[0].resources[] | "\(.format) | \(.name) | \(.url)"' /tmp/pkg.json | head -100
-
-      - name: Achar recurso de GO e baixar
+      - name: Baixar bundles JS e procurar config de UF/código de eleição
         run: |
           set -x
-          jq -r '.result.results[0].resources[] | select((.format|ascii_upcase)=="CSV" and (.name|ascii_upcase|contains("GO"))) | .url' /tmp/pkg.json | tee /tmp/go_urls.txt
-          URL=$(head -1 /tmp/go_urls.txt)
-          if [ -n "$URL" ]; then
-            echo "URL: $URL"
-            curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" -o /tmp/go.csv.zip "$URL" || curl -sS -A "Mozilla/5.0" -o /tmp/go.data "$URL"
-            ls -la /tmp/go.csv.zip /tmp/go.data 2>/dev/null || true
-            file /tmp/go.csv.zip 2>/dev/null || true
-          fi
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          mkdir -p /tmp/js
+          i=0
+          for path in $(grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/index.html | sed -E 's/^(src|href)="//; s/"$//' | sort -u); do
+            i=$((i+1))
+            url="$path"
+            case "$path" in
+              http*) : ;;
+              /*) url="https://resultados.tse.jus.br$path" ;;
+              *) url="https://resultados.tse.jus.br/oficial/$path" ;;
+            esac
+            echo "baixando $url"
+            curl -sS -A "$UA" -o "/tmp/js/bundle_$i.js" -w "HTTP %{http_code} $url\n" "$url" || true
+          done
+          ls -la /tmp/js
+          echo "=== grep por 'GO' com contexto (config de UF) ==="
+          grep -o '.\{0,60\}"GO".\{0,60\}' /tmp/js/*.js 2>/dev/null | head -20
+          echo "=== grep por 'e000' (padrão de código de eleição) ==="
+          grep -oE 'e0[0-9]{4}' /tmp/js/*.js 2>/dev/null | sort -u | head -40
+          echo "=== grep por 'dados-simplificados' ==="
+          grep -o '.\{0,80\}dados-simplificados.\{0,80\}' /tmp/js/*.js 2>/dev/null | head -10
+          echo "=== grep por 'codPleito' ou 'codigoEleicao' ==="
+          grep -oE '"cod[A-Za-z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -20
 
-      - name: Extrair
+      - name: Tentar config conhecido de outras coberturas (chute educado)
         run: |
           set -x
-          cd /tmp
-          if [ -f go.csv.zip ]; then
-            unzip -o go.csv.zip -d go_extracted || true
-            ls -la go_extracted || true
-          fi
-
-      - name: Inspecionar
-        run: |
-          set -x
-          cd /tmp
-          F=$(find go_extracted -iname "*.csv" 2>/dev/null | head -1)
-          if [ -z "$F" ] && [ -f go.data ]; then F=go.data; fi
-          echo "ARQUIVO: $F"
-          if [ -n "$F" ]; then
-            iconv -f ISO-8859-1 -t UTF-8 "$F" | head -1
-            echo "=== total linhas ==="
-            wc -l "$F"
-            echo "=== grep Alessandro Moreira (deputado estadual conhecido) ==="
-            iconv -f ISO-8859-1 -t UTF-8 "$F" | grep -i "ALESSANDRO MOREIRA" | head -5
-            echo "=== grep um deputado federal conhecido (Adriano do Baldy) ==="
-            iconv -f ISO-8859-1 -t UTF-8 "$F" | grep -i "BALDY" | head -5
-            echo "=== cargos distintos ==="
-            iconv -f ISO-8859-1 -t UTF-8 "$F" | awk -F';' 'NR==1{for(i=1;i<=NF;i++) if($i ~ /DS_CARGO/) col=i} NR>1{print $col}' | sort -u
-          fi
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          for url in \
+            "https://resultados.tse.jus.br/oficial/ele2022/arquivo-urna/config/mun-e000544-cm.json" \
+            "https://resultados.tse.jus.br/oficial/index.json" \
+            "https://resultados.tse.jus.br/oficial/ele2022/config.json" \
+            "https://resultados.tse.jus.br/oficial/ele2022/comum/config/eln-cs.json"; do
+            echo "--- $url ---"
+            curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" "$url" | head -c 500
+            echo ""
+          done
