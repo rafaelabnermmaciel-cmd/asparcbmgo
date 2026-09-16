@@ -47,11 +47,20 @@ jobs:
           echo "=== grep por 'codPleito' ou 'codigoEleicao' ==="
           grep -oE '"cod[A-Za-z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -20
 
-      - name: Se não achou JS no HTML, listar diretório app/ direto
+      - name: Procurar padrões de endpoint no bundle principal (minificado)
         run: |
           set -x
-          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          if [ ! -s /tmp/js/bundle_1.js ]; then
-            echo "=== HTML completo do app/index.html (sem limite) ==="
-            cat /tmp/index.html
-          fi
+          echo "=== .json referenciado ==="
+          grep -oE '"[a-zA-Z0-9_/.-]*\.json"' /tmp/js/bundle_1.js | sort -u | head -60
+          echo "=== 'assets/' referenciado ==="
+          grep -oE '"assets/[a-zA-Z0-9_/.-]*"' /tmp/js/bundle_1.js | sort -u | head -60
+          echo "=== 'config' com contexto ==="
+          grep -o '.\{0,50\}[Cc]onfig[a-zA-Z]*.\{0,50\}' /tmp/js/bundle_1.js | sort -u | head -40
+          echo "=== 'environment'/apiUrl/baseUrl com contexto ==="
+          grep -o '.\{0,60\}\(apiUrl\|baseUrl\|urlBase\|environment\).\{0,60\}' /tmp/js/bundle_1.js | sort -u | head -30
+          echo "=== 'municipio' ou 'zona' ou 'totaliza' com contexto ==="
+          grep -o '.\{0,50\}\(municipio\|zona\|totaliza\|apuracao\)[a-zA-Z]*.\{0,50\}' /tmp/js/bundle_1.js | sort -u | head -40
+          echo "=== 'dados-simplificados' de novo, sem limite de tamanho de arquivo ==="
+          grep -c "dados-simplificados" /tmp/js/bundle_1.js || true
+          echo "=== strings genéricas '.tse.jus.br' ==="
+          grep -oE '[a-zA-Z0-9.-]*\.tse\.jus\.br[a-zA-Z0-9/_.-]*' /tmp/js/bundle_1.js | sort -u | head -40
