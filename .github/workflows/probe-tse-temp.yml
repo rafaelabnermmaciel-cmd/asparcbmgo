@@ -8,59 +8,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Explorar resultados.tse.jus.br (site de divulgação em tempo real)
+      - name: Testar variações de acesso ao dadosabertos.tse.jus.br
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          echo "=== app/index.html (SPA de verdade, / só redireciona pra cá) ==="
-          curl -sS -A "$UA" -o /tmp/index.html -w "HTTP %{http_code}\n" "https://resultados.tse.jus.br/oficial/app/index.html"
-          wc -c /tmp/index.html
-          head -c 3000 /tmp/index.html
-          echo ""
-          echo "=== procurando bundles JS referenciados ==="
-          grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/index.html | sort -u | head -30
+          echo "=== homepage ==="
+          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/a.html "https://dadosabertos.tse.jus.br/"
+          head -c 300 /tmp/a.html; echo ""
+          echo "=== dataset page (html, sem /api/) ==="
+          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/b.html "https://dadosabertos.tse.jus.br/dataset/resultados-2022"
+          head -c 300 /tmp/b.html; echo ""
+          echo "=== package_show (endpoint de API diferente) ==="
+          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/c.json "https://dadosabertos.tse.jus.br/api/3/action/package_show?id=resultados-2022"
+          head -c 500 /tmp/c.json; echo ""
+          echo "=== sem User-Agent nenhum ==="
+          curl -sS -w "\nHTTP %{http_code}\n" -o /tmp/d.json "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=teste" 2>&1
+          head -c 300 /tmp/d.json; echo ""
 
-      - name: Baixar bundles JS e procurar config de UF/código de eleição
+      - name: Testar divulgacandcontas.tse.jus.br (outro sistema, candidatos + resultado final)
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          mkdir -p /tmp/js
-          i=0
-          for path in $(grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/index.html | sed -E 's/^(src|href)="//; s/"$//' | sort -u); do
-            i=$((i+1))
-            url="$path"
-            case "$path" in
-              http*) : ;;
-              /*) url="https://resultados.tse.jus.br$path" ;;
-              *) url="https://resultados.tse.jus.br/oficial/app/$path" ;;
-            esac
-            echo "baixando $url"
-            curl -sS -A "$UA" -o "/tmp/js/bundle_$i.js" -w "HTTP %{http_code} $url\n" "$url" || true
-          done
-          ls -la /tmp/js
-          echo "=== grep por 'GO' com contexto (config de UF) ==="
-          grep -o '.\{0,60\}"GO".\{0,60\}' /tmp/js/*.js 2>/dev/null | head -20
-          echo "=== grep por 'e000' (padrão de código de eleição) ==="
-          grep -oE 'e0[0-9]{4}' /tmp/js/*.js 2>/dev/null | sort -u | head -40
-          echo "=== grep por 'dados-simplificados' ==="
-          grep -o '.\{0,80\}dados-simplificados.\{0,80\}' /tmp/js/*.js 2>/dev/null | head -10
-          echo "=== grep por 'codPleito' ou 'codigoEleicao' ==="
-          grep -oE '"cod[A-Za-z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -20
-
-      - name: Procurar padrões de endpoint no bundle principal (minificado)
-        run: |
-          set -x
-          echo "=== .json referenciado ==="
-          grep -oE '"[a-zA-Z0-9_/.-]*\.json"' /tmp/js/bundle_1.js | sort -u | head -60
-          echo "=== 'assets/' referenciado ==="
-          grep -oE '"assets/[a-zA-Z0-9_/.-]*"' /tmp/js/bundle_1.js | sort -u | head -60
-          echo "=== 'config' com contexto ==="
-          grep -o '.\{0,50\}[Cc]onfig[a-zA-Z]*.\{0,50\}' /tmp/js/bundle_1.js | sort -u | head -40
-          echo "=== 'environment'/apiUrl/baseUrl com contexto ==="
-          grep -o '.\{0,60\}\(apiUrl\|baseUrl\|urlBase\|environment\).\{0,60\}' /tmp/js/bundle_1.js | sort -u | head -30
-          echo "=== 'municipio' ou 'zona' ou 'totaliza' com contexto ==="
-          grep -o '.\{0,50\}\(municipio\|zona\|totaliza\|apuracao\)[a-zA-Z]*.\{0,50\}' /tmp/js/bundle_1.js | sort -u | head -40
-          echo "=== 'dados-simplificados' de novo, sem limite de tamanho de arquivo ==="
-          grep -c "dados-simplificados" /tmp/js/bundle_1.js || true
-          echo "=== strings genéricas '.tse.jus.br' ==="
-          grep -oE '[a-zA-Z0-9.-]*\.tse\.jus\.br[a-zA-Z0-9/_.-]*' /tmp/js/bundle_1.js | sort -u | head -40
+          echo "=== homepage divulgacandcontas ==="
+          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/e.html "https://divulgacandcontas.tse.jus.br/divulga/"
+          head -c 500 /tmp/e.html; echo ""
+          grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/e.html | sort -u | head -20
