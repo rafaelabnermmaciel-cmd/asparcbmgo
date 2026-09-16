@@ -22,17 +22,19 @@ jobs:
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
           mkdir -p /tmp/js
-          # Extrai pares "id":"hash" do objeto de mapeamento de chunk
+          # Extrai pares id:"hash" (chave SEM aspas) do objeto de mapeamento de chunk, e o
+          # mapa de apelidos ({2214:"polyfills-core-js",...}) que troca o id pelo nome no arquivo.
           python3 - /tmp/runtime.js <<'PYEOF' > /tmp/chunk_ids.txt
           import re, sys
           text = open(sys.argv[1], encoding='utf-8', errors='replace').read()
-          pairs = re.findall(r'"(\d+)":"([0-9a-f]{16,20})"', text)
+          apelidos = dict(re.findall(r'(\d+):"([a-zA-Z0-9_-]+)"', text.split('[e]||e')[0][-500:]))
+          pairs = re.findall(r'(\d+):"([0-9a-f]{16,20})"', text)
           seen = set()
           for cid, h in pairs:
-              key = (cid, h)
-              if key in seen: continue
-              seen.add(key)
-              print(f"{cid}.{h}.js")
+              if (cid, h) in seen: continue
+              seen.add((cid, h))
+              nome = apelidos.get(cid, cid)
+              print(f"{nome}.{h}.js")
           PYEOF
           wc -l /tmp/chunk_ids.txt
           cat /tmp/chunk_ids.txt
@@ -46,7 +48,7 @@ jobs:
 
       - name: Procurar UF/config/endpoint em todos os chunks baixados
         run: |
-          set -x
+          set +e
           echo "=== 'GO' com contexto ==="
           grep -o '.\{0,60\}"GO".\{0,60\}' /tmp/js/*.js 2>/dev/null | head -20
           echo "=== '.json' referenciado ==="
@@ -58,3 +60,4 @@ jobs:
           grep -ohE '[a-z]{2}-c[0-9]{4}-e[0-9]{6}' /tmp/js/*.js 2>/dev/null | sort -u | head -40
           echo "=== 'codigoEleicao' / 'codEleicao' / 'idEleicao' ==="
           grep -ohE '"[a-zA-Z]*[Ee]leicao[a-zA-Z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -30
+          exit 0
