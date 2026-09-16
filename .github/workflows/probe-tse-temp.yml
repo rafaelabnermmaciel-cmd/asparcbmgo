@@ -11,54 +11,22 @@ jobs:
       - name: Buscar pacote CKAN
         run: |
           set -x
-          curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" \
-            "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=votacao+candidato+munzona+2022&rows=5" \
-            -o /tmp/pkg.json
-          python3 -c "
-import json
-d = json.load(open('/tmp/pkg.json'))
-res = d['result']['results']
-print('COUNT', len(res))
-for p in res:
-    print('---')
-    print('name:', p['name'])
-    print('title:', p['title'])
-    print('num_resources:', len(p.get('resources', [])))
-"
+          curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=votacao+candidato+munzona+2022&rows=5" -o /tmp/pkg.json
+          jq '.result.results | length' /tmp/pkg.json
+          jq -r '.result.results[] | "---\nname: \(.name)\ntitle: \(.title)\nnum_resources: \(.resources | length)"' /tmp/pkg.json
 
       - name: Listar recursos do primeiro pacote
         run: |
-          python3 -c "
-import json
-d = json.load(open('/tmp/pkg.json'))
-res = d['result']['results']
-p = res[0]
-for r in p.get('resources', []):
-    print(r.get('format'), '|', r.get('name'), '|', r.get('url'))
-" | head -100
+          jq -r '.result.results[0].resources[] | "\(.format) | \(.name) | \(.url)"' /tmp/pkg.json | head -100
 
       - name: Achar recurso de GO e baixar
         run: |
           set -x
-          python3 -c "
-import json
-d = json.load(open('/tmp/pkg.json'))
-res = d['result']['results']
-p = res[0]
-resources = p.get('resources', [])
-go = [r for r in resources if r.get('format','').upper()=='CSV' and 'GO' in r.get('name','').upper()]
-print('GO matches:', len(go))
-for r in go:
-    print(r.get('name'), '|', r.get('url'))
-if go:
-    with open('/tmp/go_url.txt', 'w') as f:
-        f.write(go[0]['url'])
-"
-          if [ -f /tmp/go_url.txt ]; then
-            URL=$(cat /tmp/go_url.txt)
+          jq -r '.result.results[0].resources[] | select((.format|ascii_upcase)=="CSV" and (.name|ascii_upcase|contains("GO"))) | .url' /tmp/pkg.json | tee /tmp/go_urls.txt
+          URL=$(head -1 /tmp/go_urls.txt)
+          if [ -n "$URL" ]; then
             echo "URL: $URL"
-            curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" \
-              -o /tmp/go.csv.zip "$URL" || curl -sS -A "Mozilla/5.0" -o /tmp/go.data "$URL"
+            curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" -o /tmp/go.csv.zip "$URL" || curl -sS -A "Mozilla/5.0" -o /tmp/go.data "$URL"
             ls -la /tmp/go.csv.zip /tmp/go.data 2>/dev/null || true
             file /tmp/go.csv.zip 2>/dev/null || true
           fi
