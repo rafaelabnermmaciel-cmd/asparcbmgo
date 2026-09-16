@@ -30,7 +30,32 @@ jobs:
           d = json.load(open('/tmp/wiki.json', encoding='utf-8'))
           text = d.get('parse', {}).get('wikitext', {}).get('*', '')
           print("tamanho do wikitext:", len(text))
-          # Acha os títulos de seção pra eu saber onde procurar
           for m in re.finditer(r'^==+\s*(.+?)\s*==+$', text, re.MULTILINE):
               print("SECAO:", m.group(1))
+
+          def secao(nome):
+              m = re.search(r'^==+\s*' + re.escape(nome) + r'\s*==+$', text, re.MULTILINE)
+              if not m:
+                  print(f"NAO ACHOU SECAO: {nome}")
+                  return
+              start = m.end()
+              m2 = re.search(r'^==', text[start:], re.MULTILINE)
+              end = start + m2.start() if m2 else len(text)
+              print(f"\n\n===== CONTEUDO DE '{nome}' =====")
+              print(text[start:end])
+
+          secao('Deputados federais eleitos por Goiás')
+          secao('Deputados estaduais eleitos em Goiás')
+
+          # "Senador" aparece 2x (candidatos e resultados) - pegar só dentro de "Resultados"
+          mres = re.search(r'^==\s*Resultados\s*==$', text, re.MULTILINE)
+          if mres:
+              resultados_txt = text[mres.end():]
+              msen = re.search(r'^===+\s*Senador\s*===+$', resultados_txt, re.MULTILINE)
+              if msen:
+                  start = msen.end()
+                  m2 = re.search(r'^===?', resultados_txt[start:], re.MULTILINE)
+                  end = start + m2.start() if m2 else len(resultados_txt)
+                  print("\n\n===== CONTEUDO DE 'Senador' (dentro de Resultados) =====")
+                  print(resultados_txt[start:end])
           PYEOF
