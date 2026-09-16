@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "fetch:alego": "node scripts/fetch-alego.js",
     "sync:parlamentares-go": "node scripts/gerar-parlamentares-go.js"
   },
   "dependencies": {

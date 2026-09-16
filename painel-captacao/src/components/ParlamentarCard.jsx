@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 import { initials } from '../lib/data.js';
 
+const NOME_CASA = {
+  senado: 'Senado Federal (DF)',
+  camara: 'Câmara dos Deputados (DF)',
+  alego: 'Assembleia Legislativa (GO)',
+};
+
 export default function ParlamentarCard({ p, emAndamento = 0 }) {
   return (
     <Link
@@ -26,7 +32,7 @@ export default function ParlamentarCard({ p, emAndamento = 0 }) {
           )}
         </div>
         <p className="truncate text-xs text-slate-400">
-          {p.cargo} · {p.partido || '—'} {p.casa === 'senado' ? '· Senado Federal (DF)' : '· Câmara dos Deputados (DF)'}
+          {p.cargo} · {p.partido || '—'} · {NOME_CASA[p.casa] || p.casa}
         </p>
       </div>
     </Link>

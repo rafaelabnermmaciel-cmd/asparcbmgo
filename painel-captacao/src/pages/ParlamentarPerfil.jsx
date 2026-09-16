@@ -34,9 +34,16 @@ function InfoRow({ label, value, copyable }) {
   );
 }
 
+const NOME_CASA = {
+  senado: 'Senado Federal (Brasília/DF)',
+  camara: 'Câmara dos Deputados (Brasília/DF)',
+  alego: 'Assembleia Legislativa (Goiânia/GO)',
+};
+
 function formatGabinete(g) {
   if (!g) return null;
   const partes = [];
+  if (g.numero) partes.push(`Gabinete ${g.numero}`);
   if (g.predio) partes.push(`Anexo ${g.predio}`);
   if (g.sala) partes.push(`Sala ${g.sala}`);
   if (g.andar) partes.push(`${g.andar}º andar`);
@@ -114,11 +121,11 @@ export default function ParlamentarPerfil() {
         <div className="min-w-0">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{p.nome}</h1>
           <p className="mt-1 text-sm text-slate-400">
-            {p.cargo} · {p.partido || '—'} · {p.casa === 'senado' ? 'Senado Federal' : 'Câmara dos Deputados'} (Brasília/DF)
+            {p.cargo} · {p.partido || '—'} · {NOME_CASA[p.casa] || p.casa}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
-            {(p.urlCamara || p.urlSenado) && (
-              <a href={p.urlCamara || p.urlSenado} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
+            {(p.urlCamara || p.urlSenado || p.urlAlego) && (
+              <a href={p.urlCamara || p.urlSenado || p.urlAlego} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
                 Perfil oficial ↗
               </a>
             )}
