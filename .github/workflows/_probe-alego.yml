@@ -11,34 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Baixar HTML e achar bundles JS do Angular
+      - name: Baixar lista de deputados e um perfil individual
         run: |
           set +e
           curl -s -L --max-time 20 -A "Mozilla/5.0" "https://portal.al.go.leg.br/deputados" -o /tmp/page.html
-          echo "=== HTML completo (deputados) ==="
-          cat /tmp/page.html
+          echo "=== quantidade de linhas de deputado (data-title=Nome) ==="
+          grep -o 'data-title="Nome"' /tmp/page.html | wc -l
+          echo "=== todos os hrefs /deputados/perfil/N encontrados (id + nome) ==="
+          grep -oE 'href=/deputados/perfil/[0-9]+>[^<]+' /tmp/page.html | sort -u
           echo ""
-          echo "=== <script src> encontrados ==="
-          grep -oE '<script[^>]+src="[^"]+"' /tmp/page.html | sed -E 's/.*src="([^"]+)".*/\1/'
-
-      - name: Baixar cada bundle JS e procurar por rotas de API
-        run: |
-          set +e
-          base="https://portal.al.go.leg.br"
-          scripts=$(grep -oE '<script[^>]+src="[^"]+"' /tmp/page.html | sed -E 's/.*src="([^"]+)".*/\1/')
-          for s in $scripts; do
-            case "$s" in
-              http*) url="$s" ;;
-              /*) url="$base$s" ;;
-              *) url="$base/$s" ;;
-            esac
-            echo "=================================================="
-            echo "Bundle: $url"
-            curl -s -L --max-time 20 -A "Mozilla/5.0" "$url" -o /tmp/bundle.js
-            size=$(wc -c < /tmp/bundle.js)
-            echo "tamanho: $size bytes"
-            echo "--- ocorrencias de 'api' (contexto) ---"
-            grep -oE '.{0,40}(api/[a-zA-Z0-9/_-]+|apiUrl[^,}]*|baseUrl[^,}]*).{0,40}' /tmp/bundle.js | sort -u | head -60
-            echo "--- ocorrencias de 'deputado' (contexto) ---"
-            grep -oE '.{0,40}deputado[a-zA-Z]*.{0,40}' /tmp/bundle.js | sort -u | head -40
-          done
+          echo "=== baixando perfil de exemplo (825) ==="
+          curl -s -L --max-time 20 -A "Mozilla/5.0" "https://portal.al.go.leg.br/deputados/perfil/825" -o /tmp/perfil.html
+          echo "tamanho: $(wc -c < /tmp/perfil.html) bytes"
+          echo "--- imgs no perfil ---"
+          grep -oE '<img[^>]+>' /tmp/perfil.html | head -20
+          echo "--- trecho ao redor da 1a img ---"
+          python3 - <<'EOF'
+          t = open('/tmp/perfil.html', encoding='utf-8', errors='replace').read()
+          i = t.find('<img')
+          print(t[max(0,i-1200):i+1200] if i >= 0 else "nenhuma <img> encontrada")
+          EOF
+          echo "--- ocorrencias de gabinete/telefone/email no perfil ---"
+          grep -ioE '.{0,60}(gabinete|e-?mail|telefone|nascimento|profiss).{0,80}' /tmp/perfil.html | head -40
