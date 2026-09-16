@@ -47,7 +47,7 @@ export default function Parlamentares() {
       <ScrollReveal>
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Parlamentares de Goiás</h1>
         <p className="mt-1 text-sm text-slate-400">
-          {parlamentares.length ? `${filtrados.length} de ${parlamentares.length} parlamentares` : 'Bancada de Goiás — Câmara dos Deputados e Senado Federal'}
+          {parlamentares.length ? `${filtrados.length} de ${parlamentares.length} parlamentares` : 'Bancada de Goiás — Câmara dos Deputados, Senado Federal e Assembleia Legislativa (ALEGO)'}
         </p>
       </ScrollReveal>
 
@@ -62,6 +62,7 @@ export default function Parlamentares() {
           <option value="">Todas as casas</option>
           <option value="camara">Câmara dos Deputados</option>
           <option value="senado">Senado Federal</option>
+          <option value="alego">Assembleia Legislativa (ALEGO)</option>
         </select>
         <select value={partido} onChange={(e) => setPartido(e.target.value)} className={selectClass}>
           <option value="">Todos os partidos</option>

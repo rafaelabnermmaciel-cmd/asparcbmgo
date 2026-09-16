@@ -1,0 +1,72 @@
+name: Atualizar dados — Deputados estaduais (ALEGO)
+
+# Busca a lista de deputados estaduais da Assembleia Legislativa de Goiás (ALEGO) direto do
+# Portal da Alego (não existe API de dados abertos pra ALEGO — é HTML mesmo, mas com uma
+# tabela bem regular; ver scripts/fetch-alego.js) e regenera public/data/parlamentares-go.json
+# (que já junta isso com os deputados federais/senadores de Goiás vindos do painel-nacional).
+#
+# Como usar:
+#   - Manual: aba "Actions" → "Atualizar dados — Deputados estaduais (ALEGO)" → "Run workflow".
+#   - Automático: roda sozinho toda segunda-feira às 06h10 (horário de Brasília).
+#
+# Rodando num ambiente com acesso normal à internet (GitHub Actions) — diferente do sandbox
+# onde este script foi escrito e testado só uma vez, manualmente, antes de virar automático.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '10 9 * * 1' # toda segunda-feira, 09h10 UTC = 06h10 em Brasília
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-alego:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: painel-captacao
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-captacao/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Buscar deputados estaduais (ALEGO)
+        run: npm run fetch:alego
+
+      - name: Juntar com deputados federais/senadores de Goiás
+        run: npm run sync:parlamentares-go
+
+      - name: Conferir se algo mudou
+        id: diff
+        run: |
+          if git diff --quiet -- public/data/alego.json public/data/parlamentares-go.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commitar (o push dispara sozinho a publicação do painel-captacao)
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/alego.json public/data/parlamentares-go.json
+          git commit -m "chore(dados): atualiza deputados estaduais da ALEGO [automático]"
+          git push
+
+      - name: Resumo
+        run: |
+          echo "### Resultado da coleta ALEGO" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dados alterados: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira o log da etapa \"Buscar deputados estaduais (ALEGO)\" pra ver avisos/erros." >> "$GITHUB_STEP_SUMMARY"
