@@ -38,3 +38,13 @@ jobs:
               for item in d:
                   print(item.get('type'), item.get('name'))
           PYEOF
+
+      - name: Ver mirror.sh e conteudo de data/ (achar onde publicam os dados prontos)
+        run: |
+          set -x
+          curl -sS "https://raw.githubusercontent.com/turicas/eleicoes-brasil/master/mirror.sh"
+          echo "=== README (trecho) ==="
+          curl -sS "https://raw.githubusercontent.com/turicas/eleicoes-brasil/master/README.md" | head -c 3000
+          echo ""
+          echo "=== data/ ==="
+          curl -sS "https://api.github.com/repos/turicas/eleicoes-brasil/contents/data" | python3 -c "import json,sys; d=json.load(sys.stdin); print([x['name'] for x in d] if isinstance(d,list) else d)"
