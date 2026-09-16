@@ -103,8 +103,12 @@ function extrairDetalhePerfil(html) {
   const mFoto = html.match(/<img class="foto" src="([^"]+)"/);
   const mGabinete = html.match(/Número do Gabinete:<\/b>\s*<span>([^<]+)<\/span>/);
   const mEmail = html.match(/E-mail:<\/b>\s*<span>([^<]+)<\/span>/);
+  // O "?t=<timestamp>" no fim da URL da foto é só cache-busting do CDN da Alego — muda a cada
+  // carregamento da página mesmo com a foto igual, o que faria o workflow semanal achar
+  // "mudou algo" toda vez e gerar um commit/deploy à toa. Removendo pra manter a URL estável.
+  const foto = mFoto ? mFoto[1].replace(/\?t=\d+$/, '') : null;
   return {
-    foto: mFoto ? mFoto[1] : null,
+    foto,
     gabineteNumero: mGabinete ? decodeEntidades(mGabinete[1]) : null,
     email: mEmail ? decodeEntidades(mEmail[1]) : null,
   };
