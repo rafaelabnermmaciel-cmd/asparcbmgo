@@ -1,4 +1,4 @@
-name: _probe TSE (temporário)
+name: Probe TSE Temp
 
 on:
   workflow_dispatch: {}
@@ -37,7 +37,7 @@ for r in p.get('resources', []):
     print(r.get('format'), '|', r.get('name'), '|', r.get('url'))
 " | head -100
 
-      - name: Achar recurso de GO e baixar (só cabeçalho + grep)
+      - name: Achar recurso de GO e baixar
         run: |
           set -x
           python3 -c "
@@ -63,7 +63,7 @@ if go:
             file /tmp/go.csv.zip 2>/dev/null || true
           fi
 
-      - name: Extrair e inspecionar (se for zip)
+      - name: Extrair
         run: |
           set -x
           cd /tmp
@@ -72,7 +72,7 @@ if go:
             ls -la go_extracted || true
           fi
 
-      - name: Cabeçalho + linhas de exemplo
+      - name: Inspecionar
         run: |
           set -x
           cd /tmp
@@ -87,6 +87,6 @@ if go:
             iconv -f ISO-8859-1 -t UTF-8 "$F" | grep -i "ALESSANDRO MOREIRA" | head -5
             echo "=== grep um deputado federal conhecido (Adriano do Baldy) ==="
             iconv -f ISO-8859-1 -t UTF-8 "$F" | grep -i "BALDY" | head -5
-            echo "=== cargos distintos (coluna DS_CARGO, posição aproximada) ==="
+            echo "=== cargos distintos ==="
             iconv -f ISO-8859-1 -t UTF-8 "$F" | awk -F';' 'NR==1{for(i=1;i<=NF;i++) if($i ~ /DS_CARGO/) col=i} NR>1{print $col}' | sort -u
           fi
