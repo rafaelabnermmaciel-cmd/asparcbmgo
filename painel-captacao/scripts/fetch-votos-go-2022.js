@@ -217,6 +217,29 @@ async function main() {
   casar(estaduais, 'deputado estadual');
   casar(senadores, 'senador');
 
+  // O Senado tem mandato de 8 anos, com metade das vagas renovadas a cada eleição geral
+  // (1 ou 2 por vez, alternando) — por isso só 1 dos 3 senadores de GO (Wilder Morais)
+  // veio da eleição de 2022; os outros dois (Jorge Kajuru e Vanderlan Cardoso) foram
+  // eleitos em 2018. O artigo da Wikipédia de 2018 não organiza os resultados por cargo
+  // em subseções como o de 2022 (tudo fica dentro de uma única tabela em "Turno Único"
+  // com colunas de suplente/coligação bem diferentes), então em vez de escrever outro
+  // parser só pra isso, os números — já conferidos contra a mesma tabela oficial citando
+  // o TSE, e batendo com o valor citado na própria página biográfica do Vanderlan Cardoso
+  // na Wikipédia — foram anotados aqui direto (mesmo padrão do INSTAGRAM_MANUAL em
+  // scripts/gerar-parlamentares-go.js).
+  const VOTOS_SENADO_2018 = [
+    { nome: 'Vanderlan Cardoso', partido: 'PP', votos: 1729637 },
+    { nome: 'Jorge Kajuru', partido: 'PRP', votos: 1557415 },
+  ];
+  for (const { nome, partido, votos } of VOTOS_SENADO_2018) {
+    const p = acharParlamentar(porNome, nome);
+    if (!p) {
+      naoCasados.push(`senador (2018, manual): ${nome}`);
+      continue;
+    }
+    resultados[`${p.casa}:${p.id}`] = { nome: p.nome, partido, votosNominais: votos, ano: 2018, cargo: p.cargo };
+  }
+
   console.log(`[fetch-votos] ${Object.keys(resultados).length} parlamentar(es) casado(s) com sucesso.`);
   if (naoCasados.length) {
     console.warn(`[fetch-votos] não consegui casar ${naoCasados.length} nome(s) (podem ser candidatos não eleitos, ou suplentes que assumiram sem ter concorrido diretamente):`);
