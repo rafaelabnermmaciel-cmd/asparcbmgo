@@ -1,0 +1,58 @@
+name: Probe TSE Temp
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Baixar wikitext da eleição de 2018 em Goiás e listar seções
+        run: |
+          set -x
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          curl -sS -A "$UA" -o /tmp/wiki2018.json \
+            "https://pt.wikipedia.org/w/api.php?action=parse&page=Elei%C3%A7%C3%B5es_estaduais_em_Goi%C3%A1s_em_2018&prop=wikitext&format=json"
+          wc -c /tmp/wiki2018.json
+          python3 - <<'PYEOF'
+          import json, re
+          d = json.load(open('/tmp/wiki2018.json', encoding='utf-8'))
+          text = d.get('parse', {}).get('wikitext', {}).get('*', '')
+          print("tamanho:", len(text))
+          for m in re.finditer(r'^==+\s*(.+?)\s*==+$', text, re.MULTILINE):
+              print("SECAO:", m.group(1))
+          PYEOF
+
+      - name: Mostrar conteúdo bruto em volta de "Senad" (singular ou plural)
+        run: |
+          python3 - <<'PYEOF'
+          import json, re
+          d = json.load(open('/tmp/wiki2018.json', encoding='utf-8'))
+          text = d.get('parse', {}).get('wikitext', {}).get('*', '')
+          for m in re.finditer(r'Senad\w*', text):
+              pass
+          # Mostra os primeiros 3 trechos únicos de cabeçalho contendo "Senad"
+          vistos = set()
+          for m in re.finditer(r'^==+\s*(.*?Senad.*?)\s*==+$', text, re.MULTILINE | re.IGNORECASE):
+              if m.group(1) in vistos: continue
+              vistos.add(m.group(1))
+              print("CABECALHO COM SENAD:", repr(m.group(1)), "| pos:", m.start())
+          PYEOF
+
+      - name: Dump da seção Resultados inteira (pra eu ver a estrutura real)
+        run: |
+          python3 - <<'PYEOF'
+          import json, re
+          d = json.load(open('/tmp/wiki2018.json', encoding='utf-8'))
+          text = d.get('parse', {}).get('wikitext', {}).get('*', '')
+          m = re.search(r'^==\s*Resultados\s*==$', text, re.MULTILINE)
+          if not m:
+              print("NAO ACHOU == Resultados ==")
+          else:
+              start = m.end()
+              resto = text[start:]
+              fim = resto.search = re.search(r'^={2}(?!=)', resto, re.MULTILINE)
+              fimpos = fim.start() if fim else len(resto)
+              print(resto[:fimpos][:6000])
+          PYEOF
