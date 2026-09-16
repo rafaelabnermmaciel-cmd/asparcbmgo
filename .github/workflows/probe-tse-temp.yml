@@ -38,3 +38,19 @@ jobs:
           for pleito in d.get('pl', []):
               print(f"PLEITO cd={pleito['cd']} dt={pleito.get('dt')} nomes_eleicoes={[e.get('nm') for e in pleito.get('e', [])]}")
           PYEOF
+
+      - name: Tentar achar catálogo de 2022 (eleições gerais) por outros caminhos
+        run: |
+          set +e
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          for url in \
+            "https://resultados.tse.jus.br/oficial/ele2022/comum/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/ger2022/comum/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/2022/comum/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/comum/config/ele-c-2022.json" \
+            "https://resultados.tse.jus.br/oficial/comum/config/pleitos.json"; do
+            code=$(curl -sS -o /tmp/r.json -w "%{http_code}" -A "$UA" "$url")
+            echo "--- $url -> HTTP $code (tamanho $(wc -c < /tmp/r.json)) ---"
+            if [ "$code" = "200" ]; then head -c 300 /tmp/r.json; echo ""; fi
+          done
+          exit 0
