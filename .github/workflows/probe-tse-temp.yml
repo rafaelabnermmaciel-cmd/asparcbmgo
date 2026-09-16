@@ -11,7 +11,14 @@ jobs:
       - name: Buscar pacote CKAN
         run: |
           set -x
-          curl -sS -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=votacao+candidato+munzona+2022&rows=5" -o /tmp/pkg.json
+          curl -sS -D /tmp/pkg.headers -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=votacao+candidato+munzona+2022&rows=5" -o /tmp/pkg.json
+          echo "=== headers ==="
+          cat /tmp/pkg.headers
+          echo "=== tamanho ==="
+          wc -c /tmp/pkg.json
+          echo "=== primeiros 2000 bytes ==="
+          head -c 2000 /tmp/pkg.json
+          echo ""
           jq '.result.results | length' /tmp/pkg.json
           jq -r '.result.results[] | "---\nname: \(.name)\ntitle: \(.title)\nnum_resources: \(.resources | length)"' /tmp/pkg.json
 
