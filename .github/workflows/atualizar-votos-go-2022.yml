@@ -1,0 +1,87 @@
+name: Atualizar dados — Votos da eleição 2022 em GO
+
+# Busca, na Wikipédia (que republica os números oficiais do TSE em tabela — ver as
+# referências <ref> nas seções "Resultados" do artigo), os votos nominais recebidos por
+# cada deputado federal, deputado estadual (ALEGO) e o senador eleitos por Goiás em
+# 2022, e casa esses números com public/data/parlamentares-go.json.
+#
+# Por que da Wikipédia e não direto do TSE? dadosabertos.tse.jus.br, cdn.tse.jus.br e
+# divulgacandcontas.tse.jus.br bloqueiam com 403 (WAF) qualquer IP de nuvem/datacenter,
+# inclusive o do GitHub Actions (confirmado testando manualmente) — só aceitam tráfego
+# de IP residencial/nacional. O site de resultados em tempo real do TSE
+# (resultados.tse.jus.br) não bloqueia, mas seu catálogo atual só cobre as eleições
+# municipais recentes (2024+), não a eleição geral de 2022. A Wikipédia é um domínio
+# aberto sem esse bloqueio e já republica esses números em tabela, citando o TSE como
+# fonte.
+#
+# Esse é um dado histórico (eleição de 2022 já encerrada, não muda) — diferente do
+# workflow da ALEGO, não precisa rodar toda semana; só existe pra poder ser re-rodado
+# sob demanda (ex: se a Wikipédia corrigir algum número, ou se algum deputado que hoje
+# não casou pelo nome passar a casar depois de ajustarmos o script).
+#
+# Como usar:
+#   - Manual: aba "Actions" → "Atualizar dados — Votos da eleição 2022 em GO" → "Run workflow".
+#
+# ⚠️ Builda e publica o site aqui dentro (mesmo motivo do workflow da ALEGO: um push
+# feito com o GITHUB_TOKEN padrão não dispara outros workflows sozinho).
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-votos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: painel-captacao
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-captacao/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Buscar votos da eleição 2022 (Wikipédia/TSE)
+        run: npm run fetch:votos-go-2022
+
+      - name: Conferir se algo mudou
+        id: diff
+        run: |
+          if git diff --quiet -- public/data/votos-go-2022.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build (só se os dados mudaram)
+        if: steps.diff.outputs.mudou == 'true'
+        run: npm run build
+
+      - name: Commitar dados + build (um push só, já publica o site)
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          rm -rf ../painel-captacao-app
+          mkdir -p ../painel-captacao-app
+          cp -r dist/. ../painel-captacao-app/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/votos-go-2022.json ../painel-captacao-app
+          git commit -m "chore(dados): atualiza votos da eleição 2022 em GO [automático]"
+          git push
+
+      - name: Resumo
+        run: |
+          echo "### Resultado da coleta de votos" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dados alterados: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira o log da etapa \"Buscar votos da eleição 2022\" pra ver quem não casou pelo nome." >> "$GITHUB_STEP_SUMMARY"

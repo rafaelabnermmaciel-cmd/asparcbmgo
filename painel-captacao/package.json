@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "fetch:alego": "node scripts/fetch-alego.js",
+    "fetch:votos-go-2022": "node scripts/fetch-votos-go-2022.js",
     "sync:parlamentares-go": "node scripts/gerar-parlamentares-go.js"
   },
   "dependencies": {

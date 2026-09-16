@@ -1,13 +1,15 @@
 import { useMemo, useState } from 'react';
-import { useParlamentaresGO, useCaptacoes, useQuarteis, STATUS_EM_ANDAMENTO } from '../lib/data.js';
+import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, STATUS_EM_ANDAMENTO } from '../lib/data.js';
 import ParlamentarCard from '../components/ParlamentarCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
+import RankingVotos from '../components/RankingVotos.jsx';
 
 export default function Parlamentares() {
   const { loading, parlamentares } = useParlamentaresGO();
   const { captacoes } = useCaptacoes();
   const { quarteis } = useQuarteis();
+  const { resultados: resultadosEleitorais } = useResultadosEleitorais();
   const [q, setQ] = useState('');
   const [casa, setCasa] = useState('');
   const [partido, setPartido] = useState('');
@@ -49,6 +51,10 @@ export default function Parlamentares() {
         <p className="mt-1 text-sm text-slate-400">
           {parlamentares.length ? `${filtrados.length} de ${parlamentares.length} parlamentares` : 'Bancada de Goiás — Câmara dos Deputados, Senado Federal e Assembleia Legislativa (ALEGO)'}
         </p>
+      </ScrollReveal>
+
+      <ScrollReveal delay={0.03} className="mt-5">
+        <RankingVotos parlamentares={parlamentares} resultados={resultadosEleitorais} />
       </ScrollReveal>
 
       <ScrollReveal delay={0.05} className="mt-5 flex flex-wrap gap-2">
