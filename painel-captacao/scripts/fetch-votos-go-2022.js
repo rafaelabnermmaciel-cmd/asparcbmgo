@@ -75,7 +75,9 @@ function acharParlamentar(porNome, nome) {
 }
 
 // Isola o conteúdo de uma seção "== Nome ==" (ou "=== Nome ===" se nivel for '===')
-// até o próximo cabeçalho do mesmo nível ou superior.
+// até o próximo cabeçalho do mesmo nível ou mais raso (menos "="s) — um cabeçalho MAIS
+// fundo (ex: "====" dentro de uma seção "===") não conta como fim, senão a extração
+// para cedo demais na primeira subseção que aparecer.
 function extrairSecao(texto, nomeSecao, nivel = '==') {
   const escapado = nomeSecao.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const re = new RegExp(`^${nivel}+\\s*${escapado}\\s*${nivel}+$`, 'm');
@@ -83,7 +85,7 @@ function extrairSecao(texto, nomeSecao, nivel = '==') {
   if (!m) return null;
   const inicio = m.index + m[0].length;
   const resto = texto.slice(inicio);
-  const marcadorFim = resto.search(/^==/m);
+  const marcadorFim = resto.search(new RegExp(`^={2,${nivel.length}}(?!=)`, 'm'));
   return marcadorFim === -1 ? resto : resto.slice(0, marcadorFim);
 }
 
