@@ -390,5 +390,19 @@
     "votosNominais": 799022,
     "ano": 2022,
     "cargo": "Senador"
+  },
+  "senado:5899": {
+    "nome": "Vanderlan Cardoso",
+    "partido": "PP",
+    "votosNominais": 1729637,
+    "ano": 2018,
+    "cargo": "Senador"
+  },
+  "senado:5895": {
+    "nome": "Jorge Kajuru",
+    "partido": "PRP",
+    "votosNominais": 1557415,
+    "ano": 2018,
+    "cargo": "Senador"
   }
 }
