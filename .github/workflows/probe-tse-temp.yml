@@ -12,8 +12,8 @@ jobs:
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          echo "=== index ==="
-          curl -sS -A "$UA" -o /tmp/index.html -w "HTTP %{http_code}\n" "https://resultados.tse.jus.br/oficial/"
+          echo "=== app/index.html (SPA de verdade, / só redireciona pra cá) ==="
+          curl -sS -A "$UA" -o /tmp/index.html -w "HTTP %{http_code}\n" "https://resultados.tse.jus.br/oficial/app/index.html"
           wc -c /tmp/index.html
           head -c 3000 /tmp/index.html
           echo ""
@@ -32,7 +32,7 @@ jobs:
             case "$path" in
               http*) : ;;
               /*) url="https://resultados.tse.jus.br$path" ;;
-              *) url="https://resultados.tse.jus.br/oficial/$path" ;;
+              *) url="https://resultados.tse.jus.br/oficial/app/$path" ;;
             esac
             echo "baixando $url"
             curl -sS -A "$UA" -o "/tmp/js/bundle_$i.js" -w "HTTP %{http_code} $url\n" "$url" || true
@@ -47,16 +47,11 @@ jobs:
           echo "=== grep por 'codPleito' ou 'codigoEleicao' ==="
           grep -oE '"cod[A-Za-z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -20
 
-      - name: Tentar config conhecido de outras coberturas (chute educado)
+      - name: Se não achou JS no HTML, listar diretório app/ direto
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          for url in \
-            "https://resultados.tse.jus.br/oficial/ele2022/arquivo-urna/config/mun-e000544-cm.json" \
-            "https://resultados.tse.jus.br/oficial/index.json" \
-            "https://resultados.tse.jus.br/oficial/ele2022/config.json" \
-            "https://resultados.tse.jus.br/oficial/ele2022/comum/config/eln-cs.json"; do
-            echo "--- $url ---"
-            curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" "$url" | head -c 500
-            echo ""
-          done
+          if [ ! -s /tmp/js/bundle_1.js ]; then
+            echo "=== HTML completo do app/index.html (sem limite) ==="
+            cat /tmp/index.html
+          fi
