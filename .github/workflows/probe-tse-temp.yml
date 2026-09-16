@@ -64,18 +64,44 @@ jobs:
                   print('---')
           PYEOF
 
+      - name: Achar definição de carregarComum/carregarCiclo (classe repositorio)
+        run: |
+          set -x
+          python3 - <<'PYEOF'
+          import glob, re
+
+          def contexto(path, termo, antes=200, depois=600):
+              text = open(path, encoding='utf-8', errors='replace').read()
+              out = []
+              for m in re.finditer(re.escape(termo), text):
+                  a, b = max(0, m.start() - antes), min(len(text), m.end() + depois)
+                  out.append(text[a:b])
+              return out
+
+          for termo in ['carregarComum(', 'carregarCiclo(', 'class Repositorio', 'apiUrl', 'urlBase:']:
+              print(f"=== '{termo}' ===")
+              achou = False
+              for f in glob.glob('/tmp/js/*.js'):
+                  for c in contexto(f, termo)[:2]:
+                      achou = True
+                      print(f, '::', c)
+                      print('---')
+              if not achou:
+                  print('(nada encontrado)')
+          PYEOF
+
       - name: Tentar baixar ele-c.json em vários caminhos plausíveis
         run: |
           set +e
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
           for url in \
-            "https://resultados.tse.jus.br/oficial/app/assets/config/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/app/assets/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/comum/config/ele-c.json" \
             "https://resultados.tse.jus.br/oficial/config/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/ele-c.json" \
-            "https://resultados.tse.jus.br/oficial/data/ele-c.json"; do
+            "https://resultados.tse.jus.br/oficial/data/comum/config/ele-c.json" \
+            "https://resultados.tse.jus.br/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/ele-c.json"; do
             code=$(curl -sS -o /tmp/resp.json -w "%{http_code}" -A "$UA" "$url")
             echo "--- $url -> HTTP $code ---"
-            if [ "$code" = "200" ]; then head -c 800 /tmp/resp.json; echo ""; fi
+            if [ "$code" = "200" ]; then head -c 1500 /tmp/resp.json; echo ""; fi
           done
           exit 0
