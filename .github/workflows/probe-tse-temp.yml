@@ -8,28 +8,53 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Testar variações de acesso ao dadosabertos.tse.jus.br
+      - name: Baixar index + runtime.js e extrair mapa de chunks
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          echo "=== homepage ==="
-          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/a.html "https://dadosabertos.tse.jus.br/"
-          head -c 300 /tmp/a.html; echo ""
-          echo "=== dataset page (html, sem /api/) ==="
-          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/b.html "https://dadosabertos.tse.jus.br/dataset/resultados-2022"
-          head -c 300 /tmp/b.html; echo ""
-          echo "=== package_show (endpoint de API diferente) ==="
-          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/c.json "https://dadosabertos.tse.jus.br/api/3/action/package_show?id=resultados-2022"
-          head -c 500 /tmp/c.json; echo ""
-          echo "=== sem User-Agent nenhum ==="
-          curl -sS -w "\nHTTP %{http_code}\n" -o /tmp/d.json "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=teste" 2>&1
-          head -c 300 /tmp/d.json; echo ""
+          curl -sS -A "$UA" -o /tmp/index.html "https://resultados.tse.jus.br/oficial/app/index.html"
+          curl -sS -A "$UA" -o /tmp/runtime.js "https://resultados.tse.jus.br/oficial/app/runtime.006aae974d2d266d.js"
+          echo "=== runtime.js completo ==="
+          cat /tmp/runtime.js
 
-      - name: Testar divulgacandcontas.tse.jus.br (outro sistema, candidatos + resultado final)
+      - name: Baixar TODOS os chunks referenciados no runtime.js
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          echo "=== homepage divulgacandcontas ==="
-          curl -sS -A "$UA" -w "\nHTTP %{http_code}\n" -o /tmp/e.html "https://divulgacandcontas.tse.jus.br/divulga/"
-          head -c 500 /tmp/e.html; echo ""
-          grep -oE '(src|href)="[^"]*\.js[^"]*"' /tmp/e.html | sort -u | head -20
+          mkdir -p /tmp/js
+          # Extrai pares "id":"hash" do objeto de mapeamento de chunk
+          python3 - /tmp/runtime.js <<'PYEOF' > /tmp/chunk_ids.txt
+          import re, sys
+          text = open(sys.argv[1], encoding='utf-8', errors='replace').read()
+          pairs = re.findall(r'"(\d+)":"([0-9a-f]{16,20})"', text)
+          seen = set()
+          for cid, h in pairs:
+              key = (cid, h)
+              if key in seen: continue
+              seen.add(key)
+              print(f"{cid}.{h}.js")
+          PYEOF
+          wc -l /tmp/chunk_ids.txt
+          cat /tmp/chunk_ids.txt
+          i=0
+          while read -r fname; do
+            i=$((i+1))
+            curl -sS -A "$UA" -o "/tmp/js/$fname" -w "HTTP %{http_code} $fname\n" "https://resultados.tse.jus.br/oficial/app/$fname" || true
+          done < /tmp/chunk_ids.txt
+          ls -la /tmp/js | head -50
+          du -sh /tmp/js
+
+      - name: Procurar UF/config/endpoint em todos os chunks baixados
+        run: |
+          set -x
+          echo "=== 'GO' com contexto ==="
+          grep -o '.\{0,60\}"GO".\{0,60\}' /tmp/js/*.js 2>/dev/null | head -20
+          echo "=== '.json' referenciado ==="
+          grep -ohE '"[a-zA-Z0-9_/.-]*\.json"' /tmp/js/*.js 2>/dev/null | sort -u | head -60
+          echo "=== 'dados-simplificados' ==="
+          grep -l "dados-simplificados" /tmp/js/*.js 2>/dev/null
+          grep -o '.\{0,100\}dados-simplificados.\{0,150\}' /tmp/js/*.js 2>/dev/null | head -10
+          echo "=== 'e0' seguido de 4-6 digitos (codigo eleicao) ==="
+          grep -ohE '[a-z]{2}-c[0-9]{4}-e[0-9]{6}' /tmp/js/*.js 2>/dev/null | sort -u | head -40
+          echo "=== 'codigoEleicao' / 'codEleicao' / 'idEleicao' ==="
+          grep -ohE '"[a-zA-Z]*[Ee]leicao[a-zA-Z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -30
