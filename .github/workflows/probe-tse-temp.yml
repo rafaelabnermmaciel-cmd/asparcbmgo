@@ -8,43 +8,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Listar releases do turicas/eleicoes-brasil (mirror de dados do TSE)
+      - name: Testar agencia.tse.jus.br (dominio legado, usado pelo mirror.sh do turicas)
         run: |
           set -x
-          curl -sS "https://api.github.com/repos/turicas/eleicoes-brasil/releases?per_page=100" -o /tmp/releases.json
-          python3 - <<'PYEOF'
-          import json
-          releases = json.load(open('/tmp/releases.json'))
-          if isinstance(releases, dict):
-              print("ERRO:", releases)
-          else:
-              print(f"{len(releases)} releases")
-              for r in releases[:20]:
-                  print("---", r.get('tag_name'), r.get('name'))
-                  for a in r.get('assets', []):
-                      print("   ", a.get('name'), a.get('size'), a.get('browser_download_url'))
-          PYEOF
-
-      - name: Listar conteúdo do repositório (pastas/branches) pra achar dados prontos
-        run: |
-          set -x
-          curl -sS "https://api.github.com/repos/turicas/eleicoes-brasil/contents/" -o /tmp/contents.json
-          python3 - <<'PYEOF'
-          import json
-          d = json.load(open('/tmp/contents.json'))
-          if isinstance(d, dict):
-              print("ERRO:", d)
-          else:
-              for item in d:
-                  print(item.get('type'), item.get('name'))
-          PYEOF
-
-      - name: Ver mirror.sh e conteudo de data/ (achar onde publicam os dados prontos)
-        run: |
-          set -x
-          curl -sS "https://raw.githubusercontent.com/turicas/eleicoes-brasil/master/mirror.sh"
-          echo "=== README (trecho) ==="
-          curl -sS "https://raw.githubusercontent.com/turicas/eleicoes-brasil/master/README.md" | head -c 3000
-          echo ""
-          echo "=== data/ ==="
-          curl -sS "https://api.github.com/repos/turicas/eleicoes-brasil/contents/data" | python3 -c "import json,sys; d=json.load(sys.stdin); print([x['name'] for x in d] if isinstance(d,list) else d)"
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          echo "=== HEAD http (2022) ==="
+          curl -sS -I -L -A "$UA" "http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip"
+          echo "=== HEAD https (2022) ==="
+          curl -sS -I -L -A "$UA" "https://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip"
+          echo "=== HEAD consulta_cand 2022 ==="
+          curl -sS -I -L -A "$UA" "https://agencia.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip"
