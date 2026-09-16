@@ -21,8 +21,6 @@ function fmtRCompact(v) {
   return fmtR(v);
 }
 
-const PODIO_MEDALHA = ['🥇', '🥈', '🥉'];
-
 function anoDe(dataIso) {
   return dataIso ? dataIso.slice(0, 4) : null;
 }
@@ -113,8 +111,6 @@ export default function Dashboard() {
   const totalArticulacoes = captacoesDoAno.length;
   const totalReunioes = ranking.reduce((s, q) => s + q.qtdReunioes, 0);
 
-  const podio = porCaptacao.slice(0, 3);
-
   const recentes = useMemo(
     () => [...captacoesDoAno].sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || '')).slice(0, 8),
     [captacoesDoAno]
@@ -165,29 +161,8 @@ export default function Dashboard() {
         <StatCard label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="emerald" />
       </ScrollReveal>
 
-      {podio.length > 0 && (
-        <ScrollReveal delay={0.08} className="mt-6">
-          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-            <LuTrophy className="h-4 w-4 text-amber-500" /> Pódio — quartéis que mais captaram
-          </p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {podio.map((q, i) => {
-              return (
-                <div key={q.quartelId} className={`rounded-2xl border p-5 shadow-sm ${i === 0 ? 'border-amber-300 bg-amber-50/60 dark:border-amber-700 dark:bg-amber-500/10' : 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900'}`}>
-                  <span className="text-3xl">{PODIO_MEDALHA[i]}</span>
-                  <p className="mt-3 truncate text-sm font-semibold text-slate-900 dark:text-white">{q.nome}</p>
-                  <p className="truncate text-xs text-slate-400">{q.municipio}</p>
-                  <p className="mt-2 text-xl font-bold text-red-600 dark:text-red-400">{fmtRCompact(q.totalPrevisto)}</p>
-                  <p className="text-xs text-slate-400">{q.qtdArticulacoes} articulaç{q.qtdArticulacoes === 1 ? 'ão' : 'ões'} · {q.qtdReunioes} reuni{q.qtdReunioes === 1 ? 'ão' : 'ões'}</p>
-                </div>
-              );
-            })}
-          </div>
-        </ScrollReveal>
-      )}
-
       <ScrollReveal delay={0.12} className="mt-6 grid gap-4 lg:grid-cols-2">
-        <ChartCard icon={LuBanknote} title="Ranking por captação (R$)" sub="Valor previsto por quartel">
+        <ChartCard icon={LuBanknote} title="Relatório de captação" sub="Valor previsto por quartel">
           {porCaptacao.length ? (
             <BarCard
               data={porCaptacao.slice(0, 10).map((q) => ({ name: q.nome.length > 18 ? `${q.nome.slice(0, 17)}…` : q.nome, value: q.totalPrevisto }))}
@@ -202,7 +177,7 @@ export default function Dashboard() {
           )}
         </ChartCard>
 
-        <ChartCard icon={LuHandshake} title="Ranking por articulação" sub="Cadastros + reuniões por quartel">
+        <ChartCard icon={LuHandshake} title="Relatório de articulação" sub="Cadastros + reuniões por quartel">
           {porArticulacao.length ? (
             <BarCard
               data={porArticulacao.slice(0, 10).map((q) => ({ name: q.nome.length > 18 ? `${q.nome.slice(0, 17)}…` : q.nome, value: q.qtdArticulacoes }))}
