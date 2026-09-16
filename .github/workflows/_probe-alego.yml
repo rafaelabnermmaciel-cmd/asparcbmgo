@@ -11,26 +11,34 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Testar candidatos de API/página da ALEGO
+      - name: Baixar HTML e achar bundles JS do Angular
         run: |
           set +e
-          urls=(
-            "https://portal.al.go.leg.br/deputados"
-            "https://portal.al.go.leg.br/api/deputados"
-            "https://app.al.go.leg.br/api/parlamentares/parlamentar/"
-            "https://app.al.go.leg.br/api/parlamentares/parlamentar/?format=json"
-            "https://sapl.al.go.leg.br/api/parlamentares/parlamentar/"
-            "https://transparencia.al.go.leg.br/"
-            "https://transparencia.al.go.leg.br/api/"
-            "https://al.go.leg.br/"
-          )
-          for u in "${urls[@]}"; do
+          curl -s -L --max-time 20 -A "Mozilla/5.0" "https://portal.al.go.leg.br/deputados" -o /tmp/page.html
+          echo "=== HTML completo (deputados) ==="
+          cat /tmp/page.html
+          echo ""
+          echo "=== <script src> encontrados ==="
+          grep -oE '<script[^>]+src="[^"]+"' /tmp/page.html | sed -E 's/.*src="([^"]+)".*/\1/'
+
+      - name: Baixar cada bundle JS e procurar por rotas de API
+        run: |
+          set +e
+          base="https://portal.al.go.leg.br"
+          scripts=$(grep -oE '<script[^>]+src="[^"]+"' /tmp/page.html | sed -E 's/.*src="([^"]+)".*/\1/')
+          for s in $scripts; do
+            case "$s" in
+              http*) url="$s" ;;
+              /*) url="$base$s" ;;
+              *) url="$base/$s" ;;
+            esac
             echo "=================================================="
-            echo "URL: $u"
-            code=$(curl -s -o /tmp/body.txt -w "%{http_code}" -L --max-time 15 -A "Mozilla/5.0" "$u")
-            echo "HTTP: $code"
-            echo "Content-Type / primeiros 500 bytes:"
-            head -c 500 /tmp/body.txt
-            echo ""
-            echo ""
+            echo "Bundle: $url"
+            curl -s -L --max-time 20 -A "Mozilla/5.0" "$url" -o /tmp/bundle.js
+            size=$(wc -c < /tmp/bundle.js)
+            echo "tamanho: $size bytes"
+            echo "--- ocorrencias de 'api' (contexto) ---"
+            grep -oE '.{0,40}(api/[a-zA-Z0-9/_-]+|apiUrl[^,}]*|baseUrl[^,}]*).{0,40}' /tmp/bundle.js | sort -u | head -60
+            echo "--- ocorrencias de 'deputado' (contexto) ---"
+            grep -oE '.{0,40}deputado[a-zA-Z]*.{0,40}' /tmp/bundle.js | sort -u | head -40
           done
