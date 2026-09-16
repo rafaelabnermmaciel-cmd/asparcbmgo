@@ -1,0 +1,394 @@
+{
+  "camara:220569": {
+    "nome": "Silvye Alves",
+    "partido": "UNIÃO",
+    "votosNominais": 254653,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220568": {
+    "nome": "Gustavo Gayer",
+    "partido": "PL",
+    "votosNominais": 200586,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:160598": {
+    "nome": "Flávia Morais",
+    "partido": "PDT",
+    "votosNominais": 142155,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:204419": {
+    "nome": "Glaustin da Fokus",
+    "partido": "PSC",
+    "votosNominais": 117981,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:204391": {
+    "nome": "José Nelto",
+    "partido": "PP",
+    "votosNominais": 104504,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220565": {
+    "nome": "Delegada Adriana Accorsi",
+    "partido": "PT",
+    "votosNominais": 96714,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:121948": {
+    "nome": "Adriano do Baldy",
+    "partido": "PP",
+    "votosNominais": 95518,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:178876": {
+    "nome": "Célio Silveira",
+    "partido": "MDB",
+    "votosNominais": 92469,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:204390": {
+    "nome": "Professor Alcides",
+    "partido": "PL",
+    "votosNominais": 90162,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:204412": {
+    "nome": "Dr. Zacharias Calil",
+    "partido": "UNIÃO",
+    "votosNominais": 87919,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:74371": {
+    "nome": "Rubens Otoni",
+    "partido": "PT",
+    "votosNominais": 83539,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:166402": {
+    "nome": "Magda Mofatto",
+    "partido": "PL",
+    "votosNominais": 81996,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220572": {
+    "nome": "Marussa Boldrin",
+    "partido": "MDB",
+    "votosNominais": 80464,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220571": {
+    "nome": "Daniel Agrobom",
+    "partido": "PL",
+    "votosNominais": 70529,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220567": {
+    "nome": "Jeferson Rodrigues",
+    "partido": "Republicanos",
+    "votosNominais": 56026,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220570": {
+    "nome": "Dr. Ismael Alexandrino",
+    "partido": "PSD",
+    "votosNominais": 54791,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "camara:220566": {
+    "nome": "Lêda Borges",
+    "partido": "PSDB",
+    "votosNominais": 51346,
+    "ano": 2022,
+    "cargo": "Deputado Federal"
+  },
+  "alego:51": {
+    "nome": "Bruno Peixoto",
+    "partido": "UNIÃO",
+    "votosNominais": 73692,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:820": {
+    "nome": "Lucas do Vale",
+    "partido": "MDB",
+    "votosNominais": 55747,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:125": {
+    "nome": "Lucas Calil",
+    "partido": "MDB",
+    "votosNominais": 50843,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:406": {
+    "nome": "Issy Quinan",
+    "partido": "MDB",
+    "votosNominais": 47453,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:138": {
+    "nome": "Amilton Filho",
+    "partido": "MDB",
+    "votosNominais": 46556,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:139": {
+    "nome": "Antônio Gomide",
+    "partido": "PT",
+    "votosNominais": 45256,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:131": {
+    "nome": "Virmondes Cruvinel",
+    "partido": "UNIÃO",
+    "votosNominais": 42925,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:64": {
+    "nome": "Lincoln Tejota",
+    "partido": "UNIÃO",
+    "votosNominais": 41456,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:134": {
+    "nome": "Henrique César",
+    "partido": "PSC",
+    "votosNominais": 40506,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:140": {
+    "nome": "Cairo Salim",
+    "partido": "PSD",
+    "votosNominais": 40359,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:824": {
+    "nome": "Vivian Naves",
+    "partido": "PP",
+    "votosNominais": 38574,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:818": {
+    "nome": "Jamil Calife",
+    "partido": "PP",
+    "votosNominais": 38248,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:137": {
+    "nome": "Amauri Ribeiro",
+    "partido": "político)|Amauri Ribeiro]] (UNIÃO",
+    "votosNominais": 35060,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:62": {
+    "nome": "Major Araújo",
+    "partido": "PL",
+    "votosNominais": 33928,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:143": {
+    "nome": "Delegado Eduardo Prado",
+    "partido": "PL",
+    "votosNominais": 33828,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:117": {
+    "nome": "Charles Bento",
+    "partido": "MDB",
+    "votosNominais": 33280,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:152": {
+    "nome": "Wagner Camargo Neto",
+    "partido": "PRTB",
+    "votosNominais": 32543,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:68": {
+    "nome": "Talles Barreto",
+    "partido": "UNIÃO",
+    "votosNominais": 31961,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:821": {
+    "nome": "Ricardo Quirino",
+    "partido": "Republicanos",
+    "votosNominais": 31559,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:823": {
+    "nome": "Veter Martins",
+    "partido": "Patriota",
+    "votosNominais": 30836,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:153": {
+    "nome": "Wilde Cambão",
+    "partido": "PSD",
+    "votosNominais": 29908,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:819": {
+    "nome": "Lineu Olimpio",
+    "partido": "MDB",
+    "votosNominais": 29775,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:812": {
+    "nome": "Clécio Alves",
+    "partido": "Republicanos",
+    "votosNominais": 28322,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:122": {
+    "nome": "Gustavo Sebba",
+    "partido": "PSDB",
+    "votosNominais": 27973,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:810": {
+    "nome": "André do Premium",
+    "partido": "Avante",
+    "votosNominais": 26063,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:142": {
+    "nome": "Coronel Adailton",
+    "partido": "PRTB",
+    "votosNominais": 25610,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:809": {
+    "nome": "Anderson Teodoro",
+    "partido": "Avante",
+    "votosNominais": 25552,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:811": {
+    "nome": "Bia de Lima",
+    "partido": "PT",
+    "votosNominais": 24391,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:808": {
+    "nome": "Alessandro Moreira",
+    "partido": "PP",
+    "votosNominais": 23345,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:814": {
+    "nome": "José Machado",
+    "partido": "PSDB",
+    "votosNominais": 22928,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:40": {
+    "nome": "Mauro Rubem",
+    "partido": "PT",
+    "votosNominais": 22304,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:817": {
+    "nome": "Gugu Nader",
+    "partido": "Agir",
+    "votosNominais": 21743,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:145": {
+    "nome": "Julio Pina",
+    "partido": "PRTB",
+    "votosNominais": 21243,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:825": {
+    "nome": "Dra. Zeli",
+    "partido": "PRTB",
+    "votosNominais": 20967,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:822": {
+    "nome": "Rosângela Rezende",
+    "partido": "Agir",
+    "votosNominais": 19965,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:63": {
+    "nome": "Karlos Cabral",
+    "partido": "PSB",
+    "votosNominais": 18777,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:813": {
+    "nome": "Cristiano Galindo",
+    "partido": "Solidariedade",
+    "votosNominais": 17788,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "alego:6": {
+    "nome": "Cristóvão Tormin",
+    "partido": "Patriota",
+    "votosNominais": 17484,
+    "ano": 2022,
+    "cargo": "Deputado Estadual"
+  },
+  "senado:5070": {
+    "nome": "Wilder Morais",
+    "partido": "PL",
+    "votosNominais": 799022,
+    "ano": 2022,
+    "cargo": "Senador"
+  }
+}
