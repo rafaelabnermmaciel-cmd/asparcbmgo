@@ -14,16 +14,7 @@ jobs:
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
           curl -sS -A "$UA" -o /tmp/index.html "https://resultados.tse.jus.br/oficial/app/index.html"
           curl -sS -A "$UA" -o /tmp/runtime.js "https://resultados.tse.jus.br/oficial/app/runtime.006aae974d2d266d.js"
-          echo "=== runtime.js completo ==="
-          cat /tmp/runtime.js
-
-      - name: Baixar TODOS os chunks referenciados no runtime.js
-        run: |
-          set -x
-          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
           mkdir -p /tmp/js
-          # Extrai pares id:"hash" (chave SEM aspas) do objeto de mapeamento de chunk, e o
-          # mapa de apelidos ({2214:"polyfills-core-js",...}) que troca o id pelo nome no arquivo.
           python3 - /tmp/runtime.js <<'PYEOF' > /tmp/chunk_ids.txt
           import re, sys
           text = open(sys.argv[1], encoding='utf-8', errors='replace').read()
@@ -36,26 +27,35 @@ jobs:
               nome = apelidos.get(cid, cid)
               print(f"{nome}.{h}.js")
           PYEOF
-          wc -l /tmp/chunk_ids.txt
-          cat /tmp/chunk_ids.txt
           cat /tmp/chunk_ids.txt | xargs -P 20 -I{} sh -c \
             'curl -sS --max-time 6 -A "'"$UA"'" -o "/tmp/js/{}" "https://resultados.tse.jus.br/oficial/app/{}" || true'
-          echo "total de arquivos baixados:"
           ls /tmp/js | wc -l
-          du -sh /tmp/js
 
-      - name: Procurar UF/config/endpoint em todos os chunks baixados
+      - name: Contexto completo em volta de dados-simplificados / ele-c.json / assets json
         run: |
           set +e
-          echo "=== 'GO' com contexto ==="
-          grep -o '.\{0,60\}"GO".\{0,60\}' /tmp/js/*.js 2>/dev/null | head -20
-          echo "=== '.json' referenciado ==="
-          grep -ohE '"[a-zA-Z0-9_/.-]*\.json"' /tmp/js/*.js 2>/dev/null | sort -u | head -60
-          echo "=== 'dados-simplificados' ==="
-          grep -l "dados-simplificados" /tmp/js/*.js 2>/dev/null
-          grep -o '.\{0,100\}dados-simplificados.\{0,150\}' /tmp/js/*.js 2>/dev/null | head -10
-          echo "=== 'e0' seguido de 4-6 digitos (codigo eleicao) ==="
-          grep -ohE '[a-z]{2}-c[0-9]{4}-e[0-9]{6}' /tmp/js/*.js 2>/dev/null | sort -u | head -40
-          echo "=== 'codigoEleicao' / 'codEleicao' / 'idEleicao' ==="
-          grep -ohE '"[a-zA-Z]*[Ee]leicao[a-zA-Z]*"' /tmp/js/*.js 2>/dev/null | sort -u | head -30
+          echo "=== contexto grande em volta de 'dados-simplificados' (chunk 130) ==="
+          grep -o '.\{0,400\}dados-simplificados.\{0,400\}' /tmp/js/130.*.js
+          echo ""
+          echo "=== contexto em volta de 'ele-c.json' ==="
+          grep -o '.\{0,300\}ele-c\.json.\{0,300\}' /tmp/js/*.js
+          echo ""
+          echo "=== contexto em volta de 'municipios-1.json' ==="
+          grep -o '.\{0,200\}municipios-1\.json.\{0,200\}' /tmp/js/*.js
+          exit 0
+
+      - name: Tentar baixar ele-c.json em vários caminhos plausíveis
+        run: |
+          set +e
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          for url in \
+            "https://resultados.tse.jus.br/oficial/app/assets/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/app/assets/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/config/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/ele-c.json" \
+            "https://resultados.tse.jus.br/oficial/data/ele-c.json"; do
+            code=$(curl -sS -o /tmp/resp.json -w "%{http_code}" -A "$UA" "$url")
+            echo "--- $url -> HTTP $code ---"
+            if [ "$code" = "200" ]; then head -c 800 /tmp/resp.json; echo ""; fi
+          done
           exit 0
