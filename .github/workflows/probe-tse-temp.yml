@@ -38,11 +38,8 @@ jobs:
           PYEOF
           wc -l /tmp/chunk_ids.txt
           cat /tmp/chunk_ids.txt
-          i=0
-          while read -r fname; do
-            i=$((i+1))
-            curl -sS --max-time 8 -A "$UA" -o "/tmp/js/$fname" "https://resultados.tse.jus.br/oficial/app/$fname" || echo "falhou: $fname"
-          done < /tmp/chunk_ids.txt
+          cat /tmp/chunk_ids.txt | xargs -P 20 -I{} sh -c \
+            'curl -sS --max-time 6 -A "'"$UA"'" -o "/tmp/js/{}" "https://resultados.tse.jus.br/oficial/app/{}" || true'
           echo "total de arquivos baixados:"
           ls /tmp/js | wc -l
           du -sh /tmp/js
