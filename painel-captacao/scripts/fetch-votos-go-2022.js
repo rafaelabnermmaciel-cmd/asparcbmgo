@@ -168,9 +168,13 @@ async function main() {
   console.log('[fetch-votos] buscando página da Wikipédia sobre a eleição de 2022 em Goiás...');
   const wikitext = await getWikitext();
 
-  const secaoFederais = extrairSecao(wikitext, 'Deputados federais eleitos por Goiás');
-  const secaoEstaduais = extrairSecao(wikitext, 'Deputados estaduais eleitos em Goiás');
+  // "Deputados federais...", "Deputados estaduais..." e "Senador" são todos
+  // subseções (nível 3) dentro de "== Resultados ==" (junto de "Governador", que não
+  // nos interessa aqui) — extrair de dentro dela evita que uma subseção "vaze" pra
+  // dentro da seguinte quando ela é a última da página.
   const secaoResultados = extrairSecao(wikitext, 'Resultados');
+  const secaoFederais = secaoResultados ? extrairSecao(secaoResultados, 'Deputados federais eleitos por Goiás', '===') : null;
+  const secaoEstaduais = secaoResultados ? extrairSecao(secaoResultados, 'Deputados estaduais eleitos em Goiás', '===') : null;
   const secaoSenador = secaoResultados ? extrairSecao(secaoResultados, 'Senador', '===') : null;
 
   if (!secaoFederais || !secaoEstaduais || !secaoSenador) {
