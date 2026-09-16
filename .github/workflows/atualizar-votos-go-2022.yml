@@ -58,7 +58,9 @@ jobs:
       - name: Conferir se algo mudou
         id: diff
         run: |
-          if git diff --quiet -- public/data/votos-go-2022.json; then
+          # git diff --quiet sozinho não pega arquivo novo/nunca versionado (ex: a
+          # primeira vez que este workflow roda) — status --porcelain pega os dois casos.
+          if [ -z "$(git status --porcelain -- public/data/votos-go-2022.json)" ]; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
