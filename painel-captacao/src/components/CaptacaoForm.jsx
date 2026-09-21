@@ -15,10 +15,12 @@ export function fmtR(v) {
   return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
 }
 
-// Cor do badge de status: verde pro desfecho de sucesso, cinza pro arquivado, âmbar pro que
-// ainda está em andamento (Primeiro contato / Em articulação).
+// Cor do badge de status: verde pro desfecho de sucesso, cinza pro arquivado, índigo pro marco
+// intermediário (Destinado), âmbar pro que ainda está no início do funil (Primeiro contato /
+// Em articulação).
 export function statusBadgeClass(status) {
   if (status === 'Entregue') return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300';
+  if (status === 'Destinado') return 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300';
   if (status === 'Arquivado') return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400';
   return 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300';
 }

@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck } from 'react-icons/lu';
-import { useCaptacoes, useQuarteis, useEventos } from '../lib/data.js';
+import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck, LuFlag, LuFlame } from 'react-icons/lu';
+import { useCaptacoes, useQuarteis, useEventos, STATUS_TERMINAL } from '../lib/data.js';
 import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao } from '../lib/ranking.js';
 import { useTheme } from '../lib/theme.jsx';
 import { CATEGORICO } from '../lib/palette.js';
 import { statusBadgeClass } from '../components/CaptacaoForm.jsx';
+import { AlertaParado, diasSemAndamento } from '../components/CaptacaoTimeline.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import StatCard from '../components/StatCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -106,14 +106,32 @@ export default function Dashboard() {
   const porCaptacao = useMemo(() => rankPorCaptacao(ranking).filter((q) => q.totalPrevisto > 0), [ranking]);
   const porArticulacao = useMemo(() => rankPorArticulacao(ranking).filter((q) => q.qtdArticulacoes > 0), [ranking]);
 
-  const totalPrevisto = ranking.reduce((s, q) => s + q.totalPrevisto, 0);
+  const totalArticulado = ranking.reduce((s, q) => s + q.totalPrevisto, 0);
   const totalEntregue = ranking.reduce((s, q) => s + q.totalEntregue, 0);
+  // "Destinado" é o marco em que o parlamentar já formalizou a destinação do recurso — quem já
+  // chegou em "Entregue" passou por esse marco também, então soma os dois.
+  const totalDestinado = useMemo(
+    () => captacoesDoAno.filter((c) => c.status === 'Destinado' || c.status === 'Entregue').reduce((s, c) => s + (c.valorPrevisto || 0), 0),
+    [captacoesDoAno]
+  );
   const totalArticulacoes = captacoesDoAno.length;
   const totalReunioes = ranking.reduce((s, q) => s + q.qtdReunioes, 0);
 
   const recentes = useMemo(
     () => [...captacoesDoAno].sort((a, b) => (b.criadoEm || '').localeCompare(a.criadoEm || '')).slice(0, 8),
     [captacoesDoAno]
+  );
+
+  // Contatos que estão há 15+ dias sem nenhum andamento novo na linha do tempo e ainda não
+  // chegaram num desfecho (ver AlertaParado em CaptacaoTimeline.jsx) — precisam de atenção.
+  const esfriando = useMemo(
+    () =>
+      captacoesDoAno
+        .filter((c) => !STATUS_TERMINAL.includes(c.status))
+        .map((c) => ({ captacao: c, dias: diasSemAndamento(c, eventos) }))
+        .filter((x) => x.dias !== null && x.dias >= 15)
+        .sort((a, b) => b.dias - a.dias),
+    [captacoesDoAno, eventos]
   );
 
   const corAzul = CATEGORICO[0][theme];
@@ -125,14 +143,9 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
-      <ScrollReveal className="flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Dashboard de Captação</h1>
-          <p className="mt-1 text-sm text-slate-400">Ranking gamificado dos quartéis do CBMGO na captação de recursos junto ao Congresso Nacional.</p>
-        </div>
-        <Link to="/cadastro" className="rounded-full bg-red-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-red-700">
-          + Cadastrar primeiro contato
-        </Link>
+      <ScrollReveal>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Dashboard de Captação</h1>
+        <p className="mt-1 text-sm text-slate-400">Ranking gamificado dos quartéis do CBMGO na captação de recursos junto ao Congresso Nacional.</p>
       </ScrollReveal>
 
       <ScrollReveal delay={0.02} className="mt-4 flex flex-wrap items-center gap-2">
@@ -154,12 +167,34 @@ export default function Dashboard() {
         </ScrollReveal>
       )}
 
-      <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard label="Total captado (previsto)" value={fmtRCompact(totalPrevisto)} sub={fmtR(totalPrevisto)} icon={<LuBanknote />} accent="red" />
-        <StatCard label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="amber" />
-        <StatCard label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
-        <StatCard label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="emerald" />
+      <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <StatCard dense valueSize="text-xl" label="Total articulado" value={fmtRCompact(totalArticulado)} sub={fmtR(totalArticulado)} icon={<LuBanknote />} accent="red" />
+        <StatCard dense valueSize="text-xl" label="Total destinado" value={fmtRCompact(totalDestinado)} icon={<LuFlag />} accent="amber" />
+        <StatCard dense valueSize="text-xl" label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="emerald" />
+        <StatCard dense valueSize="text-xl" label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
+        <StatCard dense valueSize="text-xl" label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="rose" />
       </ScrollReveal>
+
+      {esfriando.length > 0 && (
+        <ScrollReveal delay={0.08} className="mt-6">
+          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <LuFlame className="h-4 w-4 text-amber-500" /> Contatos esfriando ({esfriando.length})
+          </p>
+          <div className="flex flex-col gap-2">
+            {esfriando.map(({ captacao: c }) => (
+              <div key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/40 p-3 dark:border-amber-900 dark:bg-amber-500/5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                    {c.quartelNome} <span className="font-normal text-slate-400">· {c.parlamentarNome}</span>
+                  </p>
+                  <p className="truncate text-xs text-slate-500">{c.objeto}</p>
+                </div>
+                <AlertaParado captacao={c} eventos={eventos} />
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+      )}
 
       <ScrollReveal delay={0.12} className="mt-6 grid gap-4 lg:grid-cols-2">
         <ChartCard icon={LuBanknote} title="Relatório de captação" sub="Valor previsto por quartel">

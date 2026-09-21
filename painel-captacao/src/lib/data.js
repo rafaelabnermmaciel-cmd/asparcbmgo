@@ -458,12 +458,14 @@ export function initials(name) {
 
 // Este painel acompanha só a articulação — do primeiro contato até um desfecho. Toda captação
 // nasce "Primeiro contato" (sem estágio pra escolher no cadastro); vira "Em articulação"
-// sozinha assim que o primeiro andamento é lançado na linha do tempo, e só sai daí quando o
-// militar responsável marca o desfecho ("Entregue" ou "Arquivado") ali mesmo, na aba de
-// andamentos — ver CaptacaoTimeline.jsx.
-export const STATUS_CAPTACAO = ['Primeiro contato', 'Em articulação', 'Entregue', 'Arquivado'];
+// sozinha assim que o primeiro andamento é lançado na linha do tempo. "Destinado" é um marco
+// intermediário opcional (o parlamentar formalizou a destinação do recurso, mas ele ainda não
+// chegou ao quartel) — só sai do funil "em andamento" quando o militar responsável marca o
+// desfecho ("Entregue" ou "Arquivado") ali mesmo, na aba de andamentos — ver
+// CaptacaoTimeline.jsx.
+export const STATUS_CAPTACAO = ['Primeiro contato', 'Em articulação', 'Destinado', 'Entregue', 'Arquivado'];
 
-// Os 2 primeiros são o funil "em andamento"; os 2 últimos são os desfechos ("Entregue" é o
+// Os 3 primeiros são o funil "em andamento"; os 2 últimos são os desfechos ("Entregue" é o
 // desfecho de sucesso — a captação foi entregue àquele quartel).
-export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação'];
+export const STATUS_EM_ANDAMENTO = ['Primeiro contato', 'Em articulação', 'Destinado'];
 export const STATUS_TERMINAL = ['Entregue', 'Arquivado'];
