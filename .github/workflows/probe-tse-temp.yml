@@ -12,17 +12,20 @@ jobs:
         run: |
           set -x
           curl -sS --max-time 15 "https://archive.org/wayback/available?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&timestamp=20221101" || echo "FALHOU available"
-          echo ""
-          curl -sS --max-time 15 "https://web.archive.org/cdx/search/cdx?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&output=json&limit=30" || echo "FALHOU cdx"
 
-      - name: Baixar o snapshot mais próximo de out/2022 e procurar pleito de GO 2022
+      - name: Baixar o snapshot exato confirmado (id_ = conteúdo bruto, sem reescrita)
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          curl -sS --max-time 20 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221101000000/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json" || echo "FALHOU download"
-          wc -c /tmp/wb.json
-          head -c 500 /tmp/wb.json
-          echo ""
+          for TS in "20221102031545id_" "20221102031545"; do
+            echo "=== tentando timestamp $TS ==="
+            curl -sS --max-time 25 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/${TS}/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
+            echo "status curl: $?"
+            wc -c /tmp/wb.json
+            head -c 300 /tmp/wb.json
+            echo ""
+            if [ -s /tmp/wb.json ]; then break; fi
+          done
           python3 - <<'PYEOF'
           import json
           try:
