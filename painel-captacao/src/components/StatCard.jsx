@@ -14,11 +14,11 @@ export default function StatCard({ label, value, sub, accent = 'indigo', icon, v
     red: 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400',
   };
   return (
-    <div className={`min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 ${dense ? 'p-3.5' : 'p-6'}`}>
+    <div className={`min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 ${dense ? 'p-4' : 'p-6'}`}>
       <div className="flex items-start justify-between gap-2">
-        <p className={`truncate font-medium uppercase tracking-wide text-slate-400 ${dense ? 'text-[10px]' : 'text-xs'}`}>{label}</p>
+        <p className={`truncate font-medium uppercase tracking-wide text-slate-400 ${dense ? 'text-[11px]' : 'text-xs'}`}>{label}</p>
         {icon && (
-          <span className={`flex shrink-0 items-center justify-center rounded-xl ${badgeAccents[accent]} ${dense ? 'h-6 w-6 text-xs' : 'h-8 w-8 text-base'}`}>
+          <span className={`flex shrink-0 items-center justify-center rounded-xl ${badgeAccents[accent]} ${dense ? 'h-7 w-7 text-sm' : 'h-8 w-8 text-base'}`}>
             {icon}
           </span>
         )}
