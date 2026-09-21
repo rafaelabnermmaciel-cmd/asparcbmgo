@@ -4,392 +4,2856 @@
     "partido": "UNIÃO",
     "votosNominais": 254653,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 117297
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 43846
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 20319
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 11335
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 10464
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      },
+      {
+        "municipio": "MIMOSO DE GOIÁS",
+        "votos": 1
+      },
+      {
+        "municipio": "FLORES DE GOIÁS",
+        "votos": 2
+      },
+      {
+        "municipio": "MARZAGÃO",
+        "votos": 3
+      },
+      {
+        "municipio": "BALIZA",
+        "votos": 5
+      }
+    ]
   },
   "camara:220568": {
     "nome": "Gustavo Gayer",
     "partido": "PL",
     "votosNominais": 200586,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 83604
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 14547
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 11654
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 5525
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 4766
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "GUARANI DE GOIÁS",
+        "votos": 2
+      },
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 8
+      },
+      {
+        "municipio": "MARZAGÃO",
+        "votos": 10
+      },
+      {
+        "municipio": "GUARINOS",
+        "votos": 13
+      },
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 14
+      }
+    ]
   },
   "camara:160598": {
     "nome": "Flávia Morais",
     "partido": "PDT",
     "votosNominais": 142155,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "TRINDADE",
+        "votos": 12755
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3900
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 3387
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 3304
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 3238
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 1
+      },
+      {
+        "municipio": "IPIRANGA DE GOIÁS",
+        "votos": 3
+      },
+      {
+        "municipio": "TEREZÓPOLIS DE GOIÁS",
+        "votos": 4
+      },
+      {
+        "municipio": "MORRO AGUDO DE GOIÁS",
+        "votos": 4
+      },
+      {
+        "municipio": "ÁGUA LIMPA",
+        "votos": 4
+      }
+    ]
   },
   "camara:204419": {
     "nome": "Glaustin da Fokus",
     "partido": "PSC",
     "votosNominais": 117981,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14310
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 8667
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 5657
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 4202
+      },
+      {
+        "municipio": "ANICUNS",
+        "votos": 3805
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 2
+      },
+      {
+        "municipio": "TERESINA DE GOIÁS",
+        "votos": 2
+      },
+      {
+        "municipio": "SÍTIO D ABADIA",
+        "votos": 2
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 4
+      }
+    ]
   },
   "camara:204391": {
     "nome": "José Nelto",
     "partido": "PP",
     "votosNominais": 104504,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 11908
+      },
+      {
+        "municipio": "CATALÃO",
+        "votos": 9088
+      },
+      {
+        "municipio": "JARAGUÁ",
+        "votos": 6917
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 5795
+      },
+      {
+        "municipio": "PORANGATU",
+        "votos": 4106
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "CROMÍNIA",
+        "votos": 0
+      },
+      {
+        "municipio": "GUARAÍTA",
+        "votos": 0
+      },
+      {
+        "municipio": "CACHOEIRA DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAJÁ",
+        "votos": 0
+      }
+    ]
   },
   "camara:220565": {
     "nome": "Delegada Adriana Accorsi",
     "partido": "PT",
     "votosNominais": 96714,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 44560
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 10302
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1914
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1635
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1614
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "BONÓPOLIS",
+        "votos": 1
+      },
+      {
+        "municipio": "ALOÂNDIA",
+        "votos": 2
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 3
+      },
+      {
+        "municipio": "CAMPINAÇU",
+        "votos": 4
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 5
+      }
+    ]
   },
   "camara:121948": {
     "nome": "Adriano do Baldy",
     "partido": "PP",
     "votosNominais": 95518,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIATUBA",
+        "votos": 6103
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 3652
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 3598
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3309
+      },
+      {
+        "municipio": "ITAPURANGA",
+        "votos": 3187
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "CROMÍNIA",
+        "votos": 1
+      },
+      {
+        "municipio": "CUMARI",
+        "votos": 1
+      },
+      {
+        "municipio": "TRÊS RANCHOS",
+        "votos": 2
+      },
+      {
+        "municipio": "GUARINOS",
+        "votos": 2
+      }
+    ]
   },
   "camara:178876": {
     "nome": "Célio Silveira",
     "partido": "MDB",
     "votosNominais": 92469,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 25850
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 9060
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 4368
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 4073
+      },
+      {
+        "municipio": "CRISTALINA",
+        "votos": 3552
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "BOM JARDIM DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA HELENA DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "camara:204390": {
     "nome": "Professor Alcides",
     "partido": "PL",
     "votosNominais": 90162,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 33596
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 7887
+      },
+      {
+        "municipio": "PONTALINA",
+        "votos": 3343
+      },
+      {
+        "municipio": "PORANGATU",
+        "votos": 2771
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 2001
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "TRÊS RANCHOS",
+        "votos": 0
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      },
+      {
+        "municipio": "CUMARI",
+        "votos": 0
+      },
+      {
+        "municipio": "DAVINÓPOLIS",
+        "votos": 1
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 2
+      }
+    ]
   },
   "camara:204412": {
     "nome": "Dr. Zacharias Calil",
     "partido": "UNIÃO",
     "votosNominais": 87919,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 45315
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 12617
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 3053
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 3002
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2163
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      },
+      {
+        "municipio": "TERESINA DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "MAMBAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "ÁGUA FRIA DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAJÁ",
+        "votos": 0
+      }
+    ]
   },
   "camara:74371": {
     "nome": "Rubens Otoni",
     "partido": "PT",
     "votosNominais": 83539,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 17228
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5461
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 3964
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 3581
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 2146
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "AVELINÓPOLIS",
+        "votos": 2
+      },
+      {
+        "municipio": "VARJÃO",
+        "votos": 4
+      },
+      {
+        "municipio": "SÍTIO D ABADIA",
+        "votos": 6
+      },
+      {
+        "municipio": "MATRINCHÃ",
+        "votos": 8
+      },
+      {
+        "municipio": "NOVA ROMA",
+        "votos": 9
+      }
+    ]
   },
   "camara:166402": {
     "nome": "Magda Mofatto",
     "partido": "PL",
     "votosNominais": 81996,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 7515
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 7098
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 6794
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 5303
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 2493
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "RIANÁPOLIS",
+        "votos": 1
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 2
+      },
+      {
+        "municipio": "GUARAÍTA",
+        "votos": 3
+      },
+      {
+        "municipio": "CAMPESTRE DE GOIÁS",
+        "votos": 3
+      },
+      {
+        "municipio": "MOIPORÁ",
+        "votos": 4
+      }
+    ]
   },
   "camara:220572": {
     "nome": "Marussa Boldrin",
     "partido": "MDB",
     "votosNominais": 80464,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 15462
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 4092
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4046
+      },
+      {
+        "municipio": "URUAÇU",
+        "votos": 2937
+      },
+      {
+        "municipio": "MORRINHOS",
+        "votos": 2626
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "NOVA AURORA",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPESTRE DE GOIÁS",
+        "votos": 1
+      },
+      {
+        "municipio": "GUARINOS",
+        "votos": 1
+      },
+      {
+        "municipio": "DAVINÓPOLIS",
+        "votos": 1
+      },
+      {
+        "municipio": "ALOÂNDIA",
+        "votos": 2
+      }
+    ]
   },
   "camara:220571": {
     "nome": "Daniel Agrobom",
     "partido": "PL",
     "votosNominais": 70529,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "BOM JESUS DE GOIÁS",
+        "votos": 9800
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5682
+      },
+      {
+        "municipio": "ITUMBIARA",
+        "votos": 4552
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 2473
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2265
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 1
+      },
+      {
+        "municipio": "GUARANI DE GOIÁS",
+        "votos": 1
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 2
+      },
+      {
+        "municipio": "NOVA ROMA",
+        "votos": 2
+      }
+    ]
   },
   "camara:220567": {
     "nome": "Jeferson Rodrigues",
     "partido": "Republicanos",
     "votosNominais": 56026,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 15734
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 5441
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 2861
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2338
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 2289
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "HIDROLINA",
+        "votos": 0
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      },
+      {
+        "municipio": "PALMELO",
+        "votos": 0
+      },
+      {
+        "municipio": "ÁGUA LIMPA",
+        "votos": 0
+      }
+    ]
   },
   "camara:220570": {
     "nome": "Dr. Ismael Alexandrino",
     "partido": "PSD",
     "votosNominais": 54791,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 13140
+      },
+      {
+        "municipio": "SÃO LUÍS DE MONTES BELOS",
+        "votos": 9217
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 4438
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2202
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 1440
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "MAMBAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AURORA",
+        "votos": 0
+      },
+      {
+        "municipio": "FORMOSO",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA TEREZA DE GOIÁS",
+        "votos": 0
+      }
+    ]
   },
   "camara:220566": {
     "nome": "Lêda Borges",
     "partido": "PSDB",
     "votosNominais": 51346,
     "ano": 2022,
-    "cargo": "Deputado Federal"
+    "cargo": "Deputado Federal",
+    "topMunicipios": [
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 18331
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 4661
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 4518
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 4332
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 3159
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "CAMPOS VERDES",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "UIRAPURU",
+        "votos": 0
+      },
+      {
+        "municipio": "IVOLÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:51": {
     "nome": "Bruno Peixoto",
     "partido": "UNIÃO",
     "votosNominais": 73692,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 13154
+      },
+      {
+        "municipio": "CAMPOS BELOS",
+        "votos": 2767
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1932
+      },
+      {
+        "municipio": "MINAÇU",
+        "votos": 1669
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 1608
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      },
+      {
+        "municipio": "APORÉ",
+        "votos": 0
+      }
+    ]
   },
   "alego:820": {
     "nome": "Lucas do Vale",
     "partido": "MDB",
     "votosNominais": 55747,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 36826
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 1497
+      },
+      {
+        "municipio": "MONTIVIDIU",
+        "votos": 1262
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1195
+      },
+      {
+        "municipio": "CAÇU",
+        "votos": 1060
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      }
+    ]
   },
   "alego:125": {
     "nome": "Lucas Calil",
     "partido": "MDB",
     "votosNominais": 50843,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "INHUMAS",
+        "votos": 12675
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 11313
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 2532
+      },
+      {
+        "municipio": "PIRENÓPOLIS",
+        "votos": 1620
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1382
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "CASTELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 0
+      },
+      {
+        "municipio": "FLORES DE GOIÁS",
+        "votos": 0
+      }
+    ]
   },
   "alego:406": {
     "nome": "Issy Quinan",
     "partido": "MDB",
     "votosNominais": 47453,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "VIANÓPOLIS",
+        "votos": 6269
+      },
+      {
+        "municipio": "SILVÂNIA",
+        "votos": 5337
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4198
+      },
+      {
+        "municipio": "ORIZONA",
+        "votos": 2985
+      },
+      {
+        "municipio": "PIRES DO RIO",
+        "votos": 1400
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "TRÊS RANCHOS",
+        "votos": 0
+      },
+      {
+        "municipio": "MOIPORÁ",
+        "votos": 0
+      },
+      {
+        "municipio": "AVELINÓPOLIS",
+        "votos": 0
+      }
+    ]
   },
   "alego:138": {
     "nome": "Amilton Filho",
     "partido": "MDB",
     "votosNominais": 46556,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 22683
+      },
+      {
+        "municipio": "ABADIÂNIA",
+        "votos": 2090
+      },
+      {
+        "municipio": "CAMPO LIMPO DE GOIÁS",
+        "votos": 1676
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1654
+      },
+      {
+        "municipio": "BRITÂNIA",
+        "votos": 954
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "TRÊS RANCHOS",
+        "votos": 0
+      },
+      {
+        "municipio": "CÓRREGO DO OURO",
+        "votos": 0
+      },
+      {
+        "municipio": "AVELINÓPOLIS",
+        "votos": 0
+      }
+    ]
   },
   "alego:139": {
     "nome": "Antônio Gomide",
     "partido": "PT",
     "votosNominais": 45256,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 25553
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3953
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1142
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 646
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 458
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SANTA FÉ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "CÓRREGO DO OURO",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      }
+    ]
   },
   "alego:131": {
     "nome": "Virmondes Cruvinel",
     "partido": "UNIÃO",
     "votosNominais": 42925,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 18768
+      },
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 4879
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2147
+      },
+      {
+        "municipio": "JUSSARA",
+        "votos": 1231
+      },
+      {
+        "municipio": "FAZENDA NOVA",
+        "votos": 1026
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "GOUVELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "INACIOLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA RITA DO ARAGUAIA",
+        "votos": 0
+      },
+      {
+        "municipio": "SÍTIO D ABADIA",
+        "votos": 0
+      },
+      {
+        "municipio": "ÁGUA FRIA DE GOIÁS",
+        "votos": 0
+      }
+    ]
   },
   "alego:64": {
     "nome": "Lincoln Tejota",
     "partido": "UNIÃO",
     "votosNominais": 41456,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 9669
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 4882
+      },
+      {
+        "municipio": "CRIXÁS",
+        "votos": 2417
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1512
+      },
+      {
+        "municipio": "ABADIA DE GOIÁS",
+        "votos": 1494
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SÍTIO D ABADIA",
+        "votos": 0
+      },
+      {
+        "municipio": "GOUVELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "CACHOEIRA DOURADA",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      }
+    ]
   },
   "alego:134": {
     "nome": "Henrique César",
     "partido": "PSC",
     "votosNominais": 40506,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 9753
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3135
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 2625
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 2309
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 1202
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 0
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 0
+      },
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 0
+      }
+    ]
   },
   "alego:140": {
     "nome": "Cairo Salim",
     "partido": "PSD",
     "votosNominais": 40359,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 13316
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 4091
+      },
+      {
+        "municipio": "PARAÚNA",
+        "votos": 1556
+      },
+      {
+        "municipio": "PALMINÓPOLIS",
+        "votos": 1280
+      },
+      {
+        "municipio": "CAMPINAÇU",
+        "votos": 1093
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "ALVORADA DO NORTE",
+        "votos": 0
+      }
+    ]
   },
   "alego:824": {
     "nome": "Vivian Naves",
     "partido": "PP",
     "votosNominais": 38574,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 25795
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1830
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 1200
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 1188
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 847
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "AVELINÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      }
+    ]
   },
   "alego:818": {
     "nome": "Jamil Calife",
     "partido": "PP",
     "votosNominais": 38248,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "CATALÃO",
+        "votos": 19183
+      },
+      {
+        "municipio": "IPAMERI",
+        "votos": 3729
+      },
+      {
+        "municipio": "PIRES DO RIO",
+        "votos": 2199
+      },
+      {
+        "municipio": "BELA VISTA DE GOIÁS",
+        "votos": 2127
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1757
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      }
+    ]
   },
   "alego:137": {
     "nome": "Amauri Ribeiro",
     "partido": "político)|Amauri Ribeiro]] (UNIÃO",
     "votosNominais": 35060,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "PIRACANJUBA",
+        "votos": 6913
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5904
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 2266
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 1685
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1241
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      },
+      {
+        "municipio": "BURITINÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVO PLANALTO",
+        "votos": 0
+      },
+      {
+        "municipio": "DIVINÓPOLIS DE GOIÁS",
+        "votos": 1
+      },
+      {
+        "municipio": "APORÉ",
+        "votos": 1
+      }
+    ]
   },
   "alego:62": {
     "nome": "Major Araújo",
     "partido": "PL",
     "votosNominais": 33928,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 13114
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3253
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2995
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 731
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 584
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      },
+      {
+        "municipio": "JAUPACI",
+        "votos": 1
+      },
+      {
+        "municipio": "SÃO JOÃO DA PARAÚNA",
+        "votos": 1
+      },
+      {
+        "municipio": "TERESINA DE GOIÁS",
+        "votos": 1
+      },
+      {
+        "municipio": "NOVA ROMA",
+        "votos": 1
+      }
+    ]
   },
   "alego:143": {
     "nome": "Delegado Eduardo Prado",
     "partido": "PL",
     "votosNominais": 33828,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14325
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2993
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 1964
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 928
+      },
+      {
+        "municipio": "MINAÇU",
+        "votos": 544
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA IGUAÇU DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ALOÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:117": {
     "nome": "Charles Bento",
     "partido": "MDB",
     "votosNominais": 33280,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 17480
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1308
+      },
+      {
+        "municipio": "ARENÓPOLIS",
+        "votos": 873
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 722
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 648
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPO ALEGRE DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 0
+      }
+    ]
   },
   "alego:152": {
     "nome": "Wagner Camargo Neto",
     "partido": "PRTB",
     "votosNominais": 32543,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ITAPURANGA",
+        "votos": 11067
+      },
+      {
+        "municipio": "URUANA",
+        "votos": 2806
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2499
+      },
+      {
+        "municipio": "MORRO AGUDO DE GOIÁS",
+        "votos": 1128
+      },
+      {
+        "municipio": "SÃO PATRÍCIO",
+        "votos": 1109
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "CAVALCANTE",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      }
+    ]
   },
   "alego:68": {
     "nome": "Talles Barreto",
     "partido": "UNIÃO",
     "votosNominais": 31961,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3821
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 3433
+      },
+      {
+        "municipio": "NERÓPOLIS",
+        "votos": 1989
+      },
+      {
+        "municipio": "MARA ROSA",
+        "votos": 1665
+      },
+      {
+        "municipio": "RIANÁPOLIS",
+        "votos": 1094
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "SÃO MIGUEL DO PASSA QUATRO",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPO ALEGRE DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "SÃO SIMÃO",
+        "votos": 0
+      }
+    ]
   },
   "alego:821": {
     "nome": "Ricardo Quirino",
     "partido": "Republicanos",
     "votosNominais": 31559,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3655
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2539
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2155
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 2016
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1942
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "MOIPORÁ",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTES CLAROS DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "UIRAPURU",
+        "votos": 0
+      }
+    ]
   },
   "alego:823": {
     "nome": "Veter Martins",
     "partido": "Patriota",
     "votosNominais": 30836,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 24758
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4193
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 125
+      },
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 108
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 104
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      }
+    ]
   },
   "alego:153": {
     "nome": "Wilde Cambão",
     "partido": "PSD",
     "votosNominais": 29908,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 9391
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 8791
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 3199
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 3159
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 1242
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      }
+    ]
   },
   "alego:819": {
     "nome": "Lineu Olimpio",
     "partido": "MDB",
     "votosNominais": 29775,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "JARAGUÁ",
+        "votos": 14273
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2857
+      },
+      {
+        "municipio": "SÃO MIGUEL DO ARAGUAIA",
+        "votos": 1059
+      },
+      {
+        "municipio": "ITAGUARU",
+        "votos": 915
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 780
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      }
+    ]
   },
   "alego:812": {
     "nome": "Clécio Alves",
     "partido": "Republicanos",
     "votosNominais": 28322,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 21024
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1732
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 630
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 370
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 320
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:122": {
     "nome": "Gustavo Sebba",
     "partido": "PSDB",
     "votosNominais": 27973,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "CATALÃO",
+        "votos": 9468
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1903
+      },
+      {
+        "municipio": "CAMPO ALEGRE DE GOIÁS",
+        "votos": 1305
+      },
+      {
+        "municipio": "MIMOSO DE GOIÁS",
+        "votos": 1138
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 1027
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "DOVERLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "RIANÁPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "PALESTINA DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "SIMOLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "PORTEIRÃO",
+        "votos": 0
+      }
+    ]
   },
   "alego:810": {
     "nome": "André do Premium",
     "partido": "Avante",
     "votosNominais": 26063,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 21844
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 447
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 225
+      },
+      {
+        "municipio": "FLORES DE GOIÁS",
+        "votos": 209
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 177
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "CAMPOS VERDES",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "PONTALINA",
+        "votos": 0
+      }
+    ]
   },
   "alego:142": {
     "nome": "Coronel Adailton",
     "partido": "PRTB",
     "votosNominais": 25610,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 9102
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2320
+      },
+      {
+        "municipio": "NERÓPOLIS",
+        "votos": 1622
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 1139
+      },
+      {
+        "municipio": "ABADIÂNIA",
+        "votos": 841
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "SÃO SIMÃO",
+        "votos": 0
+      },
+      {
+        "municipio": "MOIPORÁ",
+        "votos": 0
+      }
+    ]
   },
   "alego:809": {
     "nome": "Anderson Teodoro",
     "partido": "Avante",
     "votosNominais": 25552,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 22870
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 652
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 553
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 200
+      },
+      {
+        "municipio": "CAMPINORTE",
+        "votos": 101
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ITAGUARU",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:811": {
     "nome": "Bia de Lima",
     "partido": "PT",
     "votosNominais": 24391,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4994
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 3435
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1445
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 549
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 494
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "ESTRELA DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "UIRAPURU",
+        "votos": 0
+      },
+      {
+        "municipio": "MOIPORÁ",
+        "votos": 0
+      }
+    ]
   },
   "alego:808": {
     "nome": "Alessandro Moreira",
     "partido": "PP",
     "votosNominais": 23345,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ALVORADA DO NORTE",
+        "votos": 3133
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 2217
+      },
+      {
+        "municipio": "POSSE",
+        "votos": 2177
+      },
+      {
+        "municipio": "SIMOLÂNDIA",
+        "votos": 2163
+      },
+      {
+        "municipio": "MAMBAÍ",
+        "votos": 1245
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SANTA FÉ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "BOM JARDIM DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAGUARU",
+        "votos": 0
+      },
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      }
+    ]
   },
   "alego:814": {
     "nome": "José Machado",
     "partido": "PSDB",
     "votosNominais": 22928,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 10850
+      },
+      {
+        "municipio": "PIRENÓPOLIS",
+        "votos": 1678
+      },
+      {
+        "municipio": "BARRO ALTO",
+        "votos": 1375
+      },
+      {
+        "municipio": "VILA PROPÍCIO",
+        "votos": 1027
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1009
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA FÉ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "BOM JARDIM DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      }
+    ]
   },
   "alego:40": {
     "nome": "Mauro Rubem",
     "partido": "PT",
     "votosNominais": 22304,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 13261
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1720
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 580
+      },
+      {
+        "municipio": "MINAÇU",
+        "votos": 580
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 474
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "SÃO MIGUEL DO PASSA QUATRO",
+        "votos": 0
+      },
+      {
+        "municipio": "BONÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "MAURILÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 0
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 0
+      }
+    ]
   },
   "alego:817": {
     "nome": "Gugu Nader",
     "partido": "Agir",
     "votosNominais": 21743,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "ITUMBIARA",
+        "votos": 20640
+      },
+      {
+        "municipio": "CACHOEIRA DOURADA",
+        "votos": 247
+      },
+      {
+        "municipio": "INACIOLÂNDIA",
+        "votos": 136
+      },
+      {
+        "municipio": "BOM JESUS DE GOIÁS",
+        "votos": 127
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 113
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "BOM JARDIM DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 0
+      },
+      {
+        "municipio": "CORUMBÁ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAGUARU",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:145": {
     "nome": "Julio Pina",
     "partido": "PRTB",
     "votosNominais": 21243,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4528
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 4442
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 2503
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 916
+      },
+      {
+        "municipio": "ALTO HORIZONTE",
+        "votos": 500
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ITAGUARU",
+        "votos": 0
+      },
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPOS VERDES",
+        "votos": 0
+      },
+      {
+        "municipio": "UIRAPURU",
+        "votos": 0
+      }
+    ]
   },
   "alego:825": {
     "nome": "Dra. Zeli",
     "partido": "PRTB",
     "votosNominais": 20967,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 17162
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 2078
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 661
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 506
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 189
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "ARAGARÇAS",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPOS VERDES",
+        "votos": 0
+      },
+      {
+        "municipio": "MUNDO NOVO",
+        "votos": 0
+      },
+      {
+        "municipio": "RIO QUENTE",
+        "votos": 0
+      },
+      {
+        "municipio": "INHUMAS",
+        "votos": 0
+      }
+    ]
   },
   "alego:822": {
     "nome": "Rosângela Rezende",
     "partido": "Agir",
     "votosNominais": 19965,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "MINEIROS",
+        "votos": 16039
+      },
+      {
+        "municipio": "PORTELÂNDIA",
+        "votos": 1085
+      },
+      {
+        "municipio": "SANTA RITA DO ARAGUAIA",
+        "votos": 659
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 396
+      },
+      {
+        "municipio": "CHAPADÃO DO CÉU",
+        "votos": 286
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "CAVALCANTE",
+        "votos": 0
+      },
+      {
+        "municipio": "CORUMBÁ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA FÉ DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "MONTIVIDIU DO NORTE",
+        "votos": 0
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:63": {
     "nome": "Karlos Cabral",
     "partido": "PSB",
     "votosNominais": 18777,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 5192
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2461
+      },
+      {
+        "municipio": "SÃO JOÃO DA PARAÚNA",
+        "votos": 619
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 613
+      },
+      {
+        "municipio": "CHAPADÃO DO CÉU",
+        "votos": 484
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MAMBAÍ",
+        "votos": 0
+      },
+      {
+        "municipio": "SANTA RITA DO NOVO DESTINO",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAGUARI",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPINAÇU",
+        "votos": 0
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 0
+      }
+    ]
   },
   "alego:813": {
     "nome": "Cristiano Galindo",
     "partido": "Solidariedade",
     "votosNominais": 17788,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "TRINDADE",
+        "votos": 13130
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2003
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 259
+      },
+      {
+        "municipio": "CAMPESTRE DE GOIÁS",
+        "votos": 146
+      },
+      {
+        "municipio": "FAINA",
+        "votos": 137
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "ITARUMÃ",
+        "votos": 0
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      }
+    ]
   },
   "alego:6": {
     "nome": "Cristóvão Tormin",
     "partido": "Patriota",
     "votosNominais": 17484,
     "ano": 2022,
-    "cargo": "Deputado Estadual"
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 9856
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 3169
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 681
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 635
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 452
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "MUNDO NOVO",
+        "votos": 0
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAGUARU",
+        "votos": 0
+      },
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 0
+      }
+    ]
   },
   "senado:5070": {
     "nome": "Wilder Morais",
     "partido": "PL",
     "votosNominais": 799022,
     "ano": 2022,
-    "cargo": "Senador"
+    "cargo": "Senador",
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 208630
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 56853
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 45962
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 29945
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 19198
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "NOVA ROMA",
+        "votos": 95
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 109
+      },
+      {
+        "municipio": "MIMOSO DE GOIÁS",
+        "votos": 110
+      },
+      {
+        "municipio": "LAGOA SANTA",
+        "votos": 149
+      },
+      {
+        "municipio": "GUARINOS",
+        "votos": 157
+      }
+    ]
   },
   "senado:5899": {
     "nome": "Vanderlan Cardoso",
@@ -404,5 +2868,107 @@
     "votosNominais": 1557415,
     "ano": 2018,
     "cargo": "Senador"
+  },
+  "alego:28": {
+    "nome": "Paulo Cezar Martins",
+    "partido": "PL",
+    "votosNominais": 37638,
+    "ano": 2022,
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 4969
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4794
+      },
+      {
+        "municipio": "PONTALINA",
+        "votos": 2023
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 1849
+      },
+      {
+        "municipio": "PIRANHAS",
+        "votos": 1484
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "VILA BOA",
+        "votos": 0
+      },
+      {
+        "municipio": "JESÚPOLIS",
+        "votos": 0
+      },
+      {
+        "municipio": "CAMPO ALEGRE DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ANHANGÜERA",
+        "votos": 0
+      }
+    ]
+  },
+  "alego:815": {
+    "nome": "Dr. George Morais",
+    "partido": "PDT",
+    "votosNominais": 38336,
+    "ano": 2022,
+    "cargo": "Deputado Estadual",
+    "topMunicipios": [
+      {
+        "municipio": "TRINDADE",
+        "votos": 6809
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3369
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 1395
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 911
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 809
+      }
+    ],
+    "bottomMunicipios": [
+      {
+        "municipio": "NOVA AMÉRICA",
+        "votos": 0
+      },
+      {
+        "municipio": "GUARAÍTA",
+        "votos": 0
+      },
+      {
+        "municipio": "MORRO AGUDO DE GOIÁS",
+        "votos": 0
+      },
+      {
+        "municipio": "ÁGUA LIMPA",
+        "votos": 0
+      },
+      {
+        "municipio": "SÃO PATRÍCIO",
+        "votos": 0
+      }
+    ]
   }
 }
