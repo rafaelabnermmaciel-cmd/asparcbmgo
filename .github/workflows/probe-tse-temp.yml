@@ -1,0 +1,21 @@
+name: Probe TSE Temp
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Testar arquivo consolidado (go-c0006-e000544-r.json) sob varios ciclos
+        run: |
+          set -x
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          for ciclo in ele2022 ge2022 gr2022 e2022; do
+            url="https://resultados.tse.jus.br/oficial/${ciclo}/544/dados-simplificados/go/go-c0006-e000544-r.json"
+            code=$(curl -sS -o /tmp/r_${ciclo}.json -w "%{http_code}" -A "$UA" "$url")
+            tam=$(wc -c < /tmp/r_${ciclo}.json)
+            echo "--- ciclo=$ciclo -> HTTP $code (tamanho $tam) ---"
+            if [ "$code" = "200" ]; then head -c 500 /tmp/r_${ciclo}.json; echo ""; fi
+          done
