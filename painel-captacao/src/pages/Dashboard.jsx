@@ -168,33 +168,12 @@ export default function Dashboard() {
       )}
 
       <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        <StatCard dense valueSize="text-xl" label="Total articulado" value={fmtRCompact(totalArticulado)} sub={fmtR(totalArticulado)} icon={<LuBanknote />} accent="red" />
+        <StatCard dense valueSize="text-xl" label="Total articulado" value={fmtRCompact(totalArticulado)} icon={<LuBanknote />} accent="red" />
         <StatCard dense valueSize="text-xl" label="Total destinado" value={fmtRCompact(totalDestinado)} icon={<LuFlag />} accent="amber" />
         <StatCard dense valueSize="text-xl" label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="emerald" />
         <StatCard dense valueSize="text-xl" label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
         <StatCard dense valueSize="text-xl" label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="rose" />
       </ScrollReveal>
-
-      {esfriando.length > 0 && (
-        <ScrollReveal delay={0.08} className="mt-6">
-          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-            <LuFlame className="h-4 w-4 text-amber-500" /> Contatos esfriando ({esfriando.length})
-          </p>
-          <div className="flex flex-col gap-2">
-            {esfriando.map(({ captacao: c }) => (
-              <div key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/40 p-3 dark:border-amber-900 dark:bg-amber-500/5">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
-                    {c.quartelNome} <span className="font-normal text-slate-400">· {c.parlamentarNome}</span>
-                  </p>
-                  <p className="truncate text-xs text-slate-500">{c.objeto}</p>
-                </div>
-                <AlertaParado captacao={c} eventos={eventos} />
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
-      )}
 
       <ScrollReveal delay={0.12} className="mt-6 grid gap-4 lg:grid-cols-2">
         <ChartCard icon={LuBanknote} title="Relatório de captação" sub="Valor previsto por quartel">
@@ -229,7 +208,28 @@ export default function Dashboard() {
         </ChartCard>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.16} className="mt-6">
+      {esfriando.length > 0 && (
+        <ScrollReveal delay={0.16} className="mt-6">
+          <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+            <LuFlame className="h-4 w-4 text-amber-500" /> Contatos esfriando ({esfriando.length})
+          </p>
+          <div className="flex flex-col gap-2">
+            {esfriando.map(({ captacao: c }) => (
+              <div key={c.id} className="flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/40 p-3 dark:border-amber-900 dark:bg-amber-500/5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                    {c.quartelNome} <span className="font-normal text-slate-400">· {c.parlamentarNome}</span>
+                  </p>
+                  <p className="truncate text-xs text-slate-500">{c.objeto}</p>
+                </div>
+                <AlertaParado captacao={c} eventos={eventos} />
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+      )}
+
+      <ScrollReveal delay={0.18} className="mt-6">
         <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
           <LuUsers className="h-4 w-4 text-red-500" /> Atividade recente
         </p>
