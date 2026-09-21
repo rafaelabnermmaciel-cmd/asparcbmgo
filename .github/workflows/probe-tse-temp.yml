@@ -8,14 +8,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Testar arquivo consolidado (go-c0006-e000544-r.json) sob varios ciclos
+      - name: Achar snapshot de 2022 do ele-c.json no Wayback Machine
+        run: |
+          set -x
+          curl -sS "http://archive.org/wayback/available?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&timestamp=20221101"
+          echo ""
+          curl -sS "https://web.archive.org/cdx/search/cdx?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&output=json&limit=30"
+
+      - name: Baixar o snapshot mais próximo de out/2022 e procurar pleito de GO 2022
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          for ciclo in ele2022 ge2022 gr2022 e2022; do
-            url="https://resultados.tse.jus.br/oficial/${ciclo}/544/dados-simplificados/go/go-c0006-e000544-r.json"
-            code=$(curl -sS -o /tmp/r_${ciclo}.json -w "%{http_code}" -A "$UA" "$url")
-            tam=$(wc -c < /tmp/r_${ciclo}.json)
-            echo "--- ciclo=$ciclo -> HTTP $code (tamanho $tam) ---"
-            if [ "$code" = "200" ]; then head -c 500 /tmp/r_${ciclo}.json; echo ""; fi
-          done
+          curl -sS -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221101000000/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
+          wc -c /tmp/wb.json
+          head -c 500 /tmp/wb.json
+          echo ""
+          python3 - <<'PYEOF'
+          import json
+          try:
+              d = json.load(open('/tmp/wb.json', encoding='utf-8'))
+          except Exception as e:
+              print("ERRO AO PARSEAR:", e)
+              raise SystemExit
+          print("ciclo (c):", d.get('c'))
+          print("total pleitos:", len(d.get('pl', [])))
+          for pleito in d.get('pl', []):
+              for eleicao in pleito.get('e', []):
+                  if eleicao.get('cd') == '544' or '2022' in (eleicao.get('nm') or ''):
+                      print("PLEITO", pleito.get('cd'), "ELEICAO", eleicao.get('cd'), eleicao.get('nm'))
+          PYEOF
