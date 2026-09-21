@@ -54,7 +54,7 @@ export default function Parlamentares() {
   }, [parlamentares, q, casa, partido, quartelId, municipio, infoPorParlamentar, resultadosEleitorais]);
 
   const selectClass =
-    'shrink-0 max-w-[130px] truncate rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
+    'shrink-0 max-w-[145px] truncate rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -70,28 +70,28 @@ export default function Parlamentares() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por nome..."
-          className={`${selectClass} max-w-none min-w-[100px] flex-1`}
+          className={`${selectClass} max-w-[160px]`}
         />
         <select value={casa} onChange={(e) => setCasa(e.target.value)} className={selectClass}>
-          <option value="">Todas as casas</option>
+          <option value="">Casa Legislativa</option>
           <option value="camara">Câmara dos Deputados</option>
           <option value="senado">Senado Federal</option>
           <option value="alego">Assembleia Legislativa (ALEGO)</option>
         </select>
         <select value={partido} onChange={(e) => setPartido(e.target.value)} className={selectClass}>
-          <option value="">Todos os partidos</option>
+          <option value="">Partidos</option>
           {partidos.map((p) => (
             <option key={p} value={p}>{p}</option>
           ))}
         </select>
         <select value={quartelId} onChange={(e) => setQuartelId(e.target.value)} className={selectClass}>
-          <option value="">Todos os quartéis</option>
+          <option value="">Quartéis</option>
           {quarteis.map((q2) => (
             <option key={q2.id} value={q2.id}>{q2.nome}</option>
           ))}
         </select>
         <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={selectClass} title="Filtra pelos parlamentares mais votados naquele município (top 10 da eleição de 2022)">
-          <option value="">Todos os municípios</option>
+          <option value="">Municípios</option>
           {municipios.map((m) => (
             <option key={m} value={m}>{m}</option>
           ))}
