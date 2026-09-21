@@ -181,6 +181,18 @@ export function useStakeholders() {
   return { loading: state.loading, stakeholders: state.stakeholders, addStakeholder, updateStakeholder, removeStakeholder };
 }
 
+// Alguma captação antiga no banco pode ter ficado com um status que já não existe mais no
+// funil atual (ex: "Indicado" — nome antigo usado quando o parlamentar prometia/indicava que
+// ia destinar o recurso, de antes de existir o status "Destinado" de hoje; ver o histórico em
+// supabase/schema.sql) porque a migração dessa tabela nunca chegou a rodar nela. Normaliza
+// aqui, no único lugar por onde toda linha de captações passa (carga inicial, insert e update
+// via realtime), pra não sumir do dashboard nem ficar com um status "orfão".
+function normalizarStatus(status) {
+  if (status === 'Indicado') return 'Destinado';
+  if (STATUS_CAPTACAO.includes(status)) return status;
+  return 'Em articulação';
+}
+
 function rowParaCaptacao(row) {
   return {
     id: row.id,
@@ -193,7 +205,7 @@ function rowParaCaptacao(row) {
     parlamentarNome: row.parlamentar_nome,
     objeto: row.objeto,
     valorPrevisto: Number(row.valor_previsto) || 0,
-    status: row.status,
+    status: normalizarStatus(row.status),
     observacoes: row.observacoes || '',
     anexos: row.anexos || [],
   };
