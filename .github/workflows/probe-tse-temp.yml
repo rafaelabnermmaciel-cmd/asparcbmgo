@@ -11,15 +11,15 @@ jobs:
       - name: Achar snapshot de 2022 do ele-c.json no Wayback Machine
         run: |
           set -x
-          curl -sS "http://archive.org/wayback/available?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&timestamp=20221101"
+          curl -sS --max-time 15 "https://archive.org/wayback/available?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&timestamp=20221101" || echo "FALHOU available"
           echo ""
-          curl -sS "https://web.archive.org/cdx/search/cdx?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&output=json&limit=30"
+          curl -sS --max-time 15 "https://web.archive.org/cdx/search/cdx?url=resultados.tse.jus.br/oficial/comum/config/ele-c.json&output=json&limit=30" || echo "FALHOU cdx"
 
       - name: Baixar o snapshot mais próximo de out/2022 e procurar pleito de GO 2022
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          curl -sS -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221101000000/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
+          curl -sS --max-time 20 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221101000000/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json" || echo "FALHOU download"
           wc -c /tmp/wb.json
           head -c 500 /tmp/wb.json
           echo ""
