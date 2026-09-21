@@ -36,14 +36,17 @@ jobs:
           head -c 300 /tmp/zip.bin || true
           echo ""
 
-      - name: Procurar mirrors no GitHub com os dados já extraídos
+      - name: Inspecionar o repo jrvidotti/extracao_dados_eleicao_br (achou 2022_2t_GO.csv)
         run: |
           set -x
           git clone --depth 1 https://github.com/jrvidotti/extracao_dados_eleicao_br /tmp/repo1 2>&1 | tail -20
-          find /tmp/repo1 -iname "*.csv" -o -iname "*.zip" | head -30
-          echo "=== tamanho do repo ==="
-          du -sh /tmp/repo1 2>/dev/null || true
-          echo ""
-          git clone --depth 1 https://github.com/derikfernandes/eleicoes_2022 /tmp/repo2 2>&1 | tail -20
-          find /tmp/repo2 -iname "*.csv" -o -iname "*.zip" | head -30
-          du -sh /tmp/repo2 2>/dev/null || true
+          echo "=== todos os csv/zip do repo ==="
+          find /tmp/repo1 -iname "*.csv" -o -iname "*.zip" | sort
+          echo "=== README (se existir) ==="
+          find /tmp/repo1 -maxdepth 1 -iname "README*" -exec cat {} \;
+          echo "=== cabeçalho + 3 linhas de 2022_2t_GO.csv ==="
+          head -4 /tmp/repo1/output/2022_2t_GO.csv 2>/dev/null || echo "não achou 2022_2t_GO.csv"
+          echo "=== tem 1t (primeiro turno)? ==="
+          find /tmp/repo1 -iname "*1t*GO*"
+          echo "=== estrutura de pastas (2 níveis) ==="
+          find /tmp/repo1 -maxdepth 2 -not -path "*/.git*"
