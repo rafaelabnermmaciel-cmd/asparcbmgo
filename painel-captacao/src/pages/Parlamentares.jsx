@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useParlamentaresGO, useCaptacoes, useQuarteis, STATUS_EM_ANDAMENTO } from '../lib/data.js';
+import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, STATUS_EM_ANDAMENTO } from '../lib/data.js';
 import ParlamentarCard from '../components/ParlamentarCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -8,12 +8,25 @@ export default function Parlamentares() {
   const { loading, parlamentares } = useParlamentaresGO();
   const { captacoes } = useCaptacoes();
   const { quarteis } = useQuarteis();
+  const { resultados: resultadosEleitorais } = useResultadosEleitorais();
   const [q, setQ] = useState('');
   const [casa, setCasa] = useState('');
   const [partido, setPartido] = useState('');
   const [quartelId, setQuartelId] = useState('');
+  const [municipio, setMunicipio] = useState('');
 
   const partidos = useMemo(() => [...new Set(parlamentares.map((p) => p.partido).filter(Boolean))].sort(), [parlamentares]);
+
+  // Municípios onde algum parlamentar aparece no top 10 de votos (ver
+  // scripts/gerar-municipios-votos-go-2022.js) — usado pro filtro "votou naquele
+  // município" abaixo.
+  const municipios = useMemo(() => {
+    const set = new Set();
+    for (const r of Object.values(resultadosEleitorais)) {
+      r.topMunicipios?.forEach((m) => set.add(m.municipio));
+    }
+    return [...set].sort();
+  }, [resultadosEleitorais]);
 
   // Por parlamentar: quantas captações em andamento (Primeiro contato/Em articulação) ele tem,
   // e com quais quartéis — usado pro badge "em articulação" e pro filtro por quartel abaixo.
@@ -36,11 +49,12 @@ export default function Parlamentares() {
       .filter((p) => !casa || p.casa === casa)
       .filter((p) => !partido || p.partido === partido)
       .filter((p) => !quartelId || infoPorParlamentar.get(p.nome)?.quarteis.has(quartelId))
+      .filter((p) => !municipio || resultadosEleitorais[`${p.casa}:${p.id}`]?.topMunicipios?.some((m) => m.municipio === municipio))
       .sort((a, b) => (a.nome || '').localeCompare(b.nome || ''));
-  }, [parlamentares, q, casa, partido, quartelId, infoPorParlamentar]);
+  }, [parlamentares, q, casa, partido, quartelId, municipio, infoPorParlamentar, resultadosEleitorais]);
 
   const selectClass =
-    'rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
+    'shrink-0 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -51,12 +65,12 @@ export default function Parlamentares() {
         </p>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.05} className="mt-5 flex flex-wrap gap-2">
+      <ScrollReveal delay={0.05} className="mt-5 flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por nome..."
-          className={`${selectClass} min-w-[200px] flex-1`}
+          className={`${selectClass} min-w-[140px] flex-1`}
         />
         <select value={casa} onChange={(e) => setCasa(e.target.value)} className={selectClass}>
           <option value="">Todas as casas</option>
@@ -74,6 +88,12 @@ export default function Parlamentares() {
           <option value="">Todos os quartéis</option>
           {quarteis.map((q2) => (
             <option key={q2.id} value={q2.id}>{q2.nome}</option>
+          ))}
+        </select>
+        <select value={municipio} onChange={(e) => setMunicipio(e.target.value)} className={selectClass} title="Filtra pelos parlamentares mais votados naquele município (top 10 da eleição de 2022)">
+          <option value="">Todos os municípios</option>
+          {municipios.map((m) => (
+            <option key={m} value={m}>{m}</option>
           ))}
         </select>
       </ScrollReveal>

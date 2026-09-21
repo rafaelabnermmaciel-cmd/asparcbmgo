@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { LuClock, LuPlus, LuTrash2, LuTriangleAlert, LuFileText, LuImage, LuCheck, LuArchive } from 'react-icons/lu';
+import { LuClock, LuPlus, LuTrash2, LuTriangleAlert, LuFileText, LuImage, LuCheck, LuArchive, LuFlag } from 'react-icons/lu';
 import { STATUS_TERMINAL } from '../lib/data.js';
 import { inputClass, labelClass, btnGhost } from './CaptacaoForm.jsx';
 import { CriarStakeholderInline } from './StakeholderForm.jsx';
@@ -19,15 +19,22 @@ function ultimaData(captacao, eventosDaCaptacao) {
   return eventosDaCaptacao.reduce((max, e) => (e.data > max ? e.data : max), eventosDaCaptacao[0].data);
 }
 
+// Dias desde o último andamento registrado (ou desde a criação, se ainda não tem nenhum) —
+// usado tanto pelo badge de alerta abaixo quanto pela lista de "contatos esfriando" no
+// Dashboard. Retorna null se não há nem data de criação (não deveria acontecer).
+export function diasSemAndamento(captacao, eventos) {
+  const doCaptacao = eventos.filter((e) => e.captacao_id === captacao.id);
+  const data = ultimaData(captacao, doCaptacao);
+  return data ? diasDesde(data) : null;
+}
+
 // Badge de alerta quando uma captação em andamento fica muito tempo sem nenhum andamento novo
 // registrado na linha do tempo — só faz sentido pra quem ainda não chegou num desfecho
 // (Entregue/Arquivado não "esfriam").
 export function AlertaParado({ captacao, eventos }) {
   if (STATUS_TERMINAL.includes(captacao.status)) return null;
-  const doCaptacao = eventos.filter((e) => e.captacao_id === captacao.id);
-  const data = ultimaData(captacao, doCaptacao);
-  if (!data) return null;
-  const dias = diasDesde(data);
+  const dias = diasSemAndamento(captacao, eventos);
+  if (dias === null) return null;
   if (dias >= 30) {
     return <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700 dark:bg-red-500/10 dark:text-red-300">🔴 Parado há {dias} dias</span>;
   }
@@ -102,7 +109,10 @@ export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMud
   }
 
   async function marcarDesfecho(status) {
-    if (!confirm(`Marcar esta captação como "${status}"? Isso encerra a articulação — pra reabrir depois é só editar o status.`)) return;
+    const mensagem = status === 'Destinado'
+      ? 'Marcar esta captação como "Destinado"? Isso registra que o parlamentar formalizou a destinação do recurso — a articulação continua em andamento até a entrega efetiva.'
+      : `Marcar esta captação como "${status}"? Isso encerra a articulação — pra reabrir depois é só editar o status.`;
+    if (!confirm(mensagem)) return;
     setMudandoStatus(true);
     try {
       await onMudarStatus(status);
@@ -185,6 +195,11 @@ export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMud
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2">
+            {['Primeiro contato', 'Em articulação'].includes(captacao.status) && (
+              <button type="button" disabled={mudandoStatus} onClick={() => marcarDesfecho('Destinado')} className="flex items-center gap-1 rounded-lg border border-indigo-200 px-3 py-1.5 text-xs font-medium text-indigo-700 transition hover:bg-indigo-50 disabled:opacity-50 dark:border-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-950/30">
+                <LuFlag className="h-3.5 w-3.5" /> Marcar como Destinado
+              </button>
+            )}
             <button type="button" disabled={mudandoStatus} onClick={() => marcarDesfecho('Entregue')} className="flex items-center gap-1 rounded-lg border border-emerald-200 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-50 dark:border-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-950/30">
               <LuCheck className="h-3.5 w-3.5" /> Marcar como Entregue
             </button>
