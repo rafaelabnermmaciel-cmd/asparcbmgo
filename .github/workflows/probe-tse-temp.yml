@@ -27,21 +27,23 @@ jobs:
           echo "=== tamanho ==="
           wc -c /tmp/wb.json
 
-      - name: Tentar eleicao 546 (estadual — onde estao dep. federal/senador/estadual)
+      - name: Reconferir bloqueio do cdn.tse.jus.br (zip oficial votacao_candidato_munzona)
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          URLS=(
-            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000546-r.json"
-            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0005-e000546-r.json"
-            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0007-e000546-r.json"
-            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0003-e000546-r.json"
-          )
-          for URL in "${URLS[@]}"; do
-            echo "=== $URL ==="
-            CODE=$(curl -sS --max-time 15 -A "$UA" -o /tmp/mun.json -w "%{http_code}" "$URL" || echo "ERR")
-            echo "http_code=$CODE  tamanho=$(wc -c < /tmp/mun.json)"
-            head -c 500 /tmp/mun.json
-            echo ""
-            echo "---"
-          done
+          curl -sS --max-time 20 -A "$UA" -o /tmp/zip.bin -w "http_code=%{http_code} tamanho=%{size_download}\n" "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2022.zip" || echo "FALHOU"
+          file /tmp/zip.bin || true
+          head -c 300 /tmp/zip.bin || true
+          echo ""
+
+      - name: Procurar mirrors no GitHub com os dados já extraídos
+        run: |
+          set -x
+          git clone --depth 1 https://github.com/jrvidotti/extracao_dados_eleicao_br /tmp/repo1 2>&1 | tail -20
+          find /tmp/repo1 -iname "*.csv" -o -iname "*.zip" | head -30
+          echo "=== tamanho do repo ==="
+          du -sh /tmp/repo1 2>/dev/null || true
+          echo ""
+          git clone --depth 1 https://github.com/derikfernandes/eleicoes_2022 /tmp/repo2 2>&1 | tail -20
+          find /tmp/repo2 -iname "*.csv" -o -iname "*.zip" | head -30
+          du -sh /tmp/repo2 2>/dev/null || true
