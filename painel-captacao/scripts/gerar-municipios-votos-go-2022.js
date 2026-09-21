@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 // Calcula, pra cada parlamentar de Goiás (deputados federais, estaduais e o senador
-// eleitos em 2022), os 5 municípios onde ele mais recebeu votos e os 5 onde recebeu
-// menos — e mescla esses dois campos (topMunicipios/bottomMunicipios) em cada entrada
-// já existente de public/data/votos-go-2022.json.
+// eleitos em 2022), os 10 municípios onde ele mais recebeu votos — e mescla esse campo
+// (topMunicipios) em cada entrada já existente de public/data/votos-go-2022.json.
 //
 // Fonte: o arquivo oficial do TSE "Votação nominal por candidato, por município e
 // zona" (dataset "Resultados - 2022" em dadosabertos.tse.jus.br), já filtrado pra
@@ -134,7 +133,7 @@ function main() {
     const municipiosOrdenados = [...cand.porMunicipio.entries()]
       .map(([municipio, votos]) => ({ municipio, votos }))
       .sort((a, b) => b.votos - a.votos);
-    if (municipiosOrdenados.length < 5) continue;
+    if (municipiosOrdenados.length < 10) continue;
 
     const chave = `${p.casa}:${p.id}`;
     const totalCsv = municipiosOrdenados.reduce((soma, m) => soma + m.votos, 0);
@@ -153,8 +152,8 @@ function main() {
       );
     }
 
-    entrada.topMunicipios = municipiosOrdenados.slice(0, 5);
-    entrada.bottomMunicipios = municipiosOrdenados.slice(-5).reverse();
+    entrada.topMunicipios = municipiosOrdenados.slice(0, 10);
+    delete entrada.bottomMunicipios;
     casados++;
   }
 
