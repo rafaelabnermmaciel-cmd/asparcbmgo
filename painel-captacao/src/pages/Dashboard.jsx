@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
-import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck, LuFlag, LuFlame } from 'react-icons/lu';
+import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck, LuFlag, LuSnowflake } from 'react-icons/lu';
 import { useCaptacoes, useQuarteis, useEventos, STATUS_TERMINAL } from '../lib/data.js';
 import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao } from '../lib/ranking.js';
 import { useTheme } from '../lib/theme.jsx';
@@ -27,11 +27,11 @@ function anoDe(dataIso) {
 
 function ChartCard({ title, sub, icon: Icon, children }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-center gap-2.5">
         {Icon && (
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400">
-            <Icon className="h-4 w-4" />
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400">
+            <Icon className="h-3.5 w-3.5" />
           </span>
         )}
         <div className="min-w-0">
@@ -54,7 +54,7 @@ function EndLabel(valueFmt) {
 
 function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle, allowDecimals = true }) {
   return (
-    <div style={{ height: Math.max(140, data.length * 34 + 20) }} className="mt-4">
+    <div style={{ height: Math.max(120, data.length * 30 + 16) }} className="mt-3">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ left: 4, right: 56 }}>
           <defs>
@@ -168,11 +168,11 @@ export default function Dashboard() {
       )}
 
       <ScrollReveal delay={0.05} className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        <StatCard dense valueSize="text-xl" label="Total articulado" value={fmtRCompact(totalArticulado)} icon={<LuBanknote />} accent="red" />
-        <StatCard dense valueSize="text-xl" label="Total destinado" value={fmtRCompact(totalDestinado)} icon={<LuFlag />} accent="amber" />
-        <StatCard dense valueSize="text-xl" label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="emerald" />
-        <StatCard dense valueSize="text-xl" label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
-        <StatCard dense valueSize="text-xl" label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="rose" />
+        <StatCard dense valueSize="text-2xl" label="Total articulado" value={fmtRCompact(totalArticulado)} icon={<LuBanknote />} accent="red" />
+        <StatCard dense valueSize="text-2xl" label="Total destinado" value={fmtRCompact(totalDestinado)} icon={<LuFlag />} accent="amber" />
+        <StatCard dense valueSize="text-2xl" label="Total entregue" value={fmtRCompact(totalEntregue)} icon={<LuTrophy />} accent="emerald" />
+        <StatCard dense valueSize="text-2xl" label="Articulações cadastradas" value={totalArticulacoes} icon={<LuHandshake />} accent="indigo" />
+        <StatCard dense valueSize="text-2xl" label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="rose" />
       </ScrollReveal>
 
       <ScrollReveal delay={0.12} className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -211,7 +211,7 @@ export default function Dashboard() {
       {esfriando.length > 0 && (
         <ScrollReveal delay={0.16} className="mt-6">
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
-            <LuFlame className="h-4 w-4 text-amber-500" /> Contatos esfriando ({esfriando.length})
+            <LuSnowflake className="h-4 w-4 text-sky-500" /> Contatos esfriando ({esfriando.length})
           </p>
           <div className="flex flex-col gap-2">
             {esfriando.map(({ captacao: c }) => (
