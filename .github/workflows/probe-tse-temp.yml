@@ -17,26 +17,24 @@ jobs:
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
-          for TS in "20221102031545id_" "20221102031545"; do
-            echo "=== tentando timestamp $TS ==="
-            curl -sS --max-time 25 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/${TS}/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
-            echo "status curl: $?"
-            wc -c /tmp/wb.json
-            head -c 300 /tmp/wb.json
+          curl -sS --max-time 25 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221102031545id_/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
+          wc -c /tmp/wb.json
+
+      - name: Tentar baixar o arquivo consolidado por município (federal, GO) direto do TSE
+        run: |
+          set -x
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+          URLS=(
+            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-r.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/go/go-c0006-e000544-r.json"
+            "https://web.archive.org/web/20221105000000id_/https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-r.json"
+          )
+          for URL in "${URLS[@]}"; do
+            echo "=== $URL ==="
+            CODE=$(curl -sS --max-time 20 -A "$UA" -o /tmp/mun.json -w "%{http_code}" "$URL" || echo "ERR")
+            echo "http_code=$CODE"
+            wc -c /tmp/mun.json
+            head -c 400 /tmp/mun.json
             echo ""
-            if [ -s /tmp/wb.json ]; then break; fi
+            echo "---"
           done
-          python3 - <<'PYEOF'
-          import json
-          try:
-              d = json.load(open('/tmp/wb.json', encoding='utf-8'))
-          except Exception as e:
-              print("ERRO AO PARSEAR:", e)
-              raise SystemExit
-          print("ciclo (c):", d.get('c'))
-          print("total pleitos:", len(d.get('pl', [])))
-          for pleito in d.get('pl', []):
-              for eleicao in pleito.get('e', []):
-                  if eleicao.get('cd') == '544' or '2022' in (eleicao.get('nm') or ''):
-                      print("PLEITO", pleito.get('cd'), "ELEICAO", eleicao.get('cd'), eleicao.get('nm'))
-          PYEOF
