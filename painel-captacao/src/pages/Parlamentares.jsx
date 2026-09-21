@@ -54,7 +54,7 @@ export default function Parlamentares() {
   }, [parlamentares, q, casa, partido, quartelId, municipio, infoPorParlamentar, resultadosEleitorais]);
 
   const selectClass =
-    'shrink-0 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
+    'shrink-0 max-w-[130px] truncate rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -65,12 +65,12 @@ export default function Parlamentares() {
         </p>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.05} className="mt-5 flex flex-nowrap items-center gap-2 overflow-x-auto pb-1">
+      <ScrollReveal delay={0.05} className="mt-5 flex flex-wrap items-center gap-2">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar por nome..."
-          className={`${selectClass} min-w-[140px] flex-1`}
+          className={`${selectClass} max-w-none min-w-[100px] flex-1`}
         />
         <select value={casa} onChange={(e) => setCasa(e.target.value)} className={selectClass}>
           <option value="">Todas as casas</option>
