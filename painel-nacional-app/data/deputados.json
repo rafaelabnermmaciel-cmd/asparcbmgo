@@ -5699,6 +5699,30 @@
     "urlCamara": "https://www.camara.leg.br/deputados/74270"
   },
   {
+    "id": 74581,
+    "casa": "camara",
+    "nome": "Gilmar Machado",
+    "nomeCivil": "GILMAR ALVES MACHADO",
+    "partido": "PT",
+    "uf": "MG",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Efetivado",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74581.jpg",
+    "email": "dep.gilmarmachado@camara.leg.br",
+    "telefone": "3215-5394",
+    "gabinete": {
+      "predio": "3",
+      "sala": "394",
+      "andar": null
+    },
+    "dataNascimento": "1961-11-06",
+    "municipioNascimento": "Cascalho Rico",
+    "ufNascimento": "MG",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/74581"
+  },
+  {
     "id": 220529,
     "casa": "camara",
     "nome": "Gilson Daniel",
@@ -5850,30 +5874,6 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/204419"
-  },
-  {
-    "id": 236284,
-    "casa": "camara",
-    "nome": "Glaycon Franco",
-    "nomeCivil": "GLYCON MOREIRA FRANCO",
-    "partido": "PSDB",
-    "uf": "MG",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Efetivado",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/236284.jpg",
-    "email": "dep.glayconfranco@camara.leg.br",
-    "telefone": "3215-5556",
-    "gabinete": {
-      "predio": "4",
-      "sala": "556",
-      "andar": "5"
-    },
-    "dataNascimento": "1967-04-16",
-    "municipioNascimento": "Conselheiro Lafaiete",
-    "ufNascimento": "MG",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/236284"
   },
   {
     "id": 107283,
