@@ -20,21 +20,31 @@ jobs:
           curl -sS --max-time 25 -A "$UA" -o /tmp/wb.json "https://web.archive.org/web/20221102031545id_/https://resultados.tse.jus.br/oficial/comum/config/ele-c.json"
           wc -c /tmp/wb.json
 
-      - name: Tentar baixar o arquivo consolidado por município (federal, GO) direto do TSE
+      - name: Ver o conteúdo completo do catálogo ele-c.json (procurar template de arquivo)
+        run: |
+          cat /tmp/wb.json
+          echo ""
+          echo "=== tamanho ==="
+          wc -c /tmp/wb.json
+
+      - name: Tentar variações de nome/caixa para o arquivo consolidado por município
         run: |
           set -x
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
           URLS=(
-            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-r.json"
-            "https://resultados.tse.jus.br/oficial/ele2022/544/dados-simplificados/go/go-c0006-e000544-r.json"
-            "https://web.archive.org/web/20221105000000id_/https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-r.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/GO/GO-c0006-e000544-r.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-r.json?v=1"
+            "https://resultados.tse.jus.br/oficial/ele2022/dados-simplificados/go/go-c0006-e000544-cs.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/dados/go/go-c0006-e000544-r.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/config/mun-e000544-cs.json"
+            "https://resultados.tse.jus.br/oficial/ele2022/config/go-e000544-mun.json"
+            "https://resultados.tse.jus.br/oficial/comum/config/mu-e000544.json"
           )
           for URL in "${URLS[@]}"; do
             echo "=== $URL ==="
-            CODE=$(curl -sS --max-time 20 -A "$UA" -o /tmp/mun.json -w "%{http_code}" "$URL" || echo "ERR")
-            echo "http_code=$CODE"
-            wc -c /tmp/mun.json
-            head -c 400 /tmp/mun.json
+            CODE=$(curl -sS --max-time 15 -A "$UA" -o /tmp/mun.json -w "%{http_code}" "$URL" || echo "ERR")
+            echo "http_code=$CODE  tamanho=$(wc -c < /tmp/mun.json)"
+            head -c 200 /tmp/mun.json
             echo ""
             echo "---"
           done
