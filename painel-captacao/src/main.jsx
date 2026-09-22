@@ -4,13 +4,16 @@ import { HashRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from './lib/theme.jsx'
+import SenhaGate from './components/SenhaGate.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>
-      <HashRouter>
-        <App />
-      </HashRouter>
+      <SenhaGate>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </SenhaGate>
     </ThemeProvider>
   </StrictMode>,
 )
