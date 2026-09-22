@@ -3,20 +3,13 @@ import { useState } from 'react';
 // Senha única e fixa pra segurar acesso casual ao link do site (não é segurança de verdade —
 // fica visível em qualquer devtools — só uma primeira camada enquanto não existe login de
 // verdade pra todo mundo; hoje só a aba "Acesso restrito" tem login, e é separado disso aqui).
-// Trocar por algo mais forte depois é o próximo passo combinado com o usuário.
+// Trocar por algo mais forte depois é o próximo passo combinado com o usuário. De propósito
+// não fica guardado em localStorage/sessionStorage: cada vez que a página é recarregada, pede
+// a senha de novo.
 const SENHA_ACESSO = '@aspar2026';
-const CHAVE_LOCALSTORAGE = 'painel-captacao:acesso-liberado';
-
-function jaLiberado() {
-  try {
-    return localStorage.getItem(CHAVE_LOCALSTORAGE) === '1';
-  } catch {
-    return false;
-  }
-}
 
 export default function SenhaGate({ children }) {
-  const [liberado, setLiberado] = useState(jaLiberado);
+  const [liberado, setLiberado] = useState(false);
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState(false);
 
@@ -25,11 +18,6 @@ export default function SenhaGate({ children }) {
   function entrar(e) {
     e.preventDefault();
     if (senha === SENHA_ACESSO) {
-      try {
-        localStorage.setItem(CHAVE_LOCALSTORAGE, '1');
-      } catch {
-        // localStorage indisponível (modo privado, etc.) — segue liberado só nesta sessão.
-      }
       setLiberado(true);
     } else {
       setErro(true);
