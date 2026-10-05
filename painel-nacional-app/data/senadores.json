@@ -1178,6 +1178,25 @@
     "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5207"
   },
   {
+    "id": "5257",
+    "casa": "senado",
+    "nome": "Renzo Braz",
+    "nomeCompleto": "Renzo do Amaral Braz",
+    "partido": "PP",
+    "uf": "MG",
+    "situacao": null,
+    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5257.jpg",
+    "email": null,
+    "telefone": "3303-2794",
+    "gabinete": null,
+    "dataNascimento": "1980-04-11",
+    "municipioNascimento": "Muriaé",
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5257"
+  },
+  {
     "id": "6025",
     "casa": "senado",
     "nome": "Roberta Acioly",
@@ -1195,25 +1214,6 @@
     "sexo": null,
     "redeSocial": [],
     "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/6025"
-  },
-  {
-    "id": "5732",
-    "casa": "senado",
-    "nome": "Rodrigo Pacheco",
-    "nomeCompleto": "Rodrigo Otavio Soares Pacheco",
-    "partido": "PSB",
-    "uf": "MG",
-    "situacao": null,
-    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5732.jpg",
-    "email": "sen.rodrigopacheco@senado.leg.br",
-    "telefone": "3303-2794",
-    "gabinete": null,
-    "dataNascimento": "1976-11-03",
-    "municipioNascimento": "Porto Velho",
-    "ufNascimento": null,
-    "sexo": null,
-    "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5732"
   },
   {
     "id": "4694",
