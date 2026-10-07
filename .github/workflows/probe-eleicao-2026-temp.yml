@@ -23,10 +23,8 @@ jobs:
           d = json.load(open('/tmp/wt2026.json', encoding='utf-8'))
           wt = d.get('parse', {}).get('wikitext', {}).get('*', '')
           print("tamanho wikitext:", len(wt))
-          import re
-          secoes = re.findall(r'^==+\s*([^=]+?)\s*==+', wt, re.M)
-          print("secoes nivel 2/3:", secoes)
-          idx = wt.find('Resultados')
-          print("--- trecho perto de Resultados ---")
-          print(wt[idx:idx+3000] if idx != -1 else "NAO ACHOU 'Resultados'")
+          for titulo in ['Deputados federais', 'Deputados estaduais']:
+              idx = wt.find(f'==={titulo}===')
+              print(f"\n\n========== {titulo} (idx={idx}) ==========")
+              print(wt[idx:idx+2500] if idx != -1 else "NAO ACHOU")
           PYEOF
