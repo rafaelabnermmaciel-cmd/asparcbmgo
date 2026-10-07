@@ -24,6 +24,20 @@ import { normalizeName, acharParlamentar } from './lib/nomes.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PAGINA = 'Eleições estaduais em Goiás em 2026';
 
+// acharParlamentar() aceita casamento por aproximação quando o nome de urna é um subconjunto
+// de palavras de um nome já cadastrado — ótimo pra "Wagner Neto" -> "Wagner Camargo Neto",
+// mas perigoso quando o nome de urna é uma ÚNICA palavra (ex: "Cardoso", sobrenome comum):
+// nesse caso ele bateria com QUALQUER "Vanderlan Cardoso", "Iris Cardoso" etc. já cadastrado,
+// mesmo sendo uma pessoa diferente. Exige 2+ palavras no nome de urna antes de tentar a
+// aproximação; nome de 1 palavra só casa por igualdade exata.
+function acharParlamentarSeguro(porNome, nome) {
+  const direto = porNome.get(normalizeName(nome));
+  if (direto) return direto;
+  const palavras = nome.trim().split(/\s+/).filter(Boolean);
+  if (palavras.length < 2) return null;
+  return acharParlamentar(porNome, nome);
+}
+
 async function getWikitext() {
   const url = `https://pt.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(PAGINA)}&prop=wikitext&format=json`;
   const res = await fetch(url, { headers: { 'User-Agent': 'painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)' } });
@@ -197,7 +211,7 @@ async function main() {
 
   function casar(lista, origem, cargo, casaEsperada) {
     for (const { nome, partido, votos, eleito: foiEleito } of lista) {
-      const p = acharParlamentar(porNome, nome);
+      const p = acharParlamentarSeguro(porNome, nome);
       if (p) {
         // Usa o cargo da disputa em que a pessoa concorreu em 2026 (não o cargo que ela já
         // tinha no cadastro) — importante pros casos de mudança de casa, onde os dois
