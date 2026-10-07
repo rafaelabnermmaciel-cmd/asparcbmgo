@@ -457,6 +457,43 @@ export function slugify(texto) {
 
 export const UFS = ['GO'];
 
+// A partir daqui, tudo que separa o painel em "Captação Federal" (Câmara + Senado) e
+// "Captação Estadual" (ALEGO) — um parlamentar já diz sua esfera pela "casa"; uma captação ou
+// stakeholder não tem esfera própria, ela vem de qual(is) parlamentar(es) estão vinculados.
+export const ESFERAS = ['federal', 'estadual'];
+
+export function esferaDoCasa(casa) {
+  return casa === 'alego' ? 'estadual' : 'federal';
+}
+
+export function filtrarParlamentaresPorEsfera(parlamentares, esfera) {
+  return parlamentares.filter((p) => esferaDoCasa(p.casa) === esfera);
+}
+
+// Uma captação não guarda a esfera — ela é descoberta pela casa do parlamentar vinculado
+// (casado por nome, mesmo padrão usado no resto do app). Captação cujo nome não bate com
+// nenhum parlamentar atual (cadastro antigo, nome digitado errado) não aparece em nenhuma das
+// duas esferas — mesmo critério já usado em ParlamentarPerfil.jsx.
+export function filtrarCaptacoesPorEsfera(captacoes, parlamentares, esfera) {
+  const casaPorNome = new Map(parlamentares.map((p) => [p.nome, p.casa]));
+  return captacoes.filter((c) => {
+    const casa = casaPorNome.get(c.parlamentarNome);
+    return casa && esferaDoCasa(casa) === esfera;
+  });
+}
+
+// Um stakeholder pode estar vinculado a parlamentares de mais de uma esfera ao mesmo tempo
+// (ex: articula com um deputado federal e um estadual) — nesse caso aparece nas duas.
+export function filtrarStakeholdersPorEsfera(stakeholders, parlamentares, esfera) {
+  const casaPorKey = new Map(parlamentares.map((p) => [`${p.casa}:${p.id}`, p.casa]));
+  return stakeholders.filter((s) =>
+    (s.parlamentares_keys || []).some((key) => {
+      const casa = casaPorKey.get(key);
+      return casa && esferaDoCasa(casa) === esfera;
+    })
+  );
+}
+
 export function initials(name) {
   if (!name) return '';
   return name

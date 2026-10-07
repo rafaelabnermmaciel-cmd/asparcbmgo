@@ -1,4 +1,6 @@
-import { useParlamentaresGO, useStakeholders } from '../lib/data.js';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useParlamentaresGO, useStakeholders, filtrarStakeholdersPorEsfera } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 
@@ -6,8 +8,10 @@ import EmptyState from '../components/EmptyState.jsx';
 // primeiro contato" ou em "Adicionar andamento" (botão "+ Novo stakeholder" perto do campo de
 // stakeholder), pra não precisar sair do que já está fazendo. Aqui só lista quem já existe.
 export default function Stakeholders() {
+  const { esfera } = useParams();
   const { parlamentares } = useParlamentaresGO();
-  const { stakeholders } = useStakeholders();
+  const { stakeholders: todosStakeholders } = useStakeholders();
+  const stakeholders = useMemo(() => filtrarStakeholdersPorEsfera(todosStakeholders, parlamentares, esfera), [todosStakeholders, parlamentares, esfera]);
 
   function nomesParlamentaresDe(s) {
     return (s.parlamentares_keys || [])

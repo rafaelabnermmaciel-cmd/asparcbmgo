@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { LuCircleCheck, LuTriangleAlert } from 'react-icons/lu';
-import { useParlamentaresGO, useQuarteis, useMilitares, useStakeholders, useCaptacoes, useEventos } from '../lib/data.js';
+import { useParlamentaresGO, useQuarteis, useMilitares, useStakeholders, useCaptacoes, useEventos, filtrarParlamentaresPorEsfera } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import FileField from '../components/FileField.jsx';
 import {
@@ -10,7 +11,9 @@ import {
 import { hoje } from '../components/CaptacaoTimeline.jsx';
 
 export default function Cadastro() {
-  const { parlamentares } = useParlamentaresGO();
+  const { esfera } = useParams();
+  const { parlamentares: todosParlamentares } = useParlamentaresGO();
+  const parlamentares = useMemo(() => filtrarParlamentaresPorEsfera(todosParlamentares, esfera), [todosParlamentares, esfera]);
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
   const { stakeholders, addStakeholder } = useStakeholders();

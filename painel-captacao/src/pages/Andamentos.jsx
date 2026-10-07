@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { LuFileText, LuImage, LuTrash2, LuClock } from 'react-icons/lu';
-import { useQuarteis, useCaptacoes, useEventos, useParlamentaresGO, useStakeholders } from '../lib/data.js';
+import { useQuarteis, useCaptacoes, useEventos, useParlamentaresGO, useStakeholders, filtrarParlamentaresPorEsfera, filtrarCaptacoesPorEsfera } from '../lib/data.js';
 import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -12,11 +13,14 @@ import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 // aqui fica "Em articulação" até o militar responsável marcar o desfecho (Entregue ou
 // Arquivado) dentro da própria linha do tempo de cada captação.
 export default function Andamentos() {
+  const { esfera } = useParams();
   const { aprovado } = useAuth();
   const { quarteis } = useQuarteis();
-  const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
+  const { captacoes: todasCaptacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
   const { eventos, addEvento, removeEvento } = useEventos();
-  const { parlamentares } = useParlamentaresGO();
+  const { parlamentares: todosParlamentares } = useParlamentaresGO();
+  const parlamentares = useMemo(() => filtrarParlamentaresPorEsfera(todosParlamentares, esfera), [todosParlamentares, esfera]);
+  const captacoes = useMemo(() => filtrarCaptacoesPorEsfera(todasCaptacoes, todosParlamentares, esfera), [todasCaptacoes, todosParlamentares, esfera]);
   const { addStakeholder } = useStakeholders();
 
   const [filtroQuartel, setFiltroQuartel] = useState('');
