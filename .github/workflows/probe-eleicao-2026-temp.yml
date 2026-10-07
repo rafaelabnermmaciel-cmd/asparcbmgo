@@ -1,0 +1,22 @@
+name: Probe Eleição 2026 Temp
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verifica se o artigo da Wikipedia sobre a eleição de 2026 em GO existe
+        run: |
+          set -x
+          UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
+          for TITULO in "Eleições estaduais em Goiás em 2026" "Eleição geral no Brasil em 2026" "Eleições gerais no Brasil em 2026"; do
+            echo "=== $TITULO ==="
+            curl -sS --max-time 20 -A "$UA" -G "https://pt.wikipedia.org/w/api.php" \
+              --data-urlencode "action=query" \
+              --data-urlencode "titles=$TITULO" \
+              --data-urlencode "format=json" | head -c 600
+            echo ""
+          done
