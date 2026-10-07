@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Baixa o wikitext e inspeciona os limites das secoes de deputados
+      - name: Mostra os cabecalhos exatos do artigo
         run: |
           set -x
           UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
@@ -21,36 +21,6 @@ jobs:
           import json, re
           d = json.load(open('/tmp/wt2026.json', encoding='utf-8'))
           wt = d['parse']['wikitext']['*']
-          print("tamanho total:", len(wt))
-
-          def extrair_secao(texto, nome, nivel='=='):
-              esc = re.escape(nome)
-              re_head = re.compile(rf'^{nivel}+\s*{esc}\s*{nivel}+$', re.M)
-              m = re_head.search(texto)
-              if not m:
-                  print(f"CABECALHO NAO ACHADO: {nome}")
-                  return None, None, None
-              inicio = m.end()
-              resto = texto[inicio:]
-              re_fim = re.compile(rf'^={{2,{len(nivel)}}}(?!=)', re.M)
-              m2 = re_fim.search(resto)
-              fim = len(resto) if not m2 else m2.start()
-              return resto[:fim], m.start(), inicio + fim
-
-          secF, iniF, fimF = extrair_secao(wt, 'Deputados federais', '==')
-          secE, iniE, fimE = extrair_secao(wt, 'Deputados estaduais', '==')
-          print(f"\nFEDERAIS: inicio_header={iniF} fim_secao={fimF} tamanho={len(secF) if secF else 0} num_linhas(|-)={secF.count(chr(10)+'|-') if secF else 0}")
-          print(f"ESTADUAIS: inicio_header={iniE} fim_secao={fimE} tamanho={len(secE) if secE else 0} num_linhas(|-)={secE.count(chr(10)+'|-') if secE else 0}")
-          print(f"\nocorrem na ordem certa? inicio_federais={iniF} < inicio_estaduais={iniE}: {iniF < iniE if (iniF is not None and iniE is not None) else 'N/A'}")
-          print(f"federais termina antes de estaduais comecar? fimF={fimF} <= iniE={iniE}: {fimF <= iniE if (fimF is not None and iniE is not None) else 'N/A'}")
-
-          print("\n===== ULTIMOS 2500 CHARS DE secaoFederais =====")
-          print(secF[-2500:] if secF else "(nenhuma)")
-
-          print("\n===== PRIMEIROS 1000 CHARS DE secaoEstaduais =====")
-          print(secE[:1000] if secE else "(nenhuma)")
-
-          # Quantas vezes "Carol do Amiltinho" aparece no wikitext inteiro, e em qual secao
-          idx_all = [i for i in range(len(wt)) if wt.startswith('Carol do Amiltinho', i)]
-          print(f"\n'Carol do Amiltinho' aparece {len(idx_all)}x no wikitext inteiro, nos indices: {idx_all}")
+          for m in re.finditer(r'^=+[^=\n].*?=+\s*$', wt, re.M):
+              print(repr(m.group(0)), 'at', m.start())
           PYEOF
