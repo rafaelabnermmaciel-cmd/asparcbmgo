@@ -12,24 +12,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Roda fetch + aplicar resultados 2026
+      - name: Dump bruto da tabela de deputados estaduais
         working-directory: painel-captacao
-        run: |
-          node scripts/fetch-votos-go-2026.js
-          node scripts/aplicar-resultados-2026.js
-      - name: Mostra o diff do parlamentares-go.json
-        run: git diff --unified=0 -- painel-captacao/public/data/parlamentares-go.json
-      - name: Mostra mudancas-casa-2026.json
-        working-directory: painel-captacao
-        run: cat mudancas-casa-2026.json
-      - name: Conta quantos tem aviso2026 / notaEleicao2026 / sao novos
-        working-directory: painel-captacao
-        run: |
-          node -e '
-          const p = require("./public/data/parlamentares-go.json");
-          console.log("total:", p.length);
-          console.log("com aviso2026:", p.filter((x) => x.aviso2026).length);
-          console.log("com notaEleicao2026:", p.filter((x) => x.notaEleicao2026).length);
-          console.log("novos (id 2026-*):", p.filter((x) => String(x.id).startsWith("2026-")).length);
-          p.filter((x) => x.notaEleicao2026).forEach((x) => console.log(" MUDOU:", x.casa, x.id, x.nome, "->", x.notaEleicao2026));
-          '
+        run: node scripts/dump-estadual-temp.mjs
