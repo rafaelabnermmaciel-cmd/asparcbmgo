@@ -9754,6 +9754,33 @@
     "urlCamara": "https://www.camara.leg.br/deputados/220617"
   },
   {
+    "id": 220584,
+    "casa": "camara",
+    "nome": "Murilo Galdino",
+    "nomeCivil": "CÁSSIO MURILO GALDINO DE ARAÚJO",
+    "partido": "REPUBLICANOS",
+    "uf": "PB",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220584.jpg",
+    "email": "dep.murilogaldino@camara.leg.br",
+    "telefone": "3215-5815",
+    "gabinete": {
+      "predio": "4",
+      "sala": "815",
+      "andar": "8"
+    },
+    "dataNascimento": "1980-07-02",
+    "municipioNascimento": "Pocinhos",
+    "ufNascimento": "PB",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/Murilogaldinopb",
+      "https://www.facebook.com/murilogaldinopb"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/220584"
+  },
+  {
     "id": 204453,
     "casa": "camara",
     "nome": "Natália Bonavides",
@@ -11224,30 +11251,6 @@
       "https://youtube.com/channel/UCDl2RREU083fkW3AR1PC3OQ"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/74084"
-  },
-  {
-    "id": 115200,
-    "casa": "camara",
-    "nome": "Raniery Paulino",
-    "nomeCivil": "ROBERTO RANIERY DE AQUINO PAULINO",
-    "partido": "REPUBLICANOS",
-    "uf": "PB",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/115200.jpg",
-    "email": "dep.ranierypaulino@camara.leg.br",
-    "telefone": "3215-5815",
-    "gabinete": {
-      "predio": "4",
-      "sala": "815",
-      "andar": "8"
-    },
-    "dataNascimento": "1978-10-18",
-    "municipioNascimento": "João Pessoa",
-    "ufNascimento": "PB",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/115200"
   },
   {
     "id": 74161,
@@ -13012,30 +13015,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/157130"
   },
   {
-    "id": 236423,
-    "casa": "camara",
-    "nome": "Valdir Trindade",
-    "nomeCivil": "VALDIR TRINDADE DOS SANTOS",
-    "partido": "REPUBLICANOS",
-    "uf": "PB",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/236423.jpg",
-    "email": "dep.valdirtrindade@camara.leg.br",
-    "telefone": "3215-5534",
-    "gabinete": {
-      "predio": "4",
-      "sala": "534",
-      "andar": "5"
-    },
-    "dataNascimento": "1973-07-18",
-    "municipioNascimento": "Garanhuns",
-    "ufNascimento": "PE",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/236423"
-  },
-  {
     "id": 160610,
     "casa": "camara",
     "nome": "Valmir Assunção",
@@ -13350,6 +13329,34 @@
       "https://www.instagram.com/eltonwelter"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/224333"
+  },
+  {
+    "id": 74044,
+    "casa": "camara",
+    "nome": "Wilson Santiago",
+    "nomeCivil": "JOSÉ WILSON SANTIAGO",
+    "partido": "REPUBLICANOS",
+    "uf": "PB",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+    "email": "dep.wilsonsantiago@camara.leg.br",
+    "telefone": "3215-5534",
+    "gabinete": {
+      "predio": "4",
+      "sala": "534",
+      "andar": "5"
+    },
+    "dataNascimento": "1957-06-10",
+    "municipioNascimento": "Uiraúna",
+    "ufNascimento": "PB",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/Wilsonsantiago_",
+      "https://www.facebook.com/wilsonsantiagopb",
+      "https://www.instagram.com/wilsonsantiago"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/74044"
   },
   {
     "id": 220564,
