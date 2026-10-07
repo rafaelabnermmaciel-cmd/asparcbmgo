@@ -1,0 +1,23 @@
+name: Probe Votos 2026 Temp
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Roda o script de busca dos votos de 2026
+        working-directory: painel-captacao
+        run: node scripts/fetch-votos-go-2026.js
+      - name: Mostra o JSON gerado (votos-go-2026.json)
+        working-directory: painel-captacao
+        run: cat public/data/votos-go-2026.json
+      - name: Mostra a lista de novos eleitos (novos-eleitos-2026.json)
+        working-directory: painel-captacao
+        run: cat novos-eleitos-2026.json
