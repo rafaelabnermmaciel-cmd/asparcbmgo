@@ -12,29 +12,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Roda o script de busca dos votos de 2026
+      - name: Dump bruto da tabela de deputados federais
         working-directory: painel-captacao
-        run: node scripts/fetch-votos-go-2026.js
-      - name: Resumo conciso — quem nao foi reeleito e a tabela completa do senado
-        working-directory: painel-captacao
-        run: |
-          node -e '
-          const roster = require("./public/data/parlamentares-go.json");
-          const votos = require("./public/data/votos-go-2026.json");
-          const novos = require("./novos-eleitos-2026.json");
-
-          for (const casa of ["camara", "alego", "senado"]) {
-            const atuais = roster.filter((p) => p.casa === casa);
-            const naoReeleitos = atuais.filter((p) => !votos[`${casa}:${p.id}`]);
-            console.log(`\n=== ${casa}: ${atuais.length} atuais, ${naoReeleitos.length} sem registro de voto 2026 ===`);
-            naoReeleitos.forEach((p) => console.log(`  NAO ACHADO EM 2026: ${casa}:${p.id} ${p.nome} (${p.partido})`));
-          }
-
-          console.log(`\n=== novos eleitos (${novos.length}) ===`);
-          novos.forEach((n) => console.log(`  ${n.nome} (${n.partido}) ${n.cargo} ${n.votos}`));
-
-          console.log(`\n=== entradas de votos-go-2026.json (${Object.keys(votos).length}) ===`);
-          for (const [key, v] of Object.entries(votos)) {
-            console.log(`  ${key} ${v.nome} ${v.cargo} ${v.votosNominais} eleito=${v.eleito}`);
-          }
-          '
+        run: node scripts/dump-federal-temp.mjs
