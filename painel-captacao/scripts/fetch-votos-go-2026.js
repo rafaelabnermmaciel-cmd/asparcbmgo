@@ -168,6 +168,9 @@ async function main() {
   const estaduais = parseTabelaDeputados(secaoEstaduais);
   const senadores = parseTabelaSenador(secaoSenador);
 
+  console.log('[fetch-votos-2026] tabela completa de candidatos a senador:');
+  senadores.forEach((s) => console.log(`  ${s.nome} (${s.partido}) — ${s.votos} votos — eleito=${s.eleito}`));
+
   console.log(
     `[fetch-votos-2026] extraído da Wikipédia: ${federais.length} candidato(s) a deputado federal ` +
       `(${federais.filter((c) => c.eleito).length} eleitos), ${estaduais.length} candidato(s) a deputado estadual ` +
