@@ -147,12 +147,14 @@ async function main() {
   console.log('[fetch-votos-2026] buscando página da Wikipédia sobre a eleição de 2026 em Goiás...');
   const wikitext = await getWikitext();
 
-  // "Deputados federais" e "Deputados estaduais" são cabeçalhos de nível 2 (== ... ==) no
-  // artigo de 2026 — diferente de 2022, onde eram subseções (===) dentro de "Resultados".
-  // "Senador" continua sendo subseção de "Resultados".
-  const secaoFederais = extrairSecao(wikitext, 'Deputados federais', '==');
-  const secaoEstaduais = extrairSecao(wikitext, 'Deputados estaduais', '==');
+  // "Governador", "Senador", "Deputados federais" e "Deputados estaduais" são todas
+  // subseções de nível 3 (=== ... ===) dentro de "== Resultados ==" — mesma estrutura de
+  // 2022 (confirmado inspecionando os cabeçalhos reais do artigo com um script de depuração
+  // via GitHub Actions; o artigo não usa nível 2 pra essas subseções como se chegou a supor
+  // numa investigação anterior).
   const secaoResultados = extrairSecao(wikitext, 'Resultados');
+  const secaoFederais = secaoResultados ? extrairSecao(secaoResultados, 'Deputados federais', '===') : null;
+  const secaoEstaduais = secaoResultados ? extrairSecao(secaoResultados, 'Deputados estaduais', '===') : null;
   const secaoSenador = secaoResultados ? extrairSecao(secaoResultados, 'Senador', '===') : null;
 
   if (!secaoFederais || !secaoEstaduais || !secaoSenador) {

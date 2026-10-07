@@ -8,19 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Mostra os cabecalhos exatos do artigo
-        run: |
-          set -x
-          UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
-          curl -sS --max-time 25 -A "$UA" -G "https://pt.wikipedia.org/w/api.php" \
-            --data-urlencode "action=parse" \
-            --data-urlencode "page=Eleições estaduais em Goiás em 2026" \
-            --data-urlencode "prop=wikitext" \
-            --data-urlencode "format=json" -o /tmp/wt2026.json
-          python3 - <<'PYEOF'
-          import json, re
-          d = json.load(open('/tmp/wt2026.json', encoding='utf-8'))
-          wt = d['parse']['wikitext']['*']
-          for m in re.finditer(r'^=+[^=\n].*?=+\s*$', wt, re.M):
-              print(repr(m.group(0)), 'at', m.start())
-          PYEOF
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Roda o script de busca dos votos de 2026
+        working-directory: painel-captacao
+        run: node scripts/fetch-votos-go-2026.js
+      - name: Mostra o JSON gerado (votos-go-2026.json)
+        working-directory: painel-captacao
+        run: cat public/data/votos-go-2026.json
+      - name: Mostra a lista de novos eleitos (novos-eleitos-2026.json)
+        working-directory: painel-captacao
+        run: cat novos-eleitos-2026.json
