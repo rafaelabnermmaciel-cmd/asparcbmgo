@@ -24,7 +24,12 @@ jobs:
           wt = d.get('parse', {}).get('wikitext', {}).get('*', '')
           print("tamanho wikitext:", len(wt))
           for titulo in ['Deputados federais', 'Deputados estaduais']:
-              idx = wt.find(f'==={titulo}===')
-              print(f"\n\n========== {titulo} (idx={idx}) ==========")
-              print(wt[idx:idx+2500] if idx != -1 else "NAO ACHOU")
+              for marcador in [f'==={titulo}===', f'== {titulo} ==', f'==={titulo} ===', f'=== {titulo}===']:
+                  idx = wt.find(marcador)
+                  if idx != -1:
+                      print(f"\n\n========== {titulo} achado com '{marcador}' idx={idx} ==========")
+                      print(wt[idx:idx+2500])
+                      break
+              else:
+                  print(f"\n\n========== {titulo}: NENHUM MARCADOR BATEU ==========")
           PYEOF
