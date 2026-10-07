@@ -47,18 +47,18 @@ export function useParlamentaresGO() {
   return state;
 }
 
-// Votos nominais recebidos na eleição de 2022 por cada parlamentar de GO (federal e
-// estadual) — ver scripts/fetch-votos-go-2022.js. Chave: "casa:id" (mesmo padrão de
-// parlamentarKeyDe usado no resto do app).
-export function useResultadosEleitorais() {
+// Votos nominais recebidos por cada parlamentar de GO (federal e estadual) numa eleição —
+// 2022 (ver scripts/fetch-votos-go-2022.js) ou 2026 (ver scripts/fetch-votos-go-2026.js).
+// Chave: "casa:id" (mesmo padrão de parlamentarKeyDe usado no resto do app).
+export function useResultadosEleitorais(ano = 2022) {
   const [state, setState] = useState({ loading: true, resultados: {} });
   useEffect(() => {
     let cancelled = false;
-    fetchJson(`${import.meta.env.BASE_URL}data/votos-go-2022.json`, {}).then((resultados) => {
+    fetchJson(`${import.meta.env.BASE_URL}data/votos-go-${ano}.json`, {}).then((resultados) => {
       if (!cancelled) setState({ loading: false, resultados });
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [ano]);
   return state;
 }
 

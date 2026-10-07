@@ -1,0 +1,498 @@
+{
+  "alego:51": {
+    "nome": "Bruno Peixoto",
+    "partido": "UNIÃO",
+    "votosNominais": 207899,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:220565": {
+    "nome": "Delegada Adriana Accorsi",
+    "partido": "PT",
+    "votosNominais": 177103,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:160598": {
+    "nome": "Flávia Morais",
+    "partido": "MDB",
+    "votosNominais": 143497,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:166402": {
+    "nome": "Magda Mofatto",
+    "partido": "PL",
+    "votosNominais": 131983,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "alego:820": {
+    "nome": "Lucas do Vale",
+    "partido": "PSD",
+    "votosNominais": 126679,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:121948": {
+    "nome": "Adriano do Baldy",
+    "partido": "PP",
+    "votosNominais": 123011,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:220571": {
+    "nome": "Daniel Agrobom",
+    "partido": "PSD",
+    "votosNominais": 116842,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:204391": {
+    "nome": "José Nelto",
+    "partido": "UNIÃO",
+    "votosNominais": 115504,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "alego:125": {
+    "nome": "Lucas Calil",
+    "partido": "PRD",
+    "votosNominais": 109025,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:178876": {
+    "nome": "Célio Silveira",
+    "partido": "MDB",
+    "votosNominais": 105256,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:74371": {
+    "nome": "Rubens Otoni",
+    "partido": "PT",
+    "votosNominais": 101902,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:204419": {
+    "nome": "Glaustin da Fokus",
+    "partido": "PODE",
+    "votosNominais": 98652,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:220572": {
+    "nome": "Marussa Boldrin",
+    "partido": "REPUBLICANOS",
+    "votosNominais": 88888,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:220569": {
+    "nome": "Silvye Alves",
+    "partido": "UNIÃO",
+    "votosNominais": 78332,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "alego:406": {
+    "nome": "Issy Quinan",
+    "partido": "MDB",
+    "votosNominais": 73433,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:137": {
+    "nome": "Amauri Ribeiro",
+    "partido": "PL",
+    "votosNominais": 69556,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:131": {
+    "nome": "Virmondes Cruvinel",
+    "partido": "UNIÃO",
+    "votosNominais": 53821,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:819": {
+    "nome": "Lineu Olimpio",
+    "partido": "MDB",
+    "votosNominais": 53569,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:153": {
+    "nome": "Wilde Cambão",
+    "partido": "UNIÃO",
+    "votosNominais": 53550,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:139": {
+    "nome": "Antônio Gomide",
+    "partido": "PT",
+    "votosNominais": 51747,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:815": {
+    "nome": "Dr. George Morais",
+    "partido": "MDB",
+    "votosNominais": 51528,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:814": {
+    "nome": "José Machado",
+    "partido": "PSDB",
+    "votosNominais": 49950,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:810": {
+    "nome": "André do Premium",
+    "partido": "UNIÃO",
+    "votosNominais": 49718,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:140": {
+    "nome": "Cairo Salim",
+    "partido": "MDB",
+    "votosNominais": 48192,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:818": {
+    "nome": "Jamil Calife",
+    "partido": "PP",
+    "votosNominais": 47993,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:117": {
+    "nome": "Charles Bento",
+    "partido": "MDB",
+    "votosNominais": 45901,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:811": {
+    "nome": "Bia de Lima",
+    "partido": "PT",
+    "votosNominais": 42980,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:68": {
+    "nome": "Talles Barreto",
+    "partido": "UNIÃO",
+    "votosNominais": 41429,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:152": {
+    "nome": "Wagner Camargo Neto",
+    "partido": "SOLIDARIEDADE",
+    "votosNominais": 40710,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:143": {
+    "nome": "Delegado Eduardo Prado",
+    "partido": "PL",
+    "votosNominais": 39446,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:809": {
+    "nome": "Anderson Teodoro",
+    "partido": "PRD",
+    "votosNominais": 39424,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:28": {
+    "nome": "Paulo Cezar Martins",
+    "partido": "MDB",
+    "votosNominais": 39275,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:808": {
+    "nome": "Alessandro Moreira",
+    "partido": "PRD",
+    "votosNominais": 36300,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:134": {
+    "nome": "Henrique César",
+    "partido": "PODE",
+    "votosNominais": 32364,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "senado:5899": {
+    "nome": "Vanderlan Cardoso",
+    "partido": "PSD",
+    "votosNominais": 633843,
+    "ano": 2026,
+    "cargo": "Senador",
+    "eleito": false
+  },
+  "alego:122": {
+    "nome": "Gustavo Sebba",
+    "partido": "PSDB",
+    "votosNominais": 28231,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:148": {
+    "nome": "Rubens Marques",
+    "partido": "PSB",
+    "votosNominais": 24564,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "camara:220568": {
+    "nome": "Gustavo Gayer",
+    "partido": "PL",
+    "votosNominais": 1639247,
+    "ano": 2026,
+    "cargo": "Senador",
+    "eleito": true
+  },
+  "camara:204412": {
+    "nome": "Dr. Zacharias Calil",
+    "partido": "MDB",
+    "votosNominais": 998319,
+    "ano": 2026,
+    "cargo": "Senador",
+    "eleito": false
+  },
+  "camara:2026-1": {
+    "nome": "Fred Rodrigues",
+    "partido": "PL",
+    "votosNominais": 152380,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:2026-2": {
+    "nome": "Major Vitor Hugo",
+    "partido": "PL",
+    "votosNominais": 104378,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "camara:2026-3": {
+    "nome": "Fábio Sousa",
+    "partido": "PL",
+    "votosNominais": 43643,
+    "ano": 2026,
+    "cargo": "Deputado Federal",
+    "eleito": true
+  },
+  "alego:2026-4": {
+    "nome": "Carol do Amiltinho",
+    "partido": "MDB",
+    "votosNominais": 109002,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-5": {
+    "nome": "Fabricio Rosa",
+    "partido": "PT",
+    "votosNominais": 81540,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-6": {
+    "nome": "Paulo do Vale",
+    "partido": "PSD",
+    "votosNominais": 72792,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-7": {
+    "nome": "GCM Romário Policarpo",
+    "partido": "CIDADANIA",
+    "votosNominais": 55337,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-8": {
+    "nome": "Lissauer Vieira",
+    "partido": "PL",
+    "votosNominais": 46056,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-9": {
+    "nome": "Kátia",
+    "partido": "PT",
+    "votosNominais": 43687,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-10": {
+    "nome": "Dr. Amarildo",
+    "partido": "NOVO",
+    "votosNominais": 43130,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-11": {
+    "nome": "Coronel Urzeda",
+    "partido": "PL",
+    "votosNominais": 40116,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-12": {
+    "nome": "Joscilene do Mangão",
+    "partido": "AGIR",
+    "votosNominais": 39977,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-13": {
+    "nome": "Graciele da Arte Trigo",
+    "partido": "AGIR",
+    "votosNominais": 37252,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-14": {
+    "nome": "Paulin Vai Nele",
+    "partido": "PRD",
+    "votosNominais": 33588,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-15": {
+    "nome": "Coronel Edson Raiado",
+    "partido": "PSD",
+    "votosNominais": 32717,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-16": {
+    "nome": "Marquinho",
+    "partido": "PL",
+    "votosNominais": 31039,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-17": {
+    "nome": "Cardoso",
+    "partido": "REPUBLICANOS",
+    "votosNominais": 30397,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-18": {
+    "nome": "Keké da Vulkanic",
+    "partido": "MOBILIZA",
+    "votosNominais": 25163,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-19": {
+    "nome": "Bessa",
+    "partido": "MOBILIZA",
+    "votosNominais": 23413,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-20": {
+    "nome": "Lucas Kitão",
+    "partido": "MOBILIZA",
+    "votosNominais": 22731,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-21": {
+    "nome": "Willian Panda",
+    "partido": "PODE",
+    "votosNominais": 21724,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "alego:2026-22": {
+    "nome": "Neto Karfan",
+    "partido": "NOVO",
+    "votosNominais": 18628,
+    "ano": 2026,
+    "cargo": "Deputado Estadual",
+    "eleito": true
+  },
+  "senado:2026-23": {
+    "nome": "Gracinha Caiado",
+    "partido": "UNIÃO",
+    "votosNominais": 1458522,
+    "ano": 2026,
+    "cargo": "Senador",
+    "eleito": true
+  }
+}

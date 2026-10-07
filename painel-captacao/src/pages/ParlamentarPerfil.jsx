@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram } from 'react-icons/lu';
+import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram, LuTriangleAlert, LuArrowUpRight } from 'react-icons/lu';
 import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -53,7 +53,8 @@ function formatGabinete(g) {
 export default function ParlamentarPerfil() {
   const { esfera, casa, id } = useParams();
   const { loading, parlamentares } = useParlamentaresGO();
-  const { resultados } = useResultadosEleitorais();
+  const { resultados } = useResultadosEleitorais(2022);
+  const { resultados: resultados2026 } = useResultadosEleitorais(2026);
   const { stakeholders, updateStakeholder, removeStakeholder } = useStakeholders();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
@@ -70,6 +71,7 @@ export default function ParlamentarPerfil() {
   const p = encontrado && esferaDoCasa(encontrado.casa) === esfera ? encontrado : null;
   const parlamentarKey = `${casa}:${id}`;
   const eleicao = resultados[parlamentarKey] || null;
+  const eleicao2026 = resultados2026[parlamentarKey] || null;
   const stakeholdersDoParlamentar = useMemo(
     () => stakeholders.filter((s) => s.parlamentares_keys?.includes(parlamentarKey)),
     [stakeholders, parlamentarKey]
@@ -112,6 +114,17 @@ export default function ParlamentarPerfil() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <Link to={`/${esfera}/parlamentares`} className="text-xs text-slate-400 hover:text-red-600">← Parlamentares</Link>
+
+      {p.aviso2026 && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+          <LuTriangleAlert className="h-4 w-4 shrink-0" /> {p.aviso2026}
+        </div>
+      )}
+      {p.notaEleicao2026 && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
+          <LuArrowUpRight className="h-4 w-4 shrink-0" /> {p.notaEleicao2026}
+        </div>
+      )}
 
       <ScrollReveal className="mt-4 flex flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
         {p.foto ? (
@@ -202,7 +215,7 @@ export default function ParlamentarPerfil() {
       </ScrollReveal>
 
       <ScrollReveal delay={0.15} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição</p>
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2022</p>
         {eleicao ? (
           <>
             <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -241,6 +254,21 @@ export default function ParlamentarPerfil() {
           <p className="mt-2 text-xs text-slate-400">Sem dado eleitoral carregado ainda.</p>
         )}
       </ScrollReveal>
+
+      {eleicao2026 && (
+        <ScrollReveal delay={0.17} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2026</p>
+          <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <InfoRow label="Ano" value={eleicao2026.ano} />
+            <InfoRow label="Partido" value={eleicao2026.partido} />
+            <InfoRow label="Votos nominais" value={eleicao2026.votosNominais?.toLocaleString('pt-BR')} />
+            <InfoRow label="Cargo" value={eleicao2026.cargo} />
+          </div>
+          <p className="mt-3 text-xs text-slate-400">
+            {eleicao2026.eleito ? 'Eleito(a) em 2026.' : 'Concorreu em 2026, mas não foi eleito(a).'}
+          </p>
+        </ScrollReveal>
+      )}
 
       <ScrollReveal delay={0.2} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">

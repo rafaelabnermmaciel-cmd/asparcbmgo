@@ -58,21 +58,27 @@ function main() {
 
   let proximoId = 1;
   for (const n of novosEleitos) {
+    const id = `2026-${proximoId++}`;
     parlamentares.push({
-      id: `2026-${proximoId++}`,
+      id,
       casa: n.casa,
       cargo: n.cargo,
       nome: n.nome,
       partido: n.partido || null,
       uf: 'GO',
     });
+    // Sem isso o novo parlamentar nunca ganha o bloco "Votos recebidos na eleição de 2026"
+    // no perfil (useResultadosEleitorais busca em votos-go-2026.json pela chave casa:id, e
+    // só agora, com o id sintético definido, dá pra saber essa chave).
+    votos[`${n.casa}:${id}`] = { nome: n.nome, partido: n.partido || null, votosNominais: n.votos, ano: 2026, cargo: n.cargo, eleito: true };
   }
 
   writeFileSync(caminhoParlamentares, JSON.stringify(parlamentares, null, 2) + '\n');
+  writeFileSync(path.resolve(__dirname, '../public/data/votos-go-2026.json'), JSON.stringify(votos, null, 2) + '\n');
 
   console.log(`[aplicar-resultados-2026] ${marcadosAviso} parlamentar(es) marcado(s) com aviso2026 (não reeleito(s)).`);
   console.log(`[aplicar-resultados-2026] ${marcadosMudanca} parlamentar(es) marcado(s) com notaEleicao2026 (mudaram de casa).`);
-  console.log(`[aplicar-resultados-2026] ${novosEleitos.length} novo(s) parlamentar(es) adicionado(s) ao cadastro.`);
+  console.log(`[aplicar-resultados-2026] ${novosEleitos.length} novo(s) parlamentar(es) adicionado(s) ao cadastro (com voto de 2026 já vinculado).`);
   console.log(`[aplicar-resultados-2026] gravado em ${caminhoParlamentares}`);
 }
 
