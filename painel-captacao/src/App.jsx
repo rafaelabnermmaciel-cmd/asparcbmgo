@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LuTriangleAlert } from 'react-icons/lu';
-import Sidebar from './components/Sidebar.jsx';
-import MobileNav from './components/MobileNav.jsx';
+import EsferaLayout from './components/EsferaLayout.jsx';
 import { supabaseConfigurado } from './lib/supabase.js';
 
+const SeletorEsfera = lazy(() => import('./pages/SeletorEsfera.jsx'));
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 const Parlamentares = lazy(() => import('./pages/Parlamentares.jsx'));
 const ParlamentarPerfil = lazy(() => import('./pages/ParlamentarPerfil.jsx'));
@@ -36,22 +36,19 @@ export default function App() {
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-      <Sidebar />
-      <main className="min-w-0 flex-1">
-        <Suspense fallback={null}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/parlamentares" element={<Parlamentares />} />
-            <Route path="/parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
-            <Route path="/stakeholders" element={<Stakeholders />} />
-            <Route path="/cadastro" element={<Cadastro />} />
-            <Route path="/andamentos" element={<Andamentos />} />
-            <Route path="/gerenciamento" element={<Gerenciamento />} />
-          </Routes>
-        </Suspense>
-      </main>
-      <MobileNav />
-    </div>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/" element={<SeletorEsfera />} />
+        <Route path="/:esfera" element={<EsferaLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="parlamentares" element={<Parlamentares />} />
+          <Route path="parlamentares/:casa/:id" element={<ParlamentarPerfil />} />
+          <Route path="stakeholders" element={<Stakeholders />} />
+          <Route path="cadastro" element={<Cadastro />} />
+          <Route path="andamentos" element={<Andamentos />} />
+          <Route path="gerenciamento" element={<Gerenciamento />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram } from 'react-icons/lu';
-import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, STATUS_CAPTACAO } from '../lib/data.js';
+import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { btnDanger, fmtR, statusBadgeClass, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
@@ -51,7 +51,7 @@ function formatGabinete(g) {
 }
 
 export default function ParlamentarPerfil() {
-  const { casa, id } = useParams();
+  const { esfera, casa, id } = useParams();
   const { loading, parlamentares } = useParlamentaresGO();
   const { resultados } = useResultadosEleitorais();
   const { stakeholders, updateStakeholder, removeStakeholder } = useStakeholders();
@@ -64,7 +64,10 @@ export default function ParlamentarPerfil() {
   const [expandidaId, setExpandidaId] = useState(null);
   const [editandoCaptacaoId, setEditandoCaptacaoId] = useState(null);
 
-  const p = parlamentares.find((x) => x.casa === casa && String(x.id) === String(id));
+  const encontrado = parlamentares.find((x) => x.casa === casa && String(x.id) === String(id));
+  // Impede abrir, por exemplo, um deputado estadual pela URL de /federal/... — ele só existe
+  // dentro da esfera que corresponde à sua casa.
+  const p = encontrado && esferaDoCasa(encontrado.casa) === esfera ? encontrado : null;
   const parlamentarKey = `${casa}:${id}`;
   const eleicao = resultados[parlamentarKey] || null;
   const stakeholdersDoParlamentar = useMemo(
@@ -101,14 +104,14 @@ export default function ParlamentarPerfil() {
     return (
       <div className="mx-auto max-w-3xl px-4 py-10">
         <EmptyState title="Parlamentar não encontrado" description="Os dados ainda não foram carregados, ou este parlamentar não faz parte da bancada de Goiás." />
-        <Link to="/parlamentares" className="mt-4 inline-block text-sm text-red-600 hover:underline">← Voltar para Parlamentares</Link>
+        <Link to={`/${esfera}/parlamentares`} className="mt-4 inline-block text-sm text-red-600 hover:underline">← Voltar para Parlamentares</Link>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
-      <Link to="/parlamentares" className="text-xs text-slate-400 hover:text-red-600">← Parlamentares</Link>
+      <Link to={`/${esfera}/parlamentares`} className="text-xs text-slate-400 hover:text-red-600">← Parlamentares</Link>
 
       <ScrollReveal className="mt-4 flex flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
         {p.foto ? (
@@ -155,7 +158,7 @@ export default function ParlamentarPerfil() {
           <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
             <LuUserRound className="h-4 w-4 text-red-500" /> Stakeholders
           </p>
-          <Link to="/stakeholders" className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
+          <Link to={`/${esfera}/stakeholders`} className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
         </div>
 
         <div className="mt-4 flex flex-col gap-3">
@@ -244,7 +247,7 @@ export default function ParlamentarPerfil() {
           <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
             <LuBanknote className="h-4 w-4 text-red-500" /> Captações vinculadas
           </p>
-          <Link to="/cadastro" className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
+          <Link to={`/${esfera}/cadastro`} className="text-xs font-medium text-red-600 hover:underline">+ Cadastrar</Link>
         </div>
         {captacoesDoParlamentar.length ? (
           <div className="mt-3 flex flex-col gap-2">

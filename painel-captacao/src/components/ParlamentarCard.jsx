@@ -7,10 +7,10 @@ const NOME_CASA = {
   alego: 'Assembleia Legislativa (GO)',
 };
 
-export default function ParlamentarCard({ p, emAndamento = 0 }) {
+export default function ParlamentarCard({ p, esfera, emAndamento = 0 }) {
   return (
     <Link
-      to={`/parlamentares/${p.casa}/${p.id}`}
+      to={`/${esfera}/parlamentares/${p.casa}/${p.id}`}
       className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-red-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-red-700"
     >
       {p.foto ? (

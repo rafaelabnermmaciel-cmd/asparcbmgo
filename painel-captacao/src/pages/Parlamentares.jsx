@@ -1,11 +1,21 @@
 import { useMemo, useState } from 'react';
-import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, STATUS_EM_ANDAMENTO } from '../lib/data.js';
+import { useParams } from 'react-router-dom';
+import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, filtrarParlamentaresPorEsfera, STATUS_EM_ANDAMENTO } from '../lib/data.js';
 import ParlamentarCard from '../components/ParlamentarCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 
+const CASAS_POR_ESFERA = {
+  federal: [
+    { value: 'camara', label: 'Câmara dos Deputados' },
+    { value: 'senado', label: 'Senado Federal' },
+  ],
+  estadual: [{ value: 'alego', label: 'Assembleia Legislativa (ALEGO)' }],
+};
+
 export default function Parlamentares() {
-  const { loading, parlamentares } = useParlamentaresGO();
+  const { esfera } = useParams();
+  const { loading, parlamentares: todosParlamentares } = useParlamentaresGO();
   const { captacoes } = useCaptacoes();
   const { quarteis } = useQuarteis();
   const { resultados: resultadosEleitorais } = useResultadosEleitorais();
@@ -14,6 +24,9 @@ export default function Parlamentares() {
   const [partido, setPartido] = useState('');
   const [quartelId, setQuartelId] = useState('');
   const [municipio, setMunicipio] = useState('');
+
+  const parlamentares = useMemo(() => filtrarParlamentaresPorEsfera(todosParlamentares, esfera), [todosParlamentares, esfera]);
+  const casasDisponiveis = CASAS_POR_ESFERA[esfera] || [];
 
   const partidos = useMemo(() => [...new Set(parlamentares.map((p) => p.partido).filter(Boolean))].sort(), [parlamentares]);
 
@@ -59,9 +72,13 @@ export default function Parlamentares() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Parlamentares de Goiás</h1>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Parlamentares {esfera === 'estadual' ? 'estaduais' : 'federais'} de Goiás</h1>
         <p className="mt-1 text-sm text-slate-400">
-          {parlamentares.length ? `${filtrados.length} de ${parlamentares.length} parlamentares` : 'Bancada de Goiás — Câmara dos Deputados, Senado Federal e Assembleia Legislativa (ALEGO)'}
+          {parlamentares.length
+            ? `${filtrados.length} de ${parlamentares.length} parlamentares`
+            : esfera === 'estadual'
+              ? 'Assembleia Legislativa de Goiás (ALEGO)'
+              : 'Câmara dos Deputados e Senado Federal'}
         </p>
       </ScrollReveal>
 
@@ -72,12 +89,14 @@ export default function Parlamentares() {
           placeholder="Buscar por nome..."
           className={`${selectClass} max-w-[160px]`}
         />
-        <select value={casa} onChange={(e) => setCasa(e.target.value)} className={selectClass}>
-          <option value="">Casa Legislativa</option>
-          <option value="camara">Câmara dos Deputados</option>
-          <option value="senado">Senado Federal</option>
-          <option value="alego">Assembleia Legislativa (ALEGO)</option>
-        </select>
+        {casasDisponiveis.length > 1 && (
+          <select value={casa} onChange={(e) => setCasa(e.target.value)} className={selectClass}>
+            <option value="">Casa Legislativa</option>
+            {casasDisponiveis.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
+        )}
         <select value={partido} onChange={(e) => setPartido(e.target.value)} className={selectClass}>
           <option value="">Partidos</option>
           {partidos.map((p) => (
@@ -100,11 +119,11 @@ export default function Parlamentares() {
 
       <ScrollReveal delay={0.08} className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtrados.map((p) => (
-          <ParlamentarCard key={`${p.casa}-${p.id}`} p={p} emAndamento={infoPorParlamentar.get(p.nome)?.emAndamento || 0} />
+          <ParlamentarCard key={`${p.casa}-${p.id}`} p={p} esfera={esfera} emAndamento={infoPorParlamentar.get(p.nome)?.emAndamento || 0} />
         ))}
       </ScrollReveal>
 
-      {!loading && !parlamentares.length && (
+      {!loading && !todosParlamentares.length && (
         <div className="mt-8">
           <EmptyState
             title="Nenhum dado carregado ainda"

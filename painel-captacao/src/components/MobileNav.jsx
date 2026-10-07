@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { NAV } from './Sidebar.jsx';
+import { buildNav } from './Sidebar.jsx';
 
 function ItemNav({ to, label, mobileLabel, icon: Icon, end }) {
   return (
@@ -18,11 +18,12 @@ function ItemNav({ to, label, mobileLabel, icon: Icon, end }) {
   );
 }
 
-// As seções cabem todas na barra inferior, sem precisar de um menu "Mais".
-export default function MobileNav() {
+// As seções cabem todas na barra inferior, sem precisar de um menu "Mais". O botão "Trocar
+// esfera" fica só na Sidebar (desktop) — aqui embaixo o espaço é mais apertado.
+export default function MobileNav({ esfera }) {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200 bg-white/95 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95 print:hidden">
-      {NAV.map((item) => (
+      {buildNav(esfera).map((item) => (
         <ItemNav key={item.to} {...item} />
       ))}
     </nav>

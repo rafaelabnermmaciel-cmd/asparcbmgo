@@ -1,16 +1,24 @@
-import { NavLink } from 'react-router-dom';
-import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuClock, LuSettings } from 'react-icons/lu';
+import { NavLink, Link } from 'react-router-dom';
+import { LuHouse, LuLandmark, LuUsers, LuClipboardPlus, LuClock, LuSettings, LuArrowLeftRight } from 'react-icons/lu';
 import ThemeToggle from './ThemeToggle.jsx';
 import brasaoCbmgo from '../assets/brasao-cbmgo.png';
 
-export const NAV = [
-  { to: '/', label: 'Dashboard', icon: LuHouse, end: true },
-  { to: '/parlamentares', label: 'Parlamentares', icon: LuLandmark },
-  { to: '/stakeholders', label: 'Stakeholders', icon: LuUsers },
-  { to: '/cadastro', label: 'Cadastrar primeiro contato', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
-  { to: '/andamentos', label: 'Adicionar andamento', mobileLabel: 'Andamento', icon: LuClock },
-  { to: '/gerenciamento', label: 'Acesso restrito', icon: LuSettings },
-];
+const TITULO_ESFERA = {
+  federal: 'Captação Federal',
+  estadual: 'Captação Estadual',
+};
+
+export function buildNav(esfera) {
+  const base = `/${esfera}`;
+  return [
+    { to: base, label: 'Dashboard', icon: LuHouse, end: true },
+    { to: `${base}/parlamentares`, label: 'Parlamentares', icon: LuLandmark },
+    { to: `${base}/stakeholders`, label: 'Stakeholders', icon: LuUsers },
+    { to: `${base}/cadastro`, label: 'Cadastrar primeiro contato', mobileLabel: 'Cadastrar', icon: LuClipboardPlus },
+    { to: `${base}/andamentos`, label: 'Adicionar andamento', mobileLabel: 'Andamento', icon: LuClock },
+    { to: `${base}/gerenciamento`, label: 'Acesso restrito', icon: LuSettings },
+  ];
+}
 
 function NavItem({ to, label, icon: Icon, end }) {
   return (
@@ -31,20 +39,23 @@ function NavItem({ to, label, icon: Icon, end }) {
   );
 }
 
-export default function Sidebar() {
+export default function Sidebar({ esfera }) {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white/80 px-4 py-6 backdrop-blur lg:flex dark:border-slate-800 dark:bg-slate-950/80 print:hidden">
       <div className="mb-8 flex items-center gap-2.5 px-2">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0f1f3d]">
           <img src={brasaoCbmgo} alt="Brasão do CBM-GO" className="h-9 w-9 object-contain" />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Captação Federal - CBMGO</p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{TITULO_ESFERA[esfera] || 'Captação'} - CBMGO</p>
           <p className="text-[11px] text-slate-400">Quartéis · Goiás</p>
         </div>
       </div>
+      <Link to="/" className="mb-5 flex items-center gap-1.5 px-2 text-xs font-medium text-slate-400 hover:text-red-600 dark:hover:text-red-400">
+        <LuArrowLeftRight className="h-3.5 w-3.5" /> Trocar esfera
+      </Link>
       <nav className="flex flex-1 flex-col gap-1">
-        {NAV.map((item) => (
+        {buildNav(esfera).map((item) => (
           <NavItem key={item.to} {...item} />
         ))}
       </nav>
