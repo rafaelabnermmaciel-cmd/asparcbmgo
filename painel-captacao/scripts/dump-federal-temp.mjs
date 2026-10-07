@@ -30,14 +30,6 @@ function celulasDaLinha(blocoLinha) {
 }
 const secaoResultados = extrairSecao(wikitext, 'Resultados');
 const secaoFederais = extrairSecao(secaoResultados, 'Deputados federais', '===');
-const linhas = secaoFederais.split(/\n\|-/).slice(1);
-let i = 0;
-for (const blocoLinha of linhas) {
-  const celulas = celulasDaLinha(blocoLinha);
-  if (celulas.length < 2) continue;
-  const primeira = celulas[0].replace(/'''/g, '').trim();
-  if (!primeira || /^(Nome|Candidato|Total|Branco|Nulo|Abstenç)/i.test(primeira)) continue;
-  i++;
-  console.log(i, limparNomeCelula(celulas[0]), '|', celulas[1]?.replace(/'''/g, ''));
-}
-console.log('TOTAL:', i);
+console.log('--- bruto completo da secaoFederais ---');
+console.log(secaoFederais);
+console.log('--- fim do bruto ---');
