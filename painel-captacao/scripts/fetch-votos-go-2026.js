@@ -187,27 +187,44 @@ async function main() {
   const resultados = {};
   const novosEleitos = [];
   const naoCasados = [];
+  // Gente que já está cadastrada mas concorreu em 2026 pra uma casa diferente da que está
+  // hoje no cadastro (ex: um deputado estadual que subiu pra Câmara, ou um deputado federal
+  // que tentou o Senado) — guarda o cargo/casa de origem pra registrar isso no perfil
+  // (ver scripts/aplicar-resultados-2026.js), sem trocar a chave do resultado (continua
+  // `casa:id` da pessoa já cadastrada, pra não perder o vínculo com stakeholders/captações
+  // já existentes).
+  const mudancasDeCasa = [];
 
-  function casar(lista, origem, cargo) {
+  function casar(lista, origem, cargo, casaEsperada) {
     for (const { nome, partido, votos, eleito: foiEleito } of lista) {
       const p = acharParlamentar(porNome, nome);
       if (p) {
-        resultados[`${p.casa}:${p.id}`] = { nome: p.nome, partido, votosNominais: votos, ano: 2026, cargo: p.cargo, eleito: foiEleito };
+        // Usa o cargo da disputa em que a pessoa concorreu em 2026 (não o cargo que ela já
+        // tinha no cadastro) — importante pros casos de mudança de casa, onde os dois
+        // divergem.
+        resultados[`${p.casa}:${p.id}`] = { nome: p.nome, partido, votosNominais: votos, ano: 2026, cargo, eleito: foiEleito };
+        if (p.casa !== casaEsperada) {
+          mudancasDeCasa.push({ chave: `${p.casa}:${p.id}`, nome: p.nome, casaAnterior: p.casa, cargoAnterior: p.cargo, cargoNovo: cargo, eleito: foiEleito });
+        }
       } else if (foiEleito) {
-        novosEleitos.push({ nome, partido, votos, cargo, origem });
+        novosEleitos.push({ nome, partido, votos, cargo, origem, casa: casaEsperada });
       } else {
         naoCasados.push(`${origem} (não eleito, sem registro prévio): ${nome} — ${votos} votos`);
       }
     }
   }
 
-  casar(federais, 'deputado federal', 'Deputado Federal');
-  casar(estaduais, 'deputado estadual', 'Deputado Estadual');
-  casar(senadores, 'senador', 'Senador');
+  casar(federais, 'deputado federal', 'Deputado Federal', 'camara');
+  casar(estaduais, 'deputado estadual', 'Deputado Estadual', 'alego');
+  casar(senadores, 'senador', 'Senador', 'senado');
 
   console.log(`[fetch-votos-2026] ${Object.keys(resultados).length} parlamentar(es) já cadastrado(s) casado(s) com sucesso.`);
   console.log(`[fetch-votos-2026] ${novosEleitos.length} candidato(s) eleito(s) em 2026 que NÃO estão no cadastro atual (novos parlamentares a adicionar):`);
   novosEleitos.forEach((n) => console.log(`  - ${n.nome} (${n.partido || 'sem partido identificado'}) — ${n.cargo} — ${n.votos} votos [${n.origem}]`));
+  if (mudancasDeCasa.length) {
+    console.log(`[fetch-votos-2026] ${mudancasDeCasa.length} pessoa(s) já cadastrada(s) que concorreram em 2026 pra uma casa diferente da atual:`);
+    mudancasDeCasa.forEach((m) => console.log(`  - ${m.chave} ${m.nome}: era ${m.cargoAnterior}, concorreu a ${m.cargoNovo} (eleito=${m.eleito})`));
+  }
   if (naoCasados.length) {
     console.warn(`[fetch-votos-2026] ${naoCasados.length} candidato(s) não eleito(s) sem registro prévio (ignorados, esperado):`);
     naoCasados.forEach((n) => console.warn('  -', n));
@@ -220,6 +237,10 @@ async function main() {
   const destinoNovos = path.resolve(__dirname, '../novos-eleitos-2026.json');
   writeFileSync(destinoNovos, JSON.stringify(novosEleitos, null, 2) + '\n');
   console.log(`[fetch-votos-2026] lista de novos eleitos gravada em ${destinoNovos}`);
+
+  const destinoMudancas = path.resolve(__dirname, '../mudancas-casa-2026.json');
+  writeFileSync(destinoMudancas, JSON.stringify(mudancasDeCasa, null, 2) + '\n');
+  console.log(`[fetch-votos-2026] lista de mudanças de casa gravada em ${destinoMudancas}`);
 }
 
 main().catch((err) => {
