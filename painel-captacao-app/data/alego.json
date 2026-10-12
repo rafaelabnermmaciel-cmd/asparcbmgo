@@ -350,39 +350,6 @@
     "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/815"
   },
   {
-    "id": "831",
-    "casa": "alego",
-    "cargo": "Deputado Estadual",
-    "nome": "Eliel Junior",
-    "partido": "SD",
-    "partidoNome": "PARTIDO SOLIDARIEDADE",
-    "uf": "GO",
-    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/mk1NS2DX-bCmxZzVAA-fDg==",
-    "email": null,
-    "telefone": null,
-    "gabinete": null,
-    "redeSocial": [
-      "https://www.facebook.com/elieljuniorgoias?mibextid=wwXIfr&amp;rdid=ejsm05Dsp6wJOnXZ&amp;share_url=https%253A%252F%252Fwww.facebook.com%252Fshare%252F1D9MdGriBG%252F%253Fmibextid%253DwwXIfr#",
-      "https://www.instagram.com/elieljunior.go"
-    ],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/831"
-  },
-  {
-    "id": "832",
-    "casa": "alego",
-    "cargo": "Deputado Estadual",
-    "nome": "Givago Valadares",
-    "partido": "UB",
-    "partidoNome": "UNIÃO BRASIL",
-    "uf": "GO",
-    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/EQEUJHeUaNk8VvEvOkD08Q==",
-    "email": null,
-    "telefone": null,
-    "gabinete": null,
-    "redeSocial": [],
-    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/832"
-  },
-  {
     "id": "817",
     "casa": "alego",
     "cargo": "Deputado Estadual",
@@ -778,6 +745,24 @@
       "https://twitter.com/talles_barreto"
     ],
     "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/68"
+  },
+  {
+    "id": "149",
+    "casa": "alego",
+    "cargo": "Deputado Estadual",
+    "nome": "Thiago Albernaz",
+    "partido": "MDB",
+    "partidoNome": "MOVIMENTO DEMOCRÁTICO BRASILEIRO",
+    "uf": "GO",
+    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/5ofIE04qiqebOFz4voOpRA==",
+    "email": "thiago.albernaz@al.go.leg.br",
+    "telefone": null,
+    "gabinete": null,
+    "redeSocial": [
+      "https://www.facebook.com/thiago.albernaz.1/",
+      "https://www.instagram.com/thiagoalbernaz/"
+    ],
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/149"
   },
   {
     "id": "823",
