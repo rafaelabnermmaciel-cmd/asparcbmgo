@@ -6236,11 +6236,11 @@
     "condicaoEleitoral": "Suplente",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/178884.jpg",
     "email": "dep.hildorocha@camara.leg.br",
-    "telefone": null,
+    "telefone": "3215-5734",
     "gabinete": {
-      "predio": null,
-      "sala": null,
-      "andar": null
+      "predio": "4",
+      "sala": "734",
+      "andar": "7"
     },
     "dataNascimento": "1960-04-22",
     "municipioNascimento": "São Luís",
@@ -10003,34 +10003,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/178986"
   },
   {
-    "id": 194260,
-    "casa": "camara",
-    "nome": "Nivaldo Albuquerque",
-    "nomeCivil": "NIVALDO FERREIRA DE ALBUQUERQUE NETO",
-    "partido": "UNIÃO",
-    "uf": "AL",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Titular",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/194260.jpg",
-    "email": "dep.nivaldoalbuquerque@camara.leg.br",
-    "telefone": "3215-5671",
-    "gabinete": {
-      "predio": "3",
-      "sala": "671",
-      "andar": null
-    },
-    "dataNascimento": "1988-01-07",
-    "municipioNascimento": "Maceió",
-    "ufNascimento": "AL",
-    "sexo": "M",
-    "redeSocial": [
-      "https://twitter.com/NivaldoAlbuq",
-      "https://www.facebook.com/DeputadoNivaldoAlbuquerque",
-      "https://www.instagram.com/nivaldoalbuquerque"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/194260"
-  },
-  {
     "id": 204498,
     "casa": "camara",
     "nome": "Olival Marques",
@@ -10142,6 +10114,33 @@
       "https://www.instagram.com/otonidepaulaoficial"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/204441"
+  },
+  {
+    "id": 220706,
+    "casa": "camara",
+    "nome": "Padovani",
+    "nomeCivil": "NELSON FERNANDO PADOVANI",
+    "partido": "PP",
+    "uf": "PR",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220706.jpg",
+    "email": "dep.padovani@camara.leg.br",
+    "telefone": "3215-5923",
+    "gabinete": {
+      "predio": "4",
+      "sala": "923",
+      "andar": "9"
+    },
+    "dataNascimento": "1977-10-29",
+    "municipioNascimento": "Cascavel",
+    "ufNascimento": "PR",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/padovanidep",
+      "https://www.instagram.com/nelsinhopadovani"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/220706"
   },
   {
     "id": 160556,
@@ -10329,6 +10328,30 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/74160"
+  },
+  {
+    "id": 171617,
+    "casa": "camara",
+    "nome": "Paulão",
+    "nomeCivil": "PAULO FERNANDO DOS SANTOS",
+    "partido": "PT",
+    "uf": "AL",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/171617.jpg",
+    "email": "dep.paulao@camara.leg.br",
+    "telefone": null,
+    "gabinete": {
+      "predio": null,
+      "sala": null,
+      "andar": null
+    },
+    "dataNascimento": "1957-09-15",
+    "municipioNascimento": "Recife",
+    "ufNascimento": "PE",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/171617"
   },
   {
     "id": 141518,
@@ -11459,7 +11482,11 @@
     "municipioNascimento": "Maringá",
     "ufNascimento": "PR",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.facebook.com/RicardoBarros",
+      "https://www.facebook.com/RicardoBarrosOficial",
+      "https://www.instagram.com/ricardobarros.oficial"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/73788"
   },
   {
@@ -12215,32 +12242,6 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/160621"
-  },
-  {
-    "id": 236518,
-    "casa": "camara",
-    "nome": "Santin Roveda",
-    "nomeCivil": "HILTON SANTIN ROVEDA",
-    "partido": "UNIÃO",
-    "uf": "PR",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/236518.jpg",
-    "email": "dep.santinroveda@camara.leg.br",
-    "telefone": "3215-5923",
-    "gabinete": {
-      "predio": "4",
-      "sala": "923",
-      "andar": "9"
-    },
-    "dataNascimento": "1981-12-26",
-    "municipioNascimento": "União da Vitória",
-    "ufNascimento": "PR",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.instagram.com/santinroveda"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/236518"
   },
   {
     "id": 204387,
@@ -13390,14 +13391,14 @@
   {
     "id": 220660,
     "casa": "camara",
-    "nome": "Yury do Paredão",
+    "nome": "Yury Bruno",
     "nomeCivil": "YURY BRUNO ALENCAR ARAUJO",
     "partido": "MDB",
     "uf": "CE",
     "situacao": "Exercício",
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/220660.jpg",
-    "email": "dep.yurydoparedao@camara.leg.br",
+    "email": "dep.yurybruno@camara.leg.br",
     "telefone": "3215-5545",
     "gabinete": {
       "predio": "4",
