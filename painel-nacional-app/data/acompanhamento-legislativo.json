@@ -7,6 +7,11 @@
   "atualizacoesRecentes": [
     {
       "proposicao": "PL 241/2023",
+      "data": "2026-10-13",
+      "fato": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
+    },
+    {
+      "proposicao": "PL 241/2023",
       "data": "2026-09-01",
       "fato": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa"
     },
@@ -99,11 +104,6 @@
       "proposicao": "PL 241/2023",
       "data": "2026-08-13",
       "fato": "Encerramentos — Aguardando Deliberação"
-    },
-    {
-      "proposicao": "PL 4.804/2025",
-      "data": "2026-06-12",
-      "fato": "Saída de Relator(a) da Comissão - Com Parecer Apresentado — Aguardando Designação de Relator(a)"
     }
   ],
   "proposicoes": [
@@ -149,10 +149,10 @@
       "parlamentar": null,
       "casaAtual": "Câmara dos Deputados",
       "assunto": "Permite a averbação de até 10 anos (hoje limitado a 5) de tempo de serviço público ou privado anterior ao ingresso na corporação, para aposentadoria integral de policiais e bombeiros militares estaduais. Não se aplica às Forças Armadas.",
-      "situacao": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa",
+      "situacao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal",
       "ultimaMovimentacao": {
-        "data": "2026-09-01",
-        "descricao": "Recebimento - Redação Final — Aguardando Autógrafos na Mesa"
+        "data": "2026-10-13",
+        "descricao": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
       },
       "proximosPassos": "Em regime de urgência, pode ser pautada e votada em qualquer sessão sem passar pelas comissões. Se aprovada, segue ao Senado.",
       "pontoAtencao": "Monitorar a Ordem do Dia diariamente — pode ser votada a qualquer momento. Articulação mantida com o Dep. Sargento Portugal.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-10-13T20:35:31.539Z"
+  "ultimaVerificacaoEm": "2026-10-14T00:15:17.770Z"
 }
