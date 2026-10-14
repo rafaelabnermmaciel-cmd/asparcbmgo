@@ -6,6 +6,11 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PEC 18/2025",
+      "data": "2026-10-14",
+      "fato": "APROVADO PARECER NA COMISSÃO"
+    },
+    {
       "proposicao": "PL 241/2023",
       "data": "2026-10-13",
       "fato": "Expedição de Documento — Aguardando Apreciação pelo Senado Federal"
@@ -99,11 +104,6 @@
       "proposicao": "PL 317/2022",
       "data": "2026-08-12",
       "fato": "Aprovação da Redação Final — Aguardando Encaminhamento"
-    },
-    {
-      "proposicao": "PL 241/2023",
-      "data": "2026-08-13",
-      "fato": "Encerramentos — Aguardando Deliberação"
     }
   ],
   "proposicoes": [
@@ -418,10 +418,10 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "PEC da Segurança Pública (iniciativa do Poder Executivo). Altera os arts. 5º, 15, 22, 23, 24, 40, 49, 84, 103-B, 130-A e 144 da CF, cria os arts. 144-A e 144-B, e estabelece novas fontes de recursos para o FNSP e o Funpen (incluindo parte da arrecadação de apostas esportivas e do Fundo Social do pré-sal).",
-      "situacao": "INCLUÍDA NA PAUTA DA REUNIÃO",
+      "situacao": "APROVADO PARECER NA COMISSÃO",
       "ultimaMovimentacao": {
-        "data": "2026-08-31",
-        "descricao": "INCLUÍDA NA PAUTA DA REUNIÃO"
+        "data": "2026-10-14",
+        "descricao": "APROVADO PARECER NA COMISSÃO"
       },
       "proximosPassos": "Aguarda chegada formal à CCJ para exame de constitucionalidade, juridicidade e técnica legislativa; depois exige 2 turnos no Plenário (quórum de 49 votos). Expectativa de conclusão na CCJ antes do fim do período eleitoral.",
       "pontoAtencao": "Prioridade do Poder Executivo, com forte pressão política. Acompanhar de perto a designação de relator na CCJ assim que recebida formalmente.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-10-14T00:15:17.770Z"
+  "ultimaVerificacaoEm": "2026-10-14T16:40:18.999Z"
 }
