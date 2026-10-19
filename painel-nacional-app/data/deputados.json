@@ -5719,7 +5719,10 @@
     "municipioNascimento": "Cascalho Rico",
     "ufNascimento": "MG",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.facebook.com/gilmarmachadodep",
+      "https://www.instagram.com/gilmarmachadodep"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/74581"
   },
   {
@@ -6775,6 +6778,30 @@
     "urlCamara": "https://www.camara.leg.br/deputados/178970"
   },
   {
+    "id": 74550,
+    "casa": "camara",
+    "nome": "João Leão",
+    "nomeCivil": "JOÃO FELIPE DE SOUZA LEÃO",
+    "partido": "PP",
+    "uf": "BA",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74550.jpg",
+    "email": "dep.joaoleao@camara.leg.br",
+    "telefone": "3215-5320",
+    "gabinete": {
+      "predio": "4",
+      "sala": "320",
+      "andar": "3"
+    },
+    "dataNascimento": "1946-02-27",
+    "municipioNascimento": "Recife",
+    "ufNascimento": "PE",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/74550"
+  },
+  {
     "id": 141459,
     "casa": "camara",
     "nome": "João Maia",
@@ -6853,30 +6880,6 @@
       "https://www.instagram.com/jonasdonizette/"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/160548"
-  },
-  {
-    "id": 235800,
-    "casa": "camara",
-    "nome": "Jorge Araújo",
-    "nomeCivil": "JORGE SILVA DE ARAÚJO",
-    "partido": "PP",
-    "uf": "BA",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/235800.jpg",
-    "email": "dep.jorgearaujo@camara.leg.br",
-    "telefone": "3215-5320",
-    "gabinete": {
-      "predio": "4",
-      "sala": "320",
-      "andar": "3"
-    },
-    "dataNascimento": "1978-07-25",
-    "municipioNascimento": "Guarulhos",
-    "ufNascimento": "SP",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/235800"
   },
   {
     "id": 205550,
@@ -8051,6 +8054,34 @@
     "urlCamara": "https://www.camara.leg.br/deputados/178931"
   },
   {
+    "id": 220616,
+    "casa": "camara",
+    "nome": "Luciano Vieira",
+    "nomeCivil": "LUCIANO VIEIRA MENDES",
+    "partido": "PSDB",
+    "uf": "RJ",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/220616.jpg",
+    "email": "dep.lucianovieira@camara.leg.br",
+    "telefone": "3215-5329",
+    "gabinete": {
+      "predio": "4",
+      "sala": "329",
+      "andar": "3"
+    },
+    "dataNascimento": "1988-04-26",
+    "municipioNascimento": "Rio de Janeiro",
+    "ufNascimento": "RJ",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/lucianovieirarj",
+      "https://www.facebook.com/lucianovieirarj",
+      "https://www.instagram.com/lucianovieirarj"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/220616"
+  },
+  {
     "id": 178954,
     "casa": "camara",
     "nome": "Lucio Mosquini",
@@ -8839,33 +8870,6 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/204431"
-  },
-  {
-    "id": 236375,
-    "casa": "camara",
-    "nome": "Marcos Braz",
-    "nomeCivil": "MARCOS TEIXEIRA BRAZ",
-    "partido": "PSDB",
-    "uf": "RJ",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/236375.jpg",
-    "email": "dep.marcosbraz@camara.leg.br",
-    "telefone": "3215-5329",
-    "gabinete": {
-      "predio": "4",
-      "sala": "329",
-      "andar": "3"
-    },
-    "dataNascimento": "1971-04-21",
-    "municipioNascimento": "Nova Iguaçu",
-    "ufNascimento": "RJ",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.facebook.com/marcosbrazoficial",
-      "https://www.instagram.com/marcosbrazoficial"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/236375"
   },
   {
     "id": 204506,
@@ -10340,10 +10344,10 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/171617.jpg",
     "email": "dep.paulao@camara.leg.br",
-    "telefone": null,
+    "telefone": "3215-5671",
     "gabinete": {
-      "predio": null,
-      "sala": null,
+      "predio": "3",
+      "sala": "671",
       "andar": null
     },
     "dataNascimento": "1957-09-15",
@@ -10633,30 +10637,6 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/74400"
-  },
-  {
-    "id": 154700,
-    "casa": "camara",
-    "nome": "Paulo Soares",
-    "nomeCivil": "PAULO ROMEIRO DE ALMEIDA SOARES",
-    "partido": "PODE",
-    "uf": "SP",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/154700.jpg",
-    "email": "dep.paulosoares@camara.leg.br",
-    "telefone": "3215-5717",
-    "gabinete": {
-      "predio": "4",
-      "sala": "717",
-      "andar": "7"
-    },
-    "dataNascimento": "1985-02-25",
-    "municipioNascimento": "Jaú",
-    "ufNascimento": "SP",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/154700"
   },
   {
     "id": 141488,
@@ -11326,6 +11306,30 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/220606"
+  },
+  {
+    "id": 178989,
+    "casa": "camara",
+    "nome": "Renata Abreu",
+    "nomeCivil": "RENATA HELLMEISTER DE ABREU MELO",
+    "partido": "PODE",
+    "uf": "SP",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/178989.jpg",
+    "email": "dep.renataabreu@camara.leg.br",
+    "telefone": "3215-5717",
+    "gabinete": {
+      "predio": "4",
+      "sala": "717",
+      "andar": "7"
+    },
+    "dataNascimento": "1982-04-15",
+    "municipioNascimento": "São Paulo",
+    "ufNascimento": "SP",
+    "sexo": "F",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/178989"
   },
   {
     "id": 153423,
