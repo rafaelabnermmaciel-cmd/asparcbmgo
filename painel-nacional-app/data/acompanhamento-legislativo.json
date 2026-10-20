@@ -8,6 +8,11 @@
     {
       "proposicao": "PL 317/2022",
       "data": "2026-10-20",
+      "fato": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
+    },
+    {
+      "proposicao": "PL 317/2022",
+      "data": "2026-10-20",
       "fato": "Apresentação de Proposição — Aguardando Autógrafos na Mesa"
     },
     {
@@ -99,11 +104,6 @@
       "proposicao": "PL 2.557/2026",
       "data": "2026-05-29",
       "fato": "AGUARDANDO DESPACHO"
-    },
-    {
-      "proposicao": "PEC 18/2025",
-      "data": "2026-08-21",
-      "fato": "MATÉRIA COM A RELATORIA"
     }
   ],
   "proposicoes": [
@@ -131,10 +131,10 @@
       "parlamentar": null,
       "casaAtual": "Câmara dos Deputados",
       "assunto": "Autoriza Estados e DF a reduzirem o tempo mínimo de atividade militar exigido para aposentadoria integral de policiais e bombeiros militares (regra geral de 30 para até 25 anos; transição de 25 para até 20 anos), com pedágio de 4 meses por ano faltante, limitado a 5 anos adicionais.",
-      "situacao": "Apresentação de Proposição — Aguardando Autógrafos na Mesa",
+      "situacao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal",
       "ultimaMovimentacao": {
         "data": "2026-10-20",
-        "descricao": "Apresentação de Proposição — Aguardando Autógrafos na Mesa"
+        "descricao": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
       },
       "proximosPassos": "Aguardar autuação formal no Senado Federal.",
       "pontoAtencao": "Redirecionar articulação para o Senado. Sen. Styvenson Valentim já se manifestou favorável; mapear relator assim que distribuída.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-10-20T19:12:58.936Z"
+  "ultimaVerificacaoEm": "2026-10-20T23:47:45.300Z"
 }
