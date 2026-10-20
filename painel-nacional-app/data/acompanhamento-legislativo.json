@@ -6,6 +6,11 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PL 317/2022",
+      "data": "2026-10-20",
+      "fato": "Apresentação de Proposição — Aguardando Autógrafos na Mesa"
+    },
+    {
       "proposicao": "PEC 18/2025",
       "data": "2026-10-15",
       "fato": "PRONTO PARA DELIBERAÇÃO DO PLENÁRIO"
@@ -99,11 +104,6 @@
       "proposicao": "PEC 18/2025",
       "data": "2026-08-21",
       "fato": "MATÉRIA COM A RELATORIA"
-    },
-    {
-      "proposicao": "PEC 44/2023",
-      "data": "2024-07-17",
-      "fato": "AGUARDANDO DESPACHO"
     }
   ],
   "proposicoes": [
@@ -131,10 +131,10 @@
       "parlamentar": null,
       "casaAtual": "Câmara dos Deputados",
       "assunto": "Autoriza Estados e DF a reduzirem o tempo mínimo de atividade militar exigido para aposentadoria integral de policiais e bombeiros militares (regra geral de 30 para até 25 anos; transição de 25 para até 20 anos), com pedágio de 4 meses por ano faltante, limitado a 5 anos adicionais.",
-      "situacao": "Aprovação da Redação Final — Aguardando Encaminhamento",
+      "situacao": "Apresentação de Proposição — Aguardando Autógrafos na Mesa",
       "ultimaMovimentacao": {
-        "data": "2026-08-12",
-        "descricao": "Aprovação da Redação Final — Aguardando Encaminhamento"
+        "data": "2026-10-20",
+        "descricao": "Apresentação de Proposição — Aguardando Autógrafos na Mesa"
       },
       "proximosPassos": "Aguardar autuação formal no Senado Federal.",
       "pontoAtencao": "Redirecionar articulação para o Senado. Sen. Styvenson Valentim já se manifestou favorável; mapear relator assim que distribuída.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-10-20T16:15:33.086Z"
+  "ultimaVerificacaoEm": "2026-10-20T19:12:58.936Z"
 }
