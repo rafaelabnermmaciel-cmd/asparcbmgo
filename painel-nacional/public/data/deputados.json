@@ -3744,7 +3744,9 @@
     "municipioNascimento": "Salvador",
     "ufNascimento": "BA",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.facebook.com/DiegoCoronel.oficial"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/220691"
   },
   {
@@ -6991,30 +6993,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/141464"
   },
   {
-    "id": 74140,
-    "casa": "camara",
-    "nome": "José Carlos Araujo",
-    "nomeCivil": "JOSÉ CARLOS LEÃO DE ARAÚJO",
-    "partido": "PDT",
-    "uf": "BA",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74140.jpg",
-    "email": "dep.josecarlosaraujo@camara.leg.br",
-    "telefone": "3215-5646",
-    "gabinete": {
-      "predio": "4",
-      "sala": "646",
-      "andar": "6"
-    },
-    "dataNascimento": "1944-12-21",
-    "municipioNascimento": "Salvador",
-    "ufNascimento": "BA",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/74140"
-  },
-  {
     "id": 204472,
     "casa": "camara",
     "nome": "José Medeiros",
@@ -7769,6 +7747,34 @@
     "sexo": "F",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/220566"
+  },
+  {
+    "id": 80815,
+    "casa": "camara",
+    "nome": "Leo Prates",
+    "nomeCivil": "LEONARDO SILVA PRATES",
+    "partido": "REPUBLICANOS",
+    "uf": "BA",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/80815.jpg",
+    "email": "dep.leoprates@camara.leg.br",
+    "telefone": null,
+    "gabinete": {
+      "predio": null,
+      "sala": null,
+      "andar": null
+    },
+    "dataNascimento": "1978-04-05",
+    "municipioNascimento": "Salvador",
+    "ufNascimento": "BA",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/LeonardoPrates4",
+      "https://www.facebook.com/leo.prates.7",
+      "https://www.instagram.com/leoprates"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/80815"
   },
   {
     "id": 122195,
