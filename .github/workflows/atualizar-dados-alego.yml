@@ -53,6 +53,15 @@ jobs:
       - name: Juntar com deputados federais/senadores de Goiás
         run: npm run sync:parlamentares-go
 
+      - name: Reaplicar o resultado da eleição de 2026
+        # sync:parlamentares-go regenera o cadastro do zero a partir das fontes oficiais
+        # (que só vão refletir a nova legislatura quando ela tomar posse) — sem este passo,
+        # toda segunda-feira apagaria os avisos de não reeleição, as notas de quem mudou de
+        # casa e os parlamentares novos eleitos em 2026 (foi exatamente o que aconteceu em
+        # 12/10/2026). Não precisa de internet: só relê public/data/votos-go-2026.json, que
+        # já foi buscado uma vez (ver scripts/fetch-votos-go-2026.js) e não muda mais.
+        run: npm run aplicar:resultados-2026
+
       - name: Conferir se algo mudou
         id: diff
         run: |

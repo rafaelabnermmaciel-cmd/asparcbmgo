@@ -3,6 +3,12 @@
 // Wikipédia e grava em public/data/votos-go-2026.json — mesma fonte e mesmo motivo do
 // fetch-votos-go-2022.js (TSE bloqueia IP de nuvem/datacenter com 403/WAF).
 //
+// Não precisa rodar de novo toda semana — o resultado da eleição já é definitivo. Quem
+// precisa rodar sempre que o cadastro for regenerado (ex: toda segunda-feira, via
+// atualizar-dados-alego.yml) é scripts/aplicar-resultados-2026.js, que já lê o
+// votos-go-2026.json gravado aqui sem precisar buscar na Wikipédia de novo. Só rode este
+// script de novo se o artigo da Wikipédia for corrigido/atualizado depois.
+//
 // O wikitext de 2026 usa um formato de tabela DIFERENTE do de 2022: cada célula fica numa
 // linha própria do wikitext (em vez de células separadas por "||" numa única linha), e o
 // candidato eleito é marcado com `style="background:#BBFFBB;"` + negrito em toda célula da
@@ -247,14 +253,7 @@ async function main() {
   const destino = path.resolve(__dirname, '../public/data/votos-go-2026.json');
   writeFileSync(destino, JSON.stringify(resultados, null, 2) + '\n');
   console.log(`[fetch-votos-2026] gravado em ${destino}`);
-
-  const destinoNovos = path.resolve(__dirname, '../novos-eleitos-2026.json');
-  writeFileSync(destinoNovos, JSON.stringify(novosEleitos, null, 2) + '\n');
-  console.log(`[fetch-votos-2026] lista de novos eleitos gravada em ${destinoNovos}`);
-
-  const destinoMudancas = path.resolve(__dirname, '../mudancas-casa-2026.json');
-  writeFileSync(destinoMudancas, JSON.stringify(mudancasDeCasa, null, 2) + '\n');
-  console.log(`[fetch-votos-2026] lista de mudanças de casa gravada em ${destinoMudancas}`);
+  console.log('[fetch-votos-2026] rode "node scripts/aplicar-resultados-2026.js" em seguida pra aplicar isso ao cadastro.');
 }
 
 main().catch((err) => {

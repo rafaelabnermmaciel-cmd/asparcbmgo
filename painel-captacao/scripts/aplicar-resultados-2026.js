@@ -1,14 +1,22 @@
-// Aplica o resultado da eleição de 2026 em public/data/parlamentares-go.json, a partir dos
-// arquivos gerados por fetch-votos-go-2026.js (votos-go-2026.json, novos-eleitos-2026.json,
-// mudancas-casa-2026.json). Não roda sozinho — sempre depois do fetch, na mesma pipeline
-// (ver .github/workflows/publicar-painel-captacao.yml ou o workflow que chamou este script).
+// Aplica o resultado da eleição de 2026 em public/data/parlamentares-go.json, a partir do
+// que já está gravado em public/data/votos-go-2026.json (gerado por fetch-votos-go-2026.js).
+//
+// Propositalmente NÃO depende de nenhum arquivo intermediário/temporário — só desses dois
+// arquivos que já ficam versionados — porque public/data/parlamentares-go.json é
+// REGENERADO DO ZERO toda semana por scripts/gerar-parlamentares-go.js (workflow
+// atualizar-dados-alego.yml, que busca os dados oficiais de novo e não sabe nada sobre
+// 2026), o que apaga qualquer aviso2026/notaEleicao2026/parlamentar novo marcado aqui. Por
+// isso .github/workflows/atualizar-dados-alego.yml roda este script de novo logo depois de
+// gerar-parlamentares-go.js — e por isso ele precisa ser idempotente e não depender de
+// arquivos que só existem na hora em que fetch-votos-go-2026.js roda.
 //
 // Regra (pedida pelo usuário): quem não foi reeleito continua no cadastro (nunca é
 // removido), só ganha um aviso ("aviso2026"); quem é novo entra com os dados que já tem
-// disponíveis (o resto fica em branco, a definir); quem já estava cadastrado e concorreu
-// (e ganhou) uma casa diferente da que já ocupava — ex: um deputado estadual que subiu pra
-// Câmara — mantém o cadastro atual (mesmos stakeholders/captações já vinculados por nome)
-// e ganha uma nota ("notaEleicao2026") em vez do aviso de não reeleição.
+// disponíveis, tirados do próprio votos-go-2026.json (o resto fica em branco, a definir);
+// quem já estava cadastrado e concorreu (e ganhou) uma casa diferente da que já ocupava —
+// ex: um deputado estadual que subiu pra Câmara — mantém o cadastro atual (mesmos
+// stakeholders/captações já vinculados por nome) e ganha uma nota ("notaEleicao2026") em
+// vez do aviso de não reeleição.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -30,55 +38,54 @@ const SEM_DISPUTA_EM_2026 = new Set(['senado:5070']);
 
 function main() {
   const caminhoParlamentares = path.resolve(__dirname, '../public/data/parlamentares-go.json');
+  const caminhoVotos = path.resolve(__dirname, '../public/data/votos-go-2026.json');
   const parlamentares = JSON.parse(readFileSync(caminhoParlamentares, 'utf-8'));
+  const votos = JSON.parse(readFileSync(caminhoVotos, 'utf-8'));
 
-  const votos = JSON.parse(readFileSync(path.resolve(__dirname, '../public/data/votos-go-2026.json'), 'utf-8'));
-  const novosEleitos = JSON.parse(readFileSync(path.resolve(__dirname, '../novos-eleitos-2026.json'), 'utf-8'));
-  const mudancasDeCasa = JSON.parse(readFileSync(path.resolve(__dirname, '../mudancas-casa-2026.json'), 'utf-8'));
-  const mudancaPorChave = new Map(mudancasDeCasa.map((m) => [m.chave, m]));
+  const porChave = new Map(parlamentares.map((p) => [`${p.casa}:${p.id}`, p]));
 
-  let marcadosAviso = 0;
   let marcadosMudanca = 0;
+  let adicionados = 0;
 
+  // 1ª passada: casa quem já está cadastrado (pela chave casa:id — sobrevive à regeneração
+  // semanal porque os ids vêm das fontes oficiais, que não mudam) e adiciona quem ainda não
+  // existe no cadastro (ids sintéticos "2026-N", só pra gente eleita pela 1ª vez em 2026).
+  for (const [chave, voto] of Object.entries(votos)) {
+    const p = porChave.get(chave);
+    if (p) {
+      if (voto.eleito && voto.cargo !== p.cargo) {
+        p.notaEleicao2026 = `Eleito(a) ${voto.cargo} em 2026 — deixa ${CASA_LEGIVEL[p.casa] || p.casa}.`;
+        marcadosMudanca++;
+      }
+      // Reeleito(a) no mesmo cargo: nada pra marcar — o bloco "Votos recebidos na eleição de
+      // 2026" já aparece sozinho no perfil, porque a chave casa:id bate direto.
+    } else if (voto.eleito) {
+      const [casa, id] = chave.split(':');
+      const novo = { id, casa, cargo: voto.cargo, nome: voto.nome, partido: voto.partido || null, uf: 'GO' };
+      parlamentares.push(novo);
+      porChave.set(chave, novo);
+      adicionados++;
+    }
+  }
+
+  // 2ª passada: quem não tem voto de 2026 registrado (não concorreu, ou concorreu e
+  // perdeu) ganha o aviso — exceto quem já ganhou a nota de mudança de casa acima.
+  let marcadosAviso = 0;
   for (const p of parlamentares) {
     const chave = `${p.casa}:${p.id}`;
-    if (SEM_DISPUTA_EM_2026.has(chave)) continue;
-
+    if (SEM_DISPUTA_EM_2026.has(chave) || p.notaEleicao2026) continue;
     const voto = votos[chave];
-    const mudanca = mudancaPorChave.get(chave);
-
-    if (mudanca && voto?.eleito) {
-      p.notaEleicao2026 = `Eleito(a) ${mudanca.cargoNovo} em 2026 — deixa ${CASA_LEGIVEL[mudanca.casaAnterior] || mudanca.casaAnterior}.`;
-      marcadosMudanca++;
-    } else if (!voto || voto.eleito === false) {
+    if (!voto || voto.eleito === false) {
       p.aviso2026 = 'Em exercício até 2026.';
       marcadosAviso++;
     }
   }
 
-  let proximoId = 1;
-  for (const n of novosEleitos) {
-    const id = `2026-${proximoId++}`;
-    parlamentares.push({
-      id,
-      casa: n.casa,
-      cargo: n.cargo,
-      nome: n.nome,
-      partido: n.partido || null,
-      uf: 'GO',
-    });
-    // Sem isso o novo parlamentar nunca ganha o bloco "Votos recebidos na eleição de 2026"
-    // no perfil (useResultadosEleitorais busca em votos-go-2026.json pela chave casa:id, e
-    // só agora, com o id sintético definido, dá pra saber essa chave).
-    votos[`${n.casa}:${id}`] = { nome: n.nome, partido: n.partido || null, votosNominais: n.votos, ano: 2026, cargo: n.cargo, eleito: true };
-  }
-
   writeFileSync(caminhoParlamentares, JSON.stringify(parlamentares, null, 2) + '\n');
-  writeFileSync(path.resolve(__dirname, '../public/data/votos-go-2026.json'), JSON.stringify(votos, null, 2) + '\n');
 
   console.log(`[aplicar-resultados-2026] ${marcadosAviso} parlamentar(es) marcado(s) com aviso2026 (não reeleito(s)).`);
   console.log(`[aplicar-resultados-2026] ${marcadosMudanca} parlamentar(es) marcado(s) com notaEleicao2026 (mudaram de casa).`);
-  console.log(`[aplicar-resultados-2026] ${novosEleitos.length} novo(s) parlamentar(es) adicionado(s) ao cadastro (com voto de 2026 já vinculado).`);
+  console.log(`[aplicar-resultados-2026] ${adicionados} novo(s) parlamentar(es) adicionado(s) ao cadastro (com voto de 2026 já vinculado).`);
   console.log(`[aplicar-resultados-2026] gravado em ${caminhoParlamentares}`);
 }
 
