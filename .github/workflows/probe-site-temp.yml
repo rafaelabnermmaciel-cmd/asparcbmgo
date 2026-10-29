@@ -8,26 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Testa o site publicado e o Supabase direto
+      - name: Confirma se o host do Supabase existe de verdade (DNS publico, sem depender do runner)
         run: |
           set -x
-          echo "=== site publicado ==="
-          curl -sS -o /tmp/site.html --max-time 20 -w "HTTP %{http_code} em %{time_total}s\n" https://rafaelabnermmaciel-cmd.github.io/asparcbmgo/painel-captacao-app/
-          wc -c /tmp/site.html
-          grep -o 'src="[^"]*"' /tmp/site.html
-
-          echo "=== supabase REST (tabela quarteis) ==="
-          curl -sS --max-time 15 -w "\nHTTP %{http_code} em %{time_total}s\n" \
-            "https://nppaeyxaxcraitpmwyqo.supabase.co/rest/v1/quarteis?select=id&limit=1" \
-            -H "apikey: sb_publishable_yUDKfC3UoJLRh_xOFQEy0A_EYAjFCXJ" \
-            -H "Authorization: Bearer sb_publishable_yUDKfC3UoJLRh_xOFQEy0A_EYAjFCXJ" || echo "FALHOU supabase quarteis"
-
-          echo "=== supabase REST (tabela captacoes) ==="
-          curl -sS --max-time 15 -w "\nHTTP %{http_code} em %{time_total}s\n" \
-            "https://nppaeyxaxcraitpmwyqo.supabase.co/rest/v1/captacoes?select=id&limit=1" \
-            -H "apikey: sb_publishable_yUDKfC3UoJLRh_xOFQEy0A_EYAjFCXJ" \
-            -H "Authorization: Bearer sb_publishable_yUDKfC3UoJLRh_xOFQEy0A_EYAjFCXJ" || echo "FALHOU supabase captacoes"
-
-          echo "=== supabase projeto status (healthcheck) ==="
-          curl -sS --max-time 15 -w "\nHTTP %{http_code} em %{time_total}s\n" \
-            "https://nppaeyxaxcraitpmwyqo.supabase.co/auth/v1/health" || echo "FALHOU healthcheck"
+          echo "=== nslookup local ==="
+          nslookup nppaeyxaxcraitpmwyqo.supabase.co || echo "nslookup falhou"
+          echo "=== Google DNS-over-HTTPS ==="
+          curl -sS --max-time 10 "https://dns.google/resolve?name=nppaeyxaxcraitpmwyqo.supabase.co&type=A"
+          echo
+          echo "=== Cloudflare DNS-over-HTTPS ==="
+          curl -sS --max-time 10 -H "accept: application/dns-json" "https://cloudflare-dns.com/dns-query?name=nppaeyxaxcraitpmwyqo.supabase.co&type=A"
+          echo
+          echo "=== supabase.co em si resolve? (dominio pai) ==="
+          curl -sS --max-time 10 "https://dns.google/resolve?name=supabase.co&type=A"
