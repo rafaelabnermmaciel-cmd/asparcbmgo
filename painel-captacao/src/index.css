@@ -12,6 +12,22 @@ html {
   scroll-behavior: smooth;
 }
 
+/* No celular, o Safari (e navegadores baseados nele) dá zoom automático ao focar qualquer
+   campo com fonte menor que 16px — é por isso que "a tela dá zoom" toda vez que abre uma
+   tela com campo em foco automático (ex: a senha) ou que a pessoa toca pra digitar algo. Os
+   campos do site usam text-sm/text-xs do Tailwind (menores que 16px) por design nas telas
+   maiores; aqui só força 16px no celular, sem mudar nada no desktop. Regra fora de qualquer
+   @layer do Tailwind, então já vence as classes utilitárias (que ficam dentro de layers) sem
+   precisar de !important.
+*/
+@media (max-width: 1023px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 body {
   @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
   font-family: var(--font-sans);
