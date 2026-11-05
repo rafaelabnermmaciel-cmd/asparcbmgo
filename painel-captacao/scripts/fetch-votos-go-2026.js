@@ -25,24 +25,10 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { normalizeName, acharParlamentar } from './lib/nomes.js';
+import { normalizeName, acharParlamentarSeguro } from './lib/nomes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PAGINA = 'Eleições estaduais em Goiás em 2026';
-
-// acharParlamentar() aceita casamento por aproximação quando o nome de urna é um subconjunto
-// de palavras de um nome já cadastrado — ótimo pra "Wagner Neto" -> "Wagner Camargo Neto",
-// mas perigoso quando o nome de urna é uma ÚNICA palavra (ex: "Cardoso", sobrenome comum):
-// nesse caso ele bateria com QUALQUER "Vanderlan Cardoso", "Iris Cardoso" etc. já cadastrado,
-// mesmo sendo uma pessoa diferente. Exige 2+ palavras no nome de urna antes de tentar a
-// aproximação; nome de 1 palavra só casa por igualdade exata.
-function acharParlamentarSeguro(porNome, nome) {
-  const direto = porNome.get(normalizeName(nome));
-  if (direto) return direto;
-  const palavras = nome.trim().split(/\s+/).filter(Boolean);
-  if (palavras.length < 2) return null;
-  return acharParlamentar(porNome, nome);
-}
 
 async function getWikitext() {
   const url = `https://pt.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(PAGINA)}&prop=wikitext&format=json`;

@@ -1,6 +1,6 @@
 // Casamento de nomes de parlamentares por aproximação — usado tanto pra casar os
-// nomes que saem da Wikipédia (fetch-votos-go-2022.js) quanto os que saem do CSV do
-// TSE (gerar-municipios-votos-go-2022.js) contra public/data/parlamentares-go.json.
+// nomes que saem da Wikipédia (fetch-votos-go-2026.js) quanto os que saem do CSV do
+// TSE (gerar-municipios-votos-go-2026.js) contra public/data/parlamentares-go.json.
 
 export function normalizeName(s) {
   return (s || '')
@@ -39,4 +39,19 @@ export function acharParlamentar(porNome, nome) {
     if (menor.length && menor.every((palavra) => maior.includes(palavra))) return p;
   }
   return null;
+}
+
+// acharParlamentar() casa por aproximação quando o nome de urna é um subconjunto de
+// palavras de um nome já cadastrado — ótimo pra "Wagner Neto" -> "Wagner Camargo Neto",
+// mas perigoso quando o nome de urna é uma ÚNICA palavra (ex: "Cardoso", sobrenome comum):
+// nesse caso bateria com QUALQUER "Vanderlan Cardoso", "Iris Cardoso" etc. já cadastrado,
+// mesmo sendo uma pessoa diferente (aconteceu de verdade com os dados de 2026 — ver
+// histórico de fetch-votos-go-2026.js). Exige 2+ palavras no nome de urna antes de tentar a
+// aproximação; nome de 1 palavra só casa por igualdade exata.
+export function acharParlamentarSeguro(porNome, nome) {
+  const direto = porNome.get(normalizeName(nome));
+  if (direto) return direto;
+  const palavras = (nome || '').trim().split(/\s+/).filter(Boolean);
+  if (palavras.length < 2) return null;
+  return acharParlamentar(porNome, nome);
 }

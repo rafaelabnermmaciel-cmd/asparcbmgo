@@ -6,12 +6,16 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Testa acesso ao cdn.tse.jus.br (arquivo de votacao por municipio/zona 2026)
+      - name: Baixa o zip e lista o conteudo (sem extrair tudo)
         run: |
           set -x
           UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
-          echo "=== HEAD no zip nacional ==="
-          curl -sS -I --max-time 20 -A "$UA" \
-            "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip" || echo "FALHOU head"
+          curl -sS --max-time 300 -A "$UA" -o /tmp/votacao.zip \
+            "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip"
+          ls -la /tmp/votacao.zip
+          echo "=== listagem do zip ==="
+          unzip -l /tmp/votacao.zip | head -60
+          echo "=== arquivos com GO no nome ==="
+          unzip -l /tmp/votacao.zip | grep -i "_GO" || echo "nenhum com _GO"
