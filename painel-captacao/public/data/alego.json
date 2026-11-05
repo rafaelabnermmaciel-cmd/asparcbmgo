@@ -350,6 +350,24 @@
     "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/815"
   },
   {
+    "id": "831",
+    "casa": "alego",
+    "cargo": "Deputado Estadual",
+    "nome": "Eliel Junior",
+    "partido": "SD",
+    "partidoNome": "PARTIDO SOLIDARIEDADE",
+    "uf": "GO",
+    "foto": "https://saba.al.go.leg.br/v1/view/portal/public/mk1NS2DX-bCmxZzVAA-fDg==",
+    "email": null,
+    "telefone": null,
+    "gabinete": null,
+    "redeSocial": [
+      "https://www.facebook.com/elieljuniorgoias?mibextid=wwXIfr&amp;rdid=ejsm05Dsp6wJOnXZ&amp;share_url=https%253A%252F%252Fwww.facebook.com%252Fshare%252F1D9MdGriBG%252F%253Fmibextid%253DwwXIfr#",
+      "https://www.instagram.com/elieljunior.go"
+    ],
+    "urlAlego": "https://portal.al.go.leg.br/deputados/perfil/831"
+  },
+  {
     "id": "817",
     "casa": "alego",
     "cargo": "Deputado Estadual",

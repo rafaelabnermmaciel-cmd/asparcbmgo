@@ -6043,7 +6043,10 @@
     "municipioNascimento": "Aracaju",
     "ufNascimento": "SE",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.facebook.com/gustinhoribeiro",
+      "https://www.instagram.com/gustinho"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/204408"
   },
   {
@@ -7759,11 +7762,11 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/80815.jpg",
     "email": "dep.leoprates@camara.leg.br",
-    "telefone": null,
+    "telefone": "3215-5646",
     "gabinete": {
-      "predio": null,
-      "sala": null,
-      "andar": null
+      "predio": "4",
+      "sala": "646",
+      "andar": "6"
     },
     "dataNascimento": "1978-04-05",
     "municipioNascimento": "Salvador",
@@ -8924,7 +8927,7 @@
       "andar": null
     },
     "dataNascimento": "1981-01-19",
-    "municipioNascimento": "Campo Grande",
+    "municipioNascimento": "Dourados",
     "ufNascimento": "MS",
     "sexo": "M",
     "redeSocial": [
@@ -12946,7 +12949,11 @@
     "municipioNascimento": "Paranavaí",
     "ufNascimento": "PR",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/https:",
+      "https://www.facebook.com/tiaomedeirospr",
+      "https://www.instagram.com/tiaomedeirospr"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/220684"
   },
   {
@@ -13420,7 +13427,7 @@
     "ufNascimento": "CE",
     "sexo": "M",
     "redeSocial": [
-      "https://twitter.com/yurydoparedao",
+      "https://twitter.com/yurybrunoce",
       "https://www.instagram.com/yurydoparedao"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/220660"

@@ -6,6 +6,16 @@
   "observacao": "Importado integralmente do PDF fornecido — número, status, órgão e tramitação exatamente como constam no arquivo. Nenhuma proposição foi inventada. O relatório não identifica um parlamentar autor/relator específico para cada item, por isso o campo \"parlamentar\" fica null (evitar vínculo forçado/inventado); onde o relatório cita nomes (relator, autor), eles aparecem no texto de situação/pontoAtencao.",
   "atualizacoesRecentes": [
     {
+      "proposicao": "PEC 18/2025",
+      "data": "2026-11-03",
+      "fato": "APROVADA"
+    },
+    {
+      "proposicao": "PEC 18/2025",
+      "data": "2026-11-03",
+      "fato": "INCLUÍDA EM ORDEM DO DIA"
+    },
+    {
       "proposicao": "PL 317/2022",
       "data": "2026-10-20",
       "fato": "Apresentação de Proposição — Aguardando Apreciação pelo Senado Federal"
@@ -94,16 +104,6 @@
       "proposicao": "PL 3.846/2025",
       "data": "2025-11-06",
       "fato": "AGUARDANDO DESIGNAÇÃO DO RELATOR"
-    },
-    {
-      "proposicao": "PL 458/2024",
-      "data": "2026-08-24",
-      "fato": "REMETIDA À CÂMARA DOS DEPUTADOS"
-    },
-    {
-      "proposicao": "PL 2.557/2026",
-      "data": "2026-05-29",
-      "fato": "AGUARDANDO DESPACHO"
     }
   ],
   "proposicoes": [
@@ -418,10 +418,10 @@
       "parlamentar": null,
       "casaAtual": "Senado Federal",
       "assunto": "PEC da Segurança Pública (iniciativa do Poder Executivo). Altera os arts. 5º, 15, 22, 23, 24, 40, 49, 84, 103-B, 130-A e 144 da CF, cria os arts. 144-A e 144-B, e estabelece novas fontes de recursos para o FNSP e o Funpen (incluindo parte da arrecadação de apostas esportivas e do Fundo Social do pré-sal).",
-      "situacao": "PRONTO PARA DELIBERAÇÃO DO PLENÁRIO",
+      "situacao": "APROVADA",
       "ultimaMovimentacao": {
-        "data": "2026-10-15",
-        "descricao": "PRONTO PARA DELIBERAÇÃO DO PLENÁRIO"
+        "data": "2026-11-03",
+        "descricao": "APROVADA"
       },
       "proximosPassos": "Aguarda chegada formal à CCJ para exame de constitucionalidade, juridicidade e técnica legislativa; depois exige 2 turnos no Plenário (quórum de 49 votos). Expectativa de conclusão na CCJ antes do fim do período eleitoral.",
       "pontoAtencao": "Prioridade do Poder Executivo, com forte pressão política. Acompanhar de perto a designação de relator na CCJ assim que recebida formalmente.",
@@ -466,5 +466,5 @@
       "idSenado": "174153"
     }
   ],
-  "ultimaVerificacaoEm": "2026-10-29T20:10:59.940Z"
+  "ultimaVerificacaoEm": "2026-11-05T01:26:02.126Z"
 }
