@@ -5,7 +5,49 @@
     "votosNominais": 207899,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 45642
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 9335
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 5575
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 5514
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 4923
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 4129
+      },
+      {
+        "municipio": "MORRINHOS",
+        "votos": 3937
+      },
+      {
+        "municipio": "SANTA HELENA DE GOIÁS",
+        "votos": 3898
+      },
+      {
+        "municipio": "RUBIATABA",
+        "votos": 3127
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 3010
+      }
+    ]
   },
   "camara:220565": {
     "nome": "Delegada Adriana Accorsi",
@@ -13,7 +55,49 @@
     "votosNominais": 177103,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 70074
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 18499
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 5170
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 3769
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 3414
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 3360
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 2991
+      },
+      {
+        "municipio": "CATALÃO",
+        "votos": 2717
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 2700
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 2423
+      }
+    ]
   },
   "camara:160598": {
     "nome": "Flávia Morais",
@@ -21,7 +105,49 @@
     "votosNominais": 143497,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "TRINDADE",
+        "votos": 12908
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 8048
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 3663
+      },
+      {
+        "municipio": "IPAMERI",
+        "votos": 3157
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 2942
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 2880
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 2825
+      },
+      {
+        "municipio": "INHUMAS",
+        "votos": 2632
+      },
+      {
+        "municipio": "IPORÁ",
+        "votos": 2384
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 2293
+      }
+    ]
   },
   "camara:166402": {
     "nome": "Magda Mofatto",
@@ -29,7 +155,49 @@
     "votosNominais": 131983,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 15054
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 12474
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 8973
+      },
+      {
+        "municipio": "POSSE",
+        "votos": 4977
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 4766
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3890
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 3602
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 3022
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 2574
+      },
+      {
+        "municipio": "PIRANHAS",
+        "votos": 2296
+      }
+    ]
   },
   "alego:820": {
     "nome": "Lucas do Vale",
@@ -37,7 +205,49 @@
     "votosNominais": 126679,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 54967
+      },
+      {
+        "municipio": "URUAÇU",
+        "votos": 5321
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3186
+      },
+      {
+        "municipio": "SANTA HELENA DE GOIÁS",
+        "votos": 3005
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2571
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 2561
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 2268
+      },
+      {
+        "municipio": "MONTIVIDIU",
+        "votos": 1998
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 1597
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 1424
+      }
+    ]
   },
   "camara:121948": {
     "nome": "Adriano do Baldy",
@@ -45,7 +255,49 @@
     "votosNominais": 123011,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 5831
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5765
+      },
+      {
+        "municipio": "ITAPURANGA",
+        "votos": 4072
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 3640
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 3610
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 2894
+      },
+      {
+        "municipio": "ABADIA DE GOIÁS",
+        "votos": 2622
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 2311
+      },
+      {
+        "municipio": "BELA VISTA DE GOIÁS",
+        "votos": 2146
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2135
+      }
+    ]
   },
   "camara:220571": {
     "nome": "Daniel Agrobom",
@@ -53,7 +305,49 @@
     "votosNominais": 116842,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ITUMBIARA",
+        "votos": 16903
+      },
+      {
+        "municipio": "BOM JESUS",
+        "votos": 9055
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 8240
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5782
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 5753
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 3006
+      },
+      {
+        "municipio": "BELA VISTA DE GOIÁS",
+        "votos": 2387
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2095
+      },
+      {
+        "municipio": "VILA PROPÍCIO",
+        "votos": 1836
+      },
+      {
+        "municipio": "GUAPÓ",
+        "votos": 1708
+      }
+    ]
   },
   "camara:204391": {
     "nome": "José Nelto",
@@ -61,7 +355,49 @@
     "votosNominais": 115504,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "CATALÃO",
+        "votos": 13314
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 8245
+      },
+      {
+        "municipio": "JARAGUÁ",
+        "votos": 6479
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 5936
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 5445
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 4960
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 4349
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4182
+      },
+      {
+        "municipio": "BARRO ALTO",
+        "votos": 2924
+      },
+      {
+        "municipio": "PORANGATU",
+        "votos": 2907
+      }
+    ]
   },
   "alego:125": {
     "nome": "Lucas Calil",
@@ -69,7 +405,49 @@
     "votosNominais": 109025,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "INHUMAS",
+        "votos": 16990
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14547
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 5612
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2880
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 2541
+      },
+      {
+        "municipio": "PIRENÓPOLIS",
+        "votos": 2524
+      },
+      {
+        "municipio": "POSSE",
+        "votos": 2331
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 2232
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 2076
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1427
+      }
+    ]
   },
   "camara:178876": {
     "nome": "Célio Silveira",
@@ -77,7 +455,49 @@
     "votosNominais": 105256,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 28496
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 14936
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 6244
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 4742
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 4226
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 2835
+      },
+      {
+        "municipio": "CRIXÁS",
+        "votos": 2784
+      },
+      {
+        "municipio": "URUANA",
+        "votos": 2526
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 2282
+      },
+      {
+        "municipio": "CRISTALINA",
+        "votos": 2092
+      }
+    ]
   },
   "camara:74371": {
     "nome": "Rubens Otoni",
@@ -85,7 +505,49 @@
     "votosNominais": 101902,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 24899
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5878
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 4866
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 4140
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2972
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 2804
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 2472
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 1726
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 1652
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 1548
+      }
+    ]
   },
   "camara:204419": {
     "nome": "Glaustin da Fokus",
@@ -93,7 +555,49 @@
     "votosNominais": 98652,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 8871
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 8438
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 4637
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 3349
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 3260
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 2801
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 2576
+      },
+      {
+        "municipio": "PIRES DO RIO",
+        "votos": 2291
+      },
+      {
+        "municipio": "ITAGUARI",
+        "votos": 1892
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 1792
+      }
+    ]
   },
   "camara:220572": {
     "nome": "Marussa Boldrin",
@@ -101,7 +605,49 @@
     "votosNominais": 88888,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 7551
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 4350
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3966
+      },
+      {
+        "municipio": "SANTA HELENA DE GOIÁS",
+        "votos": 3582
+      },
+      {
+        "municipio": "MORRINHOS",
+        "votos": 3036
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 2677
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 2607
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 2330
+      },
+      {
+        "municipio": "FLORES DE GOIÁS",
+        "votos": 2251
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 2234
+      }
+    ]
   },
   "camara:220569": {
     "nome": "Silvye Alves",
@@ -109,7 +655,49 @@
     "votosNominais": 78332,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 25813
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 11019
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 7270
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 4325
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 3287
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 2472
+      },
+      {
+        "municipio": "ARUANÃ",
+        "votos": 1961
+      },
+      {
+        "municipio": "BELA VISTA DE GOIÁS",
+        "votos": 1488
+      },
+      {
+        "municipio": "NERÓPOLIS",
+        "votos": 1476
+      },
+      {
+        "municipio": "GUAPÓ",
+        "votos": 916
+      }
+    ]
   },
   "alego:406": {
     "nome": "Issy Quinan",
@@ -117,7 +705,49 @@
     "votosNominais": 73433,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "SILVÂNIA",
+        "votos": 8067
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 6097
+      },
+      {
+        "municipio": "VIANÓPOLIS",
+        "votos": 5294
+      },
+      {
+        "municipio": "PIRES DO RIO",
+        "votos": 2661
+      },
+      {
+        "municipio": "ORIZONA",
+        "votos": 2355
+      },
+      {
+        "municipio": "LEOPOLDO DE BULHÕES",
+        "votos": 2292
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 2006
+      },
+      {
+        "municipio": "BONFINÓPOLIS",
+        "votos": 1855
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 1851
+      },
+      {
+        "municipio": "ITAPURANGA",
+        "votos": 1709
+      }
+    ]
   },
   "alego:137": {
     "nome": "Amauri Ribeiro",
@@ -125,7 +755,49 @@
     "votosNominais": 69556,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 12434
+      },
+      {
+        "municipio": "PIRACANJUBA",
+        "votos": 7362
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 3639
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2984
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2652
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1858
+      },
+      {
+        "municipio": "IPORÁ",
+        "votos": 1231
+      },
+      {
+        "municipio": "MORRINHOS",
+        "votos": 1119
+      },
+      {
+        "municipio": "GOIÁS",
+        "votos": 904
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 868
+      }
+    ]
   },
   "alego:131": {
     "nome": "Virmondes Cruvinel",
@@ -133,7 +805,49 @@
     "votosNominais": 53821,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 21087
+      },
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 8412
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2920
+      },
+      {
+        "municipio": "JUSSARA",
+        "votos": 1783
+      },
+      {
+        "municipio": "FAZENDA NOVA",
+        "votos": 1605
+      },
+      {
+        "municipio": "TEREZÓPOLIS DE GOIÁS",
+        "votos": 1522
+      },
+      {
+        "municipio": "PONTALINA",
+        "votos": 1375
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 1024
+      },
+      {
+        "municipio": "PEROLÂNDIA",
+        "votos": 871
+      },
+      {
+        "municipio": "MONTES CLAROS DE GOIÁS",
+        "votos": 869
+      }
+    ]
   },
   "alego:819": {
     "nome": "Lineu Olimpio",
@@ -141,7 +855,49 @@
     "votosNominais": 53569,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "JARAGUÁ",
+        "votos": 11294
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 5687
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3503
+      },
+      {
+        "municipio": "BARRO ALTO",
+        "votos": 2184
+      },
+      {
+        "municipio": "ITAGUARI",
+        "votos": 1915
+      },
+      {
+        "municipio": "POSSE",
+        "votos": 1816
+      },
+      {
+        "municipio": "ITAGUARU",
+        "votos": 1687
+      },
+      {
+        "municipio": "NOVA GLÓRIA",
+        "votos": 1359
+      },
+      {
+        "municipio": "SÃO LUIZ DO NORTE",
+        "votos": 1340
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 1005
+      }
+    ]
   },
   "alego:153": {
     "nome": "Wilde Cambão",
@@ -149,7 +905,49 @@
     "votosNominais": 53550,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 27436
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 4136
+      },
+      {
+        "municipio": "JUSSARA",
+        "votos": 3644
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 1923
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1667
+      },
+      {
+        "municipio": "CRISTALINA",
+        "votos": 1079
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1071
+      },
+      {
+        "municipio": "RUBIATABA",
+        "votos": 870
+      },
+      {
+        "municipio": "APARECIDA DO RIO DOCE",
+        "votos": 751
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 745
+      }
+    ]
   },
   "alego:139": {
     "nome": "Antônio Gomide",
@@ -157,7 +955,49 @@
     "votosNominais": 51747,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 25107
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4765
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1393
+      },
+      {
+        "municipio": "GOIÁS",
+        "votos": 843
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 733
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 723
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 603
+      },
+      {
+        "municipio": "INHUMAS",
+        "votos": 549
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 471
+      },
+      {
+        "municipio": "ARAGARÇAS",
+        "votos": 470
+      }
+    ]
   },
   "alego:815": {
     "nome": "Dr. George Morais",
@@ -165,7 +1005,49 @@
     "votosNominais": 51528,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "TRINDADE",
+        "votos": 7126
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3057
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 1723
+      },
+      {
+        "municipio": "INHUMAS",
+        "votos": 1602
+      },
+      {
+        "municipio": "IPAMERI",
+        "votos": 1225
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 1215
+      },
+      {
+        "municipio": "FIRMINÓPOLIS",
+        "votos": 1206
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 1103
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 1076
+      },
+      {
+        "municipio": "MONTIVIDIU",
+        "votos": 1019
+      }
+    ]
   },
   "alego:814": {
     "nome": "José Machado",
@@ -173,7 +1055,49 @@
     "votosNominais": 49950,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 18273
+      },
+      {
+        "municipio": "PIRENÓPOLIS",
+        "votos": 3719
+      },
+      {
+        "municipio": "BARRO ALTO",
+        "votos": 1918
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1364
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 1268
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 1205
+      },
+      {
+        "municipio": "VILA PROPÍCIO",
+        "votos": 1180
+      },
+      {
+        "municipio": "CAMPINORTE",
+        "votos": 878
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 817
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 799
+      }
+    ]
   },
   "alego:810": {
     "nome": "André do Premium",
@@ -181,7 +1105,49 @@
     "votosNominais": 49718,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 22349
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2105
+      },
+      {
+        "municipio": "RUBIATABA",
+        "votos": 2010
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 1361
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 898
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 869
+      },
+      {
+        "municipio": "GUAPÓ",
+        "votos": 701
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 691
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 672
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 589
+      }
+    ]
   },
   "alego:140": {
     "nome": "Cairo Salim",
@@ -189,7 +1155,49 @@
     "votosNominais": 48192,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 12111
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 4505
+      },
+      {
+        "municipio": "GUAPÓ",
+        "votos": 2430
+      },
+      {
+        "municipio": "PARAÚNA",
+        "votos": 1570
+      },
+      {
+        "municipio": "SÃO SIMÃO",
+        "votos": 1300
+      },
+      {
+        "municipio": "PALMINÓPOLIS",
+        "votos": 1173
+      },
+      {
+        "municipio": "PARANAIGUARA",
+        "votos": 1036
+      },
+      {
+        "municipio": "CAMPINAÇU",
+        "votos": 952
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 869
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 787
+      }
+    ]
   },
   "alego:818": {
     "nome": "Jamil Calife",
@@ -197,7 +1205,49 @@
     "votosNominais": 47993,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "CATALÃO",
+        "votos": 18963
+      },
+      {
+        "municipio": "IPAMERI",
+        "votos": 3525
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2316
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 2066
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1857
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 1760
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 1492
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 1474
+      },
+      {
+        "municipio": "TRÊS RANCHOS",
+        "votos": 1172
+      },
+      {
+        "municipio": "CORUMBAÍBA",
+        "votos": 1077
+      }
+    ]
   },
   "alego:117": {
     "nome": "Charles Bento",
@@ -205,7 +1255,49 @@
     "votosNominais": 45901,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 16599
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1224
+      },
+      {
+        "municipio": "MOSSÂMEDES",
+        "votos": 1147
+      },
+      {
+        "municipio": "CATURAÍ",
+        "votos": 913
+      },
+      {
+        "municipio": "MAIRIPOTABA",
+        "votos": 889
+      },
+      {
+        "municipio": "GOIÁS",
+        "votos": 876
+      },
+      {
+        "municipio": "ITAUÇU",
+        "votos": 857
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 820
+      },
+      {
+        "municipio": "CACHOEIRA DE GOIÁS",
+        "votos": 741
+      },
+      {
+        "municipio": "TAQUARAL DE GOIÁS",
+        "votos": 713
+      }
+    ]
   },
   "alego:811": {
     "nome": "Bia de Lima",
@@ -213,7 +1305,49 @@
     "votosNominais": 42980,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 10335
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 4010
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2738
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 858
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 779
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 764
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 728
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 699
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 695
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 676
+      }
+    ]
   },
   "alego:68": {
     "nome": "Talles Barreto",
@@ -221,7 +1355,49 @@
     "votosNominais": 41429,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 6311
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 3883
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 2263
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 2247
+      },
+      {
+        "municipio": "MARA ROSA",
+        "votos": 1983
+      },
+      {
+        "municipio": "VILA PROPÍCIO",
+        "votos": 1815
+      },
+      {
+        "municipio": "FLORES DE GOIÁS",
+        "votos": 1327
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1261
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 1051
+      },
+      {
+        "municipio": "PILAR DE GOIÁS",
+        "votos": 820
+      }
+    ]
   },
   "alego:152": {
     "nome": "Wagner Camargo Neto",
@@ -229,7 +1405,49 @@
     "votosNominais": 40710,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ITAPURANGA",
+        "votos": 9782
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3582
+      },
+      {
+        "municipio": "URUANA",
+        "votos": 2709
+      },
+      {
+        "municipio": "CRIXÁS",
+        "votos": 1791
+      },
+      {
+        "municipio": "RUBIATABA",
+        "votos": 1463
+      },
+      {
+        "municipio": "MORRO AGUDO DE GOIÁS",
+        "votos": 1365
+      },
+      {
+        "municipio": "GUARAÍTA",
+        "votos": 1218
+      },
+      {
+        "municipio": "HEITORAÍ",
+        "votos": 1055
+      },
+      {
+        "municipio": "CARMO DO RIO VERDE",
+        "votos": 1014
+      },
+      {
+        "municipio": "ITABERAÍ",
+        "votos": 976
+      }
+    ]
   },
   "alego:143": {
     "nome": "Delegado Eduardo Prado",
@@ -237,7 +1455,49 @@
     "votosNominais": 39446,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14496
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3056
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1439
+      },
+      {
+        "municipio": "RUBIATABA",
+        "votos": 1387
+      },
+      {
+        "municipio": "DAMIANÓPOLIS",
+        "votos": 901
+      },
+      {
+        "municipio": "SANCLERLÂNDIA",
+        "votos": 815
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 746
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 719
+      },
+      {
+        "municipio": "CEZARINA",
+        "votos": 635
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 594
+      }
+    ]
   },
   "alego:809": {
     "nome": "Anderson Teodoro",
@@ -245,7 +1505,49 @@
     "votosNominais": 39424,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 23279
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 3586
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2981
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 1193
+      },
+      {
+        "municipio": "PIRACANJUBA",
+        "votos": 672
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 540
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 490
+      },
+      {
+        "municipio": "MUNDO NOVO",
+        "votos": 450
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 441
+      },
+      {
+        "municipio": "BONFINÓPOLIS",
+        "votos": 387
+      }
+    ]
   },
   "alego:28": {
     "nome": "Paulo Cezar Martins",
@@ -253,7 +1555,49 @@
     "votosNominais": 39275,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 8734
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 4694
+      },
+      {
+        "municipio": "PIRANHAS",
+        "votos": 2623
+      },
+      {
+        "municipio": "IPORÁ",
+        "votos": 1915
+      },
+      {
+        "municipio": "BRITÂNIA",
+        "votos": 1171
+      },
+      {
+        "municipio": "PONTALINA",
+        "votos": 955
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 911
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 803
+      },
+      {
+        "municipio": "PARANAIGUARA",
+        "votos": 801
+      },
+      {
+        "municipio": "MONTES CLAROS DE GOIÁS",
+        "votos": 703
+      }
+    ]
   },
   "alego:808": {
     "nome": "Alessandro Moreira",
@@ -261,7 +1605,49 @@
     "votosNominais": 36300,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "POSSE",
+        "votos": 6488
+      },
+      {
+        "municipio": "IACIARA",
+        "votos": 2805
+      },
+      {
+        "municipio": "ALVORADA DO NORTE",
+        "votos": 2520
+      },
+      {
+        "municipio": "CAMPOS BELOS",
+        "votos": 2478
+      },
+      {
+        "municipio": "MAMBAÍ",
+        "votos": 1940
+      },
+      {
+        "municipio": "SIMOLÂNDIA",
+        "votos": 1763
+      },
+      {
+        "municipio": "CABECEIRAS",
+        "votos": 1507
+      },
+      {
+        "municipio": "SÃO DOMINGOS",
+        "votos": 1435
+      },
+      {
+        "municipio": "DIVINÓPOLIS DE GOIÁS",
+        "votos": 1311
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 1292
+      }
+    ]
   },
   "alego:134": {
     "nome": "Henrique César",
@@ -269,7 +1655,49 @@
     "votosNominais": 32364,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 7323
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2516
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 2154
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 1461
+      },
+      {
+        "municipio": "BELA VISTA DE GOIÁS",
+        "votos": 1329
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 930
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 915
+      },
+      {
+        "municipio": "ARAÇU",
+        "votos": 843
+      },
+      {
+        "municipio": "CATALÃO",
+        "votos": 827
+      },
+      {
+        "municipio": "IPORÁ",
+        "votos": 777
+      }
+    ]
   },
   "senado:5899": {
     "nome": "Vanderlan Cardoso",
@@ -285,7 +1713,49 @@
     "votosNominais": 28231,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "CATALÃO",
+        "votos": 8518
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2595
+      },
+      {
+        "municipio": "AMERICANO DO BRASIL",
+        "votos": 1708
+      },
+      {
+        "municipio": "CAMPO ALEGRE DE GOIÁS",
+        "votos": 1223
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1051
+      },
+      {
+        "municipio": "SÃO SIMÃO",
+        "votos": 948
+      },
+      {
+        "municipio": "JANDAIA",
+        "votos": 781
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 623
+      },
+      {
+        "municipio": "IPAMERI",
+        "votos": 551
+      },
+      {
+        "municipio": "OUVIDOR",
+        "votos": 505
+      }
+    ]
   },
   "alego:148": {
     "nome": "Rubens Marques",
@@ -293,7 +1763,49 @@
     "votosNominais": 24564,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 5584
+      },
+      {
+        "municipio": "ANICUNS",
+        "votos": 5052
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1019
+      },
+      {
+        "municipio": "AMERICANO DO BRASIL",
+        "votos": 825
+      },
+      {
+        "municipio": "SANTA BÁRBARA DE GOIÁS",
+        "votos": 560
+      },
+      {
+        "municipio": "CAMPOS VERDES",
+        "votos": 469
+      },
+      {
+        "municipio": "ITAPACI",
+        "votos": 460
+      },
+      {
+        "municipio": "NOVA CRIXÁS",
+        "votos": 434
+      },
+      {
+        "municipio": "FIRMINÓPOLIS",
+        "votos": 339
+      },
+      {
+        "municipio": "ARAÇU",
+        "votos": 331
+      }
+    ]
   },
   "camara:220568": {
     "nome": "Gustavo Gayer",
@@ -301,7 +1813,49 @@
     "votosNominais": 1639247,
     "ano": 2026,
     "cargo": "Senador",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 359222
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 121488
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 97165
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 67722
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 40405
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 39038
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 31032
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 29692
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 26721
+      },
+      {
+        "municipio": "ITUMBIARA",
+        "votos": 26552
+      }
+    ]
   },
   "camara:204412": {
     "nome": "Dr. Zacharias Calil",
@@ -317,7 +1871,49 @@
     "votosNominais": 152380,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 79783
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 16327
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 4043
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 3510
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 3048
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 1782
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 1677
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 1662
+      },
+      {
+        "municipio": "URUAÇU",
+        "votos": 1562
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 1349
+      }
+    ]
   },
   "camara:2026-2": {
     "nome": "Major Vitor Hugo",
@@ -325,7 +1921,49 @@
     "votosNominais": 104378,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 20382
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 16055
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 4521
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 4492
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 3251
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 3186
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 3113
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 2111
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 2087
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1930
+      }
+    ]
   },
   "camara:2026-3": {
     "nome": "Fábio Sousa",
@@ -333,7 +1971,49 @@
     "votosNominais": 43643,
     "ano": 2026,
     "cargo": "Deputado Federal",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 18016
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 5182
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2668
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1217
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1087
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 1069
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 981
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 757
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 710
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 699
+      }
+    ]
   },
   "alego:2026-4": {
     "nome": "Carol do Amiltinho",
@@ -341,7 +2021,49 @@
     "votosNominais": 109002,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 61717
+      },
+      {
+        "municipio": "CRISTALINA",
+        "votos": 10260
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 3157
+      },
+      {
+        "municipio": "ABADIÂNIA",
+        "votos": 2330
+      },
+      {
+        "municipio": "GOIANÁPOLIS",
+        "votos": 1652
+      },
+      {
+        "municipio": "SÃO FRANCISCO DE GOIÁS",
+        "votos": 1647
+      },
+      {
+        "municipio": "ALEXÂNIA",
+        "votos": 1436
+      },
+      {
+        "municipio": "SÃO MIGUEL DO ARAGUAIA",
+        "votos": 1408
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 1251
+      },
+      {
+        "municipio": "MINAÇU",
+        "votos": 1218
+      }
+    ]
   },
   "alego:2026-5": {
     "nome": "Fabricio Rosa",
@@ -349,7 +2071,49 @@
     "votosNominais": 81540,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 38522
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 8632
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 2248
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1995
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1769
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 1587
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1562
+      },
+      {
+        "municipio": "CATALÃO",
+        "votos": 1192
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 1170
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 1087
+      }
+    ]
   },
   "alego:2026-6": {
     "nome": "Paulo do Vale",
@@ -357,7 +2121,49 @@
     "votosNominais": 72792,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "RIO VERDE",
+        "votos": 43982
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1763
+      },
+      {
+        "municipio": "MONTIVIDIU",
+        "votos": 1444
+      },
+      {
+        "municipio": "DOVERLÂNDIA",
+        "votos": 1106
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 958
+      },
+      {
+        "municipio": "CACHOEIRA ALTA",
+        "votos": 897
+      },
+      {
+        "municipio": "CASTELÂNDIA",
+        "votos": 892
+      },
+      {
+        "municipio": "ITAJÁ",
+        "votos": 788
+      },
+      {
+        "municipio": "TURVELÂNDIA",
+        "votos": 785
+      },
+      {
+        "municipio": "JANDAIA",
+        "votos": 770
+      }
+    ]
   },
   "alego:2026-7": {
     "nome": "GCM Romário Policarpo",
@@ -365,7 +2171,49 @@
     "votosNominais": 55337,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 35585
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 4653
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1506
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1166
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 1032
+      },
+      {
+        "municipio": "NOVA CRIXÁS",
+        "votos": 557
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 554
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 443
+      },
+      {
+        "municipio": "BOM JARDIM DE GOIÁS",
+        "votos": 375
+      },
+      {
+        "municipio": "NERÓPOLIS",
+        "votos": 369
+      }
+    ]
   },
   "alego:2026-8": {
     "nome": "Lissauer Vieira",
@@ -373,7 +2221,49 @@
     "votosNominais": 46056,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 9494
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 8460
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1750
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 1610
+      },
+      {
+        "municipio": "PARAÚNA",
+        "votos": 1547
+      },
+      {
+        "municipio": "ACREÚNA",
+        "votos": 1543
+      },
+      {
+        "municipio": "MONTIVIDIU",
+        "votos": 1334
+      },
+      {
+        "municipio": "MAURILÂNDIA",
+        "votos": 963
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 790
+      },
+      {
+        "municipio": "CHAPADÃO DO CÉU",
+        "votos": 775
+      }
+    ]
   },
   "alego:2026-9": {
     "nome": "Kátia",
@@ -381,7 +2271,49 @@
     "votosNominais": 43687,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 21848
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3863
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 2602
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 2521
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 828
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 742
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 516
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 476
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 447
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 426
+      }
+    ]
   },
   "alego:2026-10": {
     "nome": "Dr. Amarildo",
@@ -389,7 +2321,49 @@
     "votosNominais": 43130,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 15696
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 5254
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1938
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1204
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 888
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 811
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 558
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 514
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 509
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 476
+      }
+    ]
   },
   "alego:2026-11": {
     "nome": "Coronel Urzeda",
@@ -397,7 +2371,49 @@
     "votosNominais": 40116,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 22754
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3997
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 980
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 926
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 816
+      },
+      {
+        "municipio": "EDÉIA",
+        "votos": 605
+      },
+      {
+        "municipio": "MINEIROS",
+        "votos": 408
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 398
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 358
+      },
+      {
+        "municipio": "JATAÍ",
+        "votos": 339
+      }
+    ]
   },
   "alego:2026-12": {
     "nome": "Joscilene do Mangão",
@@ -405,7 +2421,49 @@
     "votosNominais": 39977,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 23729
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 3049
+      },
+      {
+        "municipio": "CRISTALINA",
+        "votos": 1579
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 1576
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 1232
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1072
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1016
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 974
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 584
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 387
+      }
+    ]
   },
   "alego:2026-13": {
     "nome": "Graciele da Arte Trigo",
@@ -413,7 +2471,49 @@
     "votosNominais": 37252,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 17841
+      },
+      {
+        "municipio": "CAMPO LIMPO DE GOIÁS",
+        "votos": 3578
+      },
+      {
+        "municipio": "NERÓPOLIS",
+        "votos": 2346
+      },
+      {
+        "municipio": "PETROLINA DE GOIÁS",
+        "votos": 2119
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 1848
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1409
+      },
+      {
+        "municipio": "OURO VERDE DE GOIÁS",
+        "votos": 1200
+      },
+      {
+        "municipio": "SÃO FRANCISCO DE GOIÁS",
+        "votos": 447
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 371
+      },
+      {
+        "municipio": "GOIANÁPOLIS",
+        "votos": 356
+      }
+    ]
   },
   "alego:2026-14": {
     "nome": "Paulin Vai Nele",
@@ -421,7 +2521,49 @@
     "votosNominais": 33588,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 16439
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 8149
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1130
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 1097
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 406
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 311
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 297
+      },
+      {
+        "municipio": "ABADIA DE GOIÁS",
+        "votos": 294
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 236
+      },
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 234
+      }
+    ]
   },
   "alego:2026-15": {
     "nome": "Coronel Edson Raiado",
@@ -429,7 +2571,49 @@
     "votosNominais": 32717,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14045
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 4392
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 2002
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1273
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1144
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 656
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 580
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 487
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 383
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 351
+      }
+    ]
   },
   "alego:2026-16": {
     "nome": "Marquinho",
@@ -437,7 +2621,49 @@
     "votosNominais": 31039,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 8661
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 2168
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1744
+      },
+      {
+        "municipio": "PALMEIRAS DE GOIÁS",
+        "votos": 1479
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 1336
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1209
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 776
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 676
+      },
+      {
+        "municipio": "CALDAS NOVAS",
+        "votos": 658
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 575
+      }
+    ]
   },
   "alego:2026-17": {
     "nome": "Cardoso",
@@ -445,7 +2671,49 @@
     "votosNominais": 30397,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 9249
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 3092
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 1754
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 1424
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 1250
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 1232
+      },
+      {
+        "municipio": "PLANALTINA",
+        "votos": 1139
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 1040
+      },
+      {
+        "municipio": "NOVO GAMA",
+        "votos": 808
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 741
+      }
+    ]
   },
   "alego:2026-18": {
     "nome": "Keké da Vulkanic",
@@ -453,7 +2721,49 @@
     "votosNominais": 25163,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 23407
+      },
+      {
+        "municipio": "SANTO ANTÔNIO DO DESCOBERTO",
+        "votos": 563
+      },
+      {
+        "municipio": "COCALZINHO DE GOIÁS",
+        "votos": 381
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 192
+      },
+      {
+        "municipio": "PADRE BERNARDO",
+        "votos": 70
+      },
+      {
+        "municipio": "GOIANÉSIA",
+        "votos": 61
+      },
+      {
+        "municipio": "COLINAS DO SUL",
+        "votos": 49
+      },
+      {
+        "municipio": "NIQUELÂNDIA",
+        "votos": 40
+      },
+      {
+        "municipio": "CIDADE OCIDENTAL",
+        "votos": 36
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 32
+      }
+    ]
   },
   "alego:2026-19": {
     "nome": "Bessa",
@@ -461,7 +2771,49 @@
     "votosNominais": 23413,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 15910
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1741
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 466
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 381
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 337
+      },
+      {
+        "municipio": "MONTE ALEGRE DE GOIÁS",
+        "votos": 220
+      },
+      {
+        "municipio": "VARJÃO",
+        "votos": 146
+      },
+      {
+        "municipio": "POSSE",
+        "votos": 145
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 137
+      },
+      {
+        "municipio": "QUIRINÓPOLIS",
+        "votos": 125
+      }
+    ]
   },
   "alego:2026-20": {
     "nome": "Lucas Kitão",
@@ -469,7 +2821,49 @@
     "votosNominais": 22731,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 14166
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 1512
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 459
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 378
+      },
+      {
+        "municipio": "MOZARLÂNDIA",
+        "votos": 375
+      },
+      {
+        "municipio": "JANDAIA",
+        "votos": 251
+      },
+      {
+        "municipio": "INHUMAS",
+        "votos": 236
+      },
+      {
+        "municipio": "GOIÁS",
+        "votos": 233
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 181
+      },
+      {
+        "municipio": "ANICUNS",
+        "votos": 144
+      }
+    ]
   },
   "alego:2026-21": {
     "nome": "Willian Panda",
@@ -477,7 +2871,49 @@
     "votosNominais": 21724,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 17781
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 2310
+      },
+      {
+        "municipio": "ARAGARÇAS",
+        "votos": 143
+      },
+      {
+        "municipio": "HIDROLÂNDIA",
+        "votos": 131
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 105
+      },
+      {
+        "municipio": "PIRENÓPOLIS",
+        "votos": 86
+      },
+      {
+        "municipio": "GOIANIRA",
+        "votos": 72
+      },
+      {
+        "municipio": "CAIAPÔNIA",
+        "votos": 57
+      },
+      {
+        "municipio": "URUAÇU",
+        "votos": 53
+      },
+      {
+        "municipio": "ARAGOIÂNIA",
+        "votos": 47
+      }
+    ]
   },
   "alego:2026-22": {
     "nome": "Neto Karfan",
@@ -485,7 +2921,49 @@
     "votosNominais": 18628,
     "ano": 2026,
     "cargo": "Deputado Estadual",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "ITUMBIARA",
+        "votos": 11847
+      },
+      {
+        "municipio": "BOM JESUS",
+        "votos": 856
+      },
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 759
+      },
+      {
+        "municipio": "CACHOEIRA DOURADA",
+        "votos": 745
+      },
+      {
+        "municipio": "GOIATUBA",
+        "votos": 418
+      },
+      {
+        "municipio": "JOVIÂNIA",
+        "votos": 286
+      },
+      {
+        "municipio": "INACIOLÂNDIA",
+        "votos": 225
+      },
+      {
+        "municipio": "ARENÓPOLIS",
+        "votos": 215
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 198
+      },
+      {
+        "municipio": "PANAMÁ",
+        "votos": 196
+      }
+    ]
   },
   "senado:2026-23": {
     "nome": "Gracinha Caiado",
@@ -493,6 +2971,48 @@
     "votosNominais": 1458522,
     "ano": 2026,
     "cargo": "Senador",
-    "eleito": true
+    "eleito": true,
+    "topMunicipios": [
+      {
+        "municipio": "GOIÂNIA",
+        "votos": 259977
+      },
+      {
+        "municipio": "APARECIDA DE GOIÂNIA",
+        "votos": 82336
+      },
+      {
+        "municipio": "ANÁPOLIS",
+        "votos": 78921
+      },
+      {
+        "municipio": "LUZIÂNIA",
+        "votos": 41480
+      },
+      {
+        "municipio": "ÁGUAS LINDAS DE GOIÁS",
+        "votos": 32125
+      },
+      {
+        "municipio": "TRINDADE",
+        "votos": 31302
+      },
+      {
+        "municipio": "VALPARAÍSO DE GOIÁS",
+        "votos": 28571
+      },
+      {
+        "municipio": "RIO VERDE",
+        "votos": 25214
+      },
+      {
+        "municipio": "SENADOR CANEDO",
+        "votos": 24748
+      },
+      {
+        "municipio": "FORMOSA",
+        "votos": 22842
+      }
+    ]
   }
 }
