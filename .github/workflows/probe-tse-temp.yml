@@ -8,14 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Testa acesso ao dadosabertos.tse.jus.br
+      - name: Testa acesso ao cdn.tse.jus.br (arquivo de votacao por municipio/zona 2026)
         run: |
           set -x
           UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
-          echo "=== pagina do dataset Resultados 2026 ==="
-          curl -sS -o /tmp/pagina.html --max-time 20 -A "$UA" -w "HTTP %{http_code} em %{time_total}s\n" \
-            "https://dadosabertos.tse.jus.br/dataset/resultados-2026" || echo "FALHOU pagina dataset"
-          wc -c /tmp/pagina.html 2>/dev/null
-          echo "=== API de busca de datasets ==="
-          curl -sS --max-time 20 -A "$UA" -w "\nHTTP %{http_code} em %{time_total}s\n" \
-            "https://dadosabertos.tse.jus.br/api/3/action/package_search?q=resultados+2026" || echo "FALHOU api"
+          echo "=== HEAD no zip nacional ==="
+          curl -sS -I --max-time 20 -A "$UA" \
+            "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip" || echo "FALHOU head"
