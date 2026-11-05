@@ -6,13 +6,13 @@ on:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Baixa o zip e lista o conteudo (sem extrair tudo)
         run: |
           set -x
           UA="painel-captacao-cbmgo/1.0 (uso interno, sem fins comerciais)"
-          curl -sS --max-time 300 -A "$UA" -o /tmp/votacao.zip \
+          curl -sS --max-time 1200 --retry 2 -A "$UA" -o /tmp/votacao.zip \
             "https://cdn.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2026.zip"
           ls -la /tmp/votacao.zip
           echo "=== listagem do zip ==="
