@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram, LuTriangleAlert, LuArrowUpRight } from 'react-icons/lu';
 import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
+import { useAuthContext } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { btnDanger, fmtR, statusBadgeClass, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
@@ -81,6 +82,8 @@ function formatGabinete(g) {
 
 export default function ParlamentarPerfil() {
   const { esfera, casa, id } = useParams();
+  const { tipo, quartelId } = useAuthContext();
+  const ehAssessoria = tipo === 'assessoria';
   const { loading, parlamentares } = useParlamentaresGO();
   const { resultados } = useResultadosEleitorais(2022);
   const { resultados: resultados2026 } = useResultadosEleitorais(2026);
@@ -168,32 +171,36 @@ export default function ParlamentarPerfil() {
           <p className="mt-1 text-sm text-slate-400">
             {p.cargo} · {p.partido || '—'} · {NOME_CASA[p.casa] || p.casa}
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {(p.urlCamara || p.urlSenado || p.urlAlego) && (
-              <a href={p.urlCamara || p.urlSenado || p.urlAlego} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
-                Perfil oficial ↗
-              </a>
-            )}
-            {p.instagram && (
-              <a href={p.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
-                <LuInstagram className="h-3.5 w-3.5" /> Instagram ↗
-              </a>
-            )}
-          </div>
+          {ehAssessoria && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(p.urlCamara || p.urlSenado || p.urlAlego) && (
+                <a href={p.urlCamara || p.urlSenado || p.urlAlego} target="_blank" rel="noopener noreferrer" className="inline-block rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
+                  Perfil oficial ↗
+                </a>
+              )}
+              {p.instagram && (
+                <a href={p.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-300">
+                  <LuInstagram className="h-3.5 w-3.5" /> Instagram ↗
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </ScrollReveal>
 
-      <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="text-sm font-semibold text-slate-900 dark:text-white">Contato e localização do gabinete</p>
-        <div className="mt-4 flex flex-col gap-5">
-          <InfoRow label="E-mail" value={p.email} copyable />
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-            <InfoRow label="Telefone" value={p.telefone} copyable />
-            {formatGabinete(p.gabinete) && <InfoRow label="Gabinete" value={formatGabinete(p.gabinete)} />}
-            <InfoRow label="Situação" value={p.situacao} />
+      {ehAssessoria && (
+        <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Contato e localização do gabinete</p>
+          <div className="mt-4 flex flex-col gap-5">
+            <InfoRow label="E-mail" value={p.email} copyable />
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <InfoRow label="Telefone" value={p.telefone} copyable />
+              {formatGabinete(p.gabinete) && <InfoRow label="Gabinete" value={formatGabinete(p.gabinete)} />}
+              <InfoRow label="Situação" value={p.situacao} />
+            </div>
           </div>
-        </div>
-      </ScrollReveal>
+        </ScrollReveal>
+      )}
 
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">
@@ -314,6 +321,7 @@ export default function ParlamentarPerfil() {
                           militares={militares}
                           parlamentares={parlamentares}
                           stakeholders={stakeholders}
+                          quartelFixoId={ehAssessoria ? null : quartelId}
                           onCancelar={() => setEditandoCaptacaoId(null)}
                           onSalvar={async (payload) => { await updateCaptacao(c.id, payload); setEditandoCaptacaoId(null); }}
                         />

@@ -184,7 +184,7 @@ export function LinhaDoTempo({ captacao, eventos, addEvento, removeEvento, onMud
               {addStakeholder && (
                 <div className="sm:col-span-2">
                   <p className={labelClass}>Conheceu um novo stakeholder nesse andamento?</p>
-                  <CriarStakeholderInline parlamentares={parlamentares} addStakeholder={addStakeholder} parlamentarKeyPadrao={parlamentarKey} />
+                  <CriarStakeholderInline parlamentares={parlamentares} addStakeholder={addStakeholder} parlamentarKeyPadrao={parlamentarKey} quartelId={captacao.quartelId || null} />
                 </div>
               )}
             </div>

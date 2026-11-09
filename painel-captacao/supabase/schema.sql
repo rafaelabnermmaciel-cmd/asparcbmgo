@@ -17,11 +17,17 @@
 --   4. Tabela "captacoes"      — os cadastros feitos pelo formulário do site (sempre nascem
 --                                 como "Primeiro contato")
 --   4.1. Tabela "captacao_eventos" — os andamentos (linha do tempo) de cada captação
---   4.2. Tabela "usuarios_aprovados" + gatilho — login e aprovação de acesso (só Acesso restrito)
+--   4.2. Tabela "usuarios_aprovados" + gatilho — login, aprovação de acesso e o papel de cada
+--        pessoa: "militar" (só vê o quartel dela) ou "assessoria" (vê todos os quartéis) — hoje
+--        o site inteiro exige esse login, não só a aba Acesso restrito
 --   4.3. Tabela "solicitacoes_senha" + funções — pedido de redefinição de senha (a pessoa já
 --        digita a senha nova, sem precisar estar logada) autorizado por quem já tem acesso —
 --        na hora, sem nenhum e-mail, e sem exigir conta prévia no Supabase
---   5. Regras de segurança (RLS) de cada tabela
+--   4.4. Função "parlamentares_com_articulacao_ativa" — o único dado compartilhado entre
+--        quartéis: se já existe articulação em andamento com um parlamentar (sem dizer qual
+--        quartel)
+--   5. Regras de segurança (RLS) de cada tabela — captações/stakeholders/andamentos agora são
+--      escopados por quartel (cada quartel só vê e edita os próprios; a assessoria vê tudo)
 --   6. Um espaço de arquivos ("bucket") chamado "anexos" pras fotos/documentos do cadastro
 --   7. Tempo real pra tabela de captações
 --   8. As 129 unidades do CBMGO (página oficial de contatos, atualizada 12/08/2026) e os
@@ -142,6 +148,11 @@ end $$;
 alter table stakeholders add column if not exists projeto text not null default '';
 alter table stakeholders drop column if exists email;
 
+-- Quartel "dono" deste stakeholder (herdado da captação em que ele foi cadastrado) — usado pra
+-- RLS: cada quartel só vê/edita os próprios stakeholders (ver seção 5). Nulo = cadastrado direto
+-- pela assessoria parlamentar, sem vínculo com um quartel específico — visível só pra ela.
+alter table stakeholders add column if not exists quartel_id text references quarteis(id) on delete set null;
+
 -- 4) CAPTAÇÕES ----------------------------------------------------------------
 create table if not exists captacoes (
   id bigint generated always as identity primary key,
@@ -211,17 +222,33 @@ create table if not exists usuarios_aprovados (
   criado_em timestamptz not null default now()
 );
 
--- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui —
--- "aprovado = true" só se o e-mail for o do administrador, "false" (esperando aprovação) pra
--- qualquer outro.
+-- "tipo" separa os dois jeitos de usar o site: "militar" (vê só o quartel dele — quartel_id
+-- obrigatório nesse caso) ou "assessoria" (vê tudo, de todos os quartéis). Quem já tinha conta
+-- aprovada antes dessa coluna existir (hoje, só o administrador) vira "assessoria" — é
+-- exatamente o papel que essa conta já exercia.
+alter table usuarios_aprovados add column if not exists nome text not null default '';
+alter table usuarios_aprovados add column if not exists tipo text not null default 'assessoria';
+alter table usuarios_aprovados add column if not exists quartel_id text references quarteis(id) on delete set null;
+alter table usuarios_aprovados drop constraint if exists usuarios_aprovados_tipo_check;
+alter table usuarios_aprovados add constraint usuarios_aprovados_tipo_check check (tipo in ('militar', 'assessoria'));
+
+-- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui,
+-- lendo nome/tipo/quartel escolhidos na tela de criar conta (ver criarContaComSenha em
+-- src/lib/auth.js, que manda isso em auth.signUp({ options: { data: {...} } })) —
+-- "aprovado = true" (e tipo forçado "assessoria") só se o e-mail for o do administrador; pra
+-- qualquer outro fica "false" (esperando aprovação), com o tipo/quartel que a pessoa escolheu.
 create or replace function public.lidar_com_novo_usuario()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  v_admin boolean := lower(new.email) = lower('rafaelabnermmaciel@gmail.com');
+  v_tipo text := case when v_admin then 'assessoria' else coalesce(new.raw_user_meta_data->>'tipo', 'militar') end;
+  v_quartel_id text := case when v_tipo = 'militar' then new.raw_user_meta_data->>'quartel_id' else null end;
 begin
-  insert into public.usuarios_aprovados (user_id, email, aprovado)
-  values (new.id, new.email, lower(new.email) = lower('rafaelabnermmaciel@gmail.com'))
+  insert into public.usuarios_aprovados (user_id, email, nome, tipo, quartel_id, aprovado)
+  values (new.id, new.email, coalesce(new.raw_user_meta_data->>'nome', ''), v_tipo, v_quartel_id, v_admin)
   on conflict (user_id) do nothing;
   return new;
 end;
@@ -247,6 +274,38 @@ stable
 security definer set search_path = public
 as $$
   select coalesce((select aprovado from usuarios_aprovados where user_id = auth.uid()), false);
+$$;
+
+-- As três funções abaixo são o que permite cada política de RLS (seção 5) decidir "esse
+-- quartel pode ver essa linha?" sem precisar repetir a mesma sub-consulta em cada política —
+-- e, como são "security definer", nenhuma delas entra em loop de RLS consultando a própria
+-- usuarios_aprovados. Todas as três só devolvem algo pra quem já está aprovado (pendente não
+-- vê nada, mesmo logado).
+create or replace function public.meu_tipo()
+returns text
+language sql
+stable
+security definer set search_path = public
+as $$
+  select tipo from usuarios_aprovados where user_id = auth.uid() and aprovado;
+$$;
+
+create or replace function public.meu_quartel_id()
+returns text
+language sql
+stable
+security definer set search_path = public
+as $$
+  select quartel_id from usuarios_aprovados where user_id = auth.uid() and aprovado;
+$$;
+
+create or replace function public.e_assessoria()
+returns boolean
+language sql
+stable
+security definer set search_path = public
+as $$
+  select coalesce((select tipo = 'assessoria' from usuarios_aprovados where user_id = auth.uid() and aprovado), false);
 $$;
 
 -- 4.3) PEDIDO DE REDEFINIÇÃO DE SENHA ---------------------------------------------
@@ -322,18 +381,42 @@ end;
 $$;
 grant execute on function public.autorizar_redefinicao_senha(bigint) to authenticated;
 
+-- 4.4) SINAL COMPARTILHADO ENTRE QUARTÉIS: ARTICULAÇÃO ATIVA ---------------------
+-- A partir de agora captações/stakeholders só são visíveis pro próprio quartel (e pra
+-- assessoria parlamentar, que vê tudo — ver RLS na seção 5). A ÚNICA informação que continua
+-- compartilhada entre quartéis é saber SE já existe uma articulação em andamento com um
+-- parlamentar — sem dizer qual quartel, nem nenhum outro detalhe — é o "sinalzinho" que
+-- aparece ao lado do nome do parlamentar na lista (ver ParlamentarCard.jsx). "security
+-- definer" ignora a RLS de propósito só pra calcular esse boolean; mesmo assim só devolve algo
+-- pra quem já está aprovado (ver "if not esta_aprovado()" abaixo). A lista de status "em
+-- andamento" aqui tem que continuar igual a STATUS_EM_ANDAMENTO em src/lib/data.js.
+create or replace function public.parlamentares_com_articulacao_ativa()
+returns table(parlamentar_nome text)
+language plpgsql
+stable
+security definer set search_path = public
+as $$
+begin
+  if not public.esta_aprovado() then
+    return;
+  end if;
+  return query
+    select distinct c.parlamentar_nome
+    from captacoes c
+    where c.status in ('Primeiro contato', 'Em articulação', 'Destinado') and c.parlamentar_nome <> '';
+end;
+$$;
+grant execute on function public.parlamentares_com_articulacao_ativa() to authenticated;
+
 -- 5) REGRAS DE SEGURANÇA (RLS) -------------------------------------------------
 -- Com RLS ligado, ninguém consegue ler/escrever nada a menos que exista uma política
--- explícita liberando. Aqui: todo mundo pode LER as 4 tabelas (o site é público), e todas as
--- 4 também aceitam criar/editar/apagar linha vindo do próprio site (aba Acesso restrito pra
--- quartéis/militares, Cadastro/edição inline pra captações, e o perfil do parlamentar pra
--- stakeholders) — nenhuma delas precisa do Table Editor do Supabase pra ser mantida no dia a
--- dia.
---
--- Aviso: como o site não tem login, esse acesso de escrita fica aberto pra qualquer pessoa
--- que tenha o link do site — não só quem administra. Pra um painel interno pequeno isso
--- costuma ser um risco aceitável (é o mesmo modelo do formulário de Cadastro), mas não é o
--- ideal pra um sistema com muita gente de fora tendo acesso.
+-- explícita liberando. Quartéis e militares (o "diretório" do CBMGO) continuam de leitura
+-- pública — a tela de criar conta precisa mostrar a lista de quartéis pra quem ainda nem
+-- logou escolher o seu. Já captações, stakeholders e os andamentos (dado de negócio de
+-- verdade — quem articula o quê, com quem, por quanto) agora exigem login aprovado e ficam
+-- escopados por quartel: cada quartel só vê e edita o que é dele; só a assessoria parlamentar
+-- (tipo "assessoria" em usuarios_aprovados) vê e edita de todos os quartéis ao mesmo tempo —
+-- ver as funções meu_quartel_id()/e_assessoria() lá na seção 4.2.
 alter table quarteis enable row level security;
 alter table militares enable row level security;
 alter table stakeholders enable row level security;
@@ -390,32 +473,69 @@ create policy "Aprovados atendem pedidos de redefinição de senha" on solicitac
   using (public.esta_aprovado()) with check (public.esta_aprovado());
 
 drop policy if exists "Leitura pública" on stakeholders;
-create policy "Leitura pública" on stakeholders for select using (true);
+drop policy if exists "Leitura por quartel" on stakeholders;
+create policy "Leitura por quartel" on stakeholders for select
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 drop policy if exists "Inserção pública" on stakeholders;
-create policy "Inserção pública" on stakeholders for insert with check (true);
+drop policy if exists "Inserção por quartel" on stakeholders;
+create policy "Inserção por quartel" on stakeholders for insert
+  with check (public.esta_aprovado() and (public.e_assessoria() or quartel_id = public.meu_quartel_id()));
 drop policy if exists "Atualização pública" on stakeholders;
-create policy "Atualização pública" on stakeholders for update using (true) with check (true);
+drop policy if exists "Atualização por quartel" on stakeholders;
+create policy "Atualização por quartel" on stakeholders for update
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id())
+  with check (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 drop policy if exists "Remoção pública" on stakeholders;
-create policy "Remoção pública" on stakeholders for delete using (true);
+drop policy if exists "Remoção por quartel" on stakeholders;
+create policy "Remoção por quartel" on stakeholders for delete
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 
 drop policy if exists "Leitura pública" on captacoes;
-create policy "Leitura pública" on captacoes for select using (true);
+drop policy if exists "Leitura por quartel" on captacoes;
+create policy "Leitura por quartel" on captacoes for select
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 
 drop policy if exists "Cadastro público" on captacoes;
-create policy "Cadastro público" on captacoes for insert with check (true);
+drop policy if exists "Cadastro por quartel" on captacoes;
+create policy "Cadastro por quartel" on captacoes for insert
+  with check (public.esta_aprovado() and (public.e_assessoria() or quartel_id = public.meu_quartel_id()));
 drop policy if exists "Edição pública" on captacoes;
-create policy "Edição pública" on captacoes for update using (true) with check (true);
+drop policy if exists "Edição por quartel" on captacoes;
+create policy "Edição por quartel" on captacoes for update
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id())
+  with check (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 drop policy if exists "Remoção pública" on captacoes;
-create policy "Remoção pública" on captacoes for delete using (true);
+drop policy if exists "Remoção por quartel" on captacoes;
+create policy "Remoção por quartel" on captacoes for delete
+  using (public.e_assessoria() or quartel_id = public.meu_quartel_id());
 
 drop policy if exists "Leitura pública" on captacao_eventos;
-create policy "Leitura pública" on captacao_eventos for select using (true);
+drop policy if exists "Leitura por quartel" on captacao_eventos;
+create policy "Leitura por quartel" on captacao_eventos for select
+  using (public.e_assessoria() or exists (
+    select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
+  ));
 drop policy if exists "Inserção pública" on captacao_eventos;
-create policy "Inserção pública" on captacao_eventos for insert with check (true);
+drop policy if exists "Inserção por quartel" on captacao_eventos;
+create policy "Inserção por quartel" on captacao_eventos for insert
+  with check (public.esta_aprovado() and (public.e_assessoria() or exists (
+    select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
+  )));
 drop policy if exists "Atualização pública" on captacao_eventos;
-create policy "Atualização pública" on captacao_eventos for update using (true) with check (true);
+drop policy if exists "Atualização por quartel" on captacao_eventos;
+create policy "Atualização por quartel" on captacao_eventos for update
+  using (public.e_assessoria() or exists (
+    select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
+  ))
+  with check (public.e_assessoria() or exists (
+    select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
+  ));
 drop policy if exists "Remoção pública" on captacao_eventos;
-create policy "Remoção pública" on captacao_eventos for delete using (true);
+drop policy if exists "Remoção por quartel" on captacao_eventos;
+create policy "Remoção por quartel" on captacao_eventos for delete
+  using (public.e_assessoria() or exists (
+    select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
+  ));
 
 -- 6) ARMAZENAMENTO DE ANEXOS (fotos/documentos do formulário) -----------------
 insert into storage.buckets (id, name, public)

@@ -110,8 +110,15 @@ function ComboboxTexto({ valor, onChange, opcoes, placeholder }) {
 // Grade de campos compartilhada entre o formulário de novo cadastro (Cadastro.jsx) e a edição
 // inline de um já existente (aqui mesmo, e também no perfil do parlamentar) — só o que envolve
 // anexos/envio fica de fora daqui (cada chamador cuida disso).
-export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders, addStakeholder }) {
+// `quartelFixoId`: quando quem está cadastrando é militar, o quartel já vem travado no dele —
+// o campo aparece preenchido e desabilitado em vez de uma lista pra escolher (a RLS também
+// rejeitaria um quartel diferente do dele, ver supabase/schema.sql).
+export function CamposCaptacao({ valores, onChange, quarteis, militares, parlamentares, stakeholders, addStakeholder, quartelFixoId }) {
   const nomesParlamentares = useMemo(() => parlamentares.map((p) => p.nome).sort(), [parlamentares]);
+
+  useEffect(() => {
+    if (quartelFixoId && valores.quartelId !== quartelFixoId) onChange('quartelId', quartelFixoId);
+  }, [quartelFixoId, valores.quartelId, onChange]);
   // Responsável pode ser qualquer militar da plataforma — não só do quartel selecionado, já que
   // quem conduz a articulação nem sempre é lotado no mesmo quartel do cadastro. Ordenado por
   // antiguidade (Coronel primeiro, e assim por diante).
@@ -159,7 +166,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
     <>
       <div>
         <p className={labelClass}>Quartel *</p>
-        <select className={inputClass} value={valores.quartelId} onChange={selecionarQuartel}>
+        <select className={inputClass} value={valores.quartelId} onChange={selecionarQuartel} disabled={!!quartelFixoId}>
           <option value="">Selecione...</option>
           {quarteis.map((q) => (
             <option key={q.id} value={q.id}>{q.nome} — {q.municipio}</option>
@@ -210,6 +217,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
             parlamentares={parlamentares}
             addStakeholder={addStakeholder}
             parlamentarKeyPadrao={parlamentarKey}
+            quartelId={valores.quartelId || null}
             onCriado={(criado) => { setStakeholderManual(false); onChange('stakeholder', criado.nome); }}
           />
         )}
@@ -258,7 +266,7 @@ export function paraPayloadCaptacao(f, quarteis) {
 // Formulário de edição de uma captação já existente — aparece no lugar do card quando a
 // pessoa clica em "Editar" (tanto no Cadastro quanto no perfil do parlamentar). Não mexe em
 // anexos (só o cadastro inicial anexa arquivo).
-export function EdicaoCaptacao({ captacao, quarteis, militares, parlamentares, stakeholders, onSalvar, onCancelar }) {
+export function EdicaoCaptacao({ captacao, quarteis, militares, parlamentares, stakeholders, onSalvar, onCancelar, quartelFixoId }) {
   const [f, setF] = useState({
     quartelId: captacao.quartelId,
     responsavel: captacao.responsavel,
@@ -287,7 +295,7 @@ export function EdicaoCaptacao({ captacao, quarteis, militares, parlamentares, s
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} />
+      <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} quartelFixoId={quartelFixoId} />
       {erro && <p className="sm:col-span-2 flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5" /> {erro}</p>}
       <div className="flex gap-2 sm:col-span-2">
         <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : 'Salvar alterações'}</button>

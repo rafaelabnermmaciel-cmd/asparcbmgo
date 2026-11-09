@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LuFileText, LuImage, LuTrash2, LuClock } from 'react-icons/lu';
 import { useQuarteis, useCaptacoes, useEventos, useParlamentaresGO, useStakeholders, filtrarParlamentaresPorEsfera, filtrarCaptacoesPorEsfera } from '../lib/data.js';
-import { useAuth } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { inputClass, btnDanger, fmtR, statusBadgeClass } from '../components/CaptacaoForm.jsx';
@@ -14,7 +13,6 @@ import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 // Arquivado) dentro da própria linha do tempo de cada captação.
 export default function Andamentos() {
   const { esfera } = useParams();
-  const { aprovado } = useAuth();
   const { quarteis } = useQuarteis();
   const { captacoes: todasCaptacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
   const { eventos, addEvento, removeEvento } = useEventos();
@@ -78,11 +76,9 @@ export default function Andamentos() {
                       <button type="button" onClick={() => setTimelineAbertaId(timelineAbertaId === c.id ? null : c.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
                         <LuClock className="h-3 w-3" /> Adicionar andamento
                       </button>
-                      {aprovado && (
-                        <button type="button" onClick={() => removerCaptacao(c)} className={`flex items-center gap-1 ${btnDanger}`}>
-                          <LuTrash2 className="h-3 w-3" /> Excluir
-                        </button>
-                      )}
+                      <button type="button" onClick={() => removerCaptacao(c)} className={`flex items-center gap-1 ${btnDanger}`}>
+                        <LuTrash2 className="h-3 w-3" /> Excluir
+                      </button>
                     </div>
                   </div>
                   {c.observacoes && <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">{c.observacoes}</p>}

@@ -1,20 +1,29 @@
-import { useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { supabase, supabaseConfigurado } from './supabase.js';
 import { notificarPedidoAcesso } from './emailjs.js';
 
-// Login só é usado pela aba Acesso restrito (dado sensível de organização interna) — o resto do
-// site continua aberto pra quem tiver o link, sem mudança nenhuma. `aprovado` só fica true
-// pro e-mail do administrador (liberado sozinho, ver o gatilho em supabase/schema.sql) ou
-// depois que o administrador libera alguém pela própria aba Acesso restrito → Acessos.
+// Dados de quem está logado, disponíveis pra qualquer página sem precisar chamar useAuth() de
+// novo (que buscaria a aprovação de novo) — preenchido pelo AuthGate.jsx, que já fez esse
+// trabalho uma vez lá no topo da árvore.
+export const AuthContext = createContext({ userId: null, email: '', nome: '', tipo: 'assessoria', quartelId: null, sair: async () => {} });
+export function useAuthContext() {
+  return useContext(AuthContext);
+}
+
+// Login é exigido pro site inteiro agora (ver AuthGate.jsx) — cada pessoa só vê o que o papel
+// dela libera: "militar" só vê o próprio quartel, "assessoria" vê todos (ver RLS em
+// supabase/schema.sql). `aprovado` só fica true pro e-mail do administrador (liberado sozinho,
+// ver o gatilho em supabase/schema.sql) ou depois que alguém da assessoria libera pela aba
+// Acesso restrito → Acessos.
 export function useAuth() {
-  const [state, setState] = useState({ loading: true, session: null, aprovado: false });
+  const [state, setState] = useState({ loading: true, session: null, aprovado: false, nome: '', tipo: null, quartelId: null });
 
   const carregarAprovacao = useCallback(async (session) => {
-    if (!session) { setState({ loading: false, session: null, aprovado: false }); return; }
-    const { data, error } = await supabase.from('usuarios_aprovados').select('aprovado').eq('user_id', session.user.id).maybeSingle();
+    if (!session) { setState({ loading: false, session: null, aprovado: false, nome: '', tipo: null, quartelId: null }); return; }
+    const { data, error } = await supabase.from('usuarios_aprovados').select('aprovado, nome, tipo, quartel_id').eq('user_id', session.user.id).maybeSingle();
     if (error) console.warn('[auth] falha ao checar aprovação:', error.message);
     const aprovado = !!data?.aprovado;
-    setState({ loading: false, session, aprovado });
+    setState({ loading: false, session, aprovado, nome: data?.nome || '', tipo: data?.tipo || null, quartelId: data?.quartel_id || null });
 
     // Avisa o administrador por e-mail — só uma vez por pessoa pendente neste navegador,
     // pra não mandar o mesmo aviso de novo a cada vez que a pessoa recarrega a página
@@ -43,8 +52,15 @@ export function useAuth() {
     if (error) throw new Error(error.message);
   }, []);
 
-  const criarContaComSenha = useCallback(async (email, senha) => {
-    const { error } = await supabase.auth.signUp({ email, password: senha });
+  // `dados` carrega nome/tipo/quartelId escolhidos na tela de criar conta — o gatilho
+  // lidar_com_novo_usuario() (supabase/schema.sql) lê isso de raw_user_meta_data pra já criar a
+  // linha em usuarios_aprovados com o papel certo, antes mesmo da aprovação.
+  const criarContaComSenha = useCallback(async (email, senha, dados = {}) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password: senha,
+      options: { data: { nome: dados.nome || '', tipo: dados.tipo || 'militar', quartel_id: dados.quartelId || null } },
+    });
     if (error) throw new Error(error.message);
   }, []);
 

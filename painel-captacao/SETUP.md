@@ -154,18 +154,30 @@ pública fora do seu próprio site.
 
 ---
 
-## 7. Login e aprovação de acesso (só a aba Acesso restrito)
+## 7. Login e aprovação de acesso (o site inteiro, não só a aba Acesso restrito)
 
-Quartéis e militares são dado interno, então essa aba exige login **e** aprovação sua — o
-resto do site (Cadastro, Stakeholders, Parlamentares) continua igual, sem login nenhum. Como
-fica na prática:
+O site inteiro agora exige login **e** aprovação — não dá mais pra abrir o link e usar direto
+com a senha única de antes. Ao criar conta, a pessoa escolhe um de dois papéis:
+
+- **Militar de um quartel** — escolhe o quartel dela numa lista e, depois de aprovada, só
+  enxerga o dashboard, as captações e os stakeholders **daquele** quartel. No perfil de um
+  parlamentar, só vê foto, votação, stakeholders e captações — nada de e-mail/telefone/gabinete
+  do parlamentar (isso fica só pra assessoria).
+- **Assessoria parlamentar** — depois de aprovada, enxerga e edita tudo, de todos os quartéis.
+
+O único dado que continua visível entre quartéis é um sinalzinho (●) ao lado do nome do
+parlamentar na lista, avisando se já existe articulação em andamento com ele em algum quartel
+— sem dizer qual.
 
 - **Você** (o e-mail `rafaelabnermmaciel@gmail.com`, já fixado no script — me avise se quiser
-  trocar) cria a própria conta e **já entra liberado na hora**, sem passo extra nenhum.
-- **Qualquer outra pessoa** cria a própria conta (e-mail/senha) e fica **"Pendente"**,
-  esperando você aprovar. Assim que alguém pede acesso, **você recebe um e-mail avisando**
-  (configurado no passo 7.5) — daí é só entrar em **Acesso restrito → Acessos** e clicar em
-  **Aprovar**. Pra tirar o acesso de alguém depois, mesmo lugar, botão **Revogar**.
+  trocar) cria a própria conta e **já entra liberado na hora, como assessoria**, sem passo
+  extra nenhum.
+- **Qualquer outra pessoa** cria a própria conta (nome, papel, e-mail/senha — e quartel, se for
+  militar) e fica **"Pendente"**, esperando alguém da assessoria aprovar. Assim que alguém pede
+  acesso, **a assessoria recebe um e-mail avisando** (configurado no passo 7.5) — daí é só
+  entrar em **Acesso restrito → Acessos** e clicar em **Aprovar**. Pra tirar o acesso de alguém
+  depois, mesmo lugar, botão **Revogar**. A aba **Acesso restrito** (quartéis, militares,
+  aprovação de contas) só aparece pra quem é assessoria.
 
 ### 7.1. Rodar o script atualizado
 
@@ -185,21 +197,21 @@ sempre, é seguro rodar de novo (não duplica nada).
 
 ### 7.3. Criar sua conta de administrador (libera sozinha, sem passo extra)
 
-1. No site publicado, abra a aba **Acesso restrito**.
-2. Clique em **Criar conta**, preencha e-mail e senha — use exatamente
-   `rafaelabnermmaciel@gmail.com` (é o e-mail que o script reconhece como administrador; se
-   quiser usar outro, me avisa que eu troco no script).
+1. Abra o site publicado — a tela de login/criar conta aparece antes de qualquer outra coisa.
+2. Clique em **Criar conta**, escolha **"Sou da assessoria parlamentar"**, preencha nome,
+   e-mail e senha — use exatamente `rafaelabnermmaciel@gmail.com` (é o e-mail que o script
+   reconhece como administrador; se quiser usar outro, me avisa que eu troco no script).
 3. Se aparecer um aviso pedindo confirmação por e-mail, abra sua caixa de entrada e clique no
    link que o Supabase mandou antes de tentar entrar.
-4. Pronto — como é o e-mail do administrador, já libera direto, sem esperar nada. A
-   Acesso restrito abre normalmente, com uma aba a mais: **Acessos**.
+4. Pronto — como é o e-mail do administrador, já libera direto, sem esperar nada, e já como
+   assessoria. O site abre normalmente, com **Acesso restrito** disponível no menu.
 
 ### 7.4. As próximas pessoas (elas pedem, você aprova)
 
-Cada pessoa nova entra em Acesso restrito → cria a própria conta (e-mail e senha) → cai como
-**"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você abre **Acesso restrito →
-Acessos** e clica em **Aprovar** na linha da pessoa. Pra tirar o acesso de alguém depois, mesmo
-lugar, botão **Revogar** (dá pra **Aprovar** de novo se precisar).
+Cada pessoa nova abre o site → **Criar conta** → escolhe o papel (militar, com o quartel dela,
+ou assessoria) → cai como **"Pendente"**, e você recebe um e-mail avisando (próximo passo). Você
+abre **Acesso restrito → Acessos** e clica em **Aprovar** na linha da pessoa. Pra tirar o acesso
+de alguém depois, mesmo lugar, botão **Revogar** (dá pra **Aprovar** de novo se precisar).
 
 ### 7.5. Configurar o aviso por e-mail de "alguém pediu acesso"
 

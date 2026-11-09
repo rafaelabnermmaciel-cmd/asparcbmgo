@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react';
-import { LuTriangleAlert, LuLogOut, LuCheck, LuX, LuKeyRound } from 'react-icons/lu';
+import { LuTriangleAlert, LuLogOut, LuCheck, LuX, LuKeyRound, LuLock } from 'react-icons/lu';
 import { useQuarteis, useMilitares, useUsuariosAprovados, useSolicitacoesSenha, slugify } from '../lib/data.js';
-import { useAuth } from '../lib/auth.js';
+import { useAuthContext } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
-import { LoginGerenciamento, AguardandoAprovacao } from '../components/AcessoGerenciamento.jsx';
 
 const inputClass =
   'w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-red-400 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200';
@@ -96,11 +95,11 @@ function MilitarForm({ initial, quarteis, onSave, onCancel, erro }) {
 }
 
 export default function Gerenciamento() {
-  const { loading: carregandoAuth, session, aprovado, entrarComSenha, criarContaComSenha, sair } = useAuth();
+  const { userId, email, tipo, sair } = useAuthContext();
   const { quarteis, addQuartel, updateQuartel, removeQuartel } = useQuarteis();
   const { militares, addMilitar, updateMilitar, removeMilitar } = useMilitares();
   const { usuarios, definirAprovacao } = useUsuariosAprovados();
-  const { solicitacoes: solicitacoesSenha, pedirRedefinicaoSenha, atenderSolicitacao } = useSolicitacoesSenha();
+  const { solicitacoes: solicitacoesSenha, atenderSolicitacao } = useSolicitacoesSenha();
 
   const [aba, setAba] = useState('quarteis');
   const [busca, setBusca] = useState('');
@@ -167,7 +166,7 @@ export default function Gerenciamento() {
   }
 
   async function alternarAprovacao(usuario, aprovar) {
-    if (aprovar === false && usuario.user_id === session?.user?.id) {
+    if (aprovar === false && usuario.user_id === userId) {
       alert('Você não pode revogar o próprio acesso por aqui — peça pra outra pessoa aprovada fazer isso.');
       return;
     }
@@ -189,9 +188,18 @@ export default function Gerenciamento() {
     }
   }
 
-  if (carregandoAuth) return null;
-  if (!session) return <LoginGerenciamento entrarComSenha={entrarComSenha} criarContaComSenha={criarContaComSenha} pedirRedefinicaoSenha={pedirRedefinicaoSenha} />;
-  if (!aprovado) return <AguardandoAprovacao email={session.user.email} sair={sair} />;
+  // Essa área é global (todos os quartéis, todas as contas) — só a assessoria parlamentar
+  // administra; um militar nem chega a ver o link no menu (ver Sidebar.jsx), mas a checagem
+  // fica aqui também pra quem digitar a URL direto.
+  if (tipo !== 'assessoria') {
+    return (
+      <div className="mx-auto flex max-w-md flex-col items-center px-4 py-16 text-center">
+        <LuLock className="h-8 w-8 text-slate-300" />
+        <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Área restrita à assessoria parlamentar</h1>
+        <p className="mt-2 text-sm text-slate-400">Quartéis, militares e aprovação de acessos são administrados só pela assessoria parlamentar.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
@@ -201,7 +209,7 @@ export default function Gerenciamento() {
           <p className="mt-1 text-sm text-slate-400">Quartéis e militares — adicione, edite ou remova a qualquer momento.</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-slate-400">
-          {session.user.email}
+          {email}
           <button type="button" onClick={sair} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
             <LuLogOut className="h-3 w-3" /> Sair
           </button>
@@ -302,10 +310,17 @@ export default function Gerenciamento() {
             {usuarios.map((u) => (
               <div key={u.user_id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">{u.email}{u.user_id === session.user.id && <span className="ml-1.5 text-xs font-normal text-slate-400">(você)</span>}</p>
-                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${u.aprovado ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
-                    {u.aprovado ? 'Aprovado' : 'Pendente'}
-                  </span>
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                    {u.nome ? `${u.nome} · ` : ''}{u.email}{u.user_id === userId && <span className="ml-1.5 text-xs font-normal text-slate-400">(você)</span>}
+                  </p>
+                  <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                    <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${u.aprovado ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
+                      {u.aprovado ? 'Aprovado' : 'Pendente'}
+                    </span>
+                    <span className="inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                      {u.tipo === 'assessoria' ? 'Assessoria parlamentar' : `Militar · ${nomeQuartel(u.quartel_id)}`}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex shrink-0 gap-2">
                   {u.aprovado ? (
