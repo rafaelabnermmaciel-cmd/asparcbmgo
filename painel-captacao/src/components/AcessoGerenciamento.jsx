@@ -76,8 +76,8 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
 
         {modo !== 'recuperar' && (
           <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium">
+            <button type="button" onClick={() => mudarModo('criar')} className={`rounded-full px-3 py-1 ${modo === 'criar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Primeiro acesso (militar)</button>
             <button type="button" onClick={() => mudarModo('entrar')} className={`rounded-full px-3 py-1 ${modo === 'entrar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Entrar</button>
-            <button type="button" onClick={() => mudarModo('criar')} className={`rounded-full px-3 py-1 ${modo === 'criar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Criar conta (militar)</button>
             <button type="button" onClick={() => mudarModo('assessoria')} className={`rounded-full px-3 py-1 ${modo === 'assessoria' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Assessoria parlamentar</button>
           </div>
         )}

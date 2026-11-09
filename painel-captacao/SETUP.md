@@ -207,7 +207,7 @@ aqui **é** a "senha padrão" que todo mundo da assessoria vai digitar daqui pra
 
 ### 7.4. As próximas pessoas
 
-- **Militar**: abre o site → **Criar conta (militar)** → nome, quartel, e-mail, senha → acesso
+- **Militar**: abre o site → **Primeiro acesso (militar)** → nome, quartel, e-mail, senha → acesso
   liberado na hora, sem nenhum passo seu.
 - **Assessoria**: não cria conta — só compartilhe a senha padrão do passo 7.3 com quem precisar.
 - **Revogar o acesso de alguém** (um militar que saiu, por exemplo): **Acesso restrito →
