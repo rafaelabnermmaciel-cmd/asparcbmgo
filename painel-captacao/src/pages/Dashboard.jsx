@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList } from 'recharts';
 import { LuBanknote, LuHandshake, LuTrophy, LuTriangleAlert, LuUsers, LuCalendarCheck, LuFlag, LuSnowflake } from 'react-icons/lu';
 import { useCaptacoes, useQuarteis, useEventos, useParlamentaresGO, filtrarCaptacoesPorEsfera, STATUS_TERMINAL } from '../lib/data.js';
+import { useAuthContext } from '../lib/auth.js';
 import { computeQuartelRanking, rankPorCaptacao, rankPorArticulacao } from '../lib/ranking.js';
 import { useTheme } from '../lib/theme.jsx';
 import { CATEGORICO } from '../lib/palette.js';
@@ -79,11 +80,14 @@ function BarCard({ data, valueFmt, color, trackColor, gradId, tooltipStyle, allo
 
 export default function Dashboard() {
   const { esfera } = useParams();
+  const { tipo, quartelId } = useAuthContext();
+  const ehMilitar = tipo !== 'assessoria';
   const { loading, captacoes: todasCaptacoes } = useCaptacoes();
   const { loading: loadingQuarteis, quarteis } = useQuarteis();
   const { parlamentares } = useParlamentaresGO();
   const { eventos } = useEventos();
   const { theme } = useTheme();
+  const quartelDoMilitar = quarteis.find((q) => q.id === quartelId);
 
   const captacoes = useMemo(() => filtrarCaptacoesPorEsfera(todasCaptacoes, parlamentares, esfera), [todasCaptacoes, parlamentares, esfera]);
 
@@ -149,9 +153,13 @@ export default function Dashboard() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 pb-24 sm:px-6 lg:px-10 lg:pb-8">
       <ScrollReveal>
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Dashboard de Captação {esfera === 'estadual' ? 'Estadual' : 'Federal'}</h1>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+          {ehMilitar ? `Dashboard de Captação — ${quartelDoMilitar?.nome || 'seu quartel'}` : `Dashboard de Captação ${esfera === 'estadual' ? 'Estadual' : 'Federal'}`}
+        </h1>
         <p className="mt-1 text-sm text-slate-400">
-          Ranking gamificado dos quartéis do CBMGO na captação de recursos junto {esfera === 'estadual' ? 'à Assembleia Legislativa de Goiás' : 'ao Congresso Nacional'}.
+          {ehMilitar
+            ? `Articulações e captações do seu quartel junto ${esfera === 'estadual' ? 'à Assembleia Legislativa de Goiás' : 'ao Congresso Nacional'}.`
+            : `Ranking gamificado dos quartéis do CBMGO na captação de recursos junto ${esfera === 'estadual' ? 'à Assembleia Legislativa de Goiás' : 'ao Congresso Nacional'}.`}
         </p>
       </ScrollReveal>
 
@@ -182,6 +190,7 @@ export default function Dashboard() {
         <StatCard dense valueSize="text-2xl" label="Reuniões registradas" value={totalReunioes} icon={<LuCalendarCheck />} accent="rose" />
       </ScrollReveal>
 
+      {!ehMilitar && (
       <ScrollReveal delay={0.12} className="mt-6 grid gap-4 lg:grid-cols-2">
         <ChartCard icon={LuBanknote} title="Relatório de captação" sub="Valor previsto por quartel">
           {porCaptacao.length ? (
@@ -214,6 +223,7 @@ export default function Dashboard() {
           )}
         </ChartCard>
       </ScrollReveal>
+      )}
 
       {esfriando.length > 0 && (
         <ScrollReveal delay={0.16} className="mt-6">

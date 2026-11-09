@@ -7,7 +7,7 @@ const NOME_CASA = {
   alego: 'Assembleia Legislativa (GO)',
 };
 
-export default function ParlamentarCard({ p, esfera, emAndamento = 0 }) {
+export default function ParlamentarCard({ p, esfera, emAndamento = 0, temArticulacaoAtiva = false }) {
   return (
     <Link
       to={`/${esfera}/parlamentares/${p.casa}/${p.id}`}
@@ -25,6 +25,12 @@ export default function ParlamentarCard({ p, esfera, emAndamento = 0 }) {
           <p className="truncate text-sm font-semibold text-slate-900 group-hover:text-red-600 dark:text-white dark:group-hover:text-red-400">
             {p.nome}
           </p>
+          {temArticulacaoAtiva && (
+            <span
+              title="Já existe articulação em andamento com este parlamentar (algum quartel)"
+              className="h-2 w-2 shrink-0 rounded-full bg-sky-500"
+            />
+          )}
           {emAndamento > 0 && (
             <span className="shrink-0 rounded-full bg-red-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-600 dark:bg-red-500/10 dark:text-red-400">
               em articulação · {emAndamento}

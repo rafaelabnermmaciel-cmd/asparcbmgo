@@ -2,16 +2,21 @@ import { useState } from 'react';
 import { LuLock, LuTriangleAlert, LuLogOut, LuMailCheck, LuKeyRound } from 'react-icons/lu';
 import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx';
 
-// Tela de login/criar conta/pedir troca de senha — aparece quando ninguém está logado e a
-// pessoa tenta abrir o Acesso restrito. Depois de criar conta, ainda falta o administrador
-// aprovar (ver AguardandoAprovacao) — e "Esqueci minha senha" também: a pessoa já digita a
-// senha nova aqui, mas ela só passa a valer depois que o administrador autoriza em Acesso
-// restrito → Acessos (sem nenhum e-mail no meio — ver Gerenciamento.jsx e a tabela
+// Tela de login/criar conta/pedir troca de senha — aparece pra quem abre o site sem estar
+// logado (login é exigido pro site inteiro, ver AuthGate.jsx). Ao criar conta, a pessoa escolhe
+// o papel: "militar" (escolhe o quartel dela na lista, só vê o que é do próprio quartel) ou
+// "assessoria parlamentar" (vê todos os quartéis). Depois de criar conta, ainda falta alguém da
+// assessoria aprovar (ver AguardandoAprovacao) — e "Esqueci minha senha" também: a pessoa já
+// digita a senha nova aqui, mas ela só passa a valer depois que alguém aprovado autoriza em
+// Acesso restrito → Acessos (sem nenhum e-mail no meio — ver Gerenciamento.jsx e a tabela
 // solicitacoes_senha em supabase/schema.sql).
-export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRedefinicaoSenha }) {
+export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRedefinicaoSenha, quarteis = [] }) {
   const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar' | 'recuperar'
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [nome, setNome] = useState('');
+  const [tipo, setTipo] = useState('militar');
+  const [quartelId, setQuartelId] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState(null);
   const [avisoConta, setAvisoConta] = useState(null);
@@ -26,16 +31,20 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
     e.preventDefault();
     setErro(null);
     setAvisoConta(null);
+    if (modo === 'criar') {
+      if (!nome.trim()) { setErro('Informe seu nome.'); return; }
+      if (tipo === 'militar' && !quartelId) { setErro('Selecione o seu quartel.'); return; }
+    }
     setEnviando(true);
     try {
       if (modo === 'entrar') {
         await entrarComSenha(email, senha);
       } else if (modo === 'criar') {
-        await criarContaComSenha(email, senha);
-        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar. O administrador já recebeu um e-mail avisando do seu pedido — depois de aprovado, é só entrar de novo.');
+        await criarContaComSenha(email, senha, { nome: nome.trim(), tipo, quartelId: tipo === 'militar' ? quartelId : null });
+        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar. A assessoria parlamentar já recebeu um e-mail avisando do seu pedido — depois de aprovado, é só entrar de novo.');
       } else {
         await pedirRedefinicaoSenha(email, senha);
-        setAvisoConta('Pedido enviado! Assim que o administrador autorizar, é só entrar de novo com essa senha nova.');
+        setAvisoConta('Pedido enviado! Assim que alguém aprovado autorizar, é só entrar de novo com essa senha nova.');
       }
     } catch (err) {
       setErro(err.message || 'Falha ao entrar. Tente novamente.');
@@ -49,12 +58,12 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
       <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center gap-2">
           <LuLock className="h-5 w-5 text-red-500" />
-          <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Acesso restrito</h1>
+          <h1 className="text-lg font-semibold text-slate-900 dark:text-white">Painel de Captação — CBMGO</h1>
         </div>
         <p className="mt-1 text-xs text-slate-400">
           {modo === 'recuperar'
-            ? 'Digite seu e-mail e a senha que você quer usar daqui pra frente. Assim que o administrador autorizar, ela já passa a valer — não precisa de nenhum e-mail nem link.'
-            : 'Quartéis e militares são dado interno — entre com login pra editar. O resto do site continua aberto normalmente.'}
+            ? 'Digite seu e-mail e a senha que você quer usar daqui pra frente. Assim que alguém aprovado autorizar, ela já passa a valer — não precisa de nenhum e-mail nem link.'
+            : 'Entre com seu login pra continuar — cada militar vê só o quartel dele, a assessoria parlamentar vê todos.'}
         </p>
 
         {modo !== 'recuperar' && (
@@ -65,6 +74,27 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
         )}
 
         <form onSubmit={enviar} className="mt-4 flex flex-col gap-3">
+          {modo === 'criar' && (
+            <>
+              <div className="flex gap-2 text-xs font-medium">
+                <button type="button" onClick={() => setTipo('militar')} className={`flex-1 rounded-lg px-3 py-2 ${tipo === 'militar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Sou militar de um quartel</button>
+                <button type="button" onClick={() => setTipo('assessoria')} className={`flex-1 rounded-lg px-3 py-2 ${tipo === 'assessoria' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Sou da assessoria parlamentar</button>
+              </div>
+              <div>
+                <p className={labelClass}>Nome</p>
+                <input required className={inputClass} value={nome} onChange={(e) => setNome(e.target.value)} />
+              </div>
+              {tipo === 'militar' && (
+                <div>
+                  <p className={labelClass}>Quartel</p>
+                  <select required className={inputClass} value={quartelId} onChange={(e) => setQuartelId(e.target.value)}>
+                    <option value="">Selecione...</option>
+                    {quarteis.map((q) => <option key={q.id} value={q.id}>{q.nome} — {q.municipio}</option>)}
+                  </select>
+                </div>
+              )}
+            </>
+          )}
           <div>
             <p className={labelClass}>E-mail</p>
             <input type="email" required className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -104,8 +134,8 @@ export function AguardandoAprovacao({ email, sair }) {
       <LuLock className="mx-auto h-8 w-8 text-amber-500" />
       <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Aguardando aprovação</h1>
       <p className="mt-2 max-w-sm text-sm text-slate-500 dark:text-slate-400">
-        A conta <span className="font-medium">{email}</span> ainda não foi liberada pra editar o Acesso restrito.
-        O administrador já foi avisado por e-mail — assim que aprovar, é só entrar de novo.
+        A conta <span className="font-medium">{email}</span> ainda não foi liberada. A assessoria parlamentar já foi
+        avisada por e-mail — assim que aprovar, é só entrar de novo.
       </p>
       <button type="button" onClick={sair} className={`mt-4 inline-flex items-center gap-1.5 ${btnGhost}`}>
         <LuLogOut className="h-3.5 w-3.5" /> Sair

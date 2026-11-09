@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { LuCircleCheck, LuTriangleAlert } from 'react-icons/lu';
 import { useParlamentaresGO, useQuarteis, useMilitares, useStakeholders, useCaptacoes, useEventos, filtrarParlamentaresPorEsfera } from '../lib/data.js';
+import { useAuthContext } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import FileField from '../components/FileField.jsx';
 import {
@@ -12,6 +13,7 @@ import { hoje } from '../components/CaptacaoTimeline.jsx';
 
 export default function Cadastro() {
   const { esfera } = useParams();
+  const { tipo, quartelId } = useAuthContext();
   const { parlamentares: todosParlamentares } = useParlamentaresGO();
   const parlamentares = useMemo(() => filtrarParlamentaresPorEsfera(todosParlamentares, esfera), [todosParlamentares, esfera]);
   const { quarteis } = useQuarteis();
@@ -69,7 +71,7 @@ export default function Cadastro() {
 
       <ScrollReveal delay={0.06} className="mt-5">
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:grid-cols-2 dark:border-slate-800 dark:bg-slate-900">
-          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} addStakeholder={addStakeholder} />
+          <CamposCaptacao valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} quarteis={quarteis} militares={militares} parlamentares={parlamentares} stakeholders={stakeholders} addStakeholder={addStakeholder} quartelFixoId={tipo === 'militar' ? quartelId : null} />
           <div>
             <p className={labelClass}>Data do primeiro contato *</p>
             <input type="date" className={inputClass} value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} />

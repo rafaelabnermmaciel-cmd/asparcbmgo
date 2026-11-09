@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, filtrarParlamentaresPorEsfera, STATUS_EM_ANDAMENTO } from '../lib/data.js';
+import { useParlamentaresGO, useCaptacoes, useQuarteis, useResultadosEleitorais, useArticulacoesAtivas, filtrarParlamentaresPorEsfera, STATUS_EM_ANDAMENTO } from '../lib/data.js';
 import ParlamentarCard from '../components/ParlamentarCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import ScrollReveal from '../components/ScrollReveal.jsx';
@@ -19,6 +19,7 @@ export default function Parlamentares() {
   const { captacoes } = useCaptacoes();
   const { quarteis } = useQuarteis();
   const { resultados: resultadosEleitorais } = useResultadosEleitorais();
+  const articulacoesAtivas = useArticulacoesAtivas();
   const [q, setQ] = useState('');
   const [casa, setCasa] = useState('');
   const [partido, setPartido] = useState('');
@@ -119,7 +120,7 @@ export default function Parlamentares() {
 
       <ScrollReveal delay={0.08} className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtrados.map((p) => (
-          <ParlamentarCard key={`${p.casa}-${p.id}`} p={p} esfera={esfera} emAndamento={infoPorParlamentar.get(p.nome)?.emAndamento || 0} />
+          <ParlamentarCard key={`${p.casa}-${p.id}`} p={p} esfera={esfera} emAndamento={infoPorParlamentar.get(p.nome)?.emAndamento || 0} temArticulacaoAtiva={articulacoesAtivas.has(p.nome)} />
         ))}
       </ScrollReveal>
 

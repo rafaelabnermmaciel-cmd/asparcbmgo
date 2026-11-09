@@ -181,6 +181,27 @@ export function useStakeholders() {
   return { loading: state.loading, stakeholders: state.stakeholders, addStakeholder, updateStakeholder, removeStakeholder };
 }
 
+// Único dado compartilhado entre quartéis: se já existe articulação em andamento com um
+// parlamentar — sem dizer qual quartel, nem nenhum outro detalhe (ver
+// parlamentares_com_articulacao_ativa() em supabase/schema.sql, uma função "security definer"
+// feita só pra isso). Usado pelo "sinalzinho" ao lado do nome na lista de parlamentares.
+export function useArticulacoesAtivas() {
+  const [ativos, setAtivos] = useState(new Set());
+
+  useEffect(() => {
+    if (!supabaseConfigurado) return;
+    let cancelled = false;
+    supabase.rpc('parlamentares_com_articulacao_ativa').then(({ data, error }) => {
+      if (cancelled) return;
+      if (error) { console.warn('[data] falha ao carregar articulações ativas:', error.message); return; }
+      setAtivos(new Set((data || []).map((r) => r.parlamentar_nome)));
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  return ativos;
+}
+
 // Alguma captação antiga no banco pode ter ficado com um status que já não existe mais no
 // funil atual (ex: "Indicado" — nome antigo usado quando o parlamentar prometia/indicava que
 // ia destinar o recurso, de antes de existir o status "Destinado" de hoje; ver o histórico em

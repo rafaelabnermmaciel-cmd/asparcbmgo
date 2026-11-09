@@ -21,8 +21,12 @@ export function validarStakeholder(f) {
   return null;
 }
 
-export function paraPayloadStakeholder(f) {
-  return {
+// `quartelId` só vem preenchido na criação (ver CriarStakeholderInline) — stampa o quartel
+// "dono" do stakeholder a partir do quartel da própria captação em que ele nasceu (RLS escopa
+// por isso, ver supabase/schema.sql). Numa edição de um stakeholder já existente (ex: no perfil
+// do parlamentar) o parâmetro fica de fora, e o quartel_id original nunca é tocado.
+export function paraPayloadStakeholder(f, quartelId) {
+  const payload = {
     nome: f.nome.trim(),
     cargo: f.cargo.trim(),
     telefone: f.telefone.trim(),
@@ -30,6 +34,8 @@ export function paraPayloadStakeholder(f) {
     observacoes: f.observacoes.trim(),
     parlamentares_keys: f.parlamentaresKeys,
   };
+  if (quartelId !== undefined) payload.quartel_id = quartelId;
+  return payload;
 }
 
 // Lista de checkboxes pra vincular o stakeholder a um ou mais parlamentares — a mesma pessoa
@@ -87,7 +93,7 @@ export function CamposStakeholder({ valores, onChange, parlamentares }) {
 
 // Formulário de cadastro/edição de stakeholder — mesma grade usada tanto pra criar (aba
 // Cadastro) quanto pra editar (perfil do parlamentar).
-export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCancelar, textoBotao = 'Salvar' }) {
+export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCancelar, textoBotao = 'Salvar', quartelId }) {
   const [f, setF] = useState(inicial || STAKEHOLDER_VAZIO);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState(null);
@@ -98,7 +104,7 @@ export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCanc
     if (problema) { setErro(problema); return; }
     setSalvando(true);
     try {
-      await onSalvar(paraPayloadStakeholder(f));
+      await onSalvar(paraPayloadStakeholder(f, quartelId));
     } catch (err) {
       setErro(err.message || 'Falha ao salvar. Tente novamente.');
     } finally {
@@ -121,7 +127,7 @@ export function FormularioStakeholder({ inicial, parlamentares, onSalvar, onCanc
 // Cadastro rápido de stakeholder embutido em outro formulário (Cadastrar primeiro contato e
 // Adicionar andamento) — assim não precisa sair pra aba Stakeholders (que é só de consulta)
 // pra registrar alguém novo. Já vincula automaticamente o parlamentar em contexto, se houver.
-export function CriarStakeholderInline({ parlamentares, addStakeholder, parlamentarKeyPadrao, onCriado, label = '+ Novo stakeholder' }) {
+export function CriarStakeholderInline({ parlamentares, addStakeholder, parlamentarKeyPadrao, onCriado, label = '+ Novo stakeholder', quartelId }) {
   const [aberto, setAberto] = useState(false);
   const [sucesso, setSucesso] = useState(false);
 
@@ -153,6 +159,7 @@ export function CriarStakeholderInline({ parlamentares, addStakeholder, parlamen
         textoBotao="Cadastrar"
         onCancelar={() => setAberto(false)}
         onSalvar={salvar}
+        quartelId={quartelId ?? null}
       />
     </div>
   );
