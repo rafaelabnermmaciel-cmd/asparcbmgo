@@ -30,32 +30,56 @@ import { notificarWhatsApp } from './lib/callmebot.js';
 const CAMARA_BASE = 'https://dadosabertos.camara.leg.br/api/v2';
 const CONGRESSO_URL = 'https://www.congressonacional.leg.br/sessoes/agenda-do-congresso-senado-e-camara';
 const PATH = 'public/data/acompanhamento-legislativo.json';
-// Cobre os eixos que o CBM-GO acompanha (bombeiros, polícia militar, militares estaduais,
-// segurança pública/defesa civil em geral) evitando termos soltos demais como só "militar" ou
-// só "polícia", que trariam ruído de assuntos sem relação (Forças Armadas federais etc.).
-// Polícia civil fica de fora — não é o foco do acompanhamento.
-//
-// "segurança pública" sozinha ficou de fora de propósito — a pedido do usuário: ela pega ruído
-// demais (qualquer projeto/moção só de referência à comissão de segurança pública, tipo "moção de
-// louvor à segurança pública", sem relação nenhuma com bombeiros). O que interessa de verdade já
-// está coberto pelos termos mais específicos abaixo.
+// Lista ampliada a pedido do usuário (09/11/2026), revertendo a filosofia anterior ("termos
+// específicos demais, evitar ruído") depois da PEC 18/2025 (PEC da Segurança Pública) ter sido
+// aprovada no Senado sem que o painel avisasse — ela só citava "segurança pública" na ementa, e
+// esse termo tinha sido deixado de fora de propósito. A prioridade agora é não deixar passar
+// nada relevante, mesmo pagando o preço de mais ruído na seção "possíveis projetos novos" (é só
+// uma sugestão pra revisão manual, nunca adiciona nada sozinho — ver projetosNovosPorTema).
+// "militar" e "polícia" soltos (voltam a entrar aqui) também trazem assunto de Forças Armadas
+// federais sem relação com o CBM-GO — aceito como custo do "não quero que nada passe".
+// bateComPalavraChave/projetosNovosPorTema fazem match por substring (texto.includes(termo)),
+// então termos compostos cujo radical já aparece numa palavra mais curta da lista são
+// redundantes (ex.: "polícia civil" já bate em "polícia") — a lista evita essa redundância.
 const PALAVRAS_CHAVE = [
+  // Bombeiros / corporação (abrange "bombeiro militar", "corpo de bombeiros", "CBMs" etc.)
   'bombeiro',
-  'corpo de bombeiros',
-  'bombeiro militar',
-  'polícia militar',
-  'policial militar',
-  'militares estaduais',
+  'cbm',
+  'incêndio',
+  'resgate',
+  'salvamento',
+  // Segurança pública / forças de segurança em geral (reintroduzido — ver nota acima)
+  'segurança pública',
+  'polícia',
+  'policial',
+  'militar',
+  'guarda municipal',
+  'guarda civil',
+  'agente penitenciário',
+  'sistema penitenciário',
+  'perito criminal',
+  'perito oficial',
+  // Defesa civil / desastres e emergências
   'defesa civil',
+  'proteção civil',
   'desastre',
   'catástrofe',
   'calamidade',
   'emergência',
+  'enchente',
+  'inundação',
+  'alagamento',
+  'deslizamento',
+  // Atendimento pré-hospitalar (missão das corporações de bombeiros além do combate a incêndio)
+  'atendimento pré-hospitalar',
 ];
 // Tipos simbólicos/sem efeito legislativo (moção de louvor/pesar/congratulações etc.) — mesmo
 // batendo palavra-chave, não são "projetos" no sentido que o usuário quer acompanhar.
 const TIPOS_SIMBOLICOS = new Set(['MOC']);
-const MAX_ITENS_POR_SECAO = 10;
+// Bumped de 10 pra 25 (09/11/2026): com a lista de palavras-chave bem maior, um corte baixo
+// passou a arriscar descartar candidato de verdade sem avisar — ver "não quero que nada passe"
+// no commit que ampliou PALAVRAS_CHAVE. 25 ainda cabe numa mensagem de WhatsApp razoável.
+const MAX_ITENS_POR_SECAO = 25;
 
 function hojeISO() {
   return new Date().toISOString().slice(0, 10);

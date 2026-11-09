@@ -17,7 +17,16 @@ export async function notificarWhatsApp(mensagem) {
     // status 200 sozinho não prova que a mensagem chegou. Sempre logamos o corpo pra dar pra
     // diagnosticar; só tratamos como sucesso quando o texto confirma envio.
     const corpo = await res.text();
-    const enviouDeVerdade = res.ok && /message queued|message.*sent/i.test(corpo);
+    // Bug real encontrado em produção (09/11/2026): o regex antigo era /message queued|
+    // message.*sent/i — o ".*" entre "message" e "sent" também batia em "Message **not**
+    // sent" (a mensagem de erro do próprio CallMeBot quando a cota de mensagens grátis acaba),
+    // porque "not" cabe tranquilo dentro do ".*". Resultado: toda notificação com a cota
+    // zerada ainda logava "[whatsapp] notificação enviada" como se tivesse dado certo — só
+    // detectável lendo o corpo da resposta na unha. Corrigido: nunca considera sucesso se
+    // "not sent" aparecer, e o regex de sucesso não usa mais ".*" solto entre "message" e
+    // "sent"/"queued".
+    const naoEnviado = /message not sent/i.test(corpo);
+    const enviouDeVerdade = res.ok && !naoEnviado && /message (successfully )?queued|message (has been |was )?(successfully )?sent/i.test(corpo);
     if (enviouDeVerdade) {
       console.log('[whatsapp] notificação enviada. Resposta do CallMeBot:', corpo.trim());
     } else {

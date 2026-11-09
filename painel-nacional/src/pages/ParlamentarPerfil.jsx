@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuTriangleAlert, LuBanknote, LuFileText, LuHandshake, LuPenLine, LuScale } from 'react-icons/lu';
+import { LuTriangleAlert, LuArrowUpRight, LuBanknote, LuFileText, LuHandshake, LuPenLine, LuScale } from 'react-icons/lu';
 import { useParlamentares, useVotacoes, useResultadosEleitorais, initials } from '../lib/data.js';
 import { useStore, STATUS_PROJETO, diasSemContatoItem, nivelGargalo, destinacaoAtiva, projetoAtivo, nomesCorrespondem } from '../lib/store.jsx';
 import { useAdmin } from '../lib/admin.jsx';
@@ -92,7 +92,10 @@ export default function ParlamentarPerfil() {
 
   const p = parlamentares.find((x) => x.casa === casa && String(x.id) === String(id));
   const historicoVotos = votacoes[`${casa}:${id}`] || [];
-  const eleicao = resultados[`${casa}:${id}`] || null;
+  // Um array com um item por ano eleitoral disponível (2022 e/ou 2026), mais recente primeiro
+  // — ver scripts/sync-resultados-go.js. Nunca um objeto único: dá pra mostrar os dois anos lado
+  // a lado no perfil em vez de só o último.
+  const eleicoes = resultados[`${casa}:${id}`] || [];
   const destinacoes = p ? store.destinacoes.filter((d) => d.parlamentarNome === p.nome) : [];
   const projetosAutoria = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.autor, p.nome)) : [];
   const projetosRelatoria = p ? store.projetos.filter((pr) => nomesCorrespondem(pr.relator, p.nome)) : [];
@@ -131,6 +134,17 @@ export default function ParlamentarPerfil() {
       <Link to="/parlamentares" className="text-xs text-slate-400 hover:text-indigo-600">
         ← Parlamentares
       </Link>
+
+      {p.aviso2026 && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
+          <LuTriangleAlert className="h-4 w-4 shrink-0" /> {p.aviso2026}
+        </div>
+      )}
+      {p.notaEleicao2026 && (
+        <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
+          <LuArrowUpRight className="h-4 w-4 shrink-0" /> {p.notaEleicao2026}
+        </div>
+      )}
 
       <ScrollReveal className="mt-4 flex flex-col items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center dark:border-slate-800 dark:bg-slate-900">
         {p.foto ? (
@@ -174,43 +188,50 @@ export default function ParlamentarPerfil() {
 
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos Recebidos na Eleição</p>
-        {eleicao ? (
-          <>
-            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <InfoRow label="Ano" value={eleicao.ano} />
-              <InfoRow label="Partido" value={eleicao.partido} />
-              <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
-              <InfoRow label="Cargo" value={eleicao.cargo} />
-            </div>
-            {eleicao.topMunicipios?.length > 0 && (
-              <div className="mt-5 border-t border-slate-100 pt-4 dark:border-slate-800">
-                <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Top 5 municípios em votos</p>
-                <div className="mt-3 flex flex-col gap-2.5">
-                  {eleicao.topMunicipios.map((m, i) => {
-                    const max = eleicao.topMunicipios[0].votos || 1;
-                    const pct = Math.max(6, (m.votos / max) * 100);
-                    return (
-                      <div key={m.municipio} className="flex items-center gap-3">
-                        <span className="w-4 shrink-0 text-right text-xs font-semibold text-slate-400">{i + 1}</span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-baseline justify-between gap-2">
-                            <span className="truncate text-xs font-medium text-slate-700 dark:text-slate-200">{m.municipio}</span>
-                            <span className="shrink-0 text-xs text-slate-400">{m.votos.toLocaleString('pt-BR')}</span>
-                          </div>
-                          <div className="mt-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800">
-                            <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
+        {eleicoes.length > 0 ? (
+          eleicoes.map((eleicao, idx) => (
+            <div key={eleicao.ano} className={idx > 0 ? 'mt-5 border-t border-slate-100 pt-4 dark:border-slate-800' : 'mt-3'}>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <InfoRow label="Ano" value={eleicao.ano} />
+                <InfoRow label="Partido" value={eleicao.partido} />
+                <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
+                <InfoRow label="Cargo" value={eleicao.cargo} />
+              </div>
+              {eleicao.eleito === false && (
+                <p className="mt-2 text-xs font-medium text-amber-600 dark:text-amber-400">Não eleito nesta disputa.</p>
+              )}
+              {eleicao.topMunicipios?.length > 0 && (
+                <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+                  <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                    Top {eleicao.topMunicipios.length} municípios em votos ({eleicao.ano})
+                  </p>
+                  <div className="mt-3 flex flex-col gap-2.5">
+                    {eleicao.topMunicipios.map((m, i) => {
+                      const max = eleicao.topMunicipios[0].votos || 1;
+                      const pct = Math.max(6, (m.votos / max) * 100);
+                      return (
+                        <div key={m.municipio} className="flex items-center gap-3">
+                          <span className="w-4 shrink-0 text-right text-xs font-semibold text-slate-400">{i + 1}</span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-baseline justify-between gap-2">
+                              <span className="truncate text-xs font-medium text-slate-700 dark:text-slate-200">{m.municipio}</span>
+                              <span className="shrink-0 text-xs text-slate-400">{m.votos.toLocaleString('pt-BR')}</span>
+                            </div>
+                            <div className="mt-1 h-1.5 rounded-full bg-slate-100 dark:bg-slate-800">
+                              <div className="h-1.5 rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </>
+              )}
+            </div>
+          ))
         ) : (
           <p className="mt-2 text-xs text-slate-400">
-            Sem dado eleitoral carregado ainda — rode <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">npm run fetch:eleicoes</code>.
+            Sem dado eleitoral carregado ainda — rode <code className="rounded bg-slate-100 px-1 py-0.5 dark:bg-slate-800">npm run sync:resultados-go</code>.
           </p>
         )}
       </ScrollReveal>
