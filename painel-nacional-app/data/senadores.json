@@ -757,7 +757,8 @@
     "ufNascimento": null,
     "sexo": null,
     "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5895"
+    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5895",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": "6342",
@@ -1422,7 +1423,8 @@
     "ufNascimento": null,
     "sexo": null,
     "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5899"
+    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5899",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": "5748",
@@ -1537,5 +1539,25 @@
     "sexo": null,
     "redeSocial": [],
     "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/3806"
+  },
+  {
+    "id": "2026-23",
+    "casa": "senado",
+    "nome": "Gracinha Caiado",
+    "nomeCivil": null,
+    "partido": "UNIÃO",
+    "uf": "GO",
+    "situacao": "Eleito(a) em 2026 — aguardando posse da nova legislatura (fev/2027)",
+    "condicaoEleitoral": null,
+    "foto": null,
+    "email": null,
+    "telefone": null,
+    "gabinete": null,
+    "dataNascimento": null,
+    "municipioNascimento": null,
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlSenado": null
   }
 ]

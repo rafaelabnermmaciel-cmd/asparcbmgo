@@ -4148,7 +4148,8 @@
       "https://www.facebook.com/IsmaelAlexandrino",
       "https://www.instagram.com/ismael.alexandrino"
     ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220570"
+    "urlCamara": "https://www.camara.leg.br/deputados/220570",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": 204481,
@@ -4258,7 +4259,8 @@
       "https://www.facebook.com/drzachariascalil",
       "https://www.instagram.com/drzachariascalil"
     ],
-    "urlCamara": "https://www.camara.leg.br/deputados/204412"
+    "urlCamara": "https://www.camara.leg.br/deputados/204412",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": 220674,
@@ -6020,7 +6022,8 @@
       "https://www.instagram.com/gusgayer",
       "https://youtube.com/GustavoGayer"
     ],
-    "urlCamara": "https://www.camara.leg.br/deputados/220568"
+    "urlCamara": "https://www.camara.leg.br/deputados/220568",
+    "notaEleicao2026": "Eleito(a) Senador em 2026 — deixa Câmara dos Deputados."
   },
   {
     "id": 204408,
@@ -6645,7 +6648,8 @@
     "ufNascimento": "GO",
     "sexo": "M",
     "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/220567"
+    "urlCamara": "https://www.camara.leg.br/deputados/220567",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": 74273,
@@ -7749,7 +7753,8 @@
     "ufNascimento": "MG",
     "sexo": "F",
     "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/220566"
+    "urlCamara": "https://www.camara.leg.br/deputados/220566",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": 80815,
@@ -11046,7 +11051,8 @@
       "https://www.instagram.com/professoralcidesoficial",
       "https://youtube.com/DeputadoProfessorAlcides"
     ],
-    "urlCamara": "https://www.camara.leg.br/deputados/204390"
+    "urlCamara": "https://www.camara.leg.br/deputados/204390",
+    "aviso2026": "Em exercício até o fim da legislatura atual — não concorreu ou não se reelegeu em 2026."
   },
   {
     "id": 221338,
@@ -13661,5 +13667,65 @@
     "sexo": "M",
     "redeSocial": [],
     "urlCamara": "https://www.camara.leg.br/deputados/220552"
+  },
+  {
+    "id": "2026-1",
+    "casa": "camara",
+    "nome": "Fred Rodrigues",
+    "nomeCivil": null,
+    "partido": "PL",
+    "uf": "GO",
+    "situacao": "Eleito(a) em 2026 — aguardando posse da nova legislatura (fev/2027)",
+    "condicaoEleitoral": null,
+    "foto": null,
+    "email": null,
+    "telefone": null,
+    "gabinete": null,
+    "dataNascimento": null,
+    "municipioNascimento": null,
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlCamara": null
+  },
+  {
+    "id": "2026-2",
+    "casa": "camara",
+    "nome": "Major Vitor Hugo",
+    "nomeCivil": null,
+    "partido": "PL",
+    "uf": "GO",
+    "situacao": "Eleito(a) em 2026 — aguardando posse da nova legislatura (fev/2027)",
+    "condicaoEleitoral": null,
+    "foto": null,
+    "email": null,
+    "telefone": null,
+    "gabinete": null,
+    "dataNascimento": null,
+    "municipioNascimento": null,
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlCamara": null
+  },
+  {
+    "id": "2026-3",
+    "casa": "camara",
+    "nome": "Fábio Sousa",
+    "nomeCivil": null,
+    "partido": "PL",
+    "uf": "GO",
+    "situacao": "Eleito(a) em 2026 — aguardando posse da nova legislatura (fev/2027)",
+    "condicaoEleitoral": null,
+    "foto": null,
+    "email": null,
+    "telefone": null,
+    "gabinete": null,
+    "dataNascimento": null,
+    "municipioNascimento": null,
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlCamara": null
   }
 ]
