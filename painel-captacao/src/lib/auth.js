@@ -2,6 +2,12 @@ import { createContext, useContext, useEffect, useState, useCallback } from 'rea
 import { supabase, supabaseConfigurado } from './supabase.js';
 import { notificarPedidoAcesso } from './emailjs.js';
 
+// A assessoria parlamentar não cria conta própria — todo mundo da assessoria entra com essa
+// MESMA conta, digitando só a senha padrão combinada entre vocês (ver modo "assessoria" em
+// AcessoGerenciamento.jsx). Tem que continuar IGUAL ao e-mail hardcoded no gatilho
+// lidar_com_novo_usuario() em supabase/schema.sql — os dois precisam ser trocados juntos.
+export const EMAIL_ASSESSORIA_PADRAO = 'rafaelabnermmaciel@gmail.com';
+
 // Dados de quem está logado, disponíveis pra qualquer página sem precisar chamar useAuth() de
 // novo (que buscaria a aprovação de novo) — preenchido pelo AuthGate.jsx, que já fez esse
 // trabalho uma vez lá no topo da árvore.
@@ -12,9 +18,9 @@ export function useAuthContext() {
 
 // Login é exigido pro site inteiro agora (ver AuthGate.jsx) — cada pessoa só vê o que o papel
 // dela libera: "militar" só vê o próprio quartel, "assessoria" vê todos (ver RLS em
-// supabase/schema.sql). `aprovado` só fica true pro e-mail do administrador (liberado sozinho,
-// ver o gatilho em supabase/schema.sql) ou depois que alguém da assessoria libera pela aba
-// Acesso restrito → Acessos.
+// supabase/schema.sql). `aprovado` já nasce true pra toda conta nova (acesso na hora, sem
+// espera) — só fica false se alguém da assessoria revogar depois pela aba Acesso restrito →
+// Acessos (e nesse caso dá pra reaprovar ali mesmo).
 export function useAuth() {
   const [state, setState] = useState({ loading: true, session: null, aprovado: false, nome: '', tipo: null, quartelId: null });
 

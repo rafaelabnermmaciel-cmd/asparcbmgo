@@ -203,18 +203,17 @@ create table if not exists captacao_eventos (
 alter table captacao_eventos add column if not exists presentes text not null default '';
 alter table captacao_eventos add column if not exists anexos jsonb not null default '[]'::jsonb;
 
--- 4.2) LOGIN E APROVAÇÃO DE ACESSO (só pra aba Acesso restrito) -------------------
--- Quartéis/militares são dado sensível de organização interna, então quem edita precisa
--- entrar com login (e-mail/senha) E já ter sido aprovado pelo administrador — o resto do
--- site (Cadastro, Stakeholders, Parlamentares) continua aberto pra quem tiver o link, sem
--- mudança nenhuma.
+-- 4.2) LOGIN DE ACESSO (o site inteiro) -------------------------------------------
+-- Dado sensível de organização interna, então quem edita precisa entrar com login.
 --
--- O e-mail do administrador (trocar aqui se não for esse) já entra liberado sozinho, sem
--- precisar de nenhum passo manual — é comparado sem diferenciar maiúscula/minúscula.
--- Qualquer outra conta nova (criada ao entrar pela primeira vez) cai "aprovado = false" e
--- fica esperando o administrador liberar pela aba Acesso restrito → Acessos — e o administrador
--- recebe um e-mail avisando (ver EMAILJS_TEMPLATE_ID_ACESSO em src/lib/emailjs-config.js e
--- SETUP.md, seção 7).
+-- Dois jeitos de entrar:
+--   a) Militar: cria a própria conta (nome, quartel, e-mail, senha) e JÁ TEM ACESSO NA HORA —
+--      sem espera de aprovação. A segurança é o próprio escopo por quartel (RLS, seção 5): o
+--      quartel errado simplesmente não aparece pra ele, então não tem o que aprovar.
+--   b) Assessoria parlamentar: não cria conta própria — usa sempre a MESMA conta
+--      (EMAIL_ASSESSORIA_PADRAO, hardcoded também em src/lib/auth.js — os dois têm que
+--      continuar iguais) com uma senha padrão combinada entre vocês. Essa conta já entra
+--      liberada sozinha, sem passo manual, e é comparada sem diferenciar maiúscula/minúscula.
 create table if not exists usuarios_aprovados (
   user_id uuid primary key references auth.users(id) on delete cascade,
   email text not null default '',
@@ -223,9 +222,9 @@ create table if not exists usuarios_aprovados (
 );
 
 -- "tipo" separa os dois jeitos de usar o site: "militar" (vê só o quartel dele — quartel_id
--- obrigatório nesse caso) ou "assessoria" (vê tudo, de todos os quartéis). Quem já tinha conta
--- aprovada antes dessa coluna existir (hoje, só o administrador) vira "assessoria" — é
--- exatamente o papel que essa conta já exercia.
+-- obrigatório nesse caso) ou "assessoria" (vê tudo, de todos os quartéis — só a conta padrão
+-- acima tem esse tipo). Quem já tinha conta aprovada antes dessa coluna existir (hoje, só o
+-- administrador) vira "assessoria" — é exatamente o papel que essa conta já exercia.
 alter table usuarios_aprovados add column if not exists nome text not null default '';
 alter table usuarios_aprovados add column if not exists tipo text not null default 'assessoria';
 alter table usuarios_aprovados add column if not exists quartel_id text references quarteis(id) on delete set null;
@@ -233,22 +232,24 @@ alter table usuarios_aprovados drop constraint if exists usuarios_aprovados_tipo
 alter table usuarios_aprovados add constraint usuarios_aprovados_tipo_check check (tipo in ('militar', 'assessoria'));
 
 -- Gatilho: toda vez que alguém se cadastra (auth.users), já cria a linha correspondente aqui,
--- lendo nome/tipo/quartel escolhidos na tela de criar conta (ver criarContaComSenha em
--- src/lib/auth.js, que manda isso em auth.signUp({ options: { data: {...} } })) —
--- "aprovado = true" (e tipo forçado "assessoria") só se o e-mail for o do administrador; pra
--- qualquer outro fica "false" (esperando aprovação), com o tipo/quartel que a pessoa escolheu.
+-- lendo nome/quartel escolhidos na tela de criar conta (ver criarContaComSenha em
+-- src/lib/auth.js, que manda isso em auth.signUp({ options: { data: {...} } })) — "aprovado"
+-- já nasce "true" pra todo mundo (acesso liberado na hora, sem espera); o tipo só vira
+-- "assessoria" pro e-mail fixo abaixo (o mesmo de EMAIL_ASSESSORIA_PADRAO em src/lib/auth.js),
+-- qualquer outro e-mail novo é sempre "militar". "aprovado" continua existindo pra dar pra
+-- revogar (ou reaprovar) alguém depois, pela aba Acesso restrito → Acessos.
 create or replace function public.lidar_com_novo_usuario()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
 declare
-  v_admin boolean := lower(new.email) = lower('rafaelabnermmaciel@gmail.com');
-  v_tipo text := case when v_admin then 'assessoria' else coalesce(new.raw_user_meta_data->>'tipo', 'militar') end;
+  v_assessoria boolean := lower(new.email) = lower('rafaelabnermmaciel@gmail.com');
+  v_tipo text := case when v_assessoria then 'assessoria' else 'militar' end;
   v_quartel_id text := case when v_tipo = 'militar' then new.raw_user_meta_data->>'quartel_id' else null end;
 begin
   insert into public.usuarios_aprovados (user_id, email, nome, tipo, quartel_id, aprovado)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data->>'nome', ''), v_tipo, v_quartel_id, v_admin)
+  values (new.id, new.email, coalesce(new.raw_user_meta_data->>'nome', ''), v_tipo, v_quartel_id, true)
   on conflict (user_id) do nothing;
   return new;
 end;
@@ -259,10 +260,12 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.lidar_com_novo_usuario();
 
--- Garante que o administrador está liberado e que ninguém mais ficou liberado por engano
--- (ex: numa execução anterior deste script, quando todo mundo entrava liberado na hora).
-update usuarios_aprovados set aprovado = true where lower(email) = lower('rafaelabnermmaciel@gmail.com');
-update usuarios_aprovados set aprovado = false where lower(email) <> lower('rafaelabnermmaciel@gmail.com');
+-- Garante que a conta padrão da assessoria está liberada e marcada como "assessoria" (reparo
+-- idempotente, útil se ela tiver sido criada antes dessa coluna "tipo" existir). NUNCA mexe no
+-- "aprovado" de mais ninguém aqui — isso rodaria de novo toda vez que este script roda de novo,
+-- e desfaria qualquer revogação/liberação que a assessoria já tenha feito pela aba Acessos.
+update usuarios_aprovados set aprovado = true, tipo = 'assessoria'
+  where lower(email) = lower('rafaelabnermmaciel@gmail.com') and (aprovado is distinct from true or tipo is distinct from 'assessoria');
 
 -- Função auxiliar (roda com privilégio de dono da tabela, ignorando RLS por dentro) pra
 -- checar se quem está logado agora já foi aprovado — evita loop de RLS "checando a própria

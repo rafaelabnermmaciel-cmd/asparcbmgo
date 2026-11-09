@@ -224,7 +224,7 @@ export default function Gerenciamento() {
           Militares ({militares.length})
         </button>
         <button onClick={() => setAba('acessos')} className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${aba === 'acessos' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
-          Acessos ({usuarios.filter((u) => !u.aprovado).length ? `${usuarios.filter((u) => !u.aprovado).length} pendente(s)` : usuarios.length})
+          Acessos ({usuarios.filter((u) => !u.aprovado).length ? `${usuarios.filter((u) => !u.aprovado).length} revogado(s)` : usuarios.length})
         </button>
         {aba !== 'acessos' && (
           <input className={`${inputClass} ml-auto max-w-xs`} placeholder="Buscar por nome..." value={busca} onChange={(e) => setBusca(e.target.value)} />
@@ -305,7 +305,7 @@ export default function Gerenciamento() {
 
       {aba === 'acessos' && (
         <Section title="Acessos">
-          <p className="mt-1 text-xs text-slate-400">Quem cria conta (e-mail/senha) fica "Pendente" até você aprovar aqui — você recebe um e-mail avisando de cada pedido novo. Pra tirar o acesso de alguém depois, é o mesmo lugar, botão "Revogar".</p>
+          <p className="mt-1 text-xs text-slate-400">Toda conta nova (militar) já entra liberada na hora. Aqui dá pra tirar o acesso de alguém, botão "Revogar" — e liberar de novo depois, se precisar.</p>
           <div className="mt-3 flex flex-col gap-2">
             {usuarios.map((u) => (
               <div key={u.user_id} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
@@ -315,7 +315,7 @@ export default function Gerenciamento() {
                   </p>
                   <div className="mt-1 flex flex-wrap items-center gap-1.5">
                     <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-medium ${u.aprovado ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'}`}>
-                      {u.aprovado ? 'Aprovado' : 'Pendente'}
+                      {u.aprovado ? 'Liberado' : 'Revogado'}
                     </span>
                     <span className="inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
                       {u.tipo === 'assessoria' ? 'Assessoria parlamentar' : `Militar · ${nomeQuartel(u.quartel_id)}`}
@@ -326,7 +326,7 @@ export default function Gerenciamento() {
                   {u.aprovado ? (
                     <button className={btnDanger} onClick={() => alternarAprovacao(u, false)}><LuX className="mr-1 inline h-3 w-3" />Revogar</button>
                   ) : (
-                    <button className={btnPrimary} onClick={() => alternarAprovacao(u, true)}><LuCheck className="mr-1 inline h-3 w-3" />Aprovar</button>
+                    <button className={btnPrimary} onClick={() => alternarAprovacao(u, true)}><LuCheck className="mr-1 inline h-3 w-3" />Liberar de novo</button>
                   )}
                 </div>
               </div>

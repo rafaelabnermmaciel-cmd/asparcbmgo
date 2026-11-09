@@ -1,21 +1,25 @@
 import { useState } from 'react';
 import { LuLock, LuTriangleAlert, LuLogOut, LuMailCheck, LuKeyRound } from 'react-icons/lu';
 import { inputClass, labelClass, btnPrimary, btnGhost } from './CaptacaoForm.jsx';
+import { EMAIL_ASSESSORIA_PADRAO } from '../lib/auth.js';
 
 // Tela de login/criar conta/pedir troca de senha — aparece pra quem abre o site sem estar
-// logado (login é exigido pro site inteiro, ver AuthGate.jsx). Ao criar conta, a pessoa escolhe
-// o papel: "militar" (escolhe o quartel dela na lista, só vê o que é do próprio quartel) ou
-// "assessoria parlamentar" (vê todos os quartéis). Depois de criar conta, ainda falta alguém da
-// assessoria aprovar (ver AguardandoAprovacao) — e "Esqueci minha senha" também: a pessoa já
-// digita a senha nova aqui, mas ela só passa a valer depois que alguém aprovado autoriza em
-// Acesso restrito → Acessos (sem nenhum e-mail no meio — ver Gerenciamento.jsx e a tabela
-// solicitacoes_senha em supabase/schema.sql).
+// logado (login é exigido pro site inteiro, ver AuthGate.jsx). Três jeitos de entrar:
+//   - "Entrar": quem já tem conta (qualquer militar que já se cadastrou antes) digita o
+//     e-mail/senha de novo.
+//   - "Criar conta": só pra militar — escolhe o quartel na lista e já tem acesso na hora, sem
+//     esperar ninguém aprovar (o escopo por quartel já é a segurança).
+//   - "Assessoria parlamentar": não tem cadastro — é sempre a MESMA conta (ver
+//     EMAIL_ASSESSORIA_PADRAO), só digita a senha padrão combinada com o resto da equipe.
+// "Esqueci minha senha" funciona pros dois: a pessoa já digita a senha nova aqui, mas ela só
+// passa a valer depois que alguém aprovado autoriza em Acesso restrito → Acessos (sem nenhum
+// e-mail no meio — ver Gerenciamento.jsx e a tabela solicitacoes_senha em supabase/schema.sql).
 export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRedefinicaoSenha, quarteis = [] }) {
-  const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar' | 'recuperar'
+  const [modo, setModo] = useState('entrar'); // 'entrar' | 'criar' | 'assessoria' | 'recuperar'
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [senhaAssessoria, setSenhaAssessoria] = useState('');
   const [nome, setNome] = useState('');
-  const [tipo, setTipo] = useState('militar');
   const [quartelId, setQuartelId] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState(null);
@@ -33,15 +37,17 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
     setAvisoConta(null);
     if (modo === 'criar') {
       if (!nome.trim()) { setErro('Informe seu nome.'); return; }
-      if (tipo === 'militar' && !quartelId) { setErro('Selecione o seu quartel.'); return; }
+      if (!quartelId) { setErro('Selecione o seu quartel.'); return; }
     }
     setEnviando(true);
     try {
       if (modo === 'entrar') {
         await entrarComSenha(email, senha);
+      } else if (modo === 'assessoria') {
+        await entrarComSenha(EMAIL_ASSESSORIA_PADRAO, senhaAssessoria);
       } else if (modo === 'criar') {
-        await criarContaComSenha(email, senha, { nome: nome.trim(), tipo, quartelId: tipo === 'militar' ? quartelId : null });
-        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar. A assessoria parlamentar já recebeu um e-mail avisando do seu pedido — depois de aprovado, é só entrar de novo.');
+        await criarContaComSenha(email, senha, { nome: nome.trim(), quartelId });
+        setAvisoConta('Conta criada! Se o Supabase pedir confirmação por e-mail, verifique sua caixa de entrada e clique no link antes de entrar — depois disso o acesso já é liberado na hora.');
       } else {
         await pedirRedefinicaoSenha(email, senha);
         setAvisoConta('Pedido enviado! Assim que alguém aprovado autorizar, é só entrar de novo com essa senha nova.');
@@ -63,28 +69,36 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
         <p className="mt-1 text-xs text-slate-400">
           {modo === 'recuperar'
             ? 'Digite seu e-mail e a senha que você quer usar daqui pra frente. Assim que alguém aprovado autorizar, ela já passa a valer — não precisa de nenhum e-mail nem link.'
-            : 'Entre com seu login pra continuar — cada militar vê só o quartel dele, a assessoria parlamentar vê todos.'}
+            : modo === 'assessoria'
+              ? 'Conta compartilhada da assessoria parlamentar — digite a senha padrão combinada com a equipe.'
+              : 'Entre com seu login pra continuar — cada militar vê só o quartel dele.'}
         </p>
 
         {modo !== 'recuperar' && (
-          <div className="mt-4 flex gap-2 text-xs font-medium">
+          <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium">
             <button type="button" onClick={() => mudarModo('entrar')} className={`rounded-full px-3 py-1 ${modo === 'entrar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Entrar</button>
-            <button type="button" onClick={() => mudarModo('criar')} className={`rounded-full px-3 py-1 ${modo === 'criar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Criar conta</button>
+            <button type="button" onClick={() => mudarModo('criar')} className={`rounded-full px-3 py-1 ${modo === 'criar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Criar conta (militar)</button>
+            <button type="button" onClick={() => mudarModo('assessoria')} className={`rounded-full px-3 py-1 ${modo === 'assessoria' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Assessoria parlamentar</button>
           </div>
         )}
 
-        <form onSubmit={enviar} className="mt-4 flex flex-col gap-3">
-          {modo === 'criar' && (
-            <>
-              <div className="flex gap-2 text-xs font-medium">
-                <button type="button" onClick={() => setTipo('militar')} className={`flex-1 rounded-lg px-3 py-2 ${tipo === 'militar' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Sou militar de um quartel</button>
-                <button type="button" onClick={() => setTipo('assessoria')} className={`flex-1 rounded-lg px-3 py-2 ${tipo === 'assessoria' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>Sou da assessoria parlamentar</button>
-              </div>
-              <div>
-                <p className={labelClass}>Nome</p>
-                <input required className={inputClass} value={nome} onChange={(e) => setNome(e.target.value)} />
-              </div>
-              {tipo === 'militar' && (
+        {modo === 'assessoria' ? (
+          <form onSubmit={enviar} className="mt-4 flex flex-col gap-3">
+            <div>
+              <p className={labelClass}>Senha padrão da assessoria</p>
+              <input type="password" required autoFocus className={inputClass} value={senhaAssessoria} onChange={(e) => setSenhaAssessoria(e.target.value)} />
+            </div>
+            {erro && <p className="flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5 shrink-0" /> {erro}</p>}
+            <button type="submit" disabled={enviando} className={btnPrimary}>{enviando ? 'Entrando...' : 'Entrar'}</button>
+          </form>
+        ) : (
+          <form onSubmit={enviar} className="mt-4 flex flex-col gap-3">
+            {modo === 'criar' && (
+              <>
+                <div>
+                  <p className={labelClass}>Nome</p>
+                  <input required className={inputClass} value={nome} onChange={(e) => setNome(e.target.value)} />
+                </div>
                 <div>
                   <p className={labelClass}>Quartel</p>
                   <select required className={inputClass} value={quartelId} onChange={(e) => setQuartelId(e.target.value)}>
@@ -92,23 +106,23 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
                     {quarteis.map((q) => <option key={q.id} value={q.id}>{q.nome} — {q.municipio}</option>)}
                   </select>
                 </div>
-              )}
-            </>
-          )}
-          <div>
-            <p className={labelClass}>E-mail</p>
-            <input type="email" required className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <p className={labelClass}>{modo === 'recuperar' ? 'Senha nova' : 'Senha'}</p>
-            <input type="password" required minLength={6} className={inputClass} value={senha} onChange={(e) => setSenha(e.target.value)} />
-          </div>
-          {erro && <p className="flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5 shrink-0" /> {erro}</p>}
-          {avisoConta && <p className="flex items-center gap-1.5 text-xs text-emerald-600"><LuMailCheck className="h-3.5 w-3.5 shrink-0" /> {avisoConta}</p>}
-          <button type="submit" disabled={enviando} className={btnPrimary}>
-            {enviando ? 'Enviando...' : modo === 'entrar' ? 'Entrar' : modo === 'criar' ? 'Criar conta' : 'Pedir autorização'}
-          </button>
-        </form>
+              </>
+            )}
+            <div>
+              <p className={labelClass}>E-mail</p>
+              <input type="email" required className={inputClass} value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div>
+              <p className={labelClass}>{modo === 'recuperar' ? 'Senha nova' : 'Senha'}</p>
+              <input type="password" required minLength={6} className={inputClass} value={senha} onChange={(e) => setSenha(e.target.value)} />
+            </div>
+            {erro && <p className="flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5 shrink-0" /> {erro}</p>}
+            {avisoConta && <p className="flex items-center gap-1.5 text-xs text-emerald-600"><LuMailCheck className="h-3.5 w-3.5 shrink-0" /> {avisoConta}</p>}
+            <button type="submit" disabled={enviando} className={btnPrimary}>
+              {enviando ? 'Enviando...' : modo === 'entrar' ? 'Entrar' : modo === 'criar' ? 'Criar conta' : 'Pedir autorização'}
+            </button>
+          </form>
+        )}
 
         {modo === 'entrar' && (
           <button type="button" onClick={() => mudarModo('recuperar')} className="mt-3 flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-red-600">
@@ -125,17 +139,17 @@ export function LoginGerenciamento({ entrarComSenha, criarContaComSenha, pedirRe
   );
 }
 
-// Aparece quando a pessoa já entrou (login/senha) mas o administrador ainda não aprovou o
-// acesso dela — o administrador já recebeu um e-mail avisando do pedido, e aprova pela aba
-// Acesso restrito → Acessos (mesma tela serve pro caso de acesso revogado depois).
+// Toda conta nova já entra liberada na hora (ver lidar_com_novo_usuario() em
+// supabase/schema.sql) — essa tela só aparece se alguém da assessoria revogou o acesso dessa
+// conta depois, pela aba Acesso restrito → Acessos (mesmo lugar onde dá pra liberar de novo).
 export function AguardandoAprovacao({ email, sair }) {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-8 text-center lg:min-h-screen">
       <LuLock className="mx-auto h-8 w-8 text-amber-500" />
-      <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Aguardando aprovação</h1>
+      <h1 className="mt-3 text-lg font-semibold text-slate-900 dark:text-white">Acesso não liberado</h1>
       <p className="mt-2 max-w-sm text-sm text-slate-500 dark:text-slate-400">
-        A conta <span className="font-medium">{email}</span> ainda não foi liberada. A assessoria parlamentar já foi
-        avisada por e-mail — assim que aprovar, é só entrar de novo.
+        A conta <span className="font-medium">{email}</span> não está liberada no momento. Se isso for um engano,
+        peça pra alguém da assessoria parlamentar liberar de novo em Acesso restrito → Acessos.
       </p>
       <button type="button" onClick={sair} className={`mt-4 inline-flex items-center gap-1.5 ${btnGhost}`}>
         <LuLogOut className="h-3.5 w-3.5" /> Sair
