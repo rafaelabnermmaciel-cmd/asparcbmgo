@@ -6,7 +6,7 @@ import { notificarPedidoAcesso } from './emailjs.js';
 // MESMA conta, digitando só a senha padrão combinada entre vocês (ver modo "assessoria" em
 // AcessoGerenciamento.jsx). Tem que continuar IGUAL ao e-mail hardcoded no gatilho
 // lidar_com_novo_usuario() em supabase/schema.sql — os dois precisam ser trocados juntos.
-export const EMAIL_ASSESSORIA_PADRAO = 'rafaelabnermmaciel@gmail.com';
+export const EMAIL_ASSESSORIA_PADRAO = 'asparcbmgo@gmail.com';
 
 // Dados de quem está logado, disponíveis pra qualquer página sem precisar chamar useAuth() de
 // novo (que buscaria a aprovação de novo) — preenchido pelo AuthGate.jsx, que já fez esse

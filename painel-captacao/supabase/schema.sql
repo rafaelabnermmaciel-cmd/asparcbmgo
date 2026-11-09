@@ -244,7 +244,7 @@ language plpgsql
 security definer set search_path = public
 as $$
 declare
-  v_assessoria boolean := lower(new.email) = lower('rafaelabnermmaciel@gmail.com');
+  v_assessoria boolean := lower(new.email) = lower('asparcbmgo@gmail.com');
   v_tipo text := case when v_assessoria then 'assessoria' else 'militar' end;
   v_quartel_id text := case when v_tipo = 'militar' then new.raw_user_meta_data->>'quartel_id' else null end;
 begin
@@ -265,7 +265,7 @@ create trigger on_auth_user_created
 -- "aprovado" de mais ninguém aqui — isso rodaria de novo toda vez que este script roda de novo,
 -- e desfaria qualquer revogação/liberação que a assessoria já tenha feito pela aba Acessos.
 update usuarios_aprovados set aprovado = true, tipo = 'assessoria'
-  where lower(email) = lower('rafaelabnermmaciel@gmail.com') and (aprovado is distinct from true or tipo is distinct from 'assessoria');
+  where lower(email) = lower('asparcbmgo@gmail.com') and (aprovado is distinct from true or tipo is distinct from 'assessoria');
 
 -- Função auxiliar (roda com privilégio de dono da tabela, ignorando RLS por dentro) pra
 -- checar se quem está logado agora já foi aprovado — evita loop de RLS "checando a própria

@@ -165,8 +165,8 @@ entrar:
   só vê foto, votação, stakeholders e captações — nada de e-mail/telefone/gabinete do
   parlamentar (isso fica só pra assessoria).
 - **Assessoria parlamentar** — não cria conta própria. Todo mundo da assessoria entra com a
-  **mesma conta** (a sua, `rafaelabnermmaciel@gmail.com`, já fixada no script — me avise se
-  quiser trocar), digitando uma **senha padrão** combinada entre vocês — é só escolher
+  **mesma conta** (`asparcbmgo@gmail.com`, já fixada no script — me avise se quiser trocar),
+  digitando uma **senha padrão** combinada entre vocês — é só escolher
   "Assessoria parlamentar" na tela de login e digitar a senha. Quem entra assim enxerga e edita
   tudo, de todos os quartéis, e é quem tem acesso à aba **Acesso restrito** (quartéis,
   militares, revogar acesso de alguém).
@@ -199,7 +199,7 @@ aqui **é** a "senha padrão" que todo mundo da assessoria vai digitar daqui pra
 
 1. Abra o site publicado — a tela de login/criar conta aparece antes de qualquer outra coisa.
 2. Clique em **Entrar** (não em "Criar conta", que é só pra militar) e tente entrar com o
-   e-mail `rafaelabnermmaciel@gmail.com` — como a conta ainda não existe, vai dar erro; nesse
+   e-mail `asparcbmgo@gmail.com` — como a conta ainda não existe, vai dar erro; nesse
    caso use o Supabase direto: **Authentication → Users → Add user**, crie com esse e-mail e a
    senha que você quer usar como padrão (marque "Auto Confirm User" se aparecer a opção).
 3. Pronto — como é esse e-mail fixo, o gatilho já libera a conta na hora, como assessoria. No
