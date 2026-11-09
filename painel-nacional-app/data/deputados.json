@@ -5738,11 +5738,11 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/220529.jpg",
     "email": "dep.gilsondaniel@camara.leg.br",
-    "telefone": "3215-5433",
+    "telefone": "3215-5916",
     "gabinete": {
       "predio": "4",
-      "sala": "433",
-      "andar": "4"
+      "sala": "916",
+      "andar": "9"
     },
     "dataNascimento": "1978-07-17",
     "municipioNascimento": "Duque de Caxias",
@@ -7780,33 +7780,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/80815"
   },
   {
-    "id": 122195,
-    "casa": "camara",
-    "nome": "Leonardo Gadelha",
-    "nomeCivil": "LEONARDO DE MELO GADELHA",
-    "partido": "PODE",
-    "uf": "PB",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/122195.jpg",
-    "email": "dep.leonardogadelha@camara.leg.br",
-    "telefone": "3215-5610",
-    "gabinete": {
-      "predio": "4",
-      "sala": "610",
-      "andar": "6"
-    },
-    "dataNascimento": "1975-05-12",
-    "municipioNascimento": "Brasília",
-    "ufNascimento": "DF",
-    "sexo": "M",
-    "redeSocial": [
-      "https://www.facebook.com/leonardogadelhapb",
-      "https://www.instagram.com/leonardogadelhapb"
-    ],
-    "urlCamara": "https://www.camara.leg.br/deputados/122195"
-  },
-  {
     "id": 74156,
     "casa": "camara",
     "nome": "Leonardo Monteiro",
@@ -8291,11 +8264,11 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/141487.jpg",
     "email": "dep.luizfernandofaria@camara.leg.br",
-    "telefone": "3215-5916",
+    "telefone": "3215-5433",
     "gabinete": {
       "predio": "4",
-      "sala": "916",
-      "andar": "9"
+      "sala": "433",
+      "andar": "4"
     },
     "dataNascimento": "1957-09-12",
     "municipioNascimento": "Santos Dumont",
@@ -8481,7 +8454,11 @@
     "municipioNascimento": "Recife",
     "ufNascimento": "PE",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/https:https:",
+      "https://www.facebook.com/luladafonte11",
+      "https://www.instagram.com/luladafonte"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/220669"
   },
   {
@@ -11929,6 +11906,35 @@
     "urlCamara": "https://www.camara.leg.br/deputados/204480"
   },
   {
+    "id": 160629,
+    "casa": "camara",
+    "nome": "Romero Rodrigues",
+    "nomeCivil": "ROMERO RODRIGUES VEIGA",
+    "partido": "PODE",
+    "uf": "PB",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/160629.jpg",
+    "email": "dep.romerorodrigues@camara.leg.br",
+    "telefone": "3215-5610",
+    "gabinete": {
+      "predio": "4",
+      "sala": "610",
+      "andar": "6"
+    },
+    "dataNascimento": "1966-01-09",
+    "municipioNascimento": "Campina Grande",
+    "ufNascimento": "PB",
+    "sexo": "M",
+    "redeSocial": [
+      "https://twitter.com/romeropelapb",
+      "https://www.facebook.com/romerorodriguespb",
+      "https://www.instagram.com/romerorodriguespb",
+      "https://youtube.com/romerorodriguespb"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/160629"
+  },
+  {
     "id": 204525,
     "casa": "camara",
     "nome": "Rosana Valle",
@@ -12141,7 +12147,8 @@
     "redeSocial": [
       "https://twitter.com/ruycarneiropb",
       "https://www.facebook.com/ruycarneiropb",
-      "https://www.instagram.com/ruy.carneiro"
+      "https://www.instagram.com/ruy.carneiro",
+      "https://youtube.com/channel/UCMtJrRQuXrRPpZkfrwwXxwg"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/160635"
   },
