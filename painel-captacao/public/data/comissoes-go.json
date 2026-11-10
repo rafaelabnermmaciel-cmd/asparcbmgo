@@ -1,0 +1,774 @@
+{
+  "camara:121948": [
+    {
+      "nome": "Comissão de Agricultura, Pecuária, Abastecimento e Desenvolvimento Rural",
+      "sigla": "CAPADR",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Minas e Energia",
+      "sigla": "CME",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Desenvolvimento Urbano",
+      "sigla": "CDU",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-04T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Alteração no Código de Trânsito Brasileiro (PL 8085/14)",
+      "sigla": "PL808514",
+      "cargo": "Suplente",
+      "dataInicio": "2026-03-25T00:00"
+    }
+  ],
+  "camara:178876": [
+    {
+      "nome": "Comissão Especial sobre Agentes de Saúde e de Combate às Endemias (PEC 014/21)",
+      "sigla": "PEC01421",
+      "cargo": "Suplente",
+      "dataInicio": "2025-06-10T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Competências Federativas em Segurança Pública (PEC 018/25)",
+      "sigla": "PEC01825",
+      "cargo": "Titular",
+      "dataInicio": "2025-09-03T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Relações Exteriores e de Defesa Nacional",
+      "sigla": "CREDN",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-11T00:00"
+    }
+  ],
+  "camara:220565": [
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "COMISSÃO ESPECIAL - TESTE COMISSÃO",
+      "sigla": "TESTECOM",
+      "cargo": "Suplente",
+      "dataInicio": "2025-02-21T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Competências Federativas em Segurança Pública (PEC 018/25)",
+      "sigla": "PEC01825",
+      "cargo": "3º Vice-Presidente",
+      "dataInicio": "2025-09-09T00:00"
+    },
+    {
+      "nome": "Comissão de Segurança Pública e Combate ao Crime Organizado",
+      "sigla": "CSPCCO",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Mulher",
+      "sigla": "CMULHER",
+      "cargo": "2º Vice-Presidente",
+      "dataInicio": "2026-03-11T00:00"
+    }
+  ],
+  "camara:204412": [
+    {
+      "nome": "Comissão Externa sobre Propostas para Análise do Enfrentamento da Tuberculose",
+      "sigla": "CEXTUBER",
+      "cargo": "Titular",
+      "dataInicio": "2023-09-05T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Agentes de Saúde e de Combate às Endemias (PEC 014/21)",
+      "sigla": "PEC01421",
+      "cargo": "Titular",
+      "dataInicio": "2025-05-21T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre a 1ª Infância Direitos Garantias Constitucionais (PEC 034/24)",
+      "sigla": "PEC03424",
+      "cargo": "1º Vice-Presidente",
+      "dataInicio": "2025-10-14T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Titular",
+      "dataInicio": "2026-03-16T00:00"
+    },
+    {
+      "nome": "Comissão de Ciência, Tecnologia e Inovação",
+      "sigla": "CCTI",
+      "cargo": "Suplente",
+      "dataInicio": "2026-03-17T00:00"
+    }
+  ],
+  "camara:220571": [
+    {
+      "nome": "Comissão Especial da Imunidade Tributária (PEC005/23)",
+      "sigla": "PEC00523",
+      "cargo": "2º Vice-Presidente",
+      "dataInicio": "2023-11-29T00:00"
+    },
+    {
+      "nome": "Comissão Especial da Imunidade Tributária (PEC005/23)",
+      "sigla": "PEC00523",
+      "cargo": "Titular",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "COMISSÃO ESPECIAL - TESTE COMISSÃO",
+      "sigla": "TESTECOM",
+      "cargo": "Suplente",
+      "dataInicio": "2025-02-21T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Regulamentação dos Trabalhadores por App (PLP 152/25)",
+      "sigla": "PLP15225",
+      "cargo": "2º Vice-Presidente",
+      "dataInicio": "2025-08-26T00:00"
+    },
+    {
+      "nome": "Comissão Especial da Política Nacional para Pessoas com Autismo (PL 3080/20)",
+      "sigla": "PL308020",
+      "cargo": "Suplente",
+      "dataInicio": "2025-10-27T00:00"
+    },
+    {
+      "nome": "Comissão de Agricultura, Pecuária, Abastecimento e Desenvolvimento Rural",
+      "sigla": "CAPADR",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Integração Nacional e Desenvolvimento Regional",
+      "sigla": "CINDRE",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Indústria, Comércio e Serviços",
+      "sigla": "CICS",
+      "cargo": "Suplente",
+      "dataInicio": "2026-04-14T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Pessoa Idosa",
+      "sigla": "CIDOSO",
+      "cargo": "Titular",
+      "dataInicio": "2026-05-13T00:00"
+    },
+    {
+      "nome": "Comissão Mista de Orçamento",
+      "sigla": "CMO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-06-23T00:00"
+    },
+    {
+      "nome": "Comissão de Cultura",
+      "sigla": "CCULT",
+      "cargo": "Titular",
+      "dataInicio": "2026-10-29T00:00"
+    }
+  ],
+  "camara:220570": [
+    {
+      "nome": "Comissão Externa sobre Propostas para Análise do Enfrentamento da Tuberculose",
+      "sigla": "CEXTUBER",
+      "cargo": "Titular",
+      "dataInicio": "2023-09-05T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Competências Federativas em Segurança Pública (PEC 018/25)",
+      "sigla": "PEC01825",
+      "cargo": "2º Vice-Presidente",
+      "dataInicio": "2025-09-09T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Segurança Pública e Combate ao Crime Organizado",
+      "sigla": "CSPCCO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    }
+  ],
+  "camara:160598": [
+    {
+      "nome": "Comissão Externa sobre Obras Públicas Paralisadas e Inacabadas no País",
+      "sigla": "CEXOBRAS",
+      "cargo": "Coordenadora",
+      "dataInicio": "2023-03-15T00:00"
+    },
+    {
+      "nome": "Comissão Externa sobre Obras Públicas Paralisadas e Inacabadas no País",
+      "sigla": "CEXOBRAS",
+      "cargo": "Titular",
+      "dataInicio": "2023-03-15T00:00"
+    },
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "Comissão Externa sobre Propostas para Análise do Enfrentamento da Tuberculose",
+      "sigla": "CEXTUBER",
+      "cargo": "Titular",
+      "dataInicio": "2023-09-05T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Prevenção e Combate ao Câncer, AVC e Doenças do Coração",
+      "sigla": "CECANCER",
+      "cargo": "Titular",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Transição Energética e Produção de Hidrogênio Verde",
+      "sigla": "CEENERG",
+      "cargo": "Suplente",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Direito Digital",
+      "sigla": "CEDIRDIG",
+      "cargo": "Titular",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "PROCURADORIA DA MULHER",
+      "sigla": "PRMULHER",
+      "cargo": "3º Procurador Adjunto",
+      "dataInicio": "2025-05-21T00:00"
+    },
+    {
+      "nome": "PROCURADORIA DA MULHER",
+      "sigla": "PRMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2025-05-21T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre a 1ª Infância Direitos Garantias Constitucionais (PEC 034/24)",
+      "sigla": "PEC03424",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-02T00:00"
+    },
+    {
+      "nome": "Comissão do Esporte",
+      "sigla": "CESPO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Trabalho",
+      "sigla": "CTRAB",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos das Pessoas com Deficiência",
+      "sigla": "CPD",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Previdência, Assistência Social, Infância, Adolescência e Família",
+      "sigla": "CPASF",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-04T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Pessoa Idosa",
+      "sigla": "CIDOSO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-10T00:00"
+    },
+    {
+      "nome": "Subcomissão Especial sobre o Setor de Estética (CTRAB/SUBESTET)",
+      "sigla": "SUBESTET",
+      "cargo": "Suplente",
+      "dataInicio": "2026-03-06T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Mulher",
+      "sigla": "CMULHER",
+      "cargo": "Suplente",
+      "dataInicio": "2026-03-10T00:00"
+    },
+    {
+      "nome": "Subcomissão Especial sobre o Setor de Estética (CTRAB/SUBESTET)",
+      "sigla": "SUBESTET",
+      "cargo": "Suplente",
+      "dataInicio": "2029-02-25T00:00"
+    }
+  ],
+  "camara:220567": [
+    {
+      "nome": "Bancada Negra da Câmara dos Deputados, criada pela Resolução n. 6, de 2023, que acresceu ao Regimento Interno da Câmara dos Deputados o Capítulo VI, do Título I, com os artigos 13-A e 13-B",
+      "sigla": "BANEGRA",
+      "cargo": "Titular",
+      "dataInicio": "2024-04-11T00:00"
+    },
+    {
+      "nome": "Comissão de Ciência, Tecnologia e Inovação",
+      "sigla": "CCTI",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-09T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa do Consumidor",
+      "sigla": "CDC",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-09T00:00"
+    }
+  ],
+  "camara:204419": [
+    {
+      "nome": "Comissão Especial da Lei de Incentivo ao Esporte (PLP 234/24)",
+      "sigla": "PLP23424",
+      "cargo": "Suplente",
+      "dataInicio": "2025-12-03T00:00"
+    },
+    {
+      "nome": "Comissão de Direitos Humanos, Minorias e Igualdade Racial",
+      "sigla": "CDHMIR",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-25T00:00"
+    },
+    {
+      "nome": "Comissão Mista de Orçamento",
+      "sigla": "CMO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-06-15T00:00"
+    }
+  ],
+  "camara:220568": [
+    {
+      "nome": "CENTRO DE ESTUDOS E DEBATES ESTRATÉGICOS",
+      "sigla": "CEDES",
+      "cargo": "Suplente",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Direito Digital",
+      "sigla": "CEDIRDIG",
+      "cargo": "Titular",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "Comissão Especial da Lei de Incentivo ao Esporte (PLP 234/24)",
+      "sigla": "PLP23424",
+      "cargo": "Suplente",
+      "dataInicio": "2025-05-19T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Inteligência Artificial (PL 2338/23)",
+      "sigla": "PL233823",
+      "cargo": "3º Vice-Presidente",
+      "dataInicio": "2025-05-20T00:00"
+    },
+    {
+      "nome": "Conselho de Ética e Decoro Parlamentar",
+      "sigla": "COETICA",
+      "cargo": "Titular",
+      "dataInicio": "2025-07-01T00:00"
+    },
+    {
+      "nome": "Comissão de Comunicação",
+      "sigla": "CCOM",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Relações Exteriores e de Defesa Nacional",
+      "sigla": "CREDN",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Segurança Pública e Combate ao Crime Organizado",
+      "sigla": "CSPCCO",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    }
+  ],
+  "camara:220566": [
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre a 1ª Infância Direitos Garantias Constitucionais (PEC 034/24)",
+      "sigla": "PEC03424",
+      "cargo": "Suplente",
+      "dataInicio": "2025-10-02T00:00"
+    },
+    {
+      "nome": "Comissão de Desenvolvimento Urbano",
+      "sigla": "CDU",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-04T00:00"
+    },
+    {
+      "nome": "Comissão de Viação e Transportes",
+      "sigla": "CVT",
+      "cargo": "Suplente",
+      "dataInicio": "2026-04-22T00:00"
+    },
+    {
+      "nome": "Comissão de Relações Exteriores e de Defesa Nacional",
+      "sigla": "CREDN",
+      "cargo": "Titular",
+      "dataInicio": "2026-04-22T00:00"
+    }
+  ],
+  "camara:204391": [
+    {
+      "nome": "Comissão de Viação e Transportes",
+      "sigla": "CVT",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Educação",
+      "sigla": "CE",
+      "cargo": "Suplente",
+      "dataInicio": "2026-03-11T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Titular",
+      "dataInicio": "2026-03-11T00:00"
+    }
+  ],
+  "camara:220572": [
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "Comissão de Agricultura, Pecuária, Abastecimento e Desenvolvimento Rural",
+      "sigla": "CAPADR",
+      "cargo": "Titular",
+      "dataInicio": "2026-04-22T00:00"
+    },
+    {
+      "nome": "Comissão de Finanças e Tributação",
+      "sigla": "CFT",
+      "cargo": "Suplente",
+      "dataInicio": "2026-04-22T00:00"
+    },
+    {
+      "nome": "Comissão de Saúde",
+      "sigla": "CSAUDE",
+      "cargo": "Suplente",
+      "dataInicio": "2026-04-24T00:00"
+    },
+    {
+      "nome": "Comissão Mista de Orçamento",
+      "sigla": "CMO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-06-17T00:00"
+    }
+  ],
+  "camara:166402": [
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre o Plano Nacional de Educação 2024-2034 (PL 2614/24)",
+      "sigla": "PL261424",
+      "cargo": "Titular",
+      "dataInicio": "2025-04-29T00:00"
+    },
+    {
+      "nome": "Comissão de Turismo",
+      "sigla": "CTUR",
+      "cargo": "Titular",
+      "dataInicio": "2026-04-29T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Mulher",
+      "sigla": "CMULHER",
+      "cargo": "Suplente",
+      "dataInicio": "2026-05-06T00:00"
+    }
+  ],
+  "camara:204390": [
+    {
+      "nome": "Comissão Especial da Lei de Incentivo ao Esporte (PLP 234/24)",
+      "sigla": "PLP23424",
+      "cargo": "Suplente",
+      "dataInicio": "2025-05-19T00:00"
+    },
+    {
+      "nome": "Comissão de Educação",
+      "sigla": "CE",
+      "cargo": "Titular",
+      "dataInicio": "2026-03-10T00:00"
+    },
+    {
+      "nome": "Comissão de Indústria, Comércio e Serviços",
+      "sigla": "CICS",
+      "cargo": "Suplente",
+      "dataInicio": "2026-04-17T00:00"
+    }
+  ],
+  "camara:220569": [
+    {
+      "nome": "Comissão Especial sobre Violência Obstétrica e Morte Materna",
+      "sigla": "CEOBSTET",
+      "cargo": "1º Vice-Presidente",
+      "dataInicio": "2023-04-11T00:00"
+    },
+    {
+      "nome": "SECRETARIA DA MULHER",
+      "sigla": "SEMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2023-05-04T00:00"
+    },
+    {
+      "nome": "Bancada Negra da Câmara dos Deputados, criada pela Resolução n. 6, de 2023, que acresceu ao Regimento Interno da Câmara dos Deputados o Capítulo VI, do Título I, com os artigos 13-A e 13-B",
+      "sigla": "BANEGRA",
+      "cargo": "Titular",
+      "dataInicio": "2023-11-02T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre Violência Obstétrica e Morte Materna",
+      "sigla": "CEOBSTET",
+      "cargo": "Titular",
+      "dataInicio": "2024-02-07T00:00"
+    },
+    {
+      "nome": "Comissão Especial sobre a 1ª Infância Direitos Garantias Constitucionais (PEC 034/24)",
+      "sigla": "PEC03424",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-02T00:00"
+    },
+    {
+      "nome": "Comissão de Comunicação",
+      "sigla": "CCOM",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Constituição e Justiça e de Cidadania",
+      "sigla": "CCJC",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-09T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Mulher",
+      "sigla": "CMULHER",
+      "cargo": "Titular",
+      "dataInicio": "2026-03-10T00:00"
+    }
+  ],
+  "camara:74371": [
+    {
+      "nome": "Comissão Externa sobre Obras Públicas Paralisadas e Inacabadas no País",
+      "sigla": "CEXOBRAS",
+      "cargo": "Titular",
+      "dataInicio": "2023-03-15T00:00"
+    },
+    {
+      "nome": "Comissão de Minas e Energia",
+      "sigla": "CME",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Viação e Transportes",
+      "sigla": "CVT",
+      "cargo": "Titular",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos das Pessoas com Deficiência",
+      "sigla": "CPD",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-03T00:00"
+    },
+    {
+      "nome": "Comissão de Defesa dos Direitos da Pessoa Idosa",
+      "sigla": "CIDOSO",
+      "cargo": "Suplente",
+      "dataInicio": "2026-02-10T00:00"
+    }
+  ],
+  "senado:5895": [
+    {
+      "nome": "Comissão de Assuntos Econômicos",
+      "sigla": "CAE",
+      "cargo": "Titular",
+      "dataInicio": "2026-11-03"
+    },
+    {
+      "nome": "Comissão de Serviços de Infraestrutura",
+      "sigla": "CI",
+      "cargo": "Titular",
+      "dataInicio": "2025-07-01"
+    },
+    {
+      "nome": "Comissão de Segurança Pública",
+      "sigla": "CSP",
+      "cargo": "Titular",
+      "dataInicio": "2025-02-18"
+    },
+    {
+      "nome": "Conselho de Ética e Decoro Parlamentar",
+      "sigla": "CEDP",
+      "cargo": "Titular",
+      "dataInicio": "2023-03-21"
+    },
+    {
+      "nome": "Conselho do Prêmio Trânsito Seguro - Gesto Redobrado para o Futuro",
+      "sigla": "PTS",
+      "cargo": "Titular",
+      "dataInicio": "2025-08-19"
+    },
+    {
+      "nome": "Comissão de Esporte",
+      "sigla": "CEsp",
+      "cargo": "Suplente",
+      "dataInicio": "2025-02-18"
+    }
+  ],
+  "senado:5899": [
+    {
+      "nome": "Comissão de Assuntos Econômicos",
+      "sigla": "CAE",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Constituição, Justiça e Cidadania",
+      "sigla": "CCJ",
+      "cargo": "Titular",
+      "dataInicio": "2025-04-02"
+    },
+    {
+      "nome": "Comissão de Educação e Cultura",
+      "sigla": "CE",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Ciência, Tecnologia, Inovação e Informática",
+      "sigla": "CCT",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Agricultura e Reforma Agrária",
+      "sigla": "CRA",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Transparência, Governança, Fiscalização e Controle e Defesa do Consumidor",
+      "sigla": "CTFC",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Segurança Pública",
+      "sigla": "CSP",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Comunicação e Direito Digital",
+      "sigla": "CCDD",
+      "cargo": "Titular",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Direitos Humanos e Legislação Participativa",
+      "sigla": "CDH",
+      "cargo": "Suplente",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Serviços de Infraestrutura",
+      "sigla": "CI",
+      "cargo": "Suplente",
+      "dataInicio": "2025-10-30"
+    },
+    {
+      "nome": "Comissão de Meio Ambiente",
+      "sigla": "CMA",
+      "cargo": "Suplente",
+      "dataInicio": "2025-10-30"
+    }
+  ],
+  "senado:5070": [
+    {
+      "nome": "Comissão de Assuntos Econômicos",
+      "sigla": "CAE",
+      "cargo": "Titular",
+      "dataInicio": "2025-02-18"
+    },
+    {
+      "nome": "Comissão de Assuntos Sociais",
+      "sigla": "CAS",
+      "cargo": "Titular",
+      "dataInicio": "2025-02-18"
+    },
+    {
+      "nome": "Comissão de Serviços de Infraestrutura",
+      "sigla": "CI",
+      "cargo": "Titular",
+      "dataInicio": "2025-02-18"
+    },
+    {
+      "nome": "Comissão de Desenvolvimento Regional e Turismo",
+      "sigla": "CDR",
+      "cargo": "Suplente",
+      "dataInicio": "2025-05-16"
+    },
+    {
+      "nome": "Comissão de Agricultura e Reforma Agrária",
+      "sigla": "CRA",
+      "cargo": "Suplente",
+      "dataInicio": "2025-02-18"
+    },
+    {
+      "nome": "Comissão de Segurança Pública",
+      "sigla": "CSP",
+      "cargo": "Suplente",
+      "dataInicio": "2025-09-15"
+    }
+  ]
+}
