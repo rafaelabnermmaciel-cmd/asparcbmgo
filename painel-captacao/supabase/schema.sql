@@ -168,6 +168,30 @@ create table if not exists assessores (
   criado_em timestamptz not null default now()
 );
 
+-- Evita duplicar a mesma pessoa se este script rodar de novo — mesmo telefone pro mesmo
+-- parlamentar é considerado "já cadastrado" (ver "on conflict" nos inserts logo abaixo).
+alter table assessores drop constraint if exists assessores_parlamentar_telefone_key;
+alter table assessores add constraint assessores_parlamentar_telefone_key unique (parlamentar_key, telefone);
+
+-- Importação inicial (lista passada pela assessoria em 10/11/2026, direto da agenda de
+-- contatos) — "on conflict do nothing" deixa seguro rodar de novo sem duplicar.
+insert into assessores (parlamentar_key, nome, cargo, telefone, observacoes) values
+  ('camara:204390', 'Eleonora', 'Chefe de Gabinete', '(61) 98175-5718', ''),
+  ('camara:204390', 'Marcus Vinicius', 'Assessor', '(61) 99835-0738', ''),
+  ('camara:204390', 'Luisa', 'Agenda', '(62) 99322-4200', ''),
+  ('camara:121948', 'Ériton', 'Chefe de Gabinete', '(61) 98428-4713', ''),
+  ('camara:121948', 'Leidiane', '', '(61) 99343-2544', ''),
+  ('camara:121948', 'Elen Aguiar', 'Assessora', '(62) 98651-4131', ''),
+  ('camara:121948', 'Kelyany', 'Assessoria de Mídia', '(61) 99626-9594', ''),
+  ('camara:178876', 'Zezé', 'Chefe de Gabinete', '(61) 99909-6645', 'Nome completo pode ser Maria José — conferir.'),
+  ('camara:220566', 'Sandra Neres', 'Assessora Orçamentária', '(61) 98147-6644', ''),
+  ('camara:220566', 'Matheus', 'Assessor', '(62) 99846-8884', ''),
+  ('camara:220566', 'Andre', 'Assessor de Agenda', '(61) 98170-2755', ''),
+  ('camara:220571', 'Gabriella Borges', 'Assessora', '(61) 99902-9808', ''),
+  ('camara:220571', 'Marcello Cruvinel', 'Chefe de Gabinete', '(61) 98420-1888', ''),
+  ('camara:220571', 'Patricia Soares', 'Assessora Legislativa', '(61) 98209-5115', '')
+on conflict (parlamentar_key, telefone) do nothing;
+
 -- 4) CAPTAÇÕES ----------------------------------------------------------------
 create table if not exists captacoes (
   id bigint generated always as identity primary key,
