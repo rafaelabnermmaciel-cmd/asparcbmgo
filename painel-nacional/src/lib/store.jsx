@@ -76,6 +76,14 @@ function classificarEstagio(situacao) {
   if (s.includes('arquivad')) return 'Arquivado';
   if (s.includes('aprovado em comiss') || s.includes('redação final aprovada') || s.includes('aprovada a redação final') || s.includes('aprovado na c')) return 'Aprovado em Comissão';
   if (s.includes('plenário') && (s.includes('pautad') || s.includes('deliberação') || s.includes('votad'))) return 'Em Plenário';
+  // Pega "aprovado"/"aprovada" genérico (ex.: status bruto do Senado pra PEC, que é sempre
+  // feminino: "APROVADA") depois dos casos mais específicos acima — sem essa checagem, uma PEC
+  // aprovada em Plenário caía direto no fallback "Protocolado" no final desta função, porque
+  // nenhuma das checagens anteriores usa o radical "aprovad" (só as formas completas
+  // masculinas "aprovado em comissão"/"aprovado na c..."), e nenhuma delas tem "plenário" no
+  // texto quando a API só manda a palavra "APROVADA" sem mais contexto. Caso real: PEC 18/2025
+  // ficou com status "Protocolado" no painel depois de aprovada no Senado (03/11/2026).
+  if (s.includes('aprovad')) return 'Em Plenário';
   if (s.includes('aguardando despacho') || s.includes('aguardando apreciação') || s.includes('aguardando recebimento')) return 'Aguardando Despacho';
   if (s.includes('comiss') || s.includes('relator')) return 'Em Comissão';
   if (s.includes('apresentad') || s.includes('autuad') || s.includes('protocolad')) return 'Protocolado';

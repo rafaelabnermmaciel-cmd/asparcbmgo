@@ -23,7 +23,7 @@ on:
         type: boolean
         default: false
       buscar_eleicoes:
-        description: 'Também buscar votos da eleição via TSE'
+        description: '⚠️ Só pra UF fora de GO (o TSE direto é instável) — pra Goiás os dados já vêm prontos (2022+2026, top 10 municípios) do passo automático acima; isto SOBRESCREVE com um formato pior (só 1 ano, top 5) se usado pra GO'
         type: boolean
         default: false
       eleicoes_limite:
@@ -66,16 +66,27 @@ jobs:
         timeout-minutes: 20
         run: npm run fetch:parlamentares
 
-      - name: Conferir se deputados/senadores mudaram
+      - name: Sincronizar resultados eleitorais de Goiás (2022 e 2026, top 10 municípios)
+        # Não busca nada na internet — só relê o que já está commitado em
+        # ../painel-captacao/public/data/votos-go-{2022,2026}.json (ver scripts/sync-
+        # resultados-go.js) — por isso roda sempre, sem precisar de input manual. Depois de
+        # "fetch:parlamentares" (acima) porque REGENERA deputados.json/senadores.json do zero a
+        # partir da Câmara/Senado oficiais, o que apagaria os parlamentares de GO eleitos pela
+        # 1ª vez em 2026 (ainda não empossados) e os avisos de não reeleição se este passo não
+        # rodasse de novo toda semana — mesmo motivo de
+        # ../painel-captacao/scripts/aplicar-resultados-2026.js em atualizar-dados-alego.yml.
+        run: npm run sync:resultados-go
+
+      - name: Conferir se deputados/senadores/resultados eleitorais mudaram
         id: diff_parlamentares
         run: |
-          if git diff --quiet -- public/data/deputados.json public/data/senadores.json; then
+          if git diff --quiet -- public/data/deputados.json public/data/senadores.json public/data/resultados-eleitorais.json; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Recompilar e commitar deputados/senadores (passo isolado, garante que não se perde)
+      - name: Recompilar e commitar deputados/senadores/resultados eleitorais (passo isolado, garante que não se perde)
         if: steps.diff_parlamentares.outputs.mudou == 'true'
         run: |
           npm run build
@@ -84,8 +95,8 @@ jobs:
           cp -r dist/. ../painel-nacional-app/
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/deputados.json public/data/senadores.json ../painel-nacional-app
-          git commit -m "chore(dados): atualiza deputados e senadores (foto, partido, UF, gabinete) [automático]"
+          git add public/data/deputados.json public/data/senadores.json public/data/resultados-eleitorais.json ../painel-nacional-app
+          git commit -m "chore(dados): atualiza deputados, senadores e resultados eleitorais de GO [automático]"
           git push
 
       - name: Buscar histórico de votações
