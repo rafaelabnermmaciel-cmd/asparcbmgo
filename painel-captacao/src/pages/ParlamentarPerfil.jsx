@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram, LuTriangleAlert, LuArrowUpRight } from 'react-icons/lu';
-import { useParlamentaresGO, useResultadosEleitorais, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
+import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram, LuTriangleAlert, LuArrowUpRight, LuLandmark } from 'react-icons/lu';
+import { useParlamentaresGO, useResultadosEleitorais, useComissoesGO, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
 import { useAuthContext } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
@@ -64,6 +64,36 @@ function TopMunicipios({ lista }) {
   );
 }
 
+// Cargo "Presidente"/"Vice-Presidente" ganha um badge diferente (vermelho cheio) — "Titular"/
+// "Suplente" ficam num badge neutro. Comissões já vêm ordenadas com presidências primeiro (ver
+// scripts/gerar-comissoes.js).
+function badgeCargoComissao(cargo) {
+  if (/presidente/i.test(cargo || '')) return 'bg-red-600 text-white';
+  return 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300';
+}
+
+function Comissoes({ lista }) {
+  if (!lista?.length) return null;
+  return (
+    <ScrollReveal delay={0.07} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+        <LuLandmark className="h-4 w-4 text-red-500" /> Comissões
+      </p>
+      <div className="mt-3 flex flex-col gap-2">
+        {lista.map((c, i) => (
+          <div key={`${c.sigla}-${i}`} className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">{c.nome}</p>
+              {c.sigla && <p className="text-xs text-slate-400">{c.sigla}</p>}
+            </div>
+            <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium ${badgeCargoComissao(c.cargo)}`}>{c.cargo}</span>
+          </div>
+        ))}
+      </div>
+    </ScrollReveal>
+  );
+}
+
 const NOME_CASA = {
   senado: 'Senado Federal (Brasília/DF)',
   camara: 'Câmara dos Deputados (Brasília/DF)',
@@ -87,6 +117,7 @@ export default function ParlamentarPerfil() {
   const { loading, parlamentares } = useParlamentaresGO();
   const { resultados } = useResultadosEleitorais(2022);
   const { resultados: resultados2026 } = useResultadosEleitorais(2026);
+  const { comissoes } = useComissoesGO();
   const { stakeholders, updateStakeholder, removeStakeholder } = useStakeholders();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
@@ -104,6 +135,7 @@ export default function ParlamentarPerfil() {
   const parlamentarKey = `${casa}:${id}`;
   const eleicao = resultados[parlamentarKey] || null;
   const eleicao2026 = resultados2026[parlamentarKey] || null;
+  const comissoesDoParlamentar = comissoes[parlamentarKey] || [];
   const stakeholdersDoParlamentar = useMemo(
     () => stakeholders.filter((s) => s.parlamentares_keys?.includes(parlamentarKey)),
     [stakeholders, parlamentarKey]
@@ -187,6 +219,8 @@ export default function ParlamentarPerfil() {
           )}
         </div>
       </ScrollReveal>
+
+      {ehAssessoria && <Comissoes lista={comissoesDoParlamentar} />}
 
       {ehAssessoria && (
         <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">

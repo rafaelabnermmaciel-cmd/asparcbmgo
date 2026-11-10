@@ -1,0 +1,74 @@
+name: Atualizar dados — Comissões (Câmara e Senado)
+
+# Busca as comissões (e cargos — presidente, vice-presidente, titular, suplente) de cada
+# deputado federal e senador de Goiás, direto dos dados abertos da Câmara e do Senado (ver
+# scripts/gerar-comissoes.js), e grava em public/data/comissoes-go.json. Só a assessoria
+# parlamentar vê isso no site (ver ParlamentarPerfil.jsx). ALEGO ainda não entra aqui — não
+# tem API de dados abertos, fica pra uma próxima rodada.
+#
+# Como usar:
+#   - Manual: aba "Actions" → "Atualizar dados — Comissões (Câmara e Senado)" → "Run workflow".
+#   - Automático: roda sozinho toda segunda-feira às 06h20 (horário de Brasília).
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '20 9 * * 1' # toda segunda-feira, 09h20 UTC = 06h20 em Brasília
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-comissoes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: painel-captacao
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: painel-captacao/package-lock.json
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Buscar comissões (Câmara e Senado)
+        run: npm run sync:comissoes
+
+      - name: Conferir se algo mudou
+        id: diff
+        run: |
+          if git diff --quiet -- public/data/comissoes-go.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build (só se os dados mudaram)
+        if: steps.diff.outputs.mudou == 'true'
+        run: npm run build
+
+      - name: Commitar dados + build (um push só, já publica o site)
+        if: steps.diff.outputs.mudou == 'true'
+        run: |
+          rm -rf ../painel-captacao-app
+          mkdir -p ../painel-captacao-app
+          cp -r dist/. ../painel-captacao-app/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/comissoes-go.json ../painel-captacao-app
+          git commit -m "chore(dados): atualiza comissões de Câmara e Senado [automático]"
+          git push
+
+      - name: Resumo
+        run: |
+          echo "### Resultado da coleta de comissões" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Dados alterados: ${{ steps.diff.outputs.mudou }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Confira o log da etapa \"Buscar comissões (Câmara e Senado)\" pra ver avisos/erros." >> "$GITHUB_STEP_SUMMARY"

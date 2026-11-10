@@ -62,6 +62,22 @@ export function useResultadosEleitorais(ano = 2022) {
   return state;
 }
 
+// Comissões (e cargo — presidente, vice-presidente, titular, suplente) de cada deputado
+// federal/senador de GO — ver scripts/gerar-comissoes.js. Chave: "casa:id". Só aparece no
+// perfil do parlamentar pra quem é assessoria (ver ParlamentarPerfil.jsx); deputados estaduais
+// (ALEGO) ainda não têm esse dado.
+export function useComissoesGO() {
+  const [state, setState] = useState({ loading: true, comissoes: {} });
+  useEffect(() => {
+    let cancelled = false;
+    fetchJson(`${import.meta.env.BASE_URL}data/comissoes-go.json`, {}).then((comissoes) => {
+      if (!cancelled) setState({ loading: false, comissoes });
+    });
+    return () => { cancelled = true; };
+  }, []);
+  return state;
+}
+
 // Quartéis são totalmente editáveis pelo próprio site (aba Acesso restrito) — adicionar,
 // renomear, apagar — sem precisar entrar no Supabase (RLS permite, ver supabase/schema.sql).
 export function useQuarteis() {
