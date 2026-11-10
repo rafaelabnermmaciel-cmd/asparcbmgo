@@ -220,8 +220,6 @@ export default function ParlamentarPerfil() {
         </div>
       </ScrollReveal>
 
-      {ehAssessoria && <Comissoes lista={comissoesDoParlamentar} />}
-
       {ehAssessoria && (
         <ScrollReveal delay={0.05} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <p className="text-sm font-semibold text-slate-900 dark:text-white">Contato e localização do gabinete</p>
@@ -236,7 +234,42 @@ export default function ParlamentarPerfil() {
         </ScrollReveal>
       )}
 
+      {ehAssessoria && <Comissoes lista={comissoesDoParlamentar} />}
+
       <ScrollReveal delay={0.1} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2022</p>
+        {eleicao ? (
+          <>
+            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              <InfoRow label="Ano" value={eleicao.ano} />
+              <InfoRow label="Partido" value={eleicao.partido} />
+              <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
+              <InfoRow label="Cargo" value={eleicao.cargo} />
+            </div>
+            <TopMunicipios lista={eleicao.topMunicipios} />
+          </>
+        ) : (
+          <p className="mt-2 text-xs text-slate-400">Sem dado eleitoral carregado ainda.</p>
+        )}
+      </ScrollReveal>
+
+      {eleicao2026 && (
+        <ScrollReveal delay={0.13} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2026</p>
+          <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <InfoRow label="Ano" value={eleicao2026.ano} />
+            <InfoRow label="Partido" value={eleicao2026.partido} />
+            <InfoRow label="Votos nominais" value={eleicao2026.votosNominais?.toLocaleString('pt-BR')} />
+            <InfoRow label="Cargo" value={eleicao2026.cargo} />
+          </div>
+          <p className="mt-3 text-xs text-slate-400">
+            {eleicao2026.eleito ? 'Eleito(a) em 2026.' : 'Concorreu em 2026, mas não foi eleito(a).'}
+          </p>
+          <TopMunicipios lista={eleicao2026.topMunicipios} />
+        </ScrollReveal>
+      )}
+
+      <ScrollReveal delay={0.17} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">
           <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
             <LuUserRound className="h-4 w-4 text-red-500" /> Stakeholders
@@ -283,39 +316,6 @@ export default function ParlamentarPerfil() {
           )}
         </div>
       </ScrollReveal>
-
-      <ScrollReveal delay={0.15} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2022</p>
-        {eleicao ? (
-          <>
-            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <InfoRow label="Ano" value={eleicao.ano} />
-              <InfoRow label="Partido" value={eleicao.partido} />
-              <InfoRow label="Votos nominais" value={eleicao.votosNominais?.toLocaleString('pt-BR')} />
-              <InfoRow label="Cargo" value={eleicao.cargo} />
-            </div>
-            <TopMunicipios lista={eleicao.topMunicipios} />
-          </>
-        ) : (
-          <p className="mt-2 text-xs text-slate-400">Sem dado eleitoral carregado ainda.</p>
-        )}
-      </ScrollReveal>
-
-      {eleicao2026 && (
-        <ScrollReveal delay={0.17} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <p className="text-sm font-semibold text-slate-900 dark:text-white">Votos recebidos na eleição de 2026</p>
-          <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <InfoRow label="Ano" value={eleicao2026.ano} />
-            <InfoRow label="Partido" value={eleicao2026.partido} />
-            <InfoRow label="Votos nominais" value={eleicao2026.votosNominais?.toLocaleString('pt-BR')} />
-            <InfoRow label="Cargo" value={eleicao2026.cargo} />
-          </div>
-          <p className="mt-3 text-xs text-slate-400">
-            {eleicao2026.eleito ? 'Eleito(a) em 2026.' : 'Concorreu em 2026, mas não foi eleito(a).'}
-          </p>
-          <TopMunicipios lista={eleicao2026.topMunicipios} />
-        </ScrollReveal>
-      )}
 
       <ScrollReveal delay={0.2} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between gap-3">
