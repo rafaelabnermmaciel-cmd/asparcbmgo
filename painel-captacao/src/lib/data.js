@@ -197,6 +197,45 @@ export function useStakeholders() {
   return { loading: state.loading, stakeholders: state.stakeholders, addStakeholder, updateStakeholder, removeStakeholder };
 }
 
+// Assessores de gabinete (nome/cargo/telefone de quem trabalha com cada parlamentar) — dado
+// de contato só da assessoria parlamentar (RLS bloqueia militar até de ler, ver
+// supabase/schema.sql). Editável direto no perfil do parlamentar, mesmo padrão de stakeholders.
+export function useAssessores() {
+  const [state, setState] = useState({ loading: true, assessores: [] });
+
+  const recarregar = useCallback(async () => {
+    if (!supabaseConfigurado) { setState({ loading: false, assessores: [] }); return; }
+    try {
+      setState({ loading: false, assessores: await fetchAllRows('assessores', 'id') });
+    } catch (err) {
+      console.warn('[data] falha ao carregar assessores:', err.message);
+      setState({ loading: false, assessores: [] });
+    }
+  }, []);
+
+  useEffect(() => { recarregar(); }, [recarregar]);
+
+  const addAssessor = useCallback(async (a) => {
+    const { error } = await supabase.from('assessores').insert(a);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const updateAssessor = useCallback(async (id, patch) => {
+    const { error } = await supabase.from('assessores').update(patch).eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  const removeAssessor = useCallback(async (id) => {
+    const { error } = await supabase.from('assessores').delete().eq('id', id);
+    if (error) throw new Error(error.message);
+    await recarregar();
+  }, [recarregar]);
+
+  return { loading: state.loading, assessores: state.assessores, addAssessor, updateAssessor, removeAssessor };
+}
+
 // Único dado compartilhado entre quartéis: se já existe articulação em andamento com um
 // parlamentar — sem dizer qual quartel, nem nenhum outro detalhe (ver
 // parlamentares_com_articulacao_ativa() em supabase/schema.sql, uma função "security definer"

@@ -153,6 +153,21 @@ alter table stakeholders drop column if exists email;
 -- pela assessoria parlamentar, sem vínculo com um quartel específico — visível só pra ela.
 alter table stakeholders add column if not exists quartel_id text references quarteis(id) on delete set null;
 
+-- 3.1) ASSESSORES DE GABINETE ----------------------------------------------------
+-- Nome/cargo/telefone de quem trabalha no gabinete de cada parlamentar (chefe de gabinete,
+-- assessor parlamentar etc.) — dado de contato que só a assessoria parlamentar usa/vê (ver RLS
+-- na seção 5); não tem fonte oficial automática, é digitado/importado manualmente. Aparece no
+-- perfil do parlamentar, editável ali mesmo (igual os outros cadastros do site).
+create table if not exists assessores (
+  id bigint generated always as identity primary key,
+  parlamentar_key text not null, -- "casa:id", mesmo padrão de stakeholders.parlamentares_keys
+  nome text not null default '',
+  cargo text not null default '',
+  telefone text not null default '',
+  observacoes text not null default '',
+  criado_em timestamptz not null default now()
+);
+
 -- 4) CAPTAÇÕES ----------------------------------------------------------------
 create table if not exists captacoes (
   id bigint generated always as identity primary key,
@@ -427,6 +442,7 @@ alter table captacoes enable row level security;
 alter table captacao_eventos enable row level security;
 alter table usuarios_aprovados enable row level security;
 alter table solicitacoes_senha enable row level security;
+alter table assessores enable row level security;
 
 -- Leitura de quarteis/militares continua pública (o Cadastro e o Dashboard precisam ler sem
 -- login) — só criar/editar/apagar passa a exigir login aprovado, pela aba Acesso restrito.
@@ -539,6 +555,17 @@ create policy "Remoção por quartel" on captacao_eventos for delete
   using (public.e_assessoria() or exists (
     select 1 from captacoes c where c.id = captacao_eventos.captacao_id and c.quartel_id = public.meu_quartel_id()
   ));
+
+-- Assessores de gabinete: só a assessoria parlamentar lê e edita (dado de contato que não é do
+-- escopo de nenhum quartel) — militar não enxerga essa tabela nem em leitura.
+drop policy if exists "Assessoria vê assessores" on assessores;
+create policy "Assessoria vê assessores" on assessores for select using (public.e_assessoria());
+drop policy if exists "Assessoria cria assessores" on assessores;
+create policy "Assessoria cria assessores" on assessores for insert with check (public.e_assessoria());
+drop policy if exists "Assessoria edita assessores" on assessores;
+create policy "Assessoria edita assessores" on assessores for update using (public.e_assessoria()) with check (public.e_assessoria());
+drop policy if exists "Assessoria remove assessores" on assessores;
+create policy "Assessoria remove assessores" on assessores for delete using (public.e_assessoria());
 
 -- 6) ARMAZENAMENTO DE ANEXOS (fotos/documentos do formulário) -----------------
 insert into storage.buckets (id, name, public)

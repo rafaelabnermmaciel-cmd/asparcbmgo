@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { LuBanknote, LuUserRound, LuPencil, LuTrash2, LuChevronDown, LuChevronUp, LuInstagram, LuTriangleAlert, LuArrowUpRight, LuLandmark } from 'react-icons/lu';
-import { useParlamentaresGO, useResultadosEleitorais, useComissoesGO, useStakeholders, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
+import { useParlamentaresGO, useResultadosEleitorais, useComissoesGO, useStakeholders, useAssessores, useQuarteis, useMilitares, useCaptacoes, useEventos, initials, esferaDoCasa, STATUS_CAPTACAO } from '../lib/data.js';
 import { useAuthContext } from '../lib/auth.js';
 import ScrollReveal from '../components/ScrollReveal.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-import { btnDanger, fmtR, statusBadgeClass, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
+import { inputClass, labelClass, btnPrimary, btnGhost, btnDanger, fmtR, statusBadgeClass, EdicaoCaptacao } from '../components/CaptacaoForm.jsx';
 import { AlertaParado, LinhaDoTempo } from '../components/CaptacaoTimeline.jsx';
 import { FormularioStakeholder } from '../components/StakeholderForm.jsx';
 
@@ -94,6 +94,124 @@ function Comissoes({ lista }) {
   );
 }
 
+const ASSESSOR_VAZIO = { nome: '', cargo: '', telefone: '', observacoes: '' };
+
+function CamposAssessor({ valores, onChange }) {
+  return (
+    <>
+      <div>
+        <p className={labelClass}>Nome *</p>
+        <input className={inputClass} value={valores.nome} onChange={(e) => onChange('nome', e.target.value)} />
+      </div>
+      <div>
+        <p className={labelClass}>Cargo</p>
+        <input className={inputClass} value={valores.cargo} onChange={(e) => onChange('cargo', e.target.value)} placeholder="Ex: chefe de gabinete, assessor parlamentar..." />
+      </div>
+      <div>
+        <p className={labelClass}>Telefone / WhatsApp</p>
+        <input className={inputClass} value={valores.telefone} onChange={(e) => onChange('telefone', e.target.value)} />
+      </div>
+      <div className="sm:col-span-2">
+        <p className={labelClass}>Observações</p>
+        <textarea rows={2} className={inputClass} value={valores.observacoes} onChange={(e) => onChange('observacoes', e.target.value)} />
+      </div>
+    </>
+  );
+}
+
+function FormularioAssessor({ inicial, onSalvar, onCancelar, textoBotao = 'Salvar' }) {
+  const [f, setF] = useState(inicial || ASSESSOR_VAZIO);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState(null);
+
+  async function salvar() {
+    setErro(null);
+    if (!f.nome.trim()) { setErro('Informe o nome.'); return; }
+    setSalvando(true);
+    try {
+      await onSalvar({ nome: f.nome.trim(), cargo: f.cargo.trim(), telefone: f.telefone.trim(), observacoes: f.observacoes.trim() });
+    } catch (err) {
+      setErro(err.message || 'Falha ao salvar. Tente novamente.');
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <CamposAssessor valores={f} onChange={(k, v) => setF((prev) => ({ ...prev, [k]: v }))} />
+      {erro && <p className="sm:col-span-2 flex items-center gap-1.5 text-xs text-red-600"><LuTriangleAlert className="h-3.5 w-3.5" /> {erro}</p>}
+      <div className="flex gap-2 sm:col-span-2">
+        <button type="button" className={btnPrimary} disabled={salvando} onClick={salvar}>{salvando ? 'Salvando...' : textoBotao}</button>
+        <button type="button" className={btnGhost} onClick={onCancelar}>Cancelar</button>
+      </div>
+    </div>
+  );
+}
+
+// Nome/cargo/telefone de quem trabalha no gabinete do parlamentar — só assessoria parlamentar
+// vê (RLS bloqueia militar até de ler, ver supabase/schema.sql); não vem de nenhuma fonte
+// oficial, é digitado/importado manualmente aqui mesmo.
+function Assessores({ lista, onAdicionar, onEditar, onExcluir }) {
+  const [criando, setCriando] = useState(false);
+  const [editandoId, setEditandoId] = useState(null);
+
+  return (
+    <ScrollReveal delay={0.06} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex items-center justify-between gap-3">
+        <p className="flex items-center gap-2 text-sm font-semibold text-slate-900 dark:text-white">
+          <LuUserRound className="h-4 w-4 text-red-500" /> Assessores de gabinete
+        </p>
+        {!criando && (
+          <button type="button" onClick={() => setCriando(true)} className="text-xs font-medium text-red-600 hover:underline">+ Adicionar</button>
+        )}
+      </div>
+
+      {criando && (
+        <div className="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/40">
+          <FormularioAssessor textoBotao="Cadastrar" onCancelar={() => setCriando(false)} onSalvar={async (payload) => { await onAdicionar(payload); setCriando(false); }} />
+        </div>
+      )}
+
+      <div className="mt-3 flex flex-col gap-2">
+        {lista.map((a) =>
+          editandoId === a.id ? (
+            <div key={a.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+              <FormularioAssessor
+                inicial={{ nome: a.nome, cargo: a.cargo, telefone: a.telefone, observacoes: a.observacoes }}
+                onCancelar={() => setEditandoId(null)}
+                onSalvar={async (payload) => { await onEditar(a.id, payload); setEditandoId(null); }}
+              />
+            </div>
+          ) : (
+            <div key={a.id} className="rounded-xl border border-slate-100 p-3 dark:border-slate-800">
+              <div className="flex items-start justify-between gap-2">
+                <div className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-3">
+                  <InfoRow label="Nome" value={a.nome} />
+                  <InfoRow label="Cargo" value={a.cargo} />
+                  <InfoRow label="Telefone" value={a.telefone} copyable />
+                  {a.observacoes && <InfoRow label="Observações" value={a.observacoes} />}
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <button type="button" onClick={() => setEditandoId(a.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:text-slate-400">
+                    <LuPencil className="h-3 w-3" /> Editar
+                  </button>
+                  <button type="button" onClick={() => onExcluir(a)} className={`flex items-center gap-1 ${btnDanger}`}>
+                    <LuTrash2 className="h-3 w-3" /> Excluir
+                  </button>
+                </div>
+              </div>
+            </div>
+          )
+        )}
+        {lista.length === 0 && !criando && (
+          <p className="text-xs text-slate-400">Nenhum assessor cadastrado pra este parlamentar ainda.</p>
+        )}
+      </div>
+    </ScrollReveal>
+  );
+}
+
 const NOME_CASA = {
   senado: 'Senado Federal (Brasília/DF)',
   camara: 'Câmara dos Deputados (Brasília/DF)',
@@ -119,6 +237,7 @@ export default function ParlamentarPerfil() {
   const { resultados: resultados2026 } = useResultadosEleitorais(2026);
   const { comissoes } = useComissoesGO();
   const { stakeholders, updateStakeholder, removeStakeholder } = useStakeholders();
+  const { assessores, addAssessor, updateAssessor, removeAssessor } = useAssessores();
   const { quarteis } = useQuarteis();
   const { militares } = useMilitares();
   const { captacoes, updateCaptacao, removeCaptacao } = useCaptacoes();
@@ -140,6 +259,10 @@ export default function ParlamentarPerfil() {
     () => stakeholders.filter((s) => s.parlamentares_keys?.includes(parlamentarKey)),
     [stakeholders, parlamentarKey]
   );
+  const assessoresDoParlamentar = useMemo(
+    () => assessores.filter((a) => a.parlamentar_key === parlamentarKey),
+    [assessores, parlamentarKey]
+  );
   const captacoesDoParlamentar = useMemo(
     () => (p ? captacoes.filter((c) => c.parlamentarNome === p.nome).sort((a, b) => STATUS_CAPTACAO.indexOf(b.status) - STATUS_CAPTACAO.indexOf(a.status)) : []),
     [captacoes, p]
@@ -149,6 +272,15 @@ export default function ParlamentarPerfil() {
     if (!confirm(`Excluir o stakeholder "${s.nome}"?`)) return;
     try {
       await removeStakeholder(s.id);
+    } catch (err) {
+      alert(err.message || 'Falha ao excluir. Tente novamente.');
+    }
+  }
+
+  async function excluirAssessor(a) {
+    if (!confirm(`Excluir o assessor "${a.nome}"?`)) return;
+    try {
+      await removeAssessor(a.id);
     } catch (err) {
       alert(err.message || 'Falha ao excluir. Tente novamente.');
     }
@@ -232,6 +364,15 @@ export default function ParlamentarPerfil() {
             </div>
           </div>
         </ScrollReveal>
+      )}
+
+      {ehAssessoria && (
+        <Assessores
+          lista={assessoresDoParlamentar}
+          onAdicionar={(payload) => addAssessor({ ...payload, parlamentar_key: parlamentarKey })}
+          onEditar={updateAssessor}
+          onExcluir={excluirAssessor}
+        />
       )}
 
       {ehAssessoria && <Comissoes lista={comissoesDoParlamentar} />}
