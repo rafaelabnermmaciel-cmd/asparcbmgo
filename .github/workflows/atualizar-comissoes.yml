@@ -44,8 +44,11 @@ jobs:
 
       - name: Conferir se algo mudou
         id: diff
+        # "git diff" sozinho não vê um arquivo NOVO (ainda não rastreado) como mudança — teria
+        # pulado o primeiro commit deste arquivo. "git status --porcelain" cobre os dois casos
+        # (arquivo novo ou já existente com conteúdo diferente).
         run: |
-          if git diff --quiet -- public/data/comissoes-go.json; then
+          if [ -z "$(git status --porcelain -- public/data/comissoes-go.json)" ]; then
             echo "mudou=false" >> "$GITHUB_OUTPUT"
           else
             echo "mudou=true" >> "$GITHUB_OUTPUT"
