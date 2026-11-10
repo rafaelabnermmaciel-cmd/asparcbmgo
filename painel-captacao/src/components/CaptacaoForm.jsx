@@ -191,7 +191,7 @@ export function CamposCaptacao({ valores, onChange, quarteis, militares, parlame
           placeholder="Clique pra ver todos ou digite pra buscar..."
         />
       </div>
-      <div>
+      <div className="sm:col-span-2">
         <p className={labelClass}>Stakeholder / contato-chave *</p>
         {stakeholdersDoParlamentar.length > 0 && !stakeholderManual ? (
           <select className={inputClass} value={valores.stakeholder} onChange={selecionarStakeholder}>

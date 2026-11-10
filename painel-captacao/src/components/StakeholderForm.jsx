@@ -152,7 +152,7 @@ export function CriarStakeholderInline({ parlamentares, addStakeholder, parlamen
   }
 
   return (
-    <div className="mt-2 rounded-lg border border-slate-200 p-3 dark:border-slate-800 dark:bg-slate-900/40">
+    <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/40">
       <FormularioStakeholder
         parlamentares={parlamentares || []}
         inicial={{ ...STAKEHOLDER_VAZIO, parlamentaresKeys: parlamentarKeyPadrao ? [parlamentarKeyPadrao] : [] }}
