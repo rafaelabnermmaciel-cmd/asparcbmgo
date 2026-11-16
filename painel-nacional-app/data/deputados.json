@@ -5649,6 +5649,33 @@
     "urlCamara": "https://www.camara.leg.br/deputados/204394"
   },
   {
+    "id": 74383,
+    "casa": "camara",
+    "nome": "Giacobo",
+    "nomeCivil": "FERNANDO LÚCIO GIACOBO",
+    "partido": "PSD",
+    "uf": "PR",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74383.jpg",
+    "email": "dep.giacobo@camara.leg.br",
+    "telefone": null,
+    "gabinete": {
+      "predio": null,
+      "sala": null,
+      "andar": null
+    },
+    "dataNascimento": "1970-12-17",
+    "municipioNascimento": "Pato Branco",
+    "ufNascimento": "PR",
+    "sexo": "M",
+    "redeSocial": [
+      "https://www.facebook.com/fernandogiacobo",
+      "https://www.instagram.com/fernandogiacobo"
+    ],
+    "urlCamara": "https://www.camara.leg.br/deputados/74383"
+  },
+  {
     "id": 204491,
     "casa": "camara",
     "nome": "Gilberto Abramo",
@@ -5749,7 +5776,7 @@
     "ufNascimento": "RJ",
     "sexo": "M",
     "redeSocial": [
-      "https://www.instagram.com/gilsondaniel1919"
+      "https://www.instagram.com/gilsondaniel.es"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/220529"
   },
@@ -6470,30 +6497,6 @@
       "https://www.instagram.com/isnaldobulhoes"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/204436"
-  },
-  {
-    "id": 225846,
-    "casa": "camara",
-    "nome": "Itamar Paim",
-    "nomeCivil": "ITAMAR PAIM PRUCH",
-    "partido": "PL",
-    "uf": "PR",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/225846.jpg",
-    "email": "dep.itamarpaim@camara.leg.br",
-    "telefone": "3215-5629",
-    "gabinete": {
-      "predio": "4",
-      "sala": "629",
-      "andar": "6"
-    },
-    "dataNascimento": "1977-04-05",
-    "municipioNascimento": "Paranaguá",
-    "ufNascimento": "PR",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/225846"
   },
   {
     "id": 220696,
@@ -8766,7 +8769,7 @@
     },
     "dataNascimento": "1966-11-14",
     "municipioNascimento": "Colinas",
-    "ufNascimento": "MA",
+    "ufNascimento": null,
     "sexo": "M",
     "redeSocial": [
       "https://twitter.com/marciojerry",
