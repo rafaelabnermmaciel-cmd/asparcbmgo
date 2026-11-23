@@ -309,7 +309,11 @@
     "municipioNascimento": "Tenente Portela",
     "ufNascimento": "RS",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/faleiroairton",
+      "https://www.facebook.com/airtonfaleiropt",
+      "https://youtube.com/channel/UCBHL-d2mPjN6JntrckpA3pQ"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/204495"
   },
   {
@@ -464,6 +468,30 @@
       "https://youtube.com/c/AlexManenteOficial"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/178972"
+  },
+  {
+    "id": 204571,
+    "casa": "camara",
+    "nome": "Alex Santana",
+    "nomeCivil": "ALEX MARCO SANTANA SOUSA",
+    "partido": "REPUBLICANOS",
+    "uf": "BA",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204571.jpg",
+    "email": "dep.alexsantana@camara.leg.br",
+    "telefone": "3215-5541",
+    "gabinete": {
+      "predio": "4",
+      "sala": "541",
+      "andar": "5"
+    },
+    "dataNascimento": "1972-06-22",
+    "municipioNascimento": "Salvador",
+    "ufNascimento": "BA",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/204571"
   },
   {
     "id": 220542,
@@ -2697,7 +2725,11 @@
     "municipioNascimento": "Tefé",
     "ufNascimento": "AM",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/DepChrisostomo",
+      "https://www.facebook.com/deputadocoronelchrisostomo",
+      "https://www.instagram.com/depcoronelchrisostomo"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/204378"
   },
   {
@@ -4421,7 +4453,9 @@
     "municipioNascimento": "Recife",
     "ufNascimento": "PE",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.instagram.com/eduardodafonte"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/141421"
   },
   {
@@ -5659,11 +5693,11 @@
     "condicaoEleitoral": "Titular",
     "foto": "https://www.camara.leg.br/internet/deputado/bandep/74383.jpg",
     "email": "dep.giacobo@camara.leg.br",
-    "telefone": null,
+    "telefone": "3215-5629",
     "gabinete": {
-      "predio": null,
-      "sala": null,
-      "andar": null
+      "predio": "4",
+      "sala": "629",
+      "andar": "6"
     },
     "dataNascimento": "1970-12-17",
     "municipioNascimento": "Pato Branco",
@@ -6419,30 +6453,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/204508"
   },
   {
-    "id": 74295,
-    "casa": "camara",
-    "nome": "Inácio Arruda",
-    "nomeCivil": "INÁCIO FRANCISCO DE ASSIS NUNES ARRUDA",
-    "partido": "PCdoB",
-    "uf": "CE",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/74295.jpg",
-    "email": "dep.inacioarruda@camara.leg.br",
-    "telefone": "3215-5306",
-    "gabinete": {
-      "predio": "4",
-      "sala": "306",
-      "andar": "3"
-    },
-    "dataNascimento": "1957-05-05",
-    "municipioNascimento": "Fortaleza",
-    "ufNascimento": "CE",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/74295"
-  },
-  {
     "id": 98615,
     "casa": "camara",
     "nome": "Ismael",
@@ -6997,6 +7007,30 @@
       "https://www.instagram.com/Joseairtoncirilo"
     ],
     "urlCamara": "https://www.camara.leg.br/deputados/141464"
+  },
+  {
+    "id": 141470,
+    "casa": "camara",
+    "nome": "José Guimarães",
+    "nomeCivil": "JOSÉ NOBRE GUIMARÃES",
+    "partido": "PT",
+    "uf": "CE",
+    "situacao": "Exercício",
+    "condicaoEleitoral": "Titular",
+    "foto": "https://www.camara.leg.br/internet/deputado/bandep/141470.jpg",
+    "email": "dep.joseguimaraes@camara.leg.br",
+    "telefone": null,
+    "gabinete": {
+      "predio": null,
+      "sala": null,
+      "andar": null
+    },
+    "dataNascimento": "1957-02-13",
+    "municipioNascimento": "Quixeramobim",
+    "ufNascimento": "CE",
+    "sexo": "M",
+    "redeSocial": [],
+    "urlCamara": "https://www.camara.leg.br/deputados/141470"
   },
   {
     "id": 204472,
@@ -8627,30 +8661,6 @@
     "urlCamara": "https://www.camara.leg.br/deputados/133810"
   },
   {
-    "id": 204558,
-    "casa": "camara",
-    "nome": "Marcelo Nilo",
-    "nomeCivil": "JOSÉ MARCELO DO NASCIMENTO NILO",
-    "partido": "REPUBLICANOS",
-    "uf": "BA",
-    "situacao": "Exercício",
-    "condicaoEleitoral": "Suplente",
-    "foto": "https://www.camara.leg.br/internet/deputado/bandep/204558.jpg",
-    "email": "dep.marcelonilo@camara.leg.br",
-    "telefone": "3215-5541",
-    "gabinete": {
-      "predio": "4",
-      "sala": "541",
-      "andar": "5"
-    },
-    "dataNascimento": "1955-04-26",
-    "municipioNascimento": "Antas",
-    "ufNascimento": "BA",
-    "sexo": "M",
-    "redeSocial": [],
-    "urlCamara": "https://www.camara.leg.br/deputados/204558"
-  },
-  {
     "id": 160161,
     "casa": "camara",
     "nome": "Marcelo Queiroz",
@@ -9694,7 +9704,7 @@
     "id": 178997,
     "casa": "camara",
     "nome": "Moses Rodrigues",
-    "nomeCivil": "MOSES HAENDEL MELO RODRIGUES",
+    "nomeCivil": "MOSES HAENDEL MELO SPÍNDOLA RODRIGUES",
     "partido": "UNIÃO",
     "uf": "CE",
     "situacao": "Exercício",
@@ -12065,7 +12075,12 @@
     "municipioNascimento": "Goianésia",
     "ufNascimento": "GO",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/https:",
+      "https://www.facebook.com/rubensotoni",
+      "https://www.instagram.com/rubensotoni",
+      "https://youtube.com/channel/UC464MIpTJ_aOBjI-oN_TBdg"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/74371"
   },
   {
@@ -12299,7 +12314,7 @@
     "id": 220621,
     "casa": "camara",
     "nome": "Sargento Gonçalves",
-    "nomeCivil": "EVANDRO GONÇALVES DA SILVA JÚNIOR",
+    "nomeCivil": "Evandro Gonçalves da Silva Júnior",
     "partido": "PL",
     "uf": "RN",
     "situacao": "Exercício",
@@ -12504,7 +12519,11 @@
     "municipioNascimento": "Rio Branco",
     "ufNascimento": "AC",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://twitter.com/depsilascamaraam",
+      "https://www.facebook.com/SilasCâmara",
+      "https://www.instagram.com/depsilascamara"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/74356"
   },
   {
@@ -13063,7 +13082,9 @@
     "municipioNascimento": "Itamaraju",
     "ufNascimento": "BA",
     "sexo": "M",
-    "redeSocial": [],
+    "redeSocial": [
+      "https://www.instagram.com/depvalmir"
+    ],
     "urlCamara": "https://www.camara.leg.br/deputados/160610"
   },
   {

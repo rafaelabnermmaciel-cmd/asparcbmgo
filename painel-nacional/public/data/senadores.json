@@ -779,25 +779,6 @@
     "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/6342"
   },
   {
-    "id": "6369",
-    "casa": "senado",
-    "nome": "Jussara Lima",
-    "nomeCompleto": "Antônia Jussara Gomes Alves Sousa Lima",
-    "partido": "PSD",
-    "uf": "PI",
-    "situacao": null,
-    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador6369.jpg",
-    "email": "sen.jussaralima@senado.leg.br",
-    "telefone": "3303-5800",
-    "gabinete": null,
-    "dataNascimento": "1960-12-05",
-    "municipioNascimento": "Fronteiras",
-    "ufNascimento": null,
-    "sexo": null,
-    "redeSocial": [],
-    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/6369"
-  },
-  {
     "id": "4811",
     "casa": "senado",
     "nome": "Laércio Oliveira",
@@ -1442,6 +1423,25 @@
     "sexo": null,
     "redeSocial": [],
     "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5748"
+  },
+  {
+    "id": "5016",
+    "casa": "senado",
+    "nome": "Wellington Dias",
+    "nomeCompleto": "José Wellington Barroso de Araujo Dias",
+    "partido": "PT",
+    "uf": "PI",
+    "situacao": null,
+    "foto": "http://www.senado.leg.br/senadores/img/fotos-oficiais/senador5016.jpg",
+    "email": "wellington.dias@senador.leg.br",
+    "telefone": null,
+    "gabinete": null,
+    "dataNascimento": "1962-03-05",
+    "municipioNascimento": "Oeiras",
+    "ufNascimento": null,
+    "sexo": null,
+    "redeSocial": [],
+    "urlSenado": "http://www25.senado.leg.br/web/senadores/senador/-/perfil/5016"
   },
   {
     "id": "1173",
